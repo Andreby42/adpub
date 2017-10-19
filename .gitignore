@@ -1,0 +1,11 @@
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+spring-mybatis.xml
+*.jar
+.classapth
+.project
+.settings
+.svn
+target
