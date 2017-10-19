@@ -4,6 +4,7 @@ ehthumbs.db
 Desktop.ini
 spring-mybatis.xml
 *.jar
+*.class
 .classapth
 .project
 .settings
