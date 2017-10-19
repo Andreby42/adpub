@@ -76,8 +76,8 @@ public class FlowService {
 		}
 
 		ChannelType channelType = activityService.getChannelType(advParam.getUdid(), id); // 频道类型，UC还是toutiao还是自定义模块
-		int hasLineArticles = activityService.getHasLineDetailArticles(advParam.getUdid(), supportNovel);
-		boolean isNewVersion = false;
+		int hasLineArticles = activityService.getHasLineDetailArticles(advParam.getUdid(), supportNovel); // 是否在详情页展示信息流入口
+		boolean isNewVersion = false;	//是否是新版
 		isNewVersion = activityService.isNewVersion(advParam); // 版本控制
 
 		// 接口拉取文章,获取活动
