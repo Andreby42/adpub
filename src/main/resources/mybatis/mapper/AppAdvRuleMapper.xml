@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bus.chelaile.dao.AppAdvRuleMapper" >
+    
+
+    
+    <select id="list4AdvIdByTime" resultType="com.bus.chelaile.model.rule.AdRule">
+        SELECT  ruleId,advId,ruleName,startDate,endDate,rule FROM APP_ADV_RULE
+           WHERE advId=#{advId,jdbcType=NUMERIC} AND  endDate >= #{today,jdbcType=TIMESTAMP}
+    </select>
+    
+   
+</mapper>

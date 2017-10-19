@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- For assistance related to logback-translator or configuration -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user -->
+<!-- For professional support please see -->
+<!-- http://www.qos.ch/shop/products/professionalSupport -->
+<!-- -->
+<configuration>
+
+
+	<appender name="info"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>UTF-8</encoder>
+		<!-- <File> /app/tomcatehallSC/logs/e3/service/info.log </File> -->
+		<File>
+			${log.dir.logback}/info.log
+		</File>
+
+		<append>true</append>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		
+			<fileNamePattern>${log.dir.logback}/info.log.%d{yyyyMMdd}
+			</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %5p %c:%L - %m%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+	</appender>
+
+	<appender name="error"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>
+			${log.dir.logback}/error.log
+		</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.dir.logback}/error.%d{yyyyMMdd}.log
+			</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %5p %c:%L - %m%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+	</appender>
+	
+	
+	<appender name="singleInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>UTF-8</encoder>
+		<File>
+			${log.dir.logback}/singleInfoLog.log
+		</File>
+		
+		<append>true</append>
+
+    	 <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
+	      <!-- daily rollover -->
+			<fileNamePattern>${log.dir.logback}/singleInfoLog.log.%d{yyyyMMdd}</fileNamePattern>
+	    </rollingPolicy>
+		<encoder>
+			<pattern>
+				[%d{yyyy-MM-dd HH:mm:ss}] [%t] %5p %c:%L - %m%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+	</appender>
+	
+	
+	
+	<appender name="timerLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>UTF-8</encoder>
+		<File>
+			${log.dir.logback}/timerLog.log
+		</File>
+		
+		<append>true</append>
+
+    	 <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
+	      <!-- daily rollover -->
+			<fileNamePattern>${log.dir.logback}/timerLog.log.%d{yyyyMMdd}</fileNamePattern>
+	    </rollingPolicy>
+		<encoder>
+			<pattern>
+				[%d{yyyy-MM-dd HH:mm:ss}] [%t] %5p %c:%L - %m%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+	</appender>
+
+
+	<logger name="com.bus.chelaile.common.SingleInfoLog"
+		additivity="false" level="info">
+		<appender-ref ref="singleInfoLog" />
+	</logger>
+	
+	
+	<logger name="com.bus.chelaile.common.TimerLog"
+		additivity="false" level="info">
+		<appender-ref ref="timerLog" />
+	</logger>
+
+
+	<root level="INFO">
+		<appender-ref ref="info" />
+		<appender-ref ref="error" />
+	</root>
+
+
+</configuration>	

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+	
+
+	<bean id="storageService" class="com.bus.chelaile.storage.StorageService" scope="prototype"></bean>
+	
+	
+	<bean id="abstractStorage" class="com.bus.chelaile.storage.impl.AbstractStorage" abstract="true">
+
+	</bean>
+	
+	<!-- 站点id -->
+	<bean id="stopIdInfoServiceImpl" class="com.bus.chelaile.storage.impl.StopIdInfoServiceImpl" parent="abstractStorage">
+	</bean>
+	
+	<!-- 换向的对应线路 -->
+	<bean id="changeDirectionServiceImpl" class="com.bus.chelaile.storage.impl.ChangeDirectionServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+
+	<!-- 线路详情 -->
+	<bean id="lineDetailServiceImpl" class="com.bus.chelaile.storage.impl.LineDetailServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+
+	<!-- 转换接口 -->
+	<bean id="transformationLineIdServiceImpl" class="com.bus.chelaile.storage.impl.TransformationLineIdServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>	
+	
+	<!-- 线路详情和站点详情 -->
+	<bean id="lineAndStopDetailsServiceImpl" class="com.bus.chelaile.storage.impl.LineAndStopDetailsServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+
+	<!-- 站点详情 -->
+	<bean id="saveStopDetailsServiceImpl" class="com.bus.chelaile.storage.impl.SaveStopDetailsServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+
+	<!-- 脊线数据 -->
+	<bean id="lineofRegressionServiceImpl" class="com.bus.chelaile.storage.impl.LineofRegressionServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+	
+	<!-- 线路列表 -->
+	<bean id="cityLineServiceImpl" class="com.bus.chelaile.storage.impl.CityLineServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+	
+	<!-- 站点对应线路列表 -->
+	<bean id="stopIdListServiceImpl" class="com.bus.chelaile.storage.impl.StopIdListServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+	
+	<!-- 搜索 -->
+	<bean id="searchLineAndStopServiceImpl" class="com.bus.chelaile.storage.impl.SearchLineAndStopServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+	
+	<!-- 周边 -->
+	<bean id="nearStopStorageServiceImpl" class="com.bus.chelaile.storage.impl.NearStopStorageServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+	
+	<!-- 收藏-->
+	<bean id="favsServiceImpl" class="com.bus.chelaile.service.impl.FavsServiceImpl" parent="abstractStorage"  scope="prototype">
+	</bean>
+	
+	
+	<!-- 所有key的处理 -->
+	<bean id="clearCache" class="com.bus.chelaile.storage.cache.ClearCache"  scope="prototype">
+	</bean>
+	
+	<!-- 处理缓存中update和switch的list -->
+	<bean id="timerClear" class="com.bus.chelaile.storage.timer.TimerClear" >
+	</bean>
+	
+	<context:annotation-config/> 
+	
+	
+</beans>

@@ -1,0 +1,201 @@
+package com.bus.chelaile.common;
+
+
+import net.spy.memcached.internal.OperationFuture;
+
+
+
+
+
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.bus.chelaile.common.cache.ICache;
+import com.bus.chelaile.common.cache.OCSCacheUtil;
+
+import com.bus.chelaile.common.cache.RedisCacheImplUtil;
+import com.bus.chelaile.model.PropertiesName;
+import com.bus.chelaile.util.config.PropertiesUtils;
+
+public class CacheUtil {
+    //	访问得到token缓存
+	private static ICache client;
+	//	redis缓存
+	private static ICache redisClient;
+	//	保存用户访问量等信息
+	private static ICache cacheNewClient;
+	//	获取access_token的
+	private static ICache cacheApiTokenClient;
+//	//  专为活动[屈臣氏]所设,放置有效用户，以及领取过
+//	private static ICache cacheActivitiesClient;
+	
+	private static boolean isInitSuccess = false;
+	
+	protected static final Logger logger = LoggerFactory
+			.getLogger(CacheUtil.class);
+	
+    private static final int DEFAULT_EXPIRE = 60 * 60;
+    
+    private static String cacheType = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "cacheType","ocs");
+    /**
+     * 推送的时候读取token
+     */
+    private static final String PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.host");
+    private static final String PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.port");
+    private static final String PROP_OCS_USERNAME =  PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.username");
+    private static final String PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.password");
+    /**
+     * 存储用户信息
+     */
+    private static final String CC_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.host");
+    private static final String CC_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.port");
+    private static final String CC_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.username");
+    private static final String CC_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.password");
+    
+    /**
+     * 第三方信息
+     */
+    private static final String API_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.host");
+    private static final String API_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.port");
+    private static final String API_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.username");
+    private static final String API_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.password");
+    //private static String cacheType = PropertiesReaderWrapper.read("cacheType", "ocs");
+    
+//    /**
+//     * 屈臣氏活动专用
+//     */
+//    private static final String ACTIVE_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.activities.host");
+//    private static final String ACTIVE_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.activities.port");
+//    private static final String ACTIVE_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.activities.username");
+//    private static final String ACTIVE_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.activities.password");
+
+//    static {
+//        initClient();
+//    }
+
+    public static void initClient() {
+    	
+       if( isInitSuccess ){
+    	   logger.info(cacheType+"已经reload成功");
+    	   return;
+       }
+    	
+       if( cacheType.equals("redis") ){
+    	   client = new RedisCacheImplUtil();
+    	   cacheNewClient = new RedisCacheImplUtil();
+    	   cacheApiTokenClient = new RedisCacheImplUtil();
+//    	   cacheActivitiesClient = new RedisCacheImplUtil();
+    	   logger.info("redis cache");
+       }else	if( cacheType.equals("ocs") ){
+    	   client = new OCSCacheUtil(PROP_OCS_HOST,PROP_OCS_PORT,PROP_OCS_USERNAME,PROP_OCS_PASSWORD);
+    	   cacheNewClient = new OCSCacheUtil(CC_PROP_OCS_HOST,CC_PROP_OCS_PORT,CC_PROP_OCS_USERNAME,CC_PROP_OCS_PASSWORD);
+    	   
+    	   cacheApiTokenClient = new OCSCacheUtil(API_PROP_OCS_HOST,API_PROP_OCS_PORT,API_PROP_OCS_USERNAME,API_PROP_OCS_PASSWORD);
+//    	   cacheActivitiesClient = new OCSCacheUtil(ACTIVE_PROP_OCS_HOST,ACTIVE_PROP_OCS_PORT,ACTIVE_PROP_OCS_USERNAME,ACTIVE_PROP_OCS_PASSWORD);
+    	   logger.info("ocs cache");
+       }else{
+    	   throw new IllegalArgumentException("未找到cacheType类型");
+       }
+       redisClient = new RedisCacheImplUtil();
+       isInitSuccess = true;
+    }
+    
+
+    
+    /**
+     * @param key the Cache Key
+     * @param exp the expiration time of the records, should not exceeds 60 * 60 * 24 * 30(30 天), 单位: 秒
+     * @param obj 缓存的对象
+     */
+    public static void set(String key, int exp, Object obj) {
+  
+        client.set(key, exp, obj);
+      
+    }
+    
+    public static void setToRedis(String key,int exp,Object obj){
+    	redisClient.set(key, exp, obj);
+    }
+    
+    public static Object getFromRedis(String key){
+    	return redisClient.get(key);
+    }
+    
+    public static void incrToCache(String key, int exp){
+    	redisClient.IncValue(key, exp);
+    }
+    
+    public static void redisDelete(String key){
+    	redisClient.delete(key);
+    }
+    
+    
+    public static Map<String, Object> getValueFromRedisByList(List<String> list){
+    	return redisClient.getByList(list);
+    }
+    
+    public static boolean acquireLock() {
+    	return redisClient.acquireLock();
+    }
+    
+    public static boolean releaseLock() {
+    	return redisClient.releaseLock();
+    }
+    
+    public static void redisIncrBy(String key, int number, int exp) {
+    	redisClient.incrBy(key, number, exp);
+    }
+    
+    /**
+     * 设置缓存， 默认缓存时间是1小时。
+     * @param key 缓存的key
+     * @param obj 缓存的对象
+     */
+    public static void set(String key, Object obj) {
+        set(key, DEFAULT_EXPIRE, obj);
+    }
+    
+    public static Object get(String key) {
+       return client.get(key);
+    }
+    
+    public static Object getNew(String key) {
+        return cacheNewClient.get(key);
+     }
+    
+    public static void setNew(String key, int exp, Object obj) {
+    	cacheNewClient.set(key, exp, obj);
+    }
+    
+    public static OperationFuture<Boolean> deleteNew(String key) {
+        return cacheNewClient.delete(key);
+    }
+
+    public static OperationFuture<Boolean> delete(String key) {
+    	return client.delete(key);
+    }
+
+    public static Map<String, Object> getByList(List<String> list) {
+    	return client.getByList(list);
+    }
+    
+    public static Object getApiInfo(String key){
+    	return cacheApiTokenClient.get(key);
+    }
+ 
+//	public static Object getActiveOcs(String key) {
+//		return cacheActivitiesClient.get(key);
+//	}
+//
+//	public static void setActiveOcs(String key, int exp, Object obj) {
+//		cacheActivitiesClient.set(key, exp, obj);
+//	}
+//	
+//	public static OperationFuture<Boolean> activitiesDelete(String key) {
+//        return cacheActivitiesClient.delete(key);
+//    }
+  
+}

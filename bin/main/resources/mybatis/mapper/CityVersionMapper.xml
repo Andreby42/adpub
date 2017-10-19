@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.chelaile.dao.CityVersionDAO">
+
+
+
+	<select id="findCityVersion" resultType="com.bus.chelaile.dao.model.CityVersion">
+		select * from
+		bus_city_version where cityId = #{cityId}
+	</select>
+
+
+	<insert id="addCityVersion" parameterType="com.bus.chelaile.dao.model.CityVersion">
+		insert into bus_city_version (
+		cityId,updateversion, updateTime
+		) values
+		(#{cityId},#{updateversion},#{updateTime})
+	</insert>
+	
+	
+	<update id="updateCityVersion">
+		update bus_city_version set  updateversion = #{updateversion}, updateTime = #{updateTime} where cityId = #{cityId}
+	
+	</update>
+
+</mapper>

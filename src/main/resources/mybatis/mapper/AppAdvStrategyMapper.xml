@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bus.chelaile.dao.AppAdvStrategyMapper" >
+    
+
+    
+    <select id="listDefaultAdvStrategies" resultType="com.bus.chelaile.model.strategy.AdStrategyParam">
+        SELECT udidPrefixes, os, thirdPartyLineDetailWeights, thirdPartyLineDetailLongtailWeights,
+            thirdPartyStartScreenWeights, thirdPartyStartScreenLongtailWeights, adExclusion, strategyName,
+            lineDetailLongtailThreshold, lineDetailNPV, lineDetail3rdGroups, startScreenLongtailThreshold,
+            startScreenNPV, startScreen3rdGroups
+        FROM APP_ADV_STRATEGY WHERE udidPrefixes = 'default'
+    </select>
+
+    <select id="listSpecifiedAdvStrategies" resultType="com.bus.chelaile.model.strategy.AdStrategyParam">
+        SELECT udidPrefixes, os, thirdPartyLineDetailWeights, thirdPartyLineDetailLongtailWeights,
+            thirdPartyStartScreenWeights, thirdPartyStartScreenLongtailWeights, adExclusion, strategyName,
+            lineDetailLongtailThreshold, lineDetailNPV, lineDetail3rdGroups, startScreenLongtailThreshold,
+            startScreenNPV, startScreen3rdGroups
+        FROM APP_ADV_STRATEGY WHERE udidPrefixes != 'default'
+    </select>
+
+    
+   
+</mapper>

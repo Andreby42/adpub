@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+	<!-- 广告相关的类 -->
+	<bean id="abstractService" class="com.bus.chelaile.service.AbstractManager" abstract="true">
+	</bean>
+	<!-- 启动类 -->
+	<bean id="startService" class="com.bus.chelaile.service.StartService" init-method="init">
+	</bean>
+	<!-- 广告策略 -->
+	<bean id="userStrategyJudger" class="com.bus.chelaile.strategy.UserStrategyJudger" init-method="init">
+	</bean>
+	<!-- 调用类 -->
+	<bean id="serviceManager" class="com.bus.chelaile.service.ServiceManager" >
+	</bean>
+	<!-- 线路详情 -->
+	<bean id="lineDetailsManager" class="com.bus.chelaile.service.impl.LineDetailsManager" parent="abstractService">
+	</bean>
+	<!-- 线路详情自采买广告 -->
+	<bean id="selfManager" class="com.bus.chelaile.service.impl.SelfManager">
+	</bean>
+	<bean id="linkActiveHelp" class="com.bus.chelaile.linkActive.LinkActiveHelp">
+	</bean>
+	<!-- 第三方广告 -->
+	<bean id="apiDetailsManager" class="com.bus.chelaile.service.impl.ApiDetailsManager">
+	</bean>
+	<!-- 开屏广告 -->
+	<bean id="openManager" class="com.bus.chelaile.service.impl.OpenManager"  parent="abstractService">
+	</bean>
+	<!-- 开屏自采买广告 -->
+	<bean id="selfOpen" class="com.bus.chelaile.service.impl.SelfOpenManager">
+	</bean>
+	<!-- 单双栏广告 -->
+	<bean id="doubleAndSingleManager" class="com.bus.chelaile.service.impl.DoubleAndSingleManager" parent="abstractService">
+	</bean>
+	<!-- 活动页广告 -->
+	<bean id="activeManager" class="com.bus.chelaile.service.impl.ActiveManager" parent="abstractService">
+	</bean>
+	<!-- 乘车页广告 -->
+	<bean id="rideManager" class="com.bus.chelaile.service.impl.RideManager" parent="abstractService">
+	</bean>
+	<!-- 取消广告 -->
+	<bean id="advInvalidService" class="com.bus.chelaile.service.AdvInvalidService" >
+	</bean>
+	<!-- 更新会员不展示广告的缓存 -->
+	<bean id="reloadInvalidAccountIdTimer" class="com.bus.chelaile.thread.ReloadInvalidAccountIdTimer" >
+	</bean>
+	
+	<!-- 获取所有类型可投放广告 -->
+	<!-- 
+	<bean id="commonService" class="com.bus.chelaile.service.CommonService" parent="abstractService">
+	</bean>
+	 -->
+	
+	<!-- pushServer类 -->
+	<bean id="abstractPushManager" class="com.bus.chelaile.push.AbstractPushManager"  abstract="true">
+	</bean>
+	<bean id="adsPushService" class="com.bus.chelaile.push.AdsPushService" parent="abstractPushManager">
+	</bean>
+	<bean id="noticePushService" class="com.bus.chelaile.push.NoticePushService" parent="abstractPushManager">
+	</bean>
+	<bean id="singlePushService" class="com.bus.chelaile.push.SinglePushService" parent="abstractPushManager">
+	</bean>
+	
+	
+	<!-- 信息流相关 -->
+	<bean id="interfaceFlowHelp" class="com.bus.chelaile.flow.InterfaceFlowHelp"  abstract="true">
+	</bean>
+	<bean id="activityService" class="com.bus.chelaile.flow.ActivityService">
+	</bean>
+	<bean id="xishuashuaHelp" class="com.bus.chelaile.flow.XishuashuaHelp">
+	</bean>
+	<bean id="toutiaoHelp" class="com.bus.chelaile.flow.ToutiaoHelp">
+	</bean>
+	<!-- kafka先关的处理类 infoStreamDispatcher -->
+	<bean id="infoStreamDispatcher" class="com.bus.chelaile.kafka.InfoStreamDispatcher">
+	</bean>
+	<bean id="infoSteamForAdvClick" class="com.bus.chelaile.kafka.InfoSteamForAdvClick">
+	</bean>
+	<!-- 信息流 服务实现 -->
+	<bean id="flowService" class="com.bus.chelaile.flow.FlowService">
+	</bean>
+	<!-- 信息流 OCS 相关 -->
+	<bean id="flowOcs" class="com.bus.chelaile.flow.FlowOcs">
+	</bean>
+	
+	
+	<!--    定时任务          -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="reloadInvalidTaskJobTrigger" />
+				<ref bean="reloadTaskJobTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 每分钟定时更新不投广告的用户 -->
+	<bean id="reloadInvalidTaskJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="reloadInvalidTaskJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 * * * * ?</value>
+		</property>
+	</bean>
+	<bean id="reloadInvalidTaskJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="serviceManager" />
+		</property>
+		<property name="targetMethod">
+			<value>reloadInvalidUsers</value>
+		</property>
+	</bean>
+	
+	<!-- 每晚定时reload -->
+	<bean id="reloadTaskJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="reloadTaskJob" />
+		</property>
+		<property name="cronExpression">
+			<value>23 59 0 * * ?</value>
+		</property>
+	</bean>
+	<bean id="reloadTaskJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="serviceManager" />
+		</property>
+		<property name="targetMethod">
+			<value>reloadDatas</value>
+		</property>
+	</bean>
+
+	<context:annotation-config/> 
+	
+</beans>

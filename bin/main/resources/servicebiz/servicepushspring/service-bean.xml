@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+	
+	
+	<bean id="abstractReadService" class="com.bus.chelaile.service.AbstractReadService" abstract="true">
+
+	</bean>
+	
+	<!-- 启动类 -->
+	<bean id="startReadService" class="com.bus.chelaile.service.StartReadService">
+	</bean>
+	
+
+	<!-- 获取脊线数据 -->
+	<bean id="reggressionServiceImpl" class="com.bus.chelaile.service.impl.ReggressionServiceImpl" parent="abstractReadService">
+	</bean>
+
+	<!-- 站点接口 -->
+	<bean id="stationServiceImpl" class="com.bus.chelaile.service.impl.StationServiceImpl" parent="abstractReadService">
+	</bean>
+	
+	<!-- 线路接口 -->
+	<bean id="lineServiceImpl" class="com.bus.chelaile.service.impl.LineServiceImpl" parent="abstractReadService">
+	</bean>
+	
+	
+	<!-- 搜索接口 -->
+	<bean id="searcheServiceImpl" class="com.bus.chelaile.service.impl.SearcheServiceImpl" parent="abstractReadService">
+	</bean>
+	
+	
+	<!-- 周边接口 -->
+	<bean id="nearStopServiceImpl" class="com.bus.chelaile.service.impl.NearStopServiceImpl" parent="abstractReadService">
+	</bean>
+	
+	<!-- 过滤接口 -->
+	<bean id="filterImpl" class="com.bus.chelaile.service.impl.FilterImpl" parent="abstractReadService">
+	</bean>
+	
+	<!-- 华视接口 -->
+	<bean id="huashiServiceImpl" class="com.bus.chelaile.service.impl.HuashiServiceImpl" >
+	</bean>
+	
+	<!-- 监控接口 -->
+	<bean id="monitorServiceImpl" class="com.bus.chelaile.service.impl.MonitorServiceImpl" >
+	</bean>
+	
+	<context:annotation-config/> 
+	
+</beans>

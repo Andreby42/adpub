@@ -1,0 +1,320 @@
+package com.bus.chelaile.model.ads.entity;
+
+import java.util.Map;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.model.Platform;
+import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.ads.AdContent;
+import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.util.AdvUtil;
+
+/**
+ * 包含每个广告的通用的最基本的属性;
+ * 
+ * @author liujh
+ * 
+ */
+public abstract class BaseAdEntity {
+	public static final String EMPTY_STR = "";
+	protected static final Logger logger = LoggerFactory.getLogger(BaseAdEntity.class);
+
+	protected int id; // 广告的唯一ID
+	protected int showType; // 广告类型： 0 双栏，1 单栏，2 首页 ，3 推送, 4 全屏， 5 线路详情广告
+	protected String link = ""; // 广告链接，默认为空串，表示没有链接
+	protected int openType; // 打开方式：0 APP内部打开；1 浏览器打开；默认值为0
+
+	protected String unfoldMonitorLink = "";
+	protected int targetType;
+	protected String clickMonitorLink = "";
+	protected int monitorType;
+	private int type = 1; // 1：我们自己广告，2：调用广点通广告，3：调用第三方广告
+	private String provider_id = "1"; // 我们自己的广告
+
+	public BaseAdEntity(int showType) {
+		this.showType = showType;
+	}
+
+	public void dealUrl(AdvParam advParam, int monitorType) {
+		// 秒针
+		// if (monitorType == 1) {
+		// link = SecondHand.replaceSecondUrl(link, param);
+		// unfoldMonitorLink = SecondHand.replaceSecondUrl(
+		// unfoldMonitorLink, param);
+		// clickMonitorLink = SecondHand.replaceSecondUrl(
+		// clickMonitorLink, param);
+		// } else if (monitorType == 2) {
+		// link = AdMaster.adMasterReplace(link, param);
+		// unfoldMonitorLink = AdMaster.adMasterReplace(
+		// unfoldMonitorLink, param);
+		// clickMonitorLink = AdMaster.adMasterReplace(
+		// clickMonitorLink, param);
+		// }
+
+		if (monitorType == 3) { // 同步监控类型
+			link = creatMonitorUrl(link, advParam);
+			logger.info("monitorType=3, link={}", link);
+			this.monitorType = 0; //设置广告的监控类型为0，否则客户端监测监控链接为空，与这里的监控类型3不符合。结果无法发送展示埋点
+		}
+
+	}
+
+	public String getPicUrl(String platform, String iosUrl, String androidUrl, String picUrl) {
+		String url = "";
+		if (platform.equalsIgnoreCase(Platform.ANDROID.getValue())) {
+			url = androidUrl;
+		} else {
+			url = iosUrl;
+		}
+		if (url == null || url.equals("")) {
+			url = picUrl;
+		}
+		return url;
+	}
+
+	public void fillBaseInfo(AdContent ad, AdvParam advParam, Map<String, String> paramMap) {
+		if (ad == null || advParam == null) {
+			return;
+		}
+
+		this.id = ad.getId();
+		this.openType = ad.getOpenType();
+		this.targetType = ad.getTargetType();
+
+		fillLink(ad, advParam, paramMap);
+
+		monitorType = ad.getMonitorType();
+		unfoldMonitorLink = AdvUtil.encodeUrl(ad.getUnfoldMonitorLink());
+		clickMonitorLink = AdvUtil.encodeUrl(ad.getClickMonitorLink());
+		if (unfoldMonitorLink == null) {
+			unfoldMonitorLink = EMPTY_STR;
+		}
+		if (clickMonitorLink == null) {
+			clickMonitorLink = EMPTY_STR;
+		}
+
+		dealUrl(advParam, ad.getMonitorType());
+	}
+
+	/**
+	 * 处理link中的通配符
+	 * 
+	 * @param res
+	 * @param advParam
+	 */
+	public void dealLink(AdvParam advParam) {
+		if (link == null || link.equals("")) {
+			return;
+		}
+		String key = "lineId";
+
+		if (link.indexOf(key) == -1) {
+			return;
+		}
+
+		// 如果有通配符,但是lineid为空,return null
+		if (link.indexOf(key) != -1 && StringUtils.isEmpty(advParam.getLineId())) {
+			throw new IllegalArgumentException("lineId为空");
+		}
+
+		if (link.indexOf("%25lineId%25") != -1) {
+			link = link.replace("%25lineId%25", advParam.getLineId());
+		}
+		if (link.indexOf("%25lineName%25") != -1) {
+			if (advParam.getLineName() == null) {
+				throw new IllegalArgumentException("lineName为空");
+			}
+			link = link.replace("%25lineName%25", advParam.getLineName());
+		}
+
+		if (link.indexOf("%25lineNo%25") != -1) {
+			if (advParam.getLineNo() == null) {
+				throw new IllegalArgumentException("lineNo为空");
+			}
+			link = link.replace("%25lineNo%25", advParam.getLineNo());
+		}
+	}
+
+	protected void fillLink(AdContent ad, AdvParam advParam, Map<String, String> param) {
+		param.put("udid", advParam.getUdid());
+
+		if (advParam.getS().equalsIgnoreCase(Platform.IOS.getDisplay()) && ad.getOpenType() == 1) { // IOS
+																									// 外部打开的时候，需要加上通用参数
+			param.put(Constants.PARAM_DEVICE, advParam.getDeviceType());
+			param.put(Constants.PARAM_LNG, advParam.getLng() + "");
+			param.put(Constants.PARAM_LAT, advParam.getLat() + "");
+			param.put(Constants.PARAM_NW, advParam.getNw());
+
+			param.put(Constants.PARAM_IP, advParam.getIp());
+			param.put(Constants.PARAM_IMEI, advParam.getImei());
+			param.put(Constants.PARAM_IDFA, advParam.getIdfa());
+			param.put(Constants.PARAM_UA, advParam.getUa());
+			param.put(Constants.PARAM_S, advParam.getS());
+			param.put(Constants.PARAM_ANDROID, advParam.getAndroidID());
+			param.put(Constants.PARAM_MAC, advParam.getMac());
+
+		}
+		link = AdvUtil.buildRedirectLink(ad.getLink(), genLinkParamMap(ad, param), advParam.getUdid(), false, true,
+				ad.getLink_extra());
+	}
+
+	protected Map<String, String> genLinkParamMap(AdContent ad, Map<String, String> param) {
+		// 默认的需要添加的参数
+		param.put(Constants.PARAM_AD_ID, String.valueOf(ad.getId()));
+		param.put(Constants.PARAM_AD_TYPE, gainShowTypeEnum().getType());
+		// if (ad.getShowType().equals(ShowType.RIDE_DETAIL.getType())) {
+		// param.put(Constants.PARAM_AD_TYPE, ShowType.RIDE_DETAIL.getType());
+		// }
+
+		return param;
+	}
+
+	private String creatMonitorUrl(String link, AdvParam advParam) {
+		String url = link;
+		logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
+		try {
+			String platform = advParam.getS();
+			String udid = advParam.getUdid();
+			String imei = advParam.getImei();
+			String idfa = advParam.getIdfa();
+			String ua = advParam.getUa();
+			String AndroidID = advParam.getAndroidID();
+			String mac = advParam.getMac();
+			String ip = advParam.getIp();
+
+			String os = "0";
+			if (platform.equalsIgnoreCase(Platform.IOS.getDisplay())) {
+				os = "1";
+			}
+			url = url.replace("__OS__", os);
+			if (ip == null) {
+				logger.error("监控链接替换时 ip 为空, parameterMap={}, ip={}", JSONObject.toJSONString(advParam), ip);
+				// return; //TODO
+			} else {
+				url = url.replace("__IP__", ip);
+			}
+			if (os.equals("0")) { // android
+				if (imei != null)
+					url = url.replace("__IMEI__", DigestUtils.md5Hex(imei));
+				if (AndroidID != null)
+					url = url.replace("__AndroidID__", DigestUtils.md5Hex(AndroidID));
+			} else {
+				if (idfa != null && !idfa.equals("00000000-0000-0000-0000-000000000000")) {
+					url = url.replace("__IDFA__", idfa);
+				}
+//				url = url.replace("__OpenUDID__", udid);
+				url = url.replace("__UDID__", udid);
+			}
+
+			if (mac != null) {
+				mac = DigestUtils.md5Hex(mac.replace(":", "").toUpperCase());
+				url = url.replace("__MAC__", mac);
+			}
+			if (ua != null) {
+				url = url.replace("__UA__", ua);
+			}
+			 url = url.replace("__TS__", System.currentTimeMillis() + "");
+			logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("广告监控出错! udid={}, url={}", advParam.getUdid(), link);
+			return url;
+		}
+		return url;
+	}
+
+	protected abstract ShowType gainShowTypeEnum();
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getShowType() {
+		return showType;
+	}
+
+	public void setShowType(int showType) {
+		this.showType = showType;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public int getOpenType() {
+		return openType;
+	}
+
+	public void setOpenType(int openType) {
+		this.openType = openType;
+	}
+
+	public int getTargetType() {
+		return targetType;
+	}
+
+	public void setTargetType(int targetType) {
+		this.targetType = targetType;
+	}
+
+	public String getUnfoldMonitorLink() {
+		return unfoldMonitorLink;
+	}
+
+	public void setUnfoldMonitorLink(String unfoldMonitorLink) {
+		this.unfoldMonitorLink = unfoldMonitorLink;
+	}
+
+	public String getClickMonitorLink() {
+		return clickMonitorLink;
+	}
+
+	public void setClickMonitorLink(String clickMonitorLink) {
+		this.clickMonitorLink = clickMonitorLink;
+	}
+
+	public int getMonitorType() {
+		return monitorType;
+	}
+
+	public void setMonitorType(int monitorType) {
+		this.monitorType = monitorType;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public String getProvider_id() {
+		return provider_id;
+	}
+
+	public void setProvider_id(String provider_id) {
+		this.provider_id = provider_id;
+	}
+
+	public static void main(String[] args) {
+		String url = "";
+		String ua = null;
+		url = url.replace("__UA__", ua);
+
+	}
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.chelaile.dao.StopInfoDAO">
+
+
+
+	<select id="findAllBusInfStop" resultType="com.bus.chelaile.dao.model.BusInfStopModel">
+		select * from
+		bus_inf_stop
+	</select>
+
+
+	<insert id="addBusInfStopModel" parameterType="java.util.List">
+		insert into bus_inf_stop (
+		stopId,
+		stopName,
+		jingdu,
+		weidu
+		)
+		values
+		<foreach collection="list" item="list" index="index"
+			separator=",">
+			(#{list.stopId,jdbcType=VARCHAR},
+			#{list.stopName,jdbcType=VARCHAR},
+			#{list.jingdu,jdbcType=DECIMAL},
+			#{list.weidu,jdbcType=DECIMAL}
+		
+			)
+
+		</foreach>
+	</insert>
+
+</mapper>

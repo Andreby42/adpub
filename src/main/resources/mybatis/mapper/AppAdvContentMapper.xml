@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bus.chelaile.dao.AppAdvContentMapper" >
+    
+    
+    
+    <select id="listValidAds" resultType="com.bus.chelaile.model.ads.AdContent">
+        SELECT id,showType,title,link,openType,content,status,createTime,modifyTime,targetType,unfoldMonitorLink,clickMonitorLink,monitorType,priority,is_fullScreen,link_extra FROM APP_ADV_CONTENT WHERE showType != '03' and (status='1' or status='2');
+    </select>
+    
+    <select id="query4Id" resultType="com.bus.chelaile.model.ads.AdContent">
+        SELECT id,showType,title,link,openType,content,status,createTime,modifyTime,targetType,unfoldMonitorLink,clickMonitorLink,monitorType,priority,is_fullScreen,link_extra FROM APP_ADV_CONTENT WHERE (status='1' or status='2')
+        AND id=#{id,jdbcType=NUMERIC}
+    </select>    
+       
+</mapper>

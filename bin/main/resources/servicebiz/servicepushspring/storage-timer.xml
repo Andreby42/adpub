@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+      
+     <!--    定时处理缓存中过期数据         -->
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="correctionCronTrigger-overTimer-storageUpdate" />
+			</list>
+		</property>
+	</bean>
+	<bean id="correctionCronTrigger-overTimer-storageUpdate" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="correctionJobDetailFactory-overTimer-storageUpdate" />
+		</property>
+		<property name="cronExpression">
+			<value>0 */2 * * * ?</value>
+		</property>
+	</bean>
+	<bean id="correctionJobDetailFactory-overTimer-storageUpdate"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="storageUpdateVersionTimer" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<bean id="storageUpdateVersionTimer" class="com.bus.chelaile.storage.timer.StorageUpdateVersionTimer" />
+
+
+
+  <!--    定时重置现在版本在缓存中的所有数据          -->
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="correctionCronTrigger-overTimer-storageReset" />
+			</list>
+		</property>
+	</bean>
+	<bean id="correctionCronTrigger-overTimer-storageReset" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="correctionJobDetailFactory-overTimer-storageReset" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 23 * * ?</value>
+		</property>
+	</bean>
+	<bean id="correctionJobDetailFactory-overTimer-storageReset"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="storageResetCacheTimer" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<bean id="storageResetCacheTimer" class="com.bus.chelaile.storage.timer.StorageResetCacheTimer" />
+
+	<context:annotation-config />
+
+</beans>
