@@ -16,6 +16,25 @@ public class FlowContent {
 	private String activityLink;
 	private String duibaLink;
 
+	public FlowContent() {
+		super();
+	}
+
+	public FlowContent(int destType, String flowtitle, String flowTag, String flowIcon, String flowTagColor,
+			String tag, String tagId, String channelLink, String activityLink, String duibaLink) {
+		super();
+		this.destType = destType;
+		this.flowtitle = flowtitle;
+		this.flowTag = flowTag;
+		this.flowIcon = flowIcon;
+		this.flowTagColor = flowTagColor;
+		this.tag = tag;
+		this.tagId = tagId;
+		this.channelLink = channelLink;
+		this.activityLink = activityLink;
+		this.duibaLink = duibaLink;
+	}
+
 	public int getDestType() {
 		return destType;
 	}

@@ -92,6 +92,10 @@
 	</bean>
 	
 	
+	<!-- 新版信息流相关 -->
+	<bean id="flowServiceManager" class="com.bus.chelaile.flowNew.FlowServiceManager"  init-method="initFlows">
+	</bean>
+	
 	<!--    定时任务          -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
