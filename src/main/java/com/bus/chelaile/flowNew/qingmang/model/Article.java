@@ -10,6 +10,14 @@ import java.util.List;
  */
 public class Article {
 
+	@Override
+	public String toString() {
+		return "Article [articleId=" + articleId + ", title=" + title + ", snippet=" + snippet + ", author=" + author
+				+ ", covers=" + covers + ", images=" + images + ", videos=" + videos + ", musics=" + musics + ", tags="
+				+ tags + ", templateType=" + templateType + ", contentUrl=" + contentUrl + ", contentFormat="
+				+ contentFormat + ", content=" + content + "]";
+	}
+
 	private String articleId;
 	private String title;
 	private String snippet;

@@ -58,7 +58,9 @@ public class FlowServiceManager {
 		
 		List<FlowContent> flows = getLineDetailFlows(param);
 		if(flows != null && flows.size() > 0) {
-			return getClienSucMap(flows, Constants.STATUS_REQUEST_SUCCESS);
+			JSONObject responseJ = new JSONObject();
+			responseJ.put("flows", flows);
+			return getClienSucMap(responseJ, Constants.STATUS_REQUEST_SUCCESS);
 		} else {
 			return getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
 		}
@@ -90,14 +92,16 @@ public class FlowServiceManager {
 	/*
 	 * 可能涉及到一些链接增加用户id之类的修正
 	 */
-	private List<FlowContent> createList(Map<Integer, FlowContent> linedetailflows, AdvParam param, List<FlowContent> flows) {
+	private List<FlowContent> createList(Map<Integer, List<FlowContent>> linedetailflows, AdvParam param, List<FlowContent> flows) {
 		if(linedetailflows == null || linedetailflows.size() < 1) {
 			logger.error("详情页下方滚动栏没有读取到任何内容！，udid={}", param.getUdid());
 			return null;
 		}
 		
 		// TODO ，需要更加科学详细的排序逻辑
-		flows.addAll(linedetailflows.values());
+		for(Integer type : linedetailflows.keySet()) {
+			flows.addAll(linedetailflows.get(type));
+		}
 		return flows;
 	}
 

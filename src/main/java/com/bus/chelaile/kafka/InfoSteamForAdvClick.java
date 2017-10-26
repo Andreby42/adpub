@@ -4,22 +4,17 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import kafka.consumer.ConsumerConfig;
-import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.kafka.thread.ConsumerHandle;
 import com.bus.chelaile.linkActive.LinkActiveHelp;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.util.config.PropertiesUtils;
-import com.chelaile.logcenter2.sdk.api.Consumer;
-import com.chelaile.logcenter2.sdk.api.LcFactory;
-import com.chelaile.logcenter2.sdk.kafka.consumer.ConsumerCallbackWorker;
 
 public class InfoSteamForAdvClick {
 

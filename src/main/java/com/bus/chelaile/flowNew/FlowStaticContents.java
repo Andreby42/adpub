@@ -11,7 +11,7 @@ import com.bus.chelaile.util.New;
 public class FlowStaticContents {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(FlowStaticContents.class);
-	public static final Map<Integer, FlowContent> lineDetailFlows = New.hashMap();
+	public static final Map<Integer, List<FlowContent>> lineDetailFlows = New.hashMap();
 	
 	
 
@@ -41,16 +41,31 @@ public class FlowStaticContents {
 		FlowContent flow1 = new FlowContent(1, "世界无车日活动", "正在进行", "http://pic1.chelaile.net.cn/adv/brandIcon286320170221.png", "230,43,22,1", 
 				null, null, null, "https://www.chelaile.net.cn/nt4web/201704/477ff2a660d549a5894e2fbc479eb44e.html", null);
 		FlowContent flow2 = new FlowContent(2, "娱乐八卦尽在此处", "热门文章", "http://pic1.chelaile.net.cn/adv/brandIcon286320170221.png", "230,43,22,1", 
-				null, null, "https://www.chelaile.net.cn/nt4web/201704/477ff2a660d549a5894e2fbc479eb44e.html", null, null);
-		FlowContent flow3 = new FlowContent(3, "你真的可以兑换雨伞啦", "能量商城", "http://pic1.chelaile.net.cn/adv/brandIcon286320170221.png", "230,43,22,1", 
-				null, null, null, null, null);
+				null, null, "c284209068", null, null);
+		FlowContent flow3 = new FlowContent(3, "1元公交卡", "能量商城", "http://pic1.chelaile.net.cn/adv/brandIcon286320170221.png", "230,43,22,1", 
+				null, null, null, null, "https://goods.m.duiba.com.cn/mobile/detail?itemId=1885");
 		FlowContent flow4 = new FlowContent(3, "商城逛逛", "能量商城", "http://pic1.chelaile.net.cn/adv/brandIcon286320170221.png", "230,43,22,1", 
 				null, null, null, null, null);
-		lineDetailFlows.put(0, flow0);
-		lineDetailFlows.put(1, flow1);
-		lineDetailFlows.put(2, flow2);
-		lineDetailFlows.put(3, flow3);
-		lineDetailFlows.put(3, flow4);
+		FlowContent flow5 = new FlowContent(4, "能量倌", "去能量倌充能", "http://pic1.chelaile.net.cn/adv/brandIcon286320170221.png", "230,43,22,1", 
+				null, null, null, null, null);
+		
+		addFlowsToMap(0, flow0);
+		addFlowsToMap(1, flow1);
+		addFlowsToMap(2, flow2);
+		addFlowsToMap(3, flow3);
+		addFlowsToMap(3, flow4);
+		addFlowsToMap(4, flow5);
+	}
+
+
+	private static void addFlowsToMap(int type, FlowContent flow) {
+		if(lineDetailFlows.containsKey(type)) {
+			lineDetailFlows.get(type).add(flow);
+		} else {
+			List<FlowContent> flowList = New.arrayList();
+			flowList.add(flow);
+			lineDetailFlows.put(type, flowList);
+		}
 	}
 
 

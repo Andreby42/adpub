@@ -7,6 +7,23 @@ public class Video {
 	private String width;
 	private String height;
 
+	@Override
+	public String toString() {
+		return "Video [url=" + url + ", duration=" + duration + ", width=" + width + ", height=" + height + "]";
+	}
+
+	public Video() {
+		super();
+	}
+
+	public Video(String url, double duration, String width, String height) {
+		super();
+		this.url = url;
+		this.duration = duration;
+		this.width = width;
+		this.height = height;
+	}
+
 	public String getUrl() {
 		return url;
 	}
