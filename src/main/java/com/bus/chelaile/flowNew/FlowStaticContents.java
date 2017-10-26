@@ -5,27 +5,83 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bus.chelaile.common.AdvCache;
+import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.flowNew.model.ArticleContent;
 import com.bus.chelaile.flowNew.model.FlowContent;
+import com.bus.chelaile.flowNew.qingmang.QMHelper;
+import com.bus.chelaile.util.DateUtil;
 import com.bus.chelaile.util.New;
 
 public class FlowStaticContents {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(FlowStaticContents.class);
-	public static final Map<Integer, List<FlowContent>> lineDetailFlows = New.hashMap();
 	
+	// 详情页下方滚动栏内容
+	public static final Map<Integer, List<FlowContent>> LINE_DETAIL_FLOWS = New.hashMap();
+	public static final int ARTICLE_NUMBER_LIMIT = 1000;
 	
+	// 定时拉取的文章列表,key=自定义文章序列(有递增项)，value=文章详情
+	// key="QM_ARTICLE_KEY#" + ${date} + "#" + articleNo
+	// articleNo从0开始递增,每天从0开始
+	public static final Map<String, ArticleContent> ARTICLE_CONTENTS = New.hashMap();
+	private static final Set<String> CHANNELS = New.hashSet();
+	static {
+		CHANNELS.add("c284209068");CHANNELS.add("c284209082");CHANNELS.add("c284209029");
+	}
+	
+	/**
+	 * 初始化拉取文章
+	 */
+	public static void initArticleContents() {
+		String date = DateUtil.getTodayStr("yyyy-MM-dd");
+		int articleNo = getArticleNo(date); //获取本次拉取之前的 ‘文章no’ 起始值
+		logger.info("本次拉取文章，起始id数为：{}", articleNo);
+		
+		while(ARTICLE_CONTENTS.size() < ARTICLE_NUMBER_LIMIT) {
+			for(String channelId : CHANNELS) {
+				articleNo = QMHelper.getArticlesFromAPI(channelId, ARTICLE_CONTENTS, articleNo, date);
+				logger.info("拉取频道 ：{} 之后，最新文章id数为：{}", channelId, articleNo);
+			}
+		}
+	}
+
 
 	
-	
+	// 获取最新文章i序列编号
+	private static int getArticleNo(String date) {
+		int articleNo = 0;
+		String articleNoStr = (String)CacheUtil.getFromRedis(AdvCache.getQMArticleNo(date));
+		if(articleNoStr != null) {
+			articleNo = Integer.parseInt(articleNoStr);
+		}
+		return articleNo;
+	}
+	// 更新最新文章序列编号
+	public static void setArticleNo(String date, int no) {
+		String key = AdvCache.getQMArticleNo(date);
+		CacheUtil.setToRedis(key, Constants.ONE_DAY_NEW_USER_PERIOD, no);
+	}
+
+
+
 	public static void initLineDetailFlows() {
 		
 		// 获取活动列表
 		
+		
+		
 		//获取文章列表
+		
 		
 		//获取话题标签列表
 		
+		
+		
 		//获取商城物品列表
+		
+		
 		
 		//构建 lineDetailFlows
 		
@@ -59,14 +115,12 @@ public class FlowStaticContents {
 
 
 	private static void addFlowsToMap(int type, FlowContent flow) {
-		if(lineDetailFlows.containsKey(type)) {
-			lineDetailFlows.get(type).add(flow);
+		if(LINE_DETAIL_FLOWS.containsKey(type)) {
+			LINE_DETAIL_FLOWS.get(type).add(flow);
 		} else {
 			List<FlowContent> flowList = New.arrayList();
 			flowList.add(flow);
-			lineDetailFlows.put(type, flowList);
+			LINE_DETAIL_FLOWS.put(type, flowList);
 		}
 	}
-
-
 }

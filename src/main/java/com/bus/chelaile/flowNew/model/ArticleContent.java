@@ -4,7 +4,7 @@ import com.bus.chelaile.flowNew.qingmang.model.Video;
 
 public class ArticleContent {
 
-	private int type;
+	private int type;	// 0:无图模式，1:有图模式
 	private String pic;
 	private String link;
 	private String source;

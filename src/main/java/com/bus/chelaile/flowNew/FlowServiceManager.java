@@ -1,7 +1,6 @@
 package com.bus.chelaile.flowNew;
 
 import java.util.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +20,12 @@ public class FlowServiceManager {
 	
 	/**
 	 * 初始化一些需要提前录入缓存的内容
+	 * 除了‘热门文章’，其他都需要放入缓存中
 	 */
 	public void initFlows() {
 		
 		FlowStaticContents.initLineDetailFlows();
+		FlowStaticContents.initArticleContents();
 		
 	}
 	
@@ -77,7 +78,7 @@ public class FlowServiceManager {
 		//条件判断
 		if(isReturnLineDetailFlows(param)) {
 		
-			createList(FlowStaticContents.lineDetailFlows, param, flows);
+			createList(FlowStaticContents.LINE_DETAIL_FLOWS, param, flows);
 		}
 		
 		return flows;

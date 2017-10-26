@@ -137,7 +137,22 @@ public class AdvCache {
 	public static String getStreamClickNumberKey(String udid) {
 		return new StringBuilder("STREAM_C_NUMBER#").append(udid).toString();
 	}
-
+	
+	/*
+	 * 给缓存的轻芒文章记录数目
+	 */
+	public static String getQMArticleNo(String date) {
+		return new StringBuilder("QM_ARTICLE_NO#").append(date).toString();
+	}
+	
+	/*
+	 * 给缓存的轻芒文章构造id
+	 *参数key=${date} + "#" + articleNo
+	 */
+	public static String getQMArticleKey(String key) {
+		return new StringBuilder("QM_ARTICLE_KEY#").append(key).toString();
+	}
+	
 //	/*
 //	 * key用户记录用户有已经点击过的广告， 对于已经点击过的广告可能不能再想用户推送。
 //	 */
