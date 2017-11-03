@@ -2,6 +2,7 @@ package com.bus.chelaile.common.cache;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.spy.memcached.internal.OperationFuture;
 
@@ -25,5 +26,8 @@ public interface ICache {
 	 
 	 //
 	 public void incrBy(String key, int incNumber, int exp);
+
+	 // 从redis直接获取set
+	 public Set<String> getSet(String key);
 	 
 }

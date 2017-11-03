@@ -13,6 +13,7 @@ public class AdvParam {
      private String accountId;
      // 需要保证每一个s的值都是小写的。
      private String s;
+     private String src;
      private String udid;
      private double lng;
      private double lat;
@@ -522,6 +523,16 @@ public class AdvParam {
 
 	public void setRideStatus(int rideStatus) {
 		this.rideStatus = rideStatus;
+	}
+
+
+	public String getSrc() {
+		return src;
+	}
+
+
+	public void setSrc(String src) {
+		this.src = src;
 	}
 	
 	

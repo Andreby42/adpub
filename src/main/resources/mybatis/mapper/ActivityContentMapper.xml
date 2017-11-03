@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bus.chelaile.dao.ActivityContentMapper" >
-    
-     
-    <select id="listValidActivity" resultType="com.bus.chelaile.flow.model.ActivityContent">
-        SELECT activity_id,type,title,tag_title,tag_color,pic,tag_id,tag_name,link,feed_id,chat_room_id,sort_index,rule,
-        custom_channel,custom_channel_id,channelType,isShowInRecommend 
-        FROM BUS_FLOW_ACTIVITY 
-        WHERE status='2' ;
-    </select>
-       
-    <select id="listValidChannel" resultType="com.bus.chelaile.flow.model.FlowChannel">
-    	SELECT id,name,channelid,title,picurl,channeltype
-    	FROM BUS_ADV_UCCHANNEL
-    	WHERE status=2;
-    </select> 
-       
+<mapper namespace="com.bus.chelaile.dao.ActivityContentMapper">
+
+
+	<select id="listValidActivity" resultType="com.bus.chelaile.flow.model.ActivityContent">
+		SELECT
+		activity_id,type,title,tag_title,tag_color,pic,tag_id,tag_name,link,feed_id,chat_room_id,sort_index,rule,
+		custom_channel,custom_channel_id,channelType,isShowInRecommend
+		FROM BUS_FLOW_ACTIVITY
+		WHERE status='2' or status='3';
+	</select>
+
+	<select id="listValidChannel" resultType="com.bus.chelaile.flow.model.FlowChannel">
+		SELECT id,name,channelid,title,picurl,channeltype
+		FROM BUS_ADV_UCCHANNEL
+		WHERE status=2;
+	</select>
+
+	<select id="listOnlineActivity" resultType="com.bus.chelaile.flow.model.ActivityContent">
+		SELECT
+		activity_id,type,title,tag_title,tag_color,pic,tag_id,tag_name,link,feed_id,chat_room_id,sort_index,rule,
+		custom_channel,custom_channel_id,channelType,isShowInRecommend
+		FROM BUS_FLOW_ACTIVITY
+		WHERE status='2';
+	</select>
+
 </mapper>

@@ -388,7 +388,7 @@ public class ActivityService {
 			}
 		}
 		
-		return ChannelType.TOUTIAO;
+		return ChannelType.UC;	 //TODO
 	}
 	
 

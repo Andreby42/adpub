@@ -4,6 +4,12 @@
  */
 package com.bus.chelaile.flowNew.model;
 
+import java.util.HashMap;
+
+import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.util.AdvUtil;
+import com.bus.chelaile.util.New;
+
 public class FlowContent {
 	private int destType; // 跳转目的地类型, 0：话题标签页，1：活动，2：文章，3：能量商城，4：能量倌首页
 	private String flowTitle;
@@ -24,7 +30,7 @@ public class FlowContent {
 			String tag, String tagId, String articleUrl, String activityLink, String duibaLink) {
 		super();
 		this.destType = destType;
-		this.setFlowTitle(flowTitle);
+		this.flowTitle = flowTitle;
 		this.flowTag = flowTag;
 		this.flowIcon = flowIcon;
 		this.flowTagColor = flowTagColor;
@@ -33,6 +39,27 @@ public class FlowContent {
 		this.setArticleUrl(articleUrl);
 		this.activityLink = activityLink;
 		this.duibaLink = duibaLink;
+	}
+	
+	public void deal(FlowContent flowContent, AdvParam param) {
+		this.destType = flowContent.getDestType();
+		this.flowTitle = flowContent.getFlowTitle();
+		this.flowTag = flowContent.getFlowTag();
+		this.flowIcon = flowContent.getFlowIcon();
+		this.flowTagColor = flowContent.getFlowTagColor();
+		this.tag = flowContent.getTag();
+		this.tagId = flowContent.getTagId();
+
+		this.activityLink = flowContent.getActivityLink();
+		this.duibaLink = flowContent.getDuibaLink();
+		
+		
+		HashMap<String, String> paramsMap = New.hashMap();
+		paramsMap.put("udid", param.getUdid());	//放在最外层的参数，未编码进link参数里面，如果跳转是ad，最终页面会丢失这个参数
+		paramsMap.put("gse", "1");		
+		paramsMap.put("wse", "1");	
+		this.articleUrl = AdvUtil.buildRedirectLink(flowContent.getArticleUrl(), paramsMap, param.getUdid(), null,
+				null, false, true, 0);	//参数1，决定使用redirect； 0，决定使用ad);
 	}
 
 	public int getDestType() {
@@ -115,5 +142,4 @@ public class FlowContent {
 	public void setArticleUrl(String articleUrl) {
 		this.articleUrl = articleUrl;
 	}
-
 }

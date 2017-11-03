@@ -139,19 +139,29 @@ public class AdvCache {
 	}
 	
 	/*
-	 * 给缓存的轻芒文章记录数目
+	 * 缓存的轻芒文章最后一篇
+	 * 参数key=date + "#" + channelId
 	 */
-	public static String getQMArticleNo(String date) {
-		return new StringBuilder("QM_ARTICLE_NO#").append(date).toString();
+	public static String getQMArticleNo(String dateChannelId) {
+		return new StringBuilder("QM_ARTICLE_NO#").append(dateChannelId).toString();
+	}
+	// 缓存的轻芒文章第一篇
+	public static String getQMArticleFirstNo(String dateChannelId) {
+		return new StringBuilder("QM_ARTICLE_FIRST_NO#").append(dateChannelId).toString();
 	}
 	
 	/*
 	 * 给缓存的轻芒文章构造id
-	 *参数key=${date} + "#" + articleNo
+	 *参数key=${date} + "#" + channelId + "#" + articleNo
 	 */
 	public static String getQMArticleKey(String key) {
 		return new StringBuilder("QM_ARTICLE_KEY#").append(key).toString();
 	}
+	
+	
+//	public static String getQMPersonArticleNo
+	
+	
 	
 //	/*
 //	 * key用户记录用户有已经点击过的广告， 对于已经点击过的广告可能不能再想用户推送。

@@ -19,9 +19,11 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 
 
 
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class OCSNewCacheUtil implements ICache{
@@ -209,5 +211,11 @@ public class OCSNewCacheUtil implements ICache{
 	@Override
 	public void incrBy(String key, int incNumber, int exp) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public Set<String> getSet(String key) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

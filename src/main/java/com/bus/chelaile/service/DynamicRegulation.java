@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.thread.CalculatePerMinCount;
+import com.bus.chelaile.thread.DowQMArticles;
 import com.bus.chelaile.thread.UpdateSendPV;
 
 public class DynamicRegulation {
@@ -32,13 +33,17 @@ public class DynamicRegulation {
 			// 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
 			service.scheduleWithFixedDelay(runnable, 10, 3, TimeUnit.SECONDS);
 			logger.info("启动发送pv到redis线程");
-			System.out.println("启动发送pv到redis线程");
 			
 			// 启动计算pv投放比例因子
 			Runnable calculateThread = new CalculatePerMinCount();
 			service.scheduleWithFixedDelay(calculateThread, 3, 20, TimeUnit.MINUTES);
 			logger.info("启动计算pv投放比例因子");
-			System.out.println("启动计算pv投放比例因子");
+			
+			
+			// 启动缓存QM文章内容
+			Runnable QMThread = new DowQMArticles();
+			service.scheduleWithFixedDelay(QMThread, 1, 5, TimeUnit.MINUTES);
+			logger.info("启动缓存QM文章内容#########");
 
 			hasStartThread = true;
 		}

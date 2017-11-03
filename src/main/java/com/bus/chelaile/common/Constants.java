@@ -14,6 +14,7 @@ public class Constants {
     public static final String STATUS_FUNCTION_NOT_ENABLED = "03";
     public static final String STATUS_NO_DATA = "00";
     public static final String STATUS_PARAM_ERROR = "05";
+    public static final String STATUS_NO_ARTICLES = "11";	// 没有更多文章了！
     
     public static final String STATUS_ILLEGAL_OPERATION = "06";
     

@@ -221,6 +221,7 @@ public class XishuashuaHelp implements InterfaceFlowHelp {
 		String response = null;
 		try {
 			response = HttpUtils.get(url, "UTF-8");
+			logger.info("头条返回的文章详情：{}", response); //TODO 
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}

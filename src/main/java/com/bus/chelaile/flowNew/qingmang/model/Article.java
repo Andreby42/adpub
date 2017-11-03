@@ -29,6 +29,8 @@ public class Article {
 	private List<String> tags;
 	private String templateType;
 	private String contentUrl;
+	private String providerName;
+	private long publishTimestamp;
 
 	private String contentFormat;
 	private String content;
@@ -135,6 +137,22 @@ public class Article {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getProviderName() {
+		return providerName;
+	}
+
+	public void setProviderName(String providerName) {
+		this.providerName = providerName;
+	}
+
+	public long getPublishTimestamp() {
+		return publishTimestamp;
+	}
+
+	public void setPublishTimestamp(long publishTimestamp) {
+		this.publishTimestamp = publishTimestamp;
 	}
 
 }

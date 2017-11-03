@@ -319,7 +319,7 @@ public class OSSUtil {
 //    	}
 //    	
     	String folder = "adv/open/";
-    	putPhoto("1shoujijingdongxinrenmianfeiling188yuanyouhuiquan.jpg", file, "image/jpeg", folder);
+    	System.out.println(putPhoto("1shoujijingdongxinrenmianfeiling188yuanyouhuiquan.jpg", file, "image/jpeg", folder));
     }
     
     @SuppressWarnings("unchecked")

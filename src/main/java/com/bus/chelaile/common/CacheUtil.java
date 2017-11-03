@@ -7,16 +7,19 @@ import net.spy.memcached.internal.OperationFuture;
 
 
 
+
+
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
-
 import com.bus.chelaile.common.cache.RedisCacheImplUtil;
+import com.bus.chelaile.common.cache.RedisWowCacheImplUtil;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
@@ -25,6 +28,8 @@ public class CacheUtil {
 	private static ICache client;
 	//	redis缓存
 	private static ICache redisClient;
+	//  用来获取用户头像的redis
+	private static ICache redisWow;
 	//	保存用户访问量等信息
 	private static ICache cacheNewClient;
 	//	获取access_token的
@@ -100,6 +105,7 @@ public class CacheUtil {
     	   throw new IllegalArgumentException("未找到cacheType类型");
        }
        redisClient = new RedisCacheImplUtil();
+       redisWow = new RedisWowCacheImplUtil();
        isInitSuccess = true;
     }
     
@@ -184,6 +190,10 @@ public class CacheUtil {
     
     public static Object getApiInfo(String key){
     	return cacheApiTokenClient.get(key);
+    }
+    
+    public static Set<String> getWowDatas(String key) {
+    	return redisWow.getSet(key);
     }
  
 //	public static Object getActiveOcs(String key) {

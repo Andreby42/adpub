@@ -120,8 +120,8 @@ public class ImgUtils {
 	
 	
 	public static void main(String[] args) throws IOException {
-		String path = "C:/2.jpeg"; // 输入图片 测试要在C盘放一张图片1.jpg
-		ImgUtils.scale("C:/2.jpeg", "C:/2yasuo.jpg", 180, 240, true);// 等比例缩放
+		String path = "C:/QM_8436484207768921049_580_Original.jpg"; // 输入图片 测试要在C盘放一张图片1.jpg
+		ImgUtils.scale(path, "C:/2yasuo.jpg", 180, 240, false);// 等比例缩放
 																	// 输出缩放图片
 
 		File newfile = new File("C:/2yasuo.jpg");
