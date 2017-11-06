@@ -16,12 +16,11 @@ import com.bus.chelaile.flowNew.model.ArticleContent;
 import com.bus.chelaile.flowNew.qingmang.model.Article;
 import com.bus.chelaile.flowNew.qingmang.model.ArticleParagraph;
 import com.bus.chelaile.model.PropertiesName;
+import com.bus.chelaile.util.config.PropertiesUtils;
 import com.bus.chelaile.util.DateUtil;
 import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
-import com.bus.chelaile.util.OSSUtil;
 import com.bus.chelaile.util.UrlUtil;
-import com.bus.chelaile.util.config.PropertiesUtils;
 
 
 /***
@@ -32,28 +31,34 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 public class QMHelper {
 
 	protected static final Logger logger = LoggerFactory.getLogger(QMHelper.class);
-	private static String ARTICLE_DUMP = "http://api.qingmang.me/v2/article.dump?token=2625bc965189419c94f2f6b3d8491876&category_id=%s";
-//	private static String ARTICLE_DUMP = "http://api.qingmang.me/v2/article.list?token=2625bc965189419c94f2f6b3d8491876&category_id=%s";	// TODO 测试
-	private static String ARTICLE_GET = "http://api.qingmang.me/v2/article.get?token=2625bc965189419c94f2f6b3d8491876&format=raml&id=%s";
-
+	private static String ARTICLE_DUMP = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"flowNew.articleList.url", "http://api.qingmang.me/v2/article.dump?token=2625bc965189419c94f2f6b3d8491876&category_id=%s");
+	private static String ARTICLE_GET = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"flowNew.articleGet.url", "http://api.qingmang.me/v2/article.get?token=2625bc965189419c94f2f6b3d8491876&format=raml&id=%s");
+	
 	private static String imageDiv = "<div class=\"img-container\"><img src=\"%s\" alt=\"\"> </div>";
+	
+	private static final String htmlPath = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"flowNew.htmlPath", "/opt/tomcat-new-6080/webapps/adpub/QM/");
+	private static String articleLinkHost = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"flowNew.articleHost", "https://api.chelaile.net.cn/adpub/QM/");
 	
 	// test
 //	private static String htmlPath = "/opt/tomcat-6090/webapps/adpub/QM/";
-//	private static String articleLinkHost = "https://dev.chelaile.net.cn/adpub/QM/"; 	// TODO　测试地址
+//	private static String articleLinkHost = "https://dev.chelaile.net.cn/adpub/QM/"; 	//　测试地址
 	
 	//stage
-	private static String htmlPath = "/root/apache-tomcat-new-8.0.32/webapps/adpub/QM/";
-	private static String articleLinkHost = "https://stage.chelaile.net.cn/adpub/QM/"; 	// TODO　stage地址
+//	private static String htmlPath = "/root/apache-tomcat-new-8.0.32/webapps/adpub/QM/";
+//	private static String articleLinkHost = "https://stage.chelaile.net.cn/adpub/QM/"; 	//　stage地址
 	
 	//pro
-//	private static String htmlPath = "/opt/tomcat-6090/webapps/adpub/QM/";
-//	private static String articleLinkHost = "https://dev.chelaile.net.cn/adpub/QM/"; 	// TODO　api地址
+//	private static String htmlPath = "/opt/tomcat-new-6080/webapps/adpub/QM/";
+//	private static String articleLinkHost = "https://api.chelaile.net.cn/adpub/QM/"; 	//　api地址
 	
 	
-	private static final String QMfolder = "adv/QMpic/";
-	private static String QMPicNewPath = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), ("QMPicNewPath"),
-			"/data/logs/pic/QM/");
+//	private static final String QMfolder = "adv/QMpic/";
+//	private static String QMPicNewPath = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), ("QMPicNewPath"),
+//			"/data/logs/pic/QM/");
 
 	/***
 	 * 从轻芒接口获取文章列表
@@ -68,7 +73,7 @@ public class QMHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("请求轻芒接口出错！response={}", response);
-			return articleNo;
+			return -1;
 		}
 		JSONObject resJ = JSONObject.parseObject(response);
 		JSONArray articlesJ = resJ.getJSONArray("articles");
@@ -78,17 +83,15 @@ public class QMHelper {
 		if (articles == null || articles.size() < 1) {
 			// TODO　
 			logger.error("QM，dump接口数据拉尽了~ ");
+			return -1;
 		}
-		int i = 0;
 		for (Article ar : articles) {
 			String articleKey = AdvCache.getQMArticleKey(date + "#" + channelId + "#" + articleNo);
 			if (createMyArticles(ar, articleKey, articleNo, channelId)) {
 				articleNo++;
-				i++;
 			}
 		}
 		FlowStaticContents.setArticleNo(date + "#" + channelId, articleNo);
-		logger.info("轻芒文章,拉取频道 ：{} ,有效文章数量为：{}", channelId, i);
 		return articleNo;
 	}
 
@@ -144,8 +147,8 @@ public class QMHelper {
 //			logger.error("生成静态html文件错误，articleId={}", ar.getArticleId());
 			return false;
 		}
-		logger.info("QM,记录有效源：channel={}, source={}, title={}", 
-				channelId, myAr.getSource(), myAr.getTitle());
+//		logger.info("QM,记录有效源：channel={}, source={}, title={}", 
+//				channelId, myAr.getSource(), myAr.getTitle());
 		myAr.setLink(articleLinkHost + link);
 		
 		// 压缩封面图			// TODO　不压缩看看效果
@@ -156,10 +159,10 @@ public class QMHelper {
 				picDownName = UrlUtil.saveUrlPic(myAr.getPic(), "QM_" + myAr.getArticleId());
 				logger.info("QMpic saved , picName={},title={}", picDownName, "QM_" + myAr.getArticleId());
 				
-				String picSmall = QMPicNewPath + "QM_" + myAr.getArticleId() + ".jpeg";
-				ImgUtils.scale(picDownName, picSmall, 180 * 3, 240 * 3, false);// 等比例缩放
-				
-				File file = new File(picSmall);
+//				String picSmall = QMPicNewPath + "QM_" + myAr.getArticleId() + ".jpeg";
+//				ImgUtils.scale(picDownName, picSmall, 180 * 3, 240 * 3, false);// 等比例缩放
+//				
+//				File file = new File(picSmall);
 //				logger.info("生成图片地址：file={}", file);
 //				String url = OSSUtil.putPhoto("QM_" + myAr.getArticleId() + ".jpg", file, "image/jpeg", QMfolder);
 //				if(url != null)
@@ -219,7 +222,7 @@ public class QMHelper {
 				} else if(arPara.getType() == 2) {
 					// 音频
 					logger.info("QM 遇到视频，暂时略过, channelId={}, source={}", channelId, author);
-//					continue;  		 // TODO　
+//					continue;  	
 					return null;
 				}
 			}
@@ -240,7 +243,7 @@ public class QMHelper {
 			// 写文件
 			BufferedWriter writer = null;
 			OutputStreamWriter output = null;
-			output = new OutputStreamWriter(new FileOutputStream(htmlPath + "QM_" + myAr.getArticleId()));	 	 // TODO 文章内容， 文章存放和同步
+			output = new OutputStreamWriter(new FileOutputStream(htmlPath + "QM_" + myAr.getArticleId()));	 	 //文章内容， 文章存放和同步
 			writer = new BufferedWriter(output);
 			writer.write(htmlOut);
 			writer.flush();

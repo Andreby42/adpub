@@ -13,12 +13,15 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.dao.ActivityContentMapper;
+import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.flowNew.model.ArticleContent;
 import com.bus.chelaile.flowNew.model.FlowContent;
+import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.DateUtil;
 import com.bus.chelaile.util.New;
+import com.bus.chelaile.util.config.PropertiesUtils;
 
 public class FlowServiceManager {
 
@@ -26,6 +29,9 @@ public class FlowServiceManager {
 //	private FlowOcs flowOcs;
 	@Autowired
 	private ActivityContentMapper activityContentMapper;
+	private static final String HEADSTRS = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"detail.new.flow.udidHEADS", "4|5|6|7");
+	private static final List<String> HEADLIST = New.arrayList();
 	
 	protected static final Logger logger = LoggerFactory.getLogger(FlowServiceManager.class);
 	/**
@@ -34,6 +40,11 @@ public class FlowServiceManager {
 	public void initFlows() {
 //		FlowStaticContents.initArticleContents();
 //		initLineDetailFlows();
+		// 详情页投放用户的处理
+		HEADLIST.clear();
+		for(String s : HEADSTRS.split("\\|")) {
+			HEADLIST.add(s);
+		}
 		
 		// 用户头像缓存
 		long t1 = System.currentTimeMillis();
@@ -123,10 +134,9 @@ public class FlowServiceManager {
 		}
 		List<ArticleContent> articleList = FlowStaticContents.getArticleList(channelId, articlePersonNo, param);
 		
-		for(ArticleContent arContent : articleList) {
-			
-		}
-		
+//		for(ArticleContent arContent : articleList) {
+//			// TODO 针对用户，做一些去重之类的处理
+//		}
 		return articleList;
 	}
 
@@ -160,11 +170,13 @@ public class FlowServiceManager {
 				String noStr = articleId.split("_")[1];
 				logger.info("用户起始文章channelId={}, no为：{}, 缓存最后一篇文章no={} ",channelId, noStr, articleLastNo);
 				int arPersonNo = Integer.parseInt(noStr);
-				if (arPersonNo + 2 >= articleLastNo) {
-					// TODO 此处让用户从第一篇开始，好处在于：1.用户可能没有开最开始的，2.后续会做排重，用户如果真的看完了，最后依旧不会返回文章，状态set为11
-					logger.info("文章刷完了~，让用户从第一篇重新开始");
-					return 0;
-				}
+//				if (arPersonNo + 2 >= articleLastNo) {
+//					//  此处让用户从第一篇开始，好处在于：
+//					// 1.用户可能没有开最开始的，
+//					// 2.后续会做排重，用户如果真的看完了，最后依旧不会返回文章，状态set为11
+//					logger.info("文章刷完了~，让用户从第一篇重新开始");
+//					return 0;
+//				}
 				return arPersonNo;
 			} catch (Exception e) {
 				return 0;
@@ -193,14 +205,13 @@ public class FlowServiceManager {
 	 * 可能涉及到一些链接增加用户id之类的修正
 	 */
 	private void createList( AdvParam param, List<FlowContent> flows) {
-		Map<Integer, List<FlowContent>> linedetailflows = FlowStaticContents.getLineDetailFlows();
-		
-		if (linedetailflows == null || linedetailflows.size() < 1) {
-			logger.error("详情页下方滚动栏没有读取到任何内容！，accountId={}", param.getAccountId());
-			return;
-		}
+//		Map<Integer, List<FlowContent>> linedetailflows = FlowStaticContents.getLineDetailFlows();
+//		
+//		if (linedetailflows == null || linedetailflows.size() < 1) {
+//			logger.error("详情页下方滚动栏没有读取到任何内容！，accountId={}", param.getAccountId());
+//			return;
+//		}
 
-		int[] types = { 4, 1, 2, 0, 3 };
 		List<FlowContent> flowEnergy = New.arrayList();
 		List<FlowContent> flowActivity = New.arrayList();
 		List<FlowContent> flowArticle = New.arrayList();
@@ -251,8 +262,27 @@ public class FlowServiceManager {
 	}
 
 	private boolean isReturnLineDetailFlows(AdvParam param) {
-		// TODO
-		return true;
+		if(isFirstWord(param.getUdid(), HEADLIST)) {
+			return true;					// udid开头的一些用户打开详情页入口||支持小说的，全部打开详情页入口
+		}
+		if (ActivityService.FLOWUDIDS.contains(param.getUdid())) {
+			return true;
+		}
+		if (Constants.ISTEST) {
+			return true; 			// FOR TEST
+		}
+		return false;
+	}
+	
+	private boolean isFirstWord(String udid, List<String> headlist) {
+		if(headlist != null && udid != null) {
+			for(String s : headlist) {
+				if(udid.startsWith(s)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**

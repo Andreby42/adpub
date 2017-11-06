@@ -8,7 +8,7 @@
 		activity_id,type,title,tag_title,tag_color,pic,tag_id,tag_name,link,feed_id,chat_room_id,sort_index,rule,
 		custom_channel,custom_channel_id,channelType,isShowInRecommend
 		FROM BUS_FLOW_ACTIVITY
-		WHERE status='2' or status='3';
+		WHERE (status='2' or status='3');
 	</select>
 
 	<select id="listValidChannel" resultType="com.bus.chelaile.flow.model.FlowChannel">

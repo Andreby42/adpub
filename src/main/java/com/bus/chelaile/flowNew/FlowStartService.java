@@ -19,7 +19,7 @@ public class FlowStartService {
 
 	protected static final Logger logger = LoggerFactory.getLogger(FlowStartService.class);
 	private static final String TAGS＿LINK = "http://api.chelaile.net.cn:7000/feed/native!tags.action?cityId=027";   // TODO　城市有用否？
-	public static final int LINEDETAIL_NUM = 2;
+	public static final int LINEDETAIL_NUM = 3;
 
 	
 	public static void initLineDetailFlows(List<ActivityContent> activityContens) {
@@ -114,7 +114,7 @@ public class FlowStartService {
 	/**
 	 * 获取文章
 	 * @param init
-	 *	// TODO，　改成从ocs提取文章
+	 * 改成从ocs提取文章
 	 */
 	private static void getInitArticles(List<FlowContent> initFlows) {
 		int i = 0;
@@ -146,9 +146,12 @@ public class FlowStartService {
 		FlowContent flowGoodsIndex = new FlowContent(3, "商城逛逛", "积分商城",
 				"https://image3.chelaile.net.cn/a6f96bcf5ee742d7aa732259c32d1b8c", "255,175,0", null, null, null, null,
 				null);
-		FlowContent flowGood0 = new FlowContent(3, "1元公交卡", "积分商城",
+		FlowContent flowGood0 = new FlowContent(3, "iPhone X 抽抽抽", "积分商城",
 				"https://image3.chelaile.net.cn/a6f96bcf5ee742d7aa732259c32d1b8c", "255,175,0", null, null, null, null,
-				"https://activity.m.duiba.com.cn/newtools/index?id=2433711");
+				"https://activity.m.duiba.com.cn/newtools/index?id=2521608");
+		FlowContent flowGood1 = new FlowContent(3, "好物翻出来", "积分商城",
+				"https://image3.chelaile.net.cn/a6f96bcf5ee742d7aa732259c32d1b8c", "255,175,0", null, null, null, null,
+				"https://activity.m.duiba.com.cn/newtools/index?id=2526447");
 //		FlowContent flowGood1 = new FlowContent(3, "1元公交卡", "积分商城",
 //				"https://image3.chelaile.net.cn/a6f96bcf5ee742d7aa732259c32d1b8c", "255,175,0", null, null, null, null,
 //				"https://goods.m.duiba.com.cn/mobile/detail?itemId=1885");
@@ -162,7 +165,7 @@ public class FlowStartService {
 		
 		initFlows.add(flowGoodsIndex);
 		initFlows.add(flowGood0);
-//		initFlows.add(flowGood1);
+		initFlows.add(flowGood1);
 		initFlows.add(flowEnergy);
 	}
 }

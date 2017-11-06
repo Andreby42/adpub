@@ -80,6 +80,10 @@ public class FlowStaticContents {
 				int articleNo = getArticleNo(date + "#" + channelId); // 获取本次拉取之前的 ‘文章no’起始值
 				logger.info("QM轻芒文章,本次拉取文章，起始id数为：{}", articleNo);
 				articleNo = QMHelper.getArticlesFromAPI(channelId, articleNo, date);	// 获取文章，填入缓存
+				if(articleNo == -1) {
+					logger.info("轻芒接口错误！！,本次拉取直接结束！！！ ");
+					return;
+				}
 				logger.info("QM轻芒文章,拉取频道 ：{} 之后，最新文章id数为：{}", channelId, articleNo);
 			}
 		}
