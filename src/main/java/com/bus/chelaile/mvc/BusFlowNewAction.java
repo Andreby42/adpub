@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
+import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flowNew.FlowServiceManager;
@@ -122,12 +123,20 @@ public class BusFlowNewAction extends AbstractController {
 	@RequestMapping(value = "flow!recordArticleClick.action", produces = "Content-Type=text/plain;charset=UTF-8")
 	public String recordArticleClick(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
-		AdvParam param = getActionParam(request);
+		AdvParam advParam = getActionParam(request);
 		String channelId = request.getParameter("channelId");
 		String articleId = request.getParameter("articleId");
 
 		logger.info("QM点击文章，channelId={}, articleId={}", channelId, articleId);
-		return flowServiceManager.recordArticleClick(param, channelId, articleId);
+		AnalysisLog
+		.info("【AritilceClick】 udid:{} |# s:{} |# v:{} |# city_id:{} |# article_id:{} |# channelId:{} "
+				+ "|# account_id:{}  |# nw:{} |# ip:{} |# diviceType:{} |# geo_lat:{} "
+				+ "|# geo_lng:{} |# linkReffer:{} ", advParam.getUdid(), advParam.getS(), advParam.getV(),
+				advParam.getCityId(), articleId, channelId, 
+				advParam.getAccountId(), advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
+				advParam.getLat(), advParam.getLng(),
+				request.getParameter("linkRefer"));
+		return flowServiceManager.recordArticleClick(advParam, channelId, articleId);
 	}
 
 	/**
