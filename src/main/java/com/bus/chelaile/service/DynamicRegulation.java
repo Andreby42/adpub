@@ -41,9 +41,9 @@ public class DynamicRegulation {
 			
 			
 			// 启动缓存QM文章内容
-			Runnable QMThread = new DowQMArticles();
-			service.scheduleWithFixedDelay(QMThread, 1, 5, TimeUnit.MINUTES);
-			logger.info("启动缓存QM文章内容#########");
+//			Runnable QMThread = new DowQMArticles();
+//			service.scheduleWithFixedDelay(QMThread, 1, 5, TimeUnit.MINUTES);
+//			logger.info("启动缓存QM文章内容#########");
 
 			hasStartThread = true;
 		}
