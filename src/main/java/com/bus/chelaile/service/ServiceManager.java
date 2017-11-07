@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import redis.clients.jedis.AdvancedBinaryJedisCommands;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -26,9 +28,14 @@ import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.TypeNumber;
+import com.bus.chelaile.model.ads.AdButtonInfo;
+import com.bus.chelaile.model.ads.AdCard;
+import com.bus.chelaile.model.ads.AdTagInfo;
+import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.model.record.DisplayUserCache;
 import com.bus.chelaile.model.rule.version.VersionEntity;
@@ -39,6 +46,7 @@ import com.bus.chelaile.service.impl.LineDetailsManager;
 import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.RideManager;
 import com.bus.chelaile.service.impl.SelfManager;
+import com.bus.chelaile.service.impl.StationAdsManager;
 import com.bus.chelaile.strategy.UserStrategyJudger;
 import com.bus.chelaile.thread.ReloadInvalidAccountIdTimer;
 import com.bus.chelaile.util.FlowUtil;
@@ -49,6 +57,8 @@ public class ServiceManager {
 	protected static final Logger logger = LoggerFactory.getLogger(ServiceManager.class);
 	@Autowired
 	private LineDetailsManager lineDetailsManager;
+	@Autowired
+	private StationAdsManager stationAdsManager;
 
 	@Autowired
 	private OpenManager openManager;
@@ -165,8 +175,15 @@ public class ServiceManager {
 		Object entity = null;
 		JSONObject object = new JSONObject();
 		if (methodName.equals("getLineDetails")) { // 线路详情
-			entity = getLineDetails(advParam);
-			object.put("lineAds", entity);
+			BaseAdEntity entity1 = getLineDetails(advParam);
+			if (entity1 == null) {
+				return null;
+			} else if (entity1 != null && entity1.getShowType() == ShowType.LINE_DETAIL.getValue()) {
+				object.put("lineAds", entity1);
+			} else if (entity1 != null && entity1.getShowType() == ShowType.STATION_ADV.getValue()) {
+				object.put("stationAds", entity1);
+			}
+			return object;
 		} else if (methodName.equals("getNewOpen")) { // 新版本开屏、浮层、乘车页浮层
 			entity = getNewOpen(advParam);
 			object.put("ads", entity);
@@ -301,7 +318,87 @@ public class ServiceManager {
 				&& advParam.getScreenHeight() > 0 && advParam.getScreenHeight() >= 960) {
 			isNeedApid = true;
 		}
+		
+		if(returnStnAds(advParam)) {
+			BaseAdEntity stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
+			
+			// TODO 手动构造一批数据
+			stnAds = createStnAds(advParam);
+			
+			if(stnAds != null) {
+				return stnAds;
+			}
+		}
+		
+		
 		return lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
+	}
+
+	//  TODO　虚构站点广告数据
+	private BaseAdEntity createStnAds(AdvParam advParam) {
+		String stationId = advParam.getStationId();
+		StationAdEntity entity = new StationAdEntity();
+		entity.setId(123123);
+		entity.setShowType(ShowType.STATION_ADV.getValue());
+		entity.setPic("http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png");
+		
+		AdTagInfo tagText = new AdTagInfo("搞起", "255,255,255,1", null);
+		AdTagInfo tagPic = new AdTagInfo(null, null, "http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png");
+		List<AdTagInfo> tags = New.arrayList();
+		tags.add(tagText);
+		tags.add(tagPic);
+		
+		AdButtonInfo button0 = new AdButtonInfo("查看", "255,255,255,1", "139,43,43,1", "118,89,89,1", "http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png");
+		AdButtonInfo button1 = new AdButtonInfo(null, null, null, null, "http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png");
+		
+		//(int cardType, String topPic, String logo, List<AdTagInfo> tags, String name, String address,
+		//Double lng, Double lat, String phoneNum, String link)
+		AdCard adCard0 = new AdCard(0, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
+				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", null);	
+		AdCard adCard1 = new AdCard(1, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
+				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null, "http://www.baidu.com");	
+		AdCard adCard2 = new AdCard(2, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
+				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", "http://www.baidu.com");	
+		
+		
+//		BannerInfo(int bannerType, String name, String color, String slogan, String sloganColor, AdTagInfo tag,
+//				AdButtonInfo button)
+		BannerInfo bannerInfo0 = new BannerInfo(0, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, null);
+		BannerInfo bannerInfo1 = new BannerInfo(1, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", tagText, null);
+		BannerInfo bannerInfo2 = new BannerInfo(2, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", tagPic, null);
+		BannerInfo bannerInfo3 = new BannerInfo(3, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, button0);
+		BannerInfo bannerInfo4 = new BannerInfo(4, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, button1);
+		
+		
+		if (stationId.equals("010-8795")) {
+			entity.setBannerInfo(bannerInfo0);
+		} else if (stationId.equals("010-3343")) {
+			entity.setBannerInfo(bannerInfo1);
+		} else if (stationId.equals("010-9053")) {
+			entity.setBannerInfo(bannerInfo2);
+		} else if (stationId.equals("010-7339")) {
+			entity.setBannerInfo(bannerInfo3);
+			entity.setAdCard(adCard0);
+		} else if (stationId.equals("010-5459")) {
+			entity.setBannerInfo(bannerInfo4);
+			entity.setAdCard(adCard1);
+		} else if (stationId.equals("010-7309")) {
+			entity.setBannerInfo(bannerInfo3);
+			entity.setAdCard(adCard2);
+		} else {
+			logger.info("站点广告为空 , stationId={}, udid={}", stationId, advParam.getUdid());
+			return null;
+		}
+		
+		return entity;
+		
+	}
+
+	// 1107后的新版支持站点广告
+	// 版本控制
+	private boolean returnStnAds(AdvParam advParam) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	/*
@@ -741,4 +838,58 @@ public class ServiceManager {
 		return;
 	}
 	
+	
+	public static void main(String[] args) {
+		String stationId = "010-7309";
+		StationAdEntity entity = new StationAdEntity();
+		entity.setId(123123);
+		entity.setShowType(ShowType.STATION_ADV.getValue());
+		entity.setPic("http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png");
+		
+		AdTagInfo tagText = new AdTagInfo("搞起", "255,255,255,1", null);
+		AdTagInfo tagPic = new AdTagInfo(null, null, "http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png");
+		List<AdTagInfo> tags = New.arrayList();
+		tags.add(tagText);
+		tags.add(tagPic);
+		
+		AdButtonInfo button0 = new AdButtonInfo("查看", "255,255,255,1", "139,43,43,1", "118,89,89,1", "http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png");
+		AdButtonInfo button1 = new AdButtonInfo(null, null, null, null, "http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png");
+		
+		//(int cardType, String topPic, String logo, List<AdTagInfo> tags, String name, String address,
+		//Double lng, Double lat, String phoneNum, String link)
+		AdCard adCard0 = new AdCard(0, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
+				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", null);	
+		AdCard adCard1 = new AdCard(1, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
+				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null, "http://www.baidu.com");	
+		AdCard adCard2 = new AdCard(2, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
+				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", "http://www.baidu.com");	
+		
+		
+//		BannerInfo(int bannerType, String name, String color, String slogan, String sloganColor, AdTagInfo tag,
+//				AdButtonInfo button)
+		BannerInfo bannerInfo0 = new BannerInfo(0, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, null);
+		BannerInfo bannerInfo1 = new BannerInfo(1, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", tagText, null);
+		BannerInfo bannerInfo2 = new BannerInfo(2, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", tagPic, null);
+		BannerInfo bannerInfo3 = new BannerInfo(3, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, button0);
+		BannerInfo bannerInfo4 = new BannerInfo(4, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, button1);
+		
+		
+		if (stationId.equals("010-8795")) {
+			entity.setBannerInfo(bannerInfo0);
+		} else if (stationId.equals("010-3343")) {
+			entity.setBannerInfo(bannerInfo1);
+		} else if (stationId.equals("010-9053")) {
+			entity.setBannerInfo(bannerInfo2);
+		} else if (stationId.equals("010-7339")) {
+			entity.setBannerInfo(bannerInfo3);
+			entity.setAdCard(adCard0);
+		} else if (stationId.equals("010-5459")) {
+			entity.setBannerInfo(bannerInfo4);
+			entity.setAdCard(adCard1);
+		} else if (stationId.equals("010-7309")) {
+			entity.setBannerInfo(bannerInfo3);
+			entity.setAdCard(adCard2);
+		}
+		System.out.println(JSONObject.toJSONString(entity));
+	}
 }

@@ -68,6 +68,8 @@ public class AdvParam {
      private String cshow; // 详情页调用场景
      private int distance; //用户距离首页第一个站点的距离
      private int rideStatus; //骑行状态 // 0没骑车 ，1骑行中， 3骑行结束
+     
+     private String stationId; // 站点id
      /**
       * 存入的s都会被转换为小写。
       *
@@ -533,6 +535,16 @@ public class AdvParam {
 
 	public void setSrc(String src) {
 		this.src = src;
+	}
+
+
+	public String getStationId() {
+		return stationId;
+	}
+
+
+	public void setStationId(String stationId) {
+		this.stationId = stationId;
 	}
 	
 	
