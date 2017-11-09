@@ -40,7 +40,6 @@ public class FlowStartService {
 			// 推入ocs缓存起来
 			for (Integer type : FlowStaticContents.LINE_DETAIL_FLOWS.keySet()) {
 				String key = "QM_LINEDETAIL_FLOW_" + type;
-				CacheUtil.deleteNew(key);
 				CacheUtil.setNew(key, Constants.ONE_DAY_TIME,
 						JSONObject.toJSONString(FlowStaticContents.LINE_DETAIL_FLOWS.get(type)));
 			}
