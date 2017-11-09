@@ -40,6 +40,7 @@ public class FlowStartService {
 			// 推入ocs缓存起来
 			for (Integer type : FlowStaticContents.LINE_DETAIL_FLOWS.keySet()) {
 				String key = "QM_LINEDETAIL_FLOW_" + type;
+				CacheUtil.deleteNew(key);
 				CacheUtil.setNew(key, Constants.ONE_DAY_TIME,
 						JSONObject.toJSONString(FlowStaticContents.LINE_DETAIL_FLOWS.get(type)));
 			}
@@ -131,7 +132,7 @@ public class FlowStartService {
 			initFlows.add(f);
 			i ++;
 			if(i >= LINEDETAIL_NUM) {
-				return;
+				break;
 			}
 		}
 		logger.info("获取详情页文章数据：{}", i);
@@ -167,5 +168,28 @@ public class FlowStartService {
 		initFlows.add(flowGood0);
 		initFlows.add(flowGood1);
 		initFlows.add(flowEnergy);
+		logger.info("积分商城和能量馆总共数量:{}", 4);
+	}
+	
+	public static void main(String[] args) {
+		int i = 0;
+		FlowStaticContents.ARTICLE_CONTENTS.clear();
+		for(ArticleContent article : FlowStaticContents.ARTICLE_CONTENTS.values()) {
+			FlowContent f = new FlowContent();
+			f.setDestType(2);
+			f.setFlowTitle(article.getTitle());
+			f.setFlowTag("热门文章");
+			f.setFlowTagColor("52,152,219");
+			f.setFlowIcon("https://image3.chelaile.net.cn/3cd56eeb33c8434daf2e17bdc9fde48d");
+			
+			f.setArticleUrl(article.getLink());
+			
+//			initFlows.add(f);
+			i ++;
+			if(i >= 3) {
+				return;
+			}
+		}
+		System.out.println("文章数： " + i);
 	}
 }

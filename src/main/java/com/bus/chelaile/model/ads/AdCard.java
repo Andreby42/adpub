@@ -1,13 +1,12 @@
 package com.bus.chelaile.model.ads;
 
-import java.util.List;
 
 public class AdCard {
 	
 	private int cardType;
 	private String topPic;
 	private String logo;
-	private List<AdTagInfo> tags;
+	private String tagPic;
 	private String name;
 	private String address;
 	private Double lng;
@@ -31,12 +30,6 @@ public class AdCard {
 	}
 	public void setLogo(String logo) {
 		this.logo = logo;
-	}
-	public List<AdTagInfo> getTags() {
-		return tags;
-	}
-	public void setTags(List<AdTagInfo> tags) {
-		this.tags = tags;
 	}
 	public String getName() {
 		return name;
@@ -77,19 +70,25 @@ public class AdCard {
 	public AdCard() {
 		super();
 	}
-	public AdCard(int cardType, String topPic, String logo, List<AdTagInfo> tags, String name, String address,
+	public AdCard(int cardType, String topPic, String logo, String tagPic, String name, String address,
 			Double lng, Double lat, String phoneNum, String link) {
 		super();
 		this.cardType = cardType;
 		this.topPic = topPic;
 		this.logo = logo;
-		this.tags = tags;
+		this.tagPic = tagPic;
 		this.name = name;
 		this.address = address;
 		this.lng = lng;
 		this.lat = lat;
 		this.phoneNum = phoneNum;
 		this.link = link;
+	}
+	public String getTagPic() {
+		return tagPic;
+	}
+	public void setTagPic(String tagPic) {
+		this.tagPic = tagPic;
 	}
 	
 }

@@ -15,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import redis.clients.jedis.AdvancedBinaryJedisCommands;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -354,11 +352,11 @@ public class ServiceManager {
 		//(int cardType, String topPic, String logo, List<AdTagInfo> tags, String name, String address,
 		//Double lng, Double lat, String phoneNum, String link)
 		AdCard adCard0 = new AdCard(0, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", null);	
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", null);	
 		AdCard adCard1 = new AdCard(1, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null, "http://www.baidu.com");	
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null, "http://www.baidu.com");	
 		AdCard adCard2 = new AdCard(2, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", "http://www.baidu.com");	
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", "http://www.baidu.com");	
 		
 		
 //		BannerInfo(int bannerType, String name, String color, String slogan, String sloganColor, AdTagInfo tag,
@@ -858,11 +856,11 @@ public class ServiceManager {
 		//(int cardType, String topPic, String logo, List<AdTagInfo> tags, String name, String address,
 		//Double lng, Double lat, String phoneNum, String link)
 		AdCard adCard0 = new AdCard(0, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", null);	
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", null);	
 		AdCard adCard1 = new AdCard(1, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null, "http://www.baidu.com");	
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null, "http://www.baidu.com");	
 		AdCard adCard2 = new AdCard(2, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				tags, "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", "http://www.baidu.com");	
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", "http://www.baidu.com");	
 		
 		
 //		BannerInfo(int bannerType, String name, String color, String slogan, String sloganColor, AdTagInfo tag,
