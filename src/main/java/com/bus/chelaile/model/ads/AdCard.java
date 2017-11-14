@@ -12,7 +12,6 @@ public class AdCard {
 	private Double lng;
 	private Double lat;
 	private String phoneNum;
-	private String link;
 	public int getCardType() {
 		return cardType;
 	}
@@ -61,17 +60,11 @@ public class AdCard {
 	public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;
 	}
-	public String getLink() {
-		return link;
-	}
-	public void setLink(String link) {
-		this.link = link;
-	}
 	public AdCard() {
 		super();
 	}
 	public AdCard(int cardType, String topPic, String logo, String tagPic, String name, String address,
-			Double lng, Double lat, String phoneNum, String link) {
+			Double lng, Double lat, String phoneNum) {
 		super();
 		this.cardType = cardType;
 		this.topPic = topPic;
@@ -82,7 +75,6 @@ public class AdCard {
 		this.lng = lng;
 		this.lat = lat;
 		this.phoneNum = phoneNum;
-		this.link = link;
 	}
 	public String getTagPic() {
 		return tagPic;

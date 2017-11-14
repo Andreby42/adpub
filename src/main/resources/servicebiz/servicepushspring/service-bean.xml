@@ -23,6 +23,9 @@
 	<!-- 线路详情 -->
 	<bean id="lineDetailsManager" class="com.bus.chelaile.service.impl.LineDetailsManager" parent="abstractService">
 	</bean>
+	<!-- 站点广告 -->
+	<bean id="stationAdsManager" class="com.bus.chelaile.service.impl.StationAdsManager" parent="abstractService">
+	</bean>
 	<!-- 线路详情自采买广告 -->
 	<bean id="selfManager" class="com.bus.chelaile.service.impl.SelfManager">
 	</bean>

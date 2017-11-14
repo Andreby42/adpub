@@ -99,7 +99,11 @@ public abstract class BaseAdEntity {
 			clickMonitorLink = EMPTY_STR;
 		}
 
-		dealUrl(advParam, ad.getMonitorType());
+		if(ad.getMonitorType() == 3) {
+			dealUrl(advParam, ad.getMonitorType());
+			unfoldMonitorLink = creatMonitorUrl(unfoldMonitorLink, advParam);
+			clickMonitorLink = creatMonitorUrl(clickMonitorLink, advParam);
+		}
 	}
 
 	/**

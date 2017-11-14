@@ -5,11 +5,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +52,7 @@ import com.bus.chelaile.service.impl.StationAdsManager;
 import com.bus.chelaile.strategy.UserStrategyJudger;
 import com.bus.chelaile.thread.ReloadInvalidAccountIdTimer;
 import com.bus.chelaile.util.FlowUtil;
+import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
 public class ServiceManager {
@@ -320,8 +325,8 @@ public class ServiceManager {
 		if(returnStnAds(advParam)) {
 			BaseAdEntity stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
 			
-			// TODO 手动构造一批数据
-			stnAds = createStnAds(advParam);
+//			// TODO 手动构造一批数据
+//			stnAds = createStnAds(advParam);
 			
 			if(stnAds != null) {
 				return stnAds;
@@ -338,25 +343,22 @@ public class ServiceManager {
 		StationAdEntity entity = new StationAdEntity();
 		entity.setId(123123);
 		entity.setShowType(ShowType.STATION_ADV.getValue());
-		entity.setPic("http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png");
+		entity.setPic("https://image3.chelaile.net.cn/cebaa1ad595c414a991a75129c22bad0");
 		
 		AdTagInfo tagText = new AdTagInfo("搞起", "255,255,255,1", null);
 		AdTagInfo tagPic = new AdTagInfo(null, null, "http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png");
-		List<AdTagInfo> tags = New.arrayList();
-		tags.add(tagText);
-		tags.add(tagPic);
 		
 		AdButtonInfo button0 = new AdButtonInfo("查看", "255,255,255,1", "139,43,43,1", "118,89,89,1", "http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png");
 		AdButtonInfo button1 = new AdButtonInfo(null, null, null, null, "http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png");
 		
 		//(int cardType, String topPic, String logo, List<AdTagInfo> tags, String name, String address,
 		//Double lng, Double lat, String phoneNum, String link)
-		AdCard adCard0 = new AdCard(0, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", null);	
-		AdCard adCard1 = new AdCard(1, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null, "http://www.baidu.com");	
-		AdCard adCard2 = new AdCard(2, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", "http://www.baidu.com");	
+		AdCard adCard0 = new AdCard(0, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","https://image3.chelaile.net.cn/cebaa1ad595c414a991a75129c22bad0",
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749");	
+		AdCard adCard1 = new AdCard(1, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","https://image3.chelaile.net.cn/cebaa1ad595c414a991a75129c22bad0",
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null);	
+		AdCard adCard2 = new AdCard(2, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","https://image3.chelaile.net.cn/cebaa1ad595c414a991a75129c22bad0",
+				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749");	
 		
 		
 //		BannerInfo(int bannerType, String name, String color, String slogan, String sloganColor, AdTagInfo tag,
@@ -380,9 +382,13 @@ public class ServiceManager {
 		} else if (stationId.equals("010-5459")) {
 			entity.setBannerInfo(bannerInfo4);
 			entity.setAdCard(adCard1);
+			entity.setLink("http://www.baidu.com");
+			entity.setOpenType(0);
 		} else if (stationId.equals("010-7309")) {
 			entity.setBannerInfo(bannerInfo3);
 			entity.setAdCard(adCard2);
+			entity.setLink("http://www.baidu.com");
+			entity.setOpenType(1);
 		} else {
 			logger.info("站点广告为空 , stationId={}, udid={}", stationId, advParam.getUdid());
 			return null;
@@ -837,57 +843,18 @@ public class ServiceManager {
 	}
 	
 	
-	public static void main(String[] args) {
-		String stationId = "010-7309";
-		StationAdEntity entity = new StationAdEntity();
-		entity.setId(123123);
-		entity.setShowType(ShowType.STATION_ADV.getValue());
-		entity.setPic("http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png");
+	public static void main(String[] args) throws ParseException, UnsupportedEncodingException, IOException {
+		List<NameValuePair> pairs = New.arrayList();
+		pairs.add(new BasicNameValuePair("title", "手动post测试0"));
+		pairs.add(new BasicNameValuePair("showType", "04"));
+		pairs.add(new BasicNameValuePair("openType", "0"));
 		
-		AdTagInfo tagText = new AdTagInfo("搞起", "255,255,255,1", null);
-		AdTagInfo tagPic = new AdTagInfo(null, null, "http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png");
-		List<AdTagInfo> tags = New.arrayList();
-		tags.add(tagText);
-		tags.add(tagPic);
+		String POSTURL = "http://127.0.0.1:8088/outman/adv/save";
+//		String POSTURL = "http://121.40.95.166:7000/outman/adv/save";
+		String a =  HttpUtils.post(POSTURL, pairs, "utf-8");		
+		System.out.println("a=" + a);
 		
-		AdButtonInfo button0 = new AdButtonInfo("查看", "255,255,255,1", "139,43,43,1", "118,89,89,1", "http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png");
-		AdButtonInfo button1 = new AdButtonInfo(null, null, null, null, "http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png");
+		System.exit(0);
 		
-		//(int cardType, String topPic, String logo, List<AdTagInfo> tags, String name, String address,
-		//Double lng, Double lat, String phoneNum, String link)
-		AdCard adCard0 = new AdCard(0, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", null);	
-		AdCard adCard1 = new AdCard(1, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, null, "http://www.baidu.com");	
-		AdCard adCard2 = new AdCard(2, "http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce3-99cb78cc02aa.jpg","http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png",
-				"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png", "路边野店", "银河系，惠中路5号，B座，22层", 116.403931, 39.994642, "15072435749", "http://www.baidu.com");	
-		
-		
-//		BannerInfo(int bannerType, String name, String color, String slogan, String sloganColor, AdTagInfo tag,
-//				AdButtonInfo button)
-		BannerInfo bannerInfo0 = new BannerInfo(0, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, null);
-		BannerInfo bannerInfo1 = new BannerInfo(1, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", tagText, null);
-		BannerInfo bannerInfo2 = new BannerInfo(2, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", tagPic, null);
-		BannerInfo bannerInfo3 = new BannerInfo(3, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, button0);
-		BannerInfo bannerInfo4 = new BannerInfo(4, "路边野店", "255,255,255,1", "来路边野店，找童年的味道", "255,255,255,1", null, button1);
-		
-		
-		if (stationId.equals("010-8795")) {
-			entity.setBannerInfo(bannerInfo0);
-		} else if (stationId.equals("010-3343")) {
-			entity.setBannerInfo(bannerInfo1);
-		} else if (stationId.equals("010-9053")) {
-			entity.setBannerInfo(bannerInfo2);
-		} else if (stationId.equals("010-7339")) {
-			entity.setBannerInfo(bannerInfo3);
-			entity.setAdCard(adCard0);
-		} else if (stationId.equals("010-5459")) {
-			entity.setBannerInfo(bannerInfo4);
-			entity.setAdCard(adCard1);
-		} else if (stationId.equals("010-7309")) {
-			entity.setBannerInfo(bannerInfo3);
-			entity.setAdCard(adCard2);
-		}
-		System.out.println(JSONObject.toJSONString(entity));
 	}
 }
