@@ -1,7 +1,11 @@
 package com.bus.chelaile.service.impl;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.model.QueryParam;
@@ -18,6 +22,7 @@ import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.util.HttpUtils;
 
 public class StationAdsManager extends AbstractManager {
 
@@ -52,8 +57,14 @@ public class StationAdsManager extends AbstractManager {
 		AdInnerContent inner = ad.getAdInnerContent();
 		if (inner instanceof AdStationlInnerContent) {
 			AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
-			res.setBannerInfo(stationInner.getBannerInfo());
-			res.setAdCard(stationInner.getAdCard());
+			// 对空串情况做一下处理
+			if(stationInner.getBannerInfo() != null && StringUtils.isNoneBlank(stationInner.getBannerInfo().getName()))
+			{
+				res.setBannerInfo(stationInner.getBannerInfo());
+			}
+			if(stationInner.getAdCard() != null && StringUtils.isNoneBlank(stationInner.getAdCard().getName())) {
+				res.setAdCard(stationInner.getAdCard());
+			}
 			res.setPic(stationInner.getPic());
 		} else {
 			throw new IllegalArgumentException("=====> 错误的innerContent类型： "
@@ -65,5 +76,8 @@ public class StationAdsManager extends AbstractManager {
 	}
 	
 	
-
+	public static void main(String[] args) throws ClientProtocolException, IOException {
+		String url = "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
+		System.out.println(HttpUtils.get(url, "utf-8"));
+	}
 }
