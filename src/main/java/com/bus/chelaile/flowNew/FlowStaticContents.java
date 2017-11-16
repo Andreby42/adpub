@@ -252,7 +252,7 @@ public class FlowStaticContents {
 		String valueStr = (String)CacheUtil.getNew(key);
 		int value = 0;
 		if(valueStr == null) {
-			value = (int) (20 + Math.random() * 30);
+			value = (int) (150 + Math.random() * 250);
 			CacheUtil.setNew(key, Constants.LONGEST_CACHE_TIME, String.valueOf(value));	 // 文章的初始化阅读值
 		} else {
 			value = Integer.parseInt(valueStr);
