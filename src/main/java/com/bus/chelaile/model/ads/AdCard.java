@@ -11,6 +11,7 @@ public class AdCard {
 	private String address;
 	private Double lng;
 	private Double lat;
+	private String gpsType;
 	private String phoneNum;
 	public int getCardType() {
 		return cardType;
@@ -81,6 +82,12 @@ public class AdCard {
 	}
 	public void setTagPic(String tagPic) {
 		this.tagPic = tagPic;
+	}
+	public String getGpsType() {
+		return gpsType;
+	}
+	public void setGpsType(String gpsType) {
+		this.gpsType = gpsType;
 	}
 	
 }

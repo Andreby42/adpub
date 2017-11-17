@@ -25,6 +25,19 @@ public class GPSConvert {
 //		double weidu = 36.069121959576 ;
 //		double[] gcj = wgs2gcj(sjingdu,sweidu);
 //		double[] bd  = gcj2bd(gcj[0],gcj[1]);
+		YGLocation baidu = new YGLocation(116.403963,39.915119) ;	// 原始百度
+		YGLocation gd = new YGLocation(116.397482,39.908688);	// 原始高德
+		
+		YGLocation wgsOut = bd2wgs(baidu);
+		System.out.println("百度2Wgs：" + wgsOut.longitude + "," + wgsOut.latitude);
+		double[] gdBuff = bd2gcj(116.403963,39.915119);
+		System.out.println("百度2高德：" + gdBuff[0] + gdBuff[1]);
+		
+		double[] bdbuff = gcj2bd(116.397482,39.908688);
+		System.out.println("gcj2百度："  + bdbuff[0] + "," + bdbuff[1]);
+		YGLocation wgsL = bd2wgs(new YGLocation(bdbuff[0], bdbuff[1]));
+		System.out.println("百度2wgs：" + wgsL.longitude + "," + wgsL.latitude);
+		
 	}
 	
 	public static double[] wgs2bd(double lon,double lat){

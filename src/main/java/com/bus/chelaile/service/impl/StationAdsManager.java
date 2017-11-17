@@ -54,7 +54,7 @@ public class StationAdsManager extends AbstractManager {
 
 		res.dealLink(advParam);
 		
-		AdInnerContent inner = ad.getAdInnerContent();
+		AdInnerContent inner = ad.getInnerContent();
 		if (inner instanceof AdStationlInnerContent) {
 			AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
 			// 对空串情况做一下处理

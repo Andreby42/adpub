@@ -255,7 +255,7 @@ public abstract class BaseAdEntity {
 				url = url.replace("__MAC__", mac);
 			}
 			if (ua != null) {
-				url = url.replace("__UA__", AdvUtil.encodeUrl(ua));
+				url = url.replace("__UA__", AdvUtil.encodeUrl(ua));		 // UA需要做一下encode
 			}
 			 url = url.replace("__TS__", System.currentTimeMillis() + "");
 			logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
@@ -353,6 +353,5 @@ public abstract class BaseAdEntity {
 		String url = "";
 		String ua = null;
 		url = url.replace("__UA__", ua);
-
 	}
 }

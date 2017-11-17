@@ -24,6 +24,7 @@ public class AdStationlInnerContent extends AdInnerContent {
 		if (ad != null) {
 			this.pic = ad.pic;
 			this.setAdCard(ad.getAdCard());
+			this.getAdCard().setGpsType("gcj"); // 默认站点坐标取自高德地图的经纬度
 			this.setBannerInfo(ad.getBannerInfo());
 		}
 	}
@@ -41,16 +42,13 @@ public class AdStationlInnerContent extends AdInnerContent {
 	public static void main(String[] args) {
 		AdStationlInnerContent adPush = new AdStationlInnerContent();
 		
-		adPush.setAndPaseJson("{\"adCard\":{\"address\":\"银河系，惠中路5号，B座，22层\",\"cardType\":2,\"lat\":39.994642,\"lin"
-				+ "k\":\"http://www.baidu.com\",\"lng\":116.403931,\"logo\":\"http://pic1.chelaile.net.cn/adv/brandIcon"
-				+ "1170620170823.png\",\"name\":\"路边野店\",\"phoneNum\":\"15072435749\",\"tagPic\":\"http://pic1.chela"
-				+ "ile.net.cn/adv/brandIcon1170620170823.png\",\"topPic\":\"http://pic1.chelaile.net.cn/adv/ios67326f0f-ebeb-47e0-bce"
-				+ "3-99cb78cc02aa.jpg\"},\"bannerInfo\":{\"bannerType\":3,\"button\":{\"buttonBG\":\"139,43,43,1\",\"but"
-				+ "tonColor\":\"255,255,255,1\",\"buttonPic\":\"http://pic1.chelaile.net.cn/adv/brandIcon1187320170922.png\",\"butto"
-				+ "nRim\":\"118,89,89,1\",\"buttonText\":\"查看\"},\"color\":\"255,255,255,1\",\"name\":\"路边野店\",\"slogan\":\"来路边野店，找童"
-				+ "年的味道\",\"sloganColor\":\"255,255,255,1\"},\"pic\":\"http://pic1.chelaile.net.cn/adv/brandIcon1170620170823.png\"}");
+		adPush.setAndPaseJson("{\"pic\":\"https://image3.chelaile.net.cn/98949248b15141a9b5eb0759097b68eb\",\"bannerInfo\":{\"bannerType\":\"3\",\"name\":\"坚持打卡\",\"color\":\"174, 60, 60, 1\",\"slogan\":\"昨天喜欢你，今天喜欢你，明天看心情\",\"sloganColor\":\"29, 116, 113, 1\",\"tag\":{},\"button\":{\"buttonText\":\"测试\",\"buttonColor\":\"255, 255, 255, 1\",\"buttonBG\":\"84, 85, 25, 1\",\"buttonRim\":\"255, 0, 43, 1\",\"buttonPic\":\"\"}},\"adCard\":{\"open\":\"0\",\"cardType\":\"2\",\"logo\":\"\",\"topPic\":\"\",\"tagPic\":\"\",\"name\":\"\",\"address\":\"\",\"lng\":\"12.1\",\"lat\":\"\",\"phoneNum\":\"\",\"link\":\"\"}}");
 		System.out.println("pic: " + adPush.pic);
 		System.out.println("adCard: name " + adPush.getAdCard().getName());
+		System.out.println("adCard: lng " + adPush.getAdCard().getLng());
+		if(adPush.getAdCard().getLng() > 1.0) {
+			System.out.println("lng 太大了");
+		}
 		System.out.println("JsonR: " + adPush.jsonContent);
 	}
 

@@ -388,9 +388,9 @@ public abstract class AbstractManager {
 
 		if (!rule.isLineStationMap(advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
 				advParam.getUdid())) {
-			logger.info("isLineStationMap return false,ruleId={},lineId={},stnName={},order={},udid={}",
-					rule.getRuleId(), advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
-					advParam.getUdid());
+//			logger.info("isLineStationMap return false,ruleId={},lineId={},stnName={},order={},udid={}",
+//					rule.getRuleId(), advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
+//					advParam.getUdid());
 			return false;
 		}
 		if (!rule.isStationMatch(advParam.getStnName())) {
