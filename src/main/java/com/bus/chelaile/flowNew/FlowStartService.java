@@ -92,19 +92,21 @@ public class FlowStartService {
 	 */
 	private static void getInitActivities(List<FlowContent> initFlows, List<ActivityContent> activityContens) {
 		int i = 0;
-		for(ActivityContent activity : activityContens) {
-			FlowContent f = new FlowContent();
-			f.setDestType(1);
-			f.setFlowTitle(activity.getTitle());
-			f.setFlowTag("正在进行");
-			f.setFlowTagColor("255,90,0");
-			f.setFlowIcon("https://image3.chelaile.net.cn/bc27f4c64cd04fad9704b032b9b912d8");
-			f.setActivityLink(activity.getLink());
-			
-			initFlows.add(f);
-			i ++ ;
-			if(i >= LINEDETAIL_NUM) {
-				break;
+		for (ActivityContent activity : activityContens) {
+			if (activity.getType() == 1) {		// 目前只支持h5类型的活动
+				FlowContent f = new FlowContent();
+				f.setDestType(1);
+				f.setFlowTitle(activity.getTitle());
+				f.setFlowTag("正在进行");
+				f.setFlowTagColor("255,90,0");
+				f.setFlowIcon("https://image3.chelaile.net.cn/bc27f4c64cd04fad9704b032b9b912d8");
+				f.setActivityLink(activity.getLink());
+
+				initFlows.add(f);
+				i++;
+				if (i >= LINEDETAIL_NUM) {
+					break;
+				}
 			}
 		}
 		logger.info("详情页下方滚动栏，正在进行的活动数为：{}", i);
