@@ -393,8 +393,8 @@ public abstract class AbstractManager {
 			return false;
 		}
 		if (!rule.isStationMatch(advParam.getStnName())) {
-			logger.info("isStationMatch return false,ruleId={},stnName={},udid={}", rule.getRuleId(),
-					advParam.getStnName(), advParam.getUdid());
+//			logger.info("isStationMatch return false,ruleId={},stnName={},udid={}", rule.getRuleId(),
+//					advParam.getStnName(), advParam.getUdid());
 			return false;
 		}
 

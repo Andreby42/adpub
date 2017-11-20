@@ -75,7 +75,7 @@ public class StartService {
 		logger.info("****AllAdsinfosize*****   {}", allAds.size());
 		// 保存已生效的广告id
 		List<String> advIds = New.arrayList();
-		// 1的话就取全部的,0就只读取线路详情,2除线路详情外的其它内容
+		// 1的话就取全部的,0就只读取线路详情,2除线路详情\站点广告外的其它内容
 		String isLineDetails = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "isLineDetails", "1");
 
 		for (AdContent ad : allAds) {
@@ -112,9 +112,11 @@ public class StartService {
 			// 详情页广告与其他广告分开
 			if (ad.getShowType() != null) {
 				// 只要线路详情
-				if (isLineDetails.equals("0") && !ad.getShowType().equals(ShowType.LINE_DETAIL.getType())) {
+				if (isLineDetails.equals("0") && ! (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
+						|| ad.getShowType().equals(ShowType.STATION_ADV.getType()) )) {
 					continue;
-				} else if (isLineDetails.equals("2") && ad.getShowType().equals(ShowType.LINE_DETAIL.getType())) {
+				} else if (isLineDetails.equals("2") && (ad.getShowType().equals(ShowType.LINE_DETAIL.getType()) 
+						|| ad.getShowType().equals(ShowType.STATION_ADV.getType()) )) {
 					continue;
 				}
 			}

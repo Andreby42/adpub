@@ -2,15 +2,13 @@ package com.bus.chelaile.thread;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bus.chelaile.flowNew.FlowServiceManager;
 import com.bus.chelaile.flowNew.FlowStartService;
 import com.bus.chelaile.flowNew.FlowStaticContents;
 
 public class DowQMArticles implements Runnable {
-	@Autowired
-	private FlowServiceManager flowServiceManager;
+//	@Autowired
+//	private FlowServiceManager flowServiceManager;
 
 	private static final Logger logger = LoggerFactory.getLogger(DowQMArticles.class);
 	
