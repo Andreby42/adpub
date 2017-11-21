@@ -336,6 +336,21 @@ public class BusAdvAction extends AbstractController {
 
 	}
 	
+	/*
+	 * 给三妹返回上车提醒的文字配置
+	 */
+	@ResponseBody
+	@RequestMapping(value = "adv!getTabActivities.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String getTabActivities(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		AdvParam param = getActionParam(request);
+		param.setStnName(request.getParameter("stnName"));
+		
+
+		return serviceManager.getAdsResponseStr(param, "getTabActivities");
+
+	}
+	
 	
 	/*
 	 * setNewUserstoOCS(往ocs中塞入用户创建时间，测试新用户不投放广告的时候使用)
