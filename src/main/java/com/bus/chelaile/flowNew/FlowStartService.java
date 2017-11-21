@@ -2,9 +2,11 @@ package com.bus.chelaile.flowNew;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
@@ -101,13 +103,19 @@ public class FlowStartService {
 				f.setFlowTagColor("255,90,0");
 				f.setFlowIcon("https://image3.chelaile.net.cn/bc27f4c64cd04fad9704b032b9b912d8");
 				f.setActivityLink(activity.getLink());
-
+				if(StringUtils.isBlank(activity.getLink())) {
+					continue;
+				}
 				initFlows.add(f);
 				i++;
 				if (i >= LINEDETAIL_NUM) {
 					break;
 				}
 			}
+		}
+		if(i == 0) {
+			String key = "QM_LINEDETAIL_FLOW_" + 1;
+			CacheUtil.deleteNew(key);
 		}
 		logger.info("详情页下方滚动栏，正在进行的活动数为：{}", i);
 	}

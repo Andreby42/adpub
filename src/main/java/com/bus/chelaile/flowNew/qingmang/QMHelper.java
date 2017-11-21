@@ -151,7 +151,7 @@ public class QMHelper {
 //				channelId, myAr.getSource(), myAr.getTitle());
 		myAr.setLink(articleLinkHost + link);
 		
-		// 压缩封面图			// TODO　不压缩看看效果
+		// 压缩封面图			//不压缩看看效果
 //		if (myAr.getType() == 1) {
 //			// 原始图片
 //			String picDownName;
