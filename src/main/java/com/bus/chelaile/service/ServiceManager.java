@@ -30,15 +30,9 @@ import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.TypeNumber;
-import com.bus.chelaile.model.ads.AdButtonInfo;
-import com.bus.chelaile.model.ads.AdCard;
-import com.bus.chelaile.model.ads.AdTagInfo;
-import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
-import com.bus.chelaile.model.ads.entity.StationAdEntity;
-import com.bus.chelaile.model.ads.entity.TabAdEntity;
 import com.bus.chelaile.model.ads.entity.TabEntity;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.model.record.DisplayUserCache;
@@ -207,6 +201,7 @@ public class ServiceManager {
 			object.put("ads", entity);
 		} else if (methodName.equals("getTabActivities")) {	// tab页点击弹窗
 			entity = getTabActivities(advParam);
+			object.put("activity", entity);
 		} else if (methodName.equals("getRide")) {
 			entity = getRide(advParam);
 			object = (JSONObject) entity; // 乘车页广告，新增音频广告内容
@@ -344,13 +339,14 @@ public class ServiceManager {
 		tabAdEntity.setPic("");
 		tabAdEntity.setLink("http://www.chelaile.net.cn");
 		tabAdEntity.setActivityType(1);
+		logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity));
 		return tabAdEntity;
 	}
 
 	// 1107后的新版支持站点广告
 	// 版本控制
 	private boolean returnStnAds(AdvParam advParam) {
-		// TODO Auto-generated method stub
+//		 TODO Auto-generated method stub
 		return true;
 	}
 

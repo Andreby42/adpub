@@ -16,6 +16,7 @@ import com.bus.chelaile.dao.ActivityContentMapper;
 import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.flowNew.model.ArticleContent;
 import com.bus.chelaile.flowNew.model.FlowContent;
+import com.bus.chelaile.flowNew.model.PayInfo;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.mvc.AdvParam;
@@ -84,6 +85,15 @@ public class FlowServiceManager {
 	}
 
 	public String getResponseLineDetailFlows(AdvParam param) {
+		// 乘车码banner入口
+		PayInfo payInfo = getPayInfo(param);
+		if (payInfo != null) {
+			JSONObject responseJ = new JSONObject();
+			responseJ.put("payInfo", payInfo);
+			return getClienSucMap(responseJ, Constants.STATUS_REQUEST_SUCCESS);
+		}
+		
+		// 单栏信息流
 		List<FlowContent> flows = getLineDetailFlows(param);
 		if (flows != null && flows.size() > 0) {
 			JSONObject responseJ = new JSONObject();
@@ -93,6 +103,23 @@ public class FlowServiceManager {
 			return getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
 		}
 	}
+
+	//获取乘车码信息
+	// TODO  先给客户端造个假数据
+	private PayInfo getPayInfo(AdvParam param) {
+		if(StringUtils.isNoneBlank(param.getAccountId()) && param.getCityId().equals("027")
+//				&& param.getLineId().equals("010-620-0")
+				) {
+			PayInfo payInfo = new PayInfo();
+			payInfo.setName("乘车码");
+			payInfo.setSlogan("乘车扫码，更加快捷");
+			payInfo.setUrl("http://www.chelaile.net.cn");
+			payInfo.setIcon("https://image3.chelaile.net.cn/4ca9504bc2ef4badb70ba43ba5d9f1ac");
+			return payInfo;
+		}
+		return null;
+	}
+
 
 	public String getResponseArticleList(AdvParam param, String channelId, String articleId) {
 		List<ArticleContent> articles = null;

@@ -337,7 +337,7 @@ public class BusAdvAction extends AbstractController {
 	}
 	
 	/*
-	 * 给三妹返回上车提醒的文字配置
+	 * tab弹窗活动
 	 */
 	@ResponseBody
 	@RequestMapping(value = "adv!getTabActivities.action", produces = "Content-Type=text/plain;charset=UTF-8")
