@@ -136,6 +136,7 @@ public abstract class AbstractManager {
 
 		Map<Integer, AdContentCacheEle> adMap = null;
 		// 单双栏、浮层、乘车页、活动页、和旧版本的开屏接口不走策略
+		// 站点广告不走策略
 		if (!isNeedApid || showType == ShowType.DOUBLE_COLUMN || showType == ShowType.SINGLE_COLUMN
 				|| showType == ShowType.FULL_SCREEN) {
 			// 需要排序
@@ -387,9 +388,9 @@ public abstract class AbstractManager {
 
 		if (!rule.isLineStationMap(advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
 				advParam.getUdid())) {
-			logger.info("isLineStationMap return false,ruleId={},lineId={},stnName={},order={},udid={}",
-					rule.getRuleId(), advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
-					advParam.getUdid());
+//			logger.info("isLineStationMap return false,ruleId={},lineId={},stnName={},order={},udid={}",
+//					rule.getRuleId(), advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
+//					advParam.getUdid());
 			return false;
 		}
 		if (!rule.isStationMatch(advParam.getStnName())) {

@@ -378,45 +378,12 @@ public class HttpUtils {
 //						"http://restapi.amap.com/v3/geocode/regeo?location=117.249471,39.136727&key=ada8dd537807d127e3d41c74cbf185836",
 //						null, "utf-8"));
 		
-		System.out.println(post("http://watsons.weixinyiwindow.com/activity/qrcode4in1/index.html?mch=kugou&unique_id=a354fd5bc9&sign=7c20fb89a7fee802dc8ff0edb4d72e14", null, "utf-8"));
+//		System.out.println(post("http://watsons.weixinyiwindow.com/activity/qrcode4in1/index.html?mch=kugou&unique_id=a354fd5bc9&sign=7c20fb89a7fee802dc8ff0edb4d72e14", null, "utf-8"));
 
-		// for (int i = 0; i < 100; i++)
-		// System.out
-		// .println(new
-		// org.apache.commons.lang3.text.translate.UnicodeUnescaper()
-		// .translate(get(
-		// "http://ip.taobao.com/service/getIpInfo.php?ip=1.1.1.1",
-		// null, "utf-8")));
-		// // }
-		/*
-		 * String[] ips = { "117.136.9.236,36.155684,120.439042,",
-		 * "112.224.65.190,36.106761,120.391487",
-		 * "117.136.9.227,36.094938,120.339831",
-		 * "112.224.67.193,36.079001187359,120.3434771304",
-		 * "117.136.9.93,36.123189872831,120.40127293911",
-		 * "153.119.154.157,36.160663455576,120.42585488973",
-		 * "219.146.7.72,36.061876211271,120.36143892873",
-		 * "117.136.9.233,36.081377,120.448166",
-		 * "112.224.67.254,36.26569,120.363081" };
-		 */
-		// List<NameValuePair> pairs = new ArrayList<>();
-		// pairs.add(new BasicNameValuePair("cityId", "004"));
-		// pairs.add(new BasicNameValuePair("magic", "zhangxu0328"));
-		// String ss = new
-		// org.apache.commons.lang3.text.translate.UnicodeUnescaper()
-		// .translate(get(
-		// "http://op.yg84.com:7000/manager/sosmt!queryalllines.action"
-		// , pairs, "utf-8"));
-		// ss = ss.substring(6, ss.length() - 6);
-		// JSONObject s = JSONObject
-		// .parseObject(ss);
-		// JSONObject a = s.getJSONObject("jsonr");
-		// JSONObject b = a.getJSONObject("data");
-		// JSONArray c = b.getJSONArray("lines");
-		// for(Object o:c){
-		// System.out.println(((JSONObject)o).getString("lineName")+","+((JSONObject)o).getString("lineNo"));
-		// }
-		// System.out.println(xs[0] + "==>" + s.getString("address"));
+		
+		
+		
+		
 
 	}
 }

@@ -151,28 +151,28 @@ public class QMHelper {
 //				channelId, myAr.getSource(), myAr.getTitle());
 		myAr.setLink(articleLinkHost + link);
 		
-		// 压缩封面图			// TODO　不压缩看看效果
-		if (myAr.getType() == 1) {
-			// 原始图片
-			String picDownName;
-			try {
-				picDownName = UrlUtil.saveUrlPic(myAr.getPic(), "QM_" + myAr.getArticleId());
-				logger.info("QMpic saved , picName={},title={}", picDownName, "QM_" + myAr.getArticleId());
-				
-//				String picSmall = QMPicNewPath + "QM_" + myAr.getArticleId() + ".jpeg";
-//				ImgUtils.scale(picDownName, picSmall, 180 * 3, 240 * 3, false);// 等比例缩放
+		// 压缩封面图			//不压缩看看效果
+//		if (myAr.getType() == 1) {
+//			// 原始图片
+//			String picDownName;
+//			try {
+//				picDownName = UrlUtil.saveUrlPic(myAr.getPic(), "QM_" + myAr.getArticleId());
+//				logger.info("QMpic saved , picName={},title={}", picDownName, "QM_" + myAr.getArticleId());
 //				
-//				File file = new File(picSmall);
-//				logger.info("生成图片地址：file={}", file);
-//				String url = OSSUtil.putPhoto("QM_" + myAr.getArticleId() + ".jpg", file, "image/jpeg", QMfolder);
-//				if(url != null)
-//					myAr.setPic(url);	// 上传压缩后的图片，并获链接
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("QM 压缩图片失败");
-//				return false;
-			}
-		}
+////				String picSmall = QMPicNewPath + "QM_" + myAr.getArticleId() + ".jpeg";
+////				ImgUtils.scale(picDownName, picSmall, 180 * 3, 240 * 3, false);// 等比例缩放
+////				
+////				File file = new File(picSmall);
+////				logger.info("生成图片地址：file={}", file);
+////				String url = OSSUtil.putPhoto("QM_" + myAr.getArticleId() + ".jpg", file, "image/jpeg", QMfolder);
+////				if(url != null)
+////					myAr.setPic(url);	// 上传压缩后的图片，并获链接
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				logger.error("QM 压缩图片失败");
+////				return false;
+//			}
+//		}
 		
 //		logger.info("轻芒文章详情： key={}, myAr={}", articleKey, JSON.toJSONString(myAr)); 
 		FlowStaticContents.ARTICLE_CONTENTS.put(articleKey, myAr);

@@ -46,8 +46,12 @@ public class AdContent {
         if (innerContent != null) {
             return innerContent;
         }
-        
-        if (ShowType.DOUBLE_COLUMN.getType().equals(showType) || ShowType.FLOW_ADV.getType().equals(showType)) { // 双栏广告 || 信息流广告
+        if(ShowType.STATION_ADV.getType().equals(showType)) {		// 站点广告
+        	AdStationlInnerContent stationInner = new AdStationlInnerContent();
+        	stationInner.setAndPaseJson(content);
+        	innerContent = stationInner;
+        }
+        else if (ShowType.DOUBLE_COLUMN.getType().equals(showType) || ShowType.FLOW_ADV.getType().equals(showType)) { // 双栏广告 || 信息流广告
             AdDoubleInnerContent dblInner = new AdDoubleInnerContent();
             dblInner.setAndPaseJson(content);
             innerContent = dblInner;

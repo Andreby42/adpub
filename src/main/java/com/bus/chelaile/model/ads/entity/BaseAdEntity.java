@@ -60,7 +60,11 @@ public abstract class BaseAdEntity {
 		if (monitorType == 3) { // 同步监控类型
 			link = creatMonitorUrl(link, advParam);
 			logger.info("monitorType=3, link={}", link);
-			this.monitorType = 0; //设置广告的监控类型为0，否则客户端监测监控链接为空，与这里的监控类型3不符合。结果无法发送展示埋点
+			// TODO 这个逻辑设定有问题，历史原因导致的。应该是某一次广告给的同步监控链接附加在 落地页link里面了
+			this.monitorType = 3; //设置广告的监控类型为0，否则客户端监测监控链接为空，与这里的监控类型3不符合。结果无法发送展示埋点
+			if(clickMonitorLink == null && unfoldMonitorLink == null) {
+				this.monitorType = 0;
+			}
 		}
 
 	}
@@ -90,16 +94,50 @@ public abstract class BaseAdEntity {
 		fillLink(ad, advParam, paramMap);
 
 		monitorType = ad.getMonitorType();
-		unfoldMonitorLink = AdvUtil.encodeUrl(ad.getUnfoldMonitorLink());
-		clickMonitorLink = AdvUtil.encodeUrl(ad.getClickMonitorLink());
-		if (unfoldMonitorLink == null) {
+		unfoldMonitorLink = ad.getUnfoldMonitorLink();
+		clickMonitorLink = ad.getClickMonitorLink();
+		
+		// monitorlink handle
+		if(ad.getMonitorType() == 3) {
+			dealUrl(advParam, ad.getMonitorType());
+		}
+		if(unfoldMonitorLink != null) {
+			if(ad.getMonitorType() ==3) {
+				unfoldMonitorLink = creatMonitorUrl(unfoldMonitorLink, advParam);
+			} else {
+				unfoldMonitorLink = AdvUtil.encodeUrl(unfoldMonitorLink);
+			}
+		} else {
 			unfoldMonitorLink = EMPTY_STR;
 		}
-		if (clickMonitorLink == null) {
+		
+		if(clickMonitorLink != null) {
+			if(ad.getMonitorType() ==3) {
+				clickMonitorLink = creatMonitorUrl(clickMonitorLink, advParam);
+			} else {
+				clickMonitorLink = AdvUtil.encodeUrl(clickMonitorLink);
+			}
+		} else {
 			clickMonitorLink = EMPTY_STR;
 		}
-
-		dealUrl(advParam, ad.getMonitorType());
+		
+//		if (unfoldMonitorLink == null) {
+//			unfoldMonitorLink = EMPTY_STR;
+//		}
+//		if (clickMonitorLink == null) {
+//			clickMonitorLink = EMPTY_STR;
+//		}
+//
+//		if(ad.getMonitorType() == 3) {
+////			dealUrl(advParam, ad.getMonitorType());
+//			unfoldMonitorLink = AdvUtil.encodeUrl(creatMonitorUrl(unfoldMonitorLink, advParam));
+//			clickMonitorLink = AdvUtil.encodeUrl(creatMonitorUrl(clickMonitorLink, advParam));
+////			unfoldMonitorLink = creatMonitorUrl(unfoldMonitorLink, advParam);
+////			clickMonitorLink = creatMonitorUrl(clickMonitorLink, advParam);
+//		} else {
+//			unfoldMonitorLink = AdvUtil.encodeUrl(unfoldMonitorLink);
+//			clickMonitorLink = AdvUtil.encodeUrl(clickMonitorLink);
+//		}
 	}
 
 	/**
@@ -217,7 +255,7 @@ public abstract class BaseAdEntity {
 				url = url.replace("__MAC__", mac);
 			}
 			if (ua != null) {
-				url = url.replace("__UA__", ua);
+				url = url.replace("__UA__", AdvUtil.encodeUrl(ua));		 // UA需要做一下encode
 			}
 			 url = url.replace("__TS__", System.currentTimeMillis() + "");
 			logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
@@ -315,6 +353,5 @@ public abstract class BaseAdEntity {
 		String url = "";
 		String ua = null;
 		url = url.replace("__UA__", ua);
-
 	}
 }
