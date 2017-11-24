@@ -107,6 +107,10 @@ public class FlowServiceManager {
 	//获取乘车码信息
 	// TODO  先给客户端造个假数据
 	private PayInfo getPayInfo(AdvParam param) {
+		// 大爷OCS，判断城市
+		// 大爷OCS，判断线路
+		// 判断accountId
+		// 坤朋OCS，判断是否领取
 		if(StringUtils.isNoneBlank(param.getAccountId()) && param.getCityId().equals("027")
 //				&& param.getLineId().equals("010-620-0")
 				) {

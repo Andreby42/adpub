@@ -192,6 +192,12 @@ public class AdvCache {
 		return (String) CacheUtil.get(getShortUrlCacheKey(shortUrl));
 	}
 
+
+	public static String getTabActivitesKey(String udid, int id) {
+		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+		return "tab_activities_" + todayStr + "_" + udid  + "_" + id;
+	}
+	
 	public static void setUrlToCache(String shortUrl, String url) {
 		if (StringUtils.isNotBlank(shortUrl) && StringUtils.isNotBlank(url)) {
 			CacheUtil.set(getShortUrlCacheKey(shortUrl), LONGEST_CACHE_TIME,

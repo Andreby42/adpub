@@ -11,9 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,6 @@ import com.bus.chelaile.model.TypeNumber;
 import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
-import com.bus.chelaile.model.ads.entity.TabEntity;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.model.record.DisplayUserCache;
 import com.bus.chelaile.model.rule.version.VersionEntity;
@@ -48,7 +45,6 @@ import com.bus.chelaile.service.impl.StationAdsManager;
 import com.bus.chelaile.strategy.UserStrategyJudger;
 import com.bus.chelaile.thread.ReloadInvalidAccountIdTimer;
 import com.bus.chelaile.util.FlowUtil;
-import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
 public class ServiceManager {
@@ -199,9 +195,6 @@ public class ServiceManager {
 		} else if (methodName.equals("getDoubleAndSingleAds")) { // 单双栏
 			entity = getDoubleAndSingleAds(advParam);
 			object.put("ads", entity);
-		} else if (methodName.equals("getTabActivities")) {	// tab页点击弹窗
-			entity = getTabActivities(advParam);
-			object.put("activity", entity);
 		} else if (methodName.equals("getRide")) {
 			entity = getRide(advParam);
 			object = (JSONObject) entity; // 乘车页广告，新增音频广告内容
@@ -332,16 +325,6 @@ public class ServiceManager {
 		return lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
 	}
 
-	//  TODO  Tab点击弹窗
-	private Object getTabActivities(AdvParam advParam) {
-		TabEntity tabAdEntity = new TabEntity();
-		tabAdEntity.setId(123123);
-		tabAdEntity.setPic("");
-		tabAdEntity.setLink("http://www.chelaile.net.cn");
-		tabAdEntity.setActivityType(1);
-		logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity));
-		return tabAdEntity;
-	}
 
 	// 1107后的新版支持站点广告
 	// 版本控制
@@ -789,15 +772,17 @@ public class ServiceManager {
 	
 	
 	public static void main(String[] args) throws ParseException, UnsupportedEncodingException, IOException {
-		List<NameValuePair> pairs = New.arrayList();
-		pairs.add(new BasicNameValuePair("title", "手动post测试0"));
-		pairs.add(new BasicNameValuePair("showType", "04"));
-		pairs.add(new BasicNameValuePair("openType", "0"));
+//		List<NameValuePair> pairs = New.arrayList();
+//		pairs.add(new BasicNameValuePair("title", "手动post测试0"));
+//		pairs.add(new BasicNameValuePair("showType", "04"));
+//		pairs.add(new BasicNameValuePair("openType", "0"));
+//		
+//		String POSTURL = "http://127.0.0.1:8088/outman/adv/save";
+////		String POSTURL = "http://121.40.95.166:7000/outman/adv/save";
+//		String a =  HttpUtils.post(POSTURL, pairs, "utf-8");		
+//		System.out.println("a=" + a);
 		
-		String POSTURL = "http://127.0.0.1:8088/outman/adv/save";
-//		String POSTURL = "http://121.40.95.166:7000/outman/adv/save";
-		String a =  HttpUtils.post(POSTURL, pairs, "utf-8");		
-		System.out.println("a=" + a);
+		//System.out.println(getClientErrMap("", Constants.STATUS_NO_DATA));
 		
 		System.exit(0);
 		

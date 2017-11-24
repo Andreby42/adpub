@@ -11,4 +11,5 @@ public interface ActivityContentMapper {
     List<ActivityContent> listValidActivity();
     List<FlowChannel> listValidChannel();
     List<ActivityContent> listOnlineActivity();
+    List<ActivityContent> listTabActivity();
 }

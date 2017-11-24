@@ -20,6 +20,7 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.model.ChannelType;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flow.model.ListIdsCache;
+import com.bus.chelaile.flow.model.TabEntity;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.QueueCacheType;
@@ -402,6 +403,25 @@ public class FlowOcs {
 				logger.info("排序结束后，新的beginIndex为：udid={}, newBeginIndex={}", udid, 0);
 			}
 		}
+	}
+	
+	
+	/**
+	 * 记录用户udid和活动id到ocs中，保证每个自然日只投放一次
+	 * @param tabEntity
+	 * @param param
+	 * @return
+	 */
+	public boolean checkTabActivities(TabEntity tabEntity, AdvParam param) {
+		String key = AdvCache.getTabActivitesKey(param.getUdid(), tabEntity.getId());
+		String value = (String)CacheUtil.getNew(key);
+		if(value == null ) {
+			CacheUtil.setNew(key, Constants.ONE_DAY_TIME, "1");
+			return true;
+		}
+		logger.info("users has send TabActivities aready! udid={}, activityId={}, key={},value={}", 
+				param.getUdid(), tabEntity.getId(), key, value);
+		return false;
 	}
 	
 	public static void main (String[] args) {

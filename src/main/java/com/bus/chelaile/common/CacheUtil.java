@@ -9,6 +9,7 @@ import net.spy.memcached.internal.OperationFuture;
 
 
 
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,8 @@ public class CacheUtil {
 	private static ICache cacheNewClient;
 	//	获取access_token的
 	private static ICache cacheApiTokenClient;
+//	支付信息
+	private static ICache cachePayInfoClient;
 //	//  专为活动[屈臣氏]所设,放置有效用户，以及领取过
 //	private static ICache cacheActivitiesClient;
 	
@@ -67,6 +70,14 @@ public class CacheUtil {
     private static final String API_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.port");
     private static final String API_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.username");
     private static final String API_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.password");
+    
+    /**
+     *基础数据获取‘线路是否支持支付’
+     */
+    private static final String PAY_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.host");
+    private static final String PAY_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.port");
+    private static final String PAY_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.username");
+    private static final String PAY_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.password");
     //private static String cacheType = PropertiesReaderWrapper.read("cacheType", "ocs");
     
 //    /**
@@ -99,6 +110,7 @@ public class CacheUtil {
     	   cacheNewClient = new OCSCacheUtil(CC_PROP_OCS_HOST,CC_PROP_OCS_PORT,CC_PROP_OCS_USERNAME,CC_PROP_OCS_PASSWORD);
     	   
     	   cacheApiTokenClient = new OCSCacheUtil(API_PROP_OCS_HOST,API_PROP_OCS_PORT,API_PROP_OCS_USERNAME,API_PROP_OCS_PASSWORD);
+    	   cachePayInfoClient = new OCSCacheUtil(PAY_PROP_OCS_HOST,PAY_PROP_OCS_PORT,PAY_PROP_OCS_USERNAME,PAY_PROP_OCS_PASSWORD);
 //    	   cacheActivitiesClient = new OCSCacheUtil(ACTIVE_PROP_OCS_HOST,ACTIVE_PROP_OCS_PORT,ACTIVE_PROP_OCS_USERNAME,ACTIVE_PROP_OCS_PASSWORD);
     	   logger.info("ocs cache");
        }else{
@@ -194,6 +206,11 @@ public class CacheUtil {
     
     public static Set<String> getWowDatas(String key) {
     	return redisWow.getSet(key);
+    }
+    
+    // 用户是否领取了乘车码
+    public static String getIsSupportAccountId(String key) {
+    	return (String) cachePayInfoClient.get(key);
     }
  
 //	public static Object getActiveOcs(String key) {

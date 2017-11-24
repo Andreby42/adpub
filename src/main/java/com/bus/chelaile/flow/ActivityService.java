@@ -1,5 +1,6 @@
 package com.bus.chelaile.flow;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.dao.ActivityContentMapper;
@@ -33,8 +34,10 @@ import com.bus.chelaile.flow.model.Channel;
 import com.bus.chelaile.flow.model.ChannelType;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flow.model.FlowChannel;
+import com.bus.chelaile.flow.model.TabEntity;
 import com.bus.chelaile.flow.model.Thumbnail;
 import com.bus.chelaile.util.CitiesList;
+import com.bus.chelaile.util.DateUtil;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
@@ -49,7 +52,8 @@ public class ActivityService {
 	@Autowired
 	private InsideUdidsMapper insideUdidsMapper;
 
-	public static final List<ActivityContent> allActivites = New.arrayList();
+	public static final List<ActivityContent> ALL_ACTIVITIES = New.arrayList();
+	public static final List<ActivityContent> ALL_TAB_ACTIVITIES = New.arrayList();
 	public static final List<AdContent> allFlowAds = New.arrayList();
 
 	// 指定投放信息流的udid列表
@@ -63,7 +67,8 @@ public class ActivityService {
 	private static final List<String> HEADLIST = New.arrayList();
 
 	public void initActivitity() {
-		allActivites.clear();
+		ALL_ACTIVITIES.clear();
+		ALL_TAB_ACTIVITIES.clear();
 		FLOWUDIDS.clear();
 		CHANNELS.clear();
 		CITIES.clear();
@@ -71,8 +76,9 @@ public class ActivityService {
 		HEADLIST.clear();
 		CUSTOM_CHANNELS.clear();
 		
-		List<ActivityContent> activityContens = activityContentMapper.listValidActivity();
-		allActivites.addAll(activityContens);
+		List<ActivityContent> activityContens = activityContentMapper.listValidActivity(); //获取所有的活动，包括上线的和下线的
+		if(activityContens != null)
+			ALL_ACTIVITIES.addAll(activityContens);
 		List<AdContent> allAds = advContent.listValidAds();
 		for(AdContent ad : allAds) {
 			if(ad.getShowType().equals(ShowType.FLOW_ADV.getType())) {
@@ -80,6 +86,10 @@ public class ActivityService {
 				allFlowAds.add(ad);
 			}
 		}
+		
+		List<ActivityContent> tabActivities = activityContentMapper.listTabActivity(); //获取所有tab弹窗
+//		if(tabActivities != null)
+			ALL_TAB_ACTIVITIES.addAll(tabActivities);	// TODO  测试如果没有任何tab活动的时候，会否出错
 
 		// 获取内部udid, type=1 或者0 表示 信息流 内推用户
 		// 从文件获取指定投放的udid列表
@@ -98,12 +108,13 @@ public class ActivityService {
 			HEADLIST.add(s);
 		}
 		
-		logger.info("活动初始化成功，活动数目size={}", allActivites.size());
+		logger.info("活动初始化成功，活动数目size={}", ALL_ACTIVITIES.size());
 		logger.info("投放信息流的内测用户成功，数目是size={}", FLOWUDIDS.size());
 		logger.info("初始化channel成功，总数={}, 自定义模块有效频道数={}，分别是：{}", CHANNELS.size(), CUSTOM_CHANNELS.size(), CUSTOM_CHANNELS.toString());
 		logger.info("初始化城市列表成功，总数={}", CITIES.size());
 		logger.info("初始化信息流广告结束，总数={}", allFlowAds.size());
 		logger.info("初始化投放详情页信息流的用户第一个字母结束，字母分别是={}", HEADLIST.toString());
+		logger.info("初始化所有Tab弹窗，数目是={}", ALL_TAB_ACTIVITIES.size());
 	}
 
 	/*
@@ -155,7 +166,7 @@ public class ActivityService {
 		HashMap<Integer, FlowContent> ucMap = new HashMap<Integer, FlowContent>();
 
 		// 获取符合规则的活动
-		List<ActivityContent> allActivites = getActivites(advParam, id, channelType);
+		List<ActivityContent> allActivites = getActivites(ALL_ACTIVITIES, advParam, id, channelType);
 		if (allActivites == null) {
 			return null;
 		}
@@ -234,16 +245,41 @@ public class ActivityService {
 		}
 	}
 	
+	/**
+	 * 获取Tab弹窗内容
+	 * @param advParam
+	 * @return
+	 */
+	public List<TabEntity> getTabActivities(AdvParam advParam, int entryId) {
+		// 获取符合规则tab弹窗
+		if(ALL_TAB_ACTIVITIES == null || ALL_TAB_ACTIVITIES.size() == 0) {
+			return null;
+		}
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		List<TabEntity> tabs = New.arrayList();
+		if(advParam.getAccountId() != null) {
+			paramMap.put("accountId", advParam.getAccountId());
+		}
+		for (ActivityContent activity : ALL_TAB_ACTIVITIES) {
+			if(ruleCitiesCheck(activity, advParam)) {
+				TabEntity tabEntity = new TabEntity();
+				if (activity.getEntry_id() == entryId && tabEntity.fillActivityInfo(activity, advParam, paramMap)) {
+					tabs.add(tabEntity);
+				}
+			}
+		}
+		return tabs;
+	}
 	
 	/*
 	 * 获取信息流，有一定的规则判断。目前只有城市
 	 */
-	private List<ActivityContent> getActivites(AdvParam advParam, int id, ChannelType channelType) {
-		if (allActivites == null || allActivites.size() == 0)
+	private List<ActivityContent> getActivites(List<ActivityContent> activities, AdvParam advParam, int id, ChannelType channelType) {
+		if (activities == null || activities.size() == 0)
 			return null;
 
 		List<ActivityContent> activites = New.arrayList();
-		for (ActivityContent activity : allActivites) {
+		for (ActivityContent activity : activities) {
 
 			if (ruleCheck(activity, advParam, id, channelType)) {
 				activites.add(activity);
@@ -281,26 +317,61 @@ public class ActivityService {
 		
 
 		// 控制投放，目前只有城市， 时间 2017-05-11
-		if (activity.getRule() != null && !activity.getRule().equals("") && !activity.getRule().equals("{}")) {
-			JSONArray jsonCityIds = JSON.parseObject(activity.getRule()).getJSONArray("cities");
-			if (jsonCityIds.size() > 0) {
-				if (advParam.getCityId() == null) {
-					return false;
-				}
+		if(ruleCitiesCheck(activity, advParam)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-				int size = jsonCityIds.size();
-				for (int i = 0; i < size; i++) {
-					if (advParam.getCityId().equals(jsonCityIds.get(i))) {
-						return true;
+	/**
+	 * 判断城市规则
+	 * @param activity
+	 * @param advParam
+	 * @return
+	 */
+	private boolean ruleCitiesCheck(ActivityContent activity, AdvParam advParam) {
+		if (activity.getRule() != null && !activity.getRule().equals("") && !activity.getRule().equals("{}")) {
+			JSONObject jsonRule = JSONObject.parseObject(activity.getRule());
+			JSONArray jsonCityIds = jsonRule.getJSONArray("cities");
+			String startDate = jsonRule.getString("startDate");
+			String endDate = jsonRule.getString("endDate");
+
+			// 判断有效时间
+			try {
+				if (StringUtils.isNoneBlank(startDate) && StringUtils.isNoneBlank(endDate)) {
+					String nowDate = DateUtil.getTodayStr("yyyy-MM-dd HH:mm:ss");
+					if (nowDate.compareTo(startDate) > 0 && nowDate.compareTo(endDate) < 0) {
+						// 有效期内，接下来继续判断城市
+					} else {
+						logger.info("time Over due, activityId={}, startDate={}, endDate={}",
+								activity.getActivity_id(), startDate, endDate);
+						return false;
 					}
 				}
-				logger.info("is city matche return false, udid={}, cityId={}, rule={}", advParam.getUdid(),
-						advParam.getCityId(), activity.getRule());
+
+				// 判断城市
+				if (jsonCityIds != null && jsonCityIds.size() > 0) {
+					if (advParam.getCityId() == null) {
+						return false;
+					}
+
+					int size = jsonCityIds.size();
+					for (int i = 0; i < size; i++) {
+						if (advParam.getCityId().equals(jsonCityIds.get(i))) {
+							return true;
+						}
+					}
+					logger.info("is city matche return false, activityId={}, udid={}, cityId={}, rule={}",
+							activity.getActivity_id(), advParam.getUdid(), advParam.getCityId(), activity.getRule());
+					return false;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 				return false;
 			}
-			
+
 		}
-		
 		return true;
 	}
 
@@ -643,7 +714,7 @@ public class ActivityService {
 	};
 	
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws ParseException{
 
 		// ApplicationContext context = new
 		// ClassPathXmlApplicationContext("classpath:servicebiz/locator-baseservice.xml");
@@ -678,5 +749,13 @@ public class ActivityService {
 		map.put(2, "a");
 		map.put(8, "b");
 		System.out.println(map.toString());
+		
+		String nowDate = DateUtil.getTodayStr("yyyy-MM-dd HH:mm:ss");
+		System.out.println(nowDate);
+		String startDate = ("2017-11-29 11:21:00");
+		String endDate = ("2017-11-24 11:59:00");
+		System.out.println(nowDate.compareTo(startDate));
+		System.out.println(nowDate.compareTo(startDate) > 0 && nowDate.compareTo(endDate) < 0);
+		
 	}
 }

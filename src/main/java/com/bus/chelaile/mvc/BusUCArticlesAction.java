@@ -36,6 +36,7 @@ import com.bus.chelaile.thread.model.QueueObject;
 import com.bus.chelaile.flow.model.ArticleInfo;
 import com.bus.chelaile.flow.model.FlowResponse;
 import com.bus.chelaile.flow.model.ListIdsCache;
+import com.bus.chelaile.flow.model.TabEntity;
 
 /**
  * 广告相关接口
@@ -225,5 +226,51 @@ public class BusUCArticlesAction extends AbstractController {
 			logger.error("udid={}, update articleChannels exception", advParam.getUdid());
 		}
 		return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_INTERNAL_ERROR);
+	}
+	
+	
+	/*
+	 * tab弹窗活动
+	 */
+	@ResponseBody
+	@RequestMapping(value = "adv!getTabActivities.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String getTabActivities(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		AdvParam param = getActionParam(request);
+		int entryId = getInt(request, "entryId");	//接口定义 0 Tab3, 1 Tab4。 与数据库定义小3（数据库需要默认值0作为不选择任何tab）
+		param.setStnName(request.getParameter("stnName"));
+		try {
+			TabEntity tabAdEntity = flowService.getTabActivities(param, entryId);
+			if (tabAdEntity != null) {
+				JSONObject j = new JSONObject();
+				j.put("activity", tabAdEntity);
+				return serviceManager.getClienSucMap(j, Constants.STATUS_REQUEST_SUCCESS);
+			} else {
+				return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_INTERNAL_ERROR);
+		}
+		// return
+
+	}
+	
+	
+	
+	/*
+	 * 清除tab弹窗记录，供测试使用
+	 * @String udid
+	 * @int id
+	 */
+	@ResponseBody
+	@RequestMapping(value = "adv!clearTabActivitiesRecord.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String clearTabActivitiesRecord(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		AdvParam param = getActionParam(request);
+		String key = AdvCache.getTabActivitesKey(param.getUdid(), getInt(request, "id"));
+		CacheUtil.deleteNew(key);
+		logger.info("清理tab弹窗记录，udid={}, id={}, key={}", param.getUdid(), getInt(request, "id"), key);
+		return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
 	}
 }

@@ -20,6 +20,8 @@ public class ActivityContent {
 	private int custom_channel_id; //渠道id
 	private int channelType;	//渠道类型
 	private int isShowInRecommend; //是否在推荐频道展示
+	private int entry_id; // 入口位置
+	private int open_type; // 打开方式,0 app内部，1 外部浏览器
 	 
 	
 	
@@ -137,5 +139,17 @@ public class ActivityContent {
 	}
 	public void setIsShowInRecommend(int isShowInRecommend) {
 		this.isShowInRecommend = isShowInRecommend;
+	}
+	public int getEntry_id() {
+		return entry_id;
+	}
+	public void setEntry_id(int entry_id) {
+		this.entry_id = entry_id;
+	}
+	public int getOpen_type() {
+		return open_type;
+	}
+	public void setOpen_type(int open_type) {
+		this.open_type = open_type;
 	}
 }

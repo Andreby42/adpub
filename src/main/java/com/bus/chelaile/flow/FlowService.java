@@ -388,6 +388,93 @@ public class FlowService {
 		return channels;
 	}
 	
+	/**
+	 * 获取tab页弹窗位内容
+	 * @param param
+	 * @return
+	 */
+	public TabEntity getTabActivities(AdvParam param, int entryId) {
+		List<TabEntity> tabs = activityService.getTabActivities(param, entryId + 3); // 接口entryid 0:tab3， 数据库 3:tab3
+		
+		if(tabs == null || tabs.size() == 0) {
+			return null;
+		}
+		for (TabEntity tabEntity : tabs) {
+			if (flowOcs.checkTabActivities(tabEntity, param)) {
+				return tabEntity;
+			} 
+		}
+		return null;
+		
+//		return testGetTabActivities(param);
+	}
+	
+	
+	/**
+	 * 获取tab页弹窗位内容
+	 * @param param
+	 * @return
+	 */
+	public TabEntity testGetTabActivities(AdvParam param) {
+		//  TODO  Tab点击弹窗
+			TabEntity tabAdEntity1 = new TabEntity();
+			tabAdEntity1.setId(1);
+			tabAdEntity1.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
+			tabAdEntity1.setLink("http://www.chelaile.net.cn");
+			tabAdEntity1.setActivityType(1);
+			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity1));
+			
+			TabEntity tabAdEntity2 = new TabEntity();
+			tabAdEntity2.setId(3);
+			tabAdEntity2.setTagId(81);
+			tabAdEntity2.setTag("公交小事");
+			tabAdEntity2.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
+//			tabAdEntity2.setLink("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
+			tabAdEntity2.setActivityType(3);
+			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity2));
+			
+//			TabEntity tabAdEntity3 = new TabEntity();
+//			tabAdEntity3.setId(4);
+//			tabAdEntity3.setPic("");
+//			tabAdEntity3.setLink("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
+//			tabAdEntity3.setActivityType(4);
+//			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity3));
+			
+			TabEntity tabAdEntity4 = new TabEntity();
+			tabAdEntity4.setId(5);
+			tabAdEntity4.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
+//			tabAdEntity4.setLink("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
+			tabAdEntity4.setActivityType(5);
+			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity4));
+			
+			TabEntity tabAdEntity5 = new TabEntity();
+			tabAdEntity5.setId(6);
+			tabAdEntity5.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
+			tabAdEntity5.setLink("https://activity.m.duiba.com.cn/newtools/index?id=2521608");
+			tabAdEntity5.setActivityType(6);
+			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity5));
+			
+			TabEntity tabAdEntity6 = new TabEntity();
+			tabAdEntity6.setId(7);
+			tabAdEntity6.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
+			tabAdEntity6.setActivityType(7);
+			tabAdEntity6.setFeedId("627093497618468864");
+			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity6));
+			
+			if(param.getCityId().equals("027"))
+				return tabAdEntity1;
+			else if(param.getCityId().equals("006"))
+				return tabAdEntity2;
+//			else if(param.getCityId().equals("019"))
+//				return tabAdEntity3;
+			else if(param.getCityId().equals("004"))
+				return tabAdEntity4;
+			else if(param.getCityId().equals("007"))
+				return tabAdEntity5;
+			else
+				return tabAdEntity6;
+	}
+	
 
 	public static void main(String[] args) {
 		
