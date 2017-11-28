@@ -134,6 +134,14 @@ public class ToutiaoResponseData {
 		content.setRecoid(String.valueOf(this.item_id));
 		content.setUrl(delUrl(advParam, channelId));
 		
+		// 将图片https改成http
+		for(Thumbnail t : large_image_list) {
+			t.setUrl(t.getUrl().replace("http", "https"));
+		}
+		for(Thumbnail t : image_list) {
+			t.setUrl(t.getUrl().replace("http", "https"));
+		}
+		
 		// 根据返回的图片结构构建自己的图片
 		if(large_image_list != null && large_image_list.size() >= 1) {
 			content.setImgs((ArrayList<Thumbnail>) large_image_list);
@@ -143,6 +151,7 @@ public class ToutiaoResponseData {
 			content.setImgs((ArrayList<Thumbnail>) image_list);
 			content.setImgsType(2);	//三图，小图
 		} else if(middle_image != null && middle_image.getUrl() != null) {
+			middle_image.setUrl(middle_image.getUrl().replace("http", "https"));  // TODO
 			List<Thumbnail> img = New.arrayList();
 			img.add(middle_image);
 			content.setImgs((ArrayList<Thumbnail>) img);

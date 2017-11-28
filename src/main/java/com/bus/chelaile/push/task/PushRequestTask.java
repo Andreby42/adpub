@@ -89,7 +89,7 @@ public class PushRequestTask implements Runnable {
 				if (tokenSendMap.containsKey(tokenStr)) {
 					int advId = tokenSendMap.get(tokenStr);
 					if (advId == adv.getId()) {
-						TimeLong.info("udid={},token={},有重复", udid, token);
+						TimeLong.info("udid={},token={},token有重复", udid, token);
 						if(! isInside) {	//如果不是内推，那么不再推送
 							continue;
 						}
@@ -102,7 +102,7 @@ public class PushRequestTask implements Runnable {
 						TimeLong.info("内推记录：udid={},token={}", udid, token);
 					}
 				}
-
+				TimeLong.info("SEN_UDID_TOKEN,udid={},token={}", udid, token);
 				if (Platform.IOS.getValue().equals(platform)) {
 					iosTokenList.add(token + "#" + udid);
 				} else if (Platform.GT.getValue().equals(platform)) {

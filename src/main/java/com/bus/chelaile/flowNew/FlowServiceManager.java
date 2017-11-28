@@ -32,6 +32,8 @@ public class FlowServiceManager {
 	private ActivityContentMapper activityContentMapper;
 	private static final String HEADSTRS = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"detail.new.flow.udidHEADS", "4|5|6|7");
+	private static final String PAY_URL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "pay.url",
+			"http://dev.web.chelaile.net.cn/iccard/");
 	private static final List<String> HEADLIST = New.arrayList();
 	
 	protected static final Logger logger = LoggerFactory.getLogger(FlowServiceManager.class);
@@ -111,16 +113,36 @@ public class FlowServiceManager {
 		// 大爷OCS，判断线路
 		// 判断accountId
 		// 坤朋OCS，判断是否领取
-		if(StringUtils.isNoneBlank(param.getAccountId()) && param.getCityId().equals("027")
-//				&& param.getLineId().equals("010-620-0")
-				) {
+		logger.info("********* cityId={}, accountId={}, lineNO={}, lineId={}", param.getCityId(), param.getAccountId(), 
+				param.getLineNo(), param.getLineId());
+		if(! param.getCityId().equals("027")) {
+			return null;
+		}
+		
+		// ios无法确保lineId和lineNo同时获取到，所以需要根据lineId来获取lineNo
+		if((StringUtils.isNoneBlank(param.getLineNo()) && param.getLineNo().equals("620")) || 
+				(StringUtils.isNoneBlank(param.getLineId()) && param.getLineId().contains("010-620"))) {
 			PayInfo payInfo = new PayInfo();
 			payInfo.setName("乘车码");
-			payInfo.setSlogan("乘车扫码，更加快捷");
-			payInfo.setUrl("http://www.chelaile.net.cn");
+			payInfo.setSlogan("乘车扫码，更加快捷");  // 跟随城市可配置
+			payInfo.setUrl(PAY_URL);
 			payInfo.setIcon("https://image3.chelaile.net.cn/4ca9504bc2ef4badb70ba43ba5d9f1ac");
-			return payInfo;
+			if(StringUtils.isBlank(param.getAccountId())) {		 // 未登录
+				return payInfo;
+			}
+			String key = "cllAccountCityKey#" + param.getAccountId() + "#" + param.getCityId();
+			logger.info("********** key={}, isSupportPay={}", key);
+			String isSupportPay = CacheUtil.getIsSupportAccountId(key);
+			logger.info("********** key={}, isSupportPay={}", key, isSupportPay);
+			if(isSupportPay == null || isSupportPay.equals("0")) { //已登录，未领取
+				return payInfo;
+			}
 		}
+//		if(StringUtils.isNoneBlank(param.getAccountId()) && param.getCityId().equals("027")
+////				&& param.getLineId().equals("010-620-0")
+//				) {
+//			return payInfo;
+//		}
 		return null;
 	}
 
@@ -236,12 +258,6 @@ public class FlowServiceManager {
 	 * 可能涉及到一些链接增加用户id之类的修正
 	 */
 	private void createList( AdvParam param, List<FlowContent> flows) {
-//		Map<Integer, List<FlowContent>> linedetailflows = FlowStaticContents.getLineDetailFlows();
-//		
-//		if (linedetailflows == null || linedetailflows.size() < 1) {
-//			logger.error("详情页下方滚动栏没有读取到任何内容！，accountId={}", param.getAccountId());
-//			return;
-//		}
 
 		List<FlowContent> flowEnergy = New.arrayList();
 		List<FlowContent> flowActivity = New.arrayList();
@@ -254,26 +270,26 @@ public class FlowServiceManager {
 		if (StringUtils.isNoneBlank(lineFlowsStr)) {
 			flowEnergy = JSON.parseArray(lineFlowsStr, FlowContent.class);
 		}
-		key = "QM_LINEDETAIL_FLOW_" + 1;
-		lineFlowsStr = (String) CacheUtil.getNew(key);
-		if (StringUtils.isNoneBlank(lineFlowsStr)) {
-			flowActivity = JSON.parseArray(lineFlowsStr, FlowContent.class);
-		}
-		key = "QM_LINEDETAIL_FLOW_" + 2;
-		lineFlowsStr = (String) CacheUtil.getNew(key);
-		if (StringUtils.isNoneBlank(lineFlowsStr)) {
-			flowArticle = JSON.parseArray(lineFlowsStr, FlowContent.class);
-		}
-		key = "QM_LINEDETAIL_FLOW_" + 0;
-		lineFlowsStr = (String) CacheUtil.getNew(key);
-		if (StringUtils.isNoneBlank(lineFlowsStr)) {
-			flowTag = JSON.parseArray(lineFlowsStr, FlowContent.class);
-		}
-		key = "QM_LINEDETAIL_FLOW_" + 3;
-		lineFlowsStr = (String) CacheUtil.getNew(key);
-		if (StringUtils.isNoneBlank(lineFlowsStr)) {
-			flowGoods = JSON.parseArray(lineFlowsStr, FlowContent.class);
-		}
+//		key = "QM_LINEDETAIL_FLOW_" + 1; //TODO for test
+//		lineFlowsStr = (String) CacheUtil.getNew(key);
+//		if (StringUtils.isNoneBlank(lineFlowsStr)) {
+//			flowActivity = JSON.parseArray(lineFlowsStr, FlowContent.class);
+//		}
+//		key = "QM_LINEDETAIL_FLOW_" + 2;
+//		lineFlowsStr = (String) CacheUtil.getNew(key);
+//		if (StringUtils.isNoneBlank(lineFlowsStr)) {
+//			flowArticle = JSON.parseArray(lineFlowsStr, FlowContent.class);
+//		}
+//		key = "QM_LINEDETAIL_FLOW_" + 0;
+//		lineFlowsStr = (String) CacheUtil.getNew(key);
+//		if (StringUtils.isNoneBlank(lineFlowsStr)) {
+//			flowTag = JSON.parseArray(lineFlowsStr, FlowContent.class);
+//		}
+//		key = "QM_LINEDETAIL_FLOW_" + 3;
+//		lineFlowsStr = (String) CacheUtil.getNew(key);
+//		if (StringUtils.isNoneBlank(lineFlowsStr)) {
+//			flowGoods = JSON.parseArray(lineFlowsStr, FlowContent.class);
+//		}
 		
 		for(int index = 0; index < FlowStartService.LINEDETAIL_NUM; index ++) {
 			addIntoFlows(flowEnergy, flows, index, param);

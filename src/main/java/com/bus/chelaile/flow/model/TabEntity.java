@@ -49,7 +49,7 @@ public class TabEntity {
 		
 		
 		this.activityType = 1; // 信息流是活动的时候，type是1
-		this.openType = activityContent.getOpen_type();
+		this.openType = activityContent.getOpen_type() - 1;  // 接口 0 内部打开，数据库 1 内部打开
 		this.id = activityContent.getActivity_id();
 		this.tag = activityContent.getTag_title();
 

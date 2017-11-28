@@ -419,7 +419,7 @@ public class FlowOcs {
 			CacheUtil.setNew(key, Constants.ONE_DAY_TIME, "1");
 			return true;
 		}
-		logger.info("users has send TabActivities aready! udid={}, activityId={}, key={},value={}", 
+		logger.info("user has send TabActivities already! udid={}, activityId={}, key={},value={}", 
 				param.getUdid(), tabEntity.getId(), key, value);
 		return false;
 	}
