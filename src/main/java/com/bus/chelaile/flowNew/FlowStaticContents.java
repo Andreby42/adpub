@@ -226,6 +226,9 @@ public class FlowStaticContents {
 	public static List<String> getRandomFakePics() {
 		int size = FAKE_PHOTOS.size();
 		List<String> photos = New.arrayList();
+		if(size == 0) {
+			return photos;
+		}
 		int i = 0;
 		while (i < 4) {
 			int num = (int) (Math.random() * size);

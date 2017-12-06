@@ -30,7 +30,7 @@ public class CacheUtil {
 	//	redis缓存
 	private static ICache redisClient;
 	//  用来获取用户头像的redis
-	private static ICache redisWow;
+//	private static ICache redisWow;
 	//	保存用户访问量等信息
 	private static ICache cacheNewClient;
 	//	获取access_token的
@@ -117,7 +117,7 @@ public class CacheUtil {
     	   throw new IllegalArgumentException("未找到cacheType类型");
        }
        redisClient = new RedisCacheImplUtil();
-       redisWow = new RedisWowCacheImplUtil();
+//       redisWow = new RedisWowCacheImplUtil();
        isInitSuccess = true;
     }
     
@@ -204,9 +204,9 @@ public class CacheUtil {
     	return cacheApiTokenClient.get(key);
     }
     
-    public static Set<String> getWowDatas(String key) {
-    	return redisWow.getSet(key);
-    }
+//    public static Set<String> getWowDatas(String key) {
+//    	return redisWow.getSet(key);
+//    }
     
     // 用户是否领取了乘车码
     public static String getIsSupportAccountId(String key) {

@@ -51,7 +51,7 @@ public class FlowServiceManager {
 		
 		// 用户头像缓存
 		long t1 = System.currentTimeMillis();
-		FlowStaticContents.FAKE_PHOTOS = new ArrayList<>(CacheUtil.getWowDatas("BUSUGC_FAKE_PHOTO"));	  // 用户头像set，直接构造list
+//		FlowStaticContents.FAKE_PHOTOS = new ArrayList<>(CacheUtil.getWowDatas("BUSUGC_FAKE_PHOTO"));	  // 用户头像set，直接构造list
 		logger.info("QM获取到所有用户头像，耗时：{}, 数量为：{}", System.currentTimeMillis() - t1, FlowStaticContents.FAKE_PHOTOS.size());
 		
 		// 缓存从数据库拉取的‘进行中’的活动
@@ -87,13 +87,13 @@ public class FlowServiceManager {
 	}
 
 	public String getResponseLineDetailFlows(AdvParam param) {
-		// 乘车码banner入口
-		PayInfo payInfo = getPayInfo(param);
-		if (payInfo != null) {
-			JSONObject responseJ = new JSONObject();
-			responseJ.put("payInfo", payInfo);
-			return getClienSucMap(responseJ, Constants.STATUS_REQUEST_SUCCESS);
-		}
+//		 乘车码banner入口
+//		PayInfo payInfo = getPayInfo(param);
+//		if (payInfo != null) {
+//			JSONObject responseJ = new JSONObject();
+//			responseJ.put("payInfo", payInfo);
+//			return getClienSucMap(responseJ, Constants.STATUS_REQUEST_SUCCESS);
+//		}
 		
 		// 单栏信息流
 		List<FlowContent> flows = getLineDetailFlows(param);
@@ -121,7 +121,9 @@ public class FlowServiceManager {
 		
 		// ios无法确保lineId和lineNo同时获取到，所以需要根据lineId来获取lineNo
 		if((StringUtils.isNoneBlank(param.getLineNo()) && param.getLineNo().equals("620")) || 
-				(StringUtils.isNoneBlank(param.getLineId()) && param.getLineId().contains("010-620"))) {
+				(StringUtils.isNoneBlank(param.getLineId()) && param.getLineId().contains("010-620")) ||
+				(StringUtils.isNoneBlank(param.getLineNo()) && param.getLineNo().equals("108")) || 
+				(StringUtils.isNoneBlank(param.getLineId()) && param.getLineId().contains("010-108"))) {
 			PayInfo payInfo = new PayInfo();
 			payInfo.setName("乘车码");
 			payInfo.setSlogan("乘车扫码，更加快捷");  // 跟随城市可配置
@@ -131,7 +133,7 @@ public class FlowServiceManager {
 				return payInfo;
 			}
 			String key = "cllAccountCityKey#" + param.getAccountId() + "#" + param.getCityId();
-			logger.info("********** key={}, isSupportPay={}", key);
+			logger.info("********** key={}", key);
 			String isSupportPay = CacheUtil.getIsSupportAccountId(key);
 			logger.info("********** key={}, isSupportPay={}", key, isSupportPay);
 			if(isSupportPay == null || isSupportPay.equals("0")) { //已登录，未领取
@@ -270,26 +272,26 @@ public class FlowServiceManager {
 		if (StringUtils.isNoneBlank(lineFlowsStr)) {
 			flowEnergy = JSON.parseArray(lineFlowsStr, FlowContent.class);
 		}
-//		key = "QM_LINEDETAIL_FLOW_" + 1; //TODO for test
+//		key = "QM_LINEDETAIL_FLOW_" + 1;
 //		lineFlowsStr = (String) CacheUtil.getNew(key);
 //		if (StringUtils.isNoneBlank(lineFlowsStr)) {
 //			flowActivity = JSON.parseArray(lineFlowsStr, FlowContent.class);
 //		}
-//		key = "QM_LINEDETAIL_FLOW_" + 2;
+//		key = "QM_LINEDETAIL_FLOW_" + 2;	// 文章暂时下线，后续改成头条内容
 //		lineFlowsStr = (String) CacheUtil.getNew(key);
 //		if (StringUtils.isNoneBlank(lineFlowsStr)) {
 //			flowArticle = JSON.parseArray(lineFlowsStr, FlowContent.class);
 //		}
-//		key = "QM_LINEDETAIL_FLOW_" + 0;
-//		lineFlowsStr = (String) CacheUtil.getNew(key);
-//		if (StringUtils.isNoneBlank(lineFlowsStr)) {
-//			flowTag = JSON.parseArray(lineFlowsStr, FlowContent.class);
-//		}
-//		key = "QM_LINEDETAIL_FLOW_" + 3;
-//		lineFlowsStr = (String) CacheUtil.getNew(key);
-//		if (StringUtils.isNoneBlank(lineFlowsStr)) {
-//			flowGoods = JSON.parseArray(lineFlowsStr, FlowContent.class);
-//		}
+		key = "QM_LINEDETAIL_FLOW_" + 0;
+		lineFlowsStr = (String) CacheUtil.getNew(key);
+		if (StringUtils.isNoneBlank(lineFlowsStr)) {
+			flowTag = JSON.parseArray(lineFlowsStr, FlowContent.class);
+		}
+		key = "QM_LINEDETAIL_FLOW_" + 3;
+		lineFlowsStr = (String) CacheUtil.getNew(key);
+		if (StringUtils.isNoneBlank(lineFlowsStr)) {
+			flowGoods = JSON.parseArray(lineFlowsStr, FlowContent.class);
+		}
 		
 		for(int index = 0; index < FlowStartService.LINEDETAIL_NUM; index ++) {
 			addIntoFlows(flowEnergy, flows, index, param);

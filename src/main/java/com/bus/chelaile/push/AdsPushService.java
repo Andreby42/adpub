@@ -573,7 +573,7 @@ public class AdsPushService extends AbstractPushManager {
 	 * @return 完整文件名
 	 */
 	private String buildFileName(int advId, int ruleId, int count) {
-		return advId + "-" + ruleId + "-" + count + ".txt";
+		return advId + "-" + ruleId + "-" + count + "_" + System.currentTimeMillis() + ".txt";
 	}
 	
 	

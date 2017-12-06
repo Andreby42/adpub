@@ -194,8 +194,7 @@ public class AdvCache {
 
 
 	public static String getTabActivitesKey(String udid, int id) {
-		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
-		return "tab_activities_" + todayStr + "_" + udid  + "_" + id;
+		return "tab_activities_" + udid  + "_" + id;
 	}
 	
 	public static void setUrlToCache(String shortUrl, String url) {

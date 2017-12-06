@@ -407,7 +407,7 @@ public class FlowOcs {
 	
 	
 	/**
-	 * 记录用户udid和活动id到ocs中，保证每个自然日只投放一次
+	 * 记录用户udid和活动id到ocs中，保证每个活动只投放一次
 	 * @param tabEntity
 	 * @param param
 	 * @return
@@ -416,7 +416,7 @@ public class FlowOcs {
 		String key = AdvCache.getTabActivitesKey(param.getUdid(), tabEntity.getId());
 		String value = (String)CacheUtil.getNew(key);
 		if(value == null ) {
-			CacheUtil.setNew(key, Constants.ONE_DAY_TIME, "1");
+			CacheUtil.setNew(key, -1, "1");
 			return true;
 		}
 		logger.info("user has send TabActivities already! udid={}, activityId={}, key={},value={}", 
