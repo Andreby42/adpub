@@ -18,6 +18,8 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 
 
 
+
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -29,8 +31,8 @@ import java.util.Set;
 
 public class RedisCacheImplUtil implements ICache{
 	private static Logger log = LoggerFactory.getLogger(RedisCacheImplUtil.class) ;
-	private static final String DEFAULT_REDIS_HOST = "127.0.0.1";
-	private static final int DEFAULT_REDIS_PORT = 6379;
+//	private static final String DEFAULT_REDIS_HOST = "127.0.0.1";
+//	private static final int DEFAULT_REDIS_PORT = 6379;
     
 	//private static String REDIS_HOST = PropertiesReaderWrapper.read("redisCount.host", DEFAULT_REDIS_HOST);
 	//private static int REDIS_PORT = PropertiesReaderWrapper.readInt("redisCount.port", DEFAULT_REDIS_PORT);
@@ -138,7 +140,14 @@ public class RedisCacheImplUtil implements ICache{
 		}
 	}
 
-	public  void setSortedSet(String key, double score,String value, int expire) {
+	/**
+	 * 缓存 有序集合
+	 * @param key
+	 * @param score
+	 * @param value
+	 * @param expire
+	 */
+	public void setSortedSet(String key, double score,String value, int expire) {
 		JedisPool pool = null;
 		Jedis conn = null;
 		try {
@@ -160,7 +169,62 @@ public class RedisCacheImplUtil implements ICache{
 				pool.returnResource(conn);
 		}
 	}
-
+	
+	/**
+	 * 按照score，从小到大获取值。 起始score为startScore，从0开始获取count个值
+	 * @return
+	 */
+	public Set<String> zrangeByScore(String key, double startScore, double endScore, int count) {
+		JedisPool pool = null;
+		Jedis conn = null;
+		Set<String> value = null;
+		try {
+			pool = getPool();
+			conn = pool.getResource();
+			value = conn.zrangeByScore(key, startScore, endScore, 0, count);
+			log.debug("Redis-SortedGet: Key=" + key + ",Value=" + value);
+		} catch (Exception e) {
+			log.error(String.format("Error occur in Redis.set, key=%s startScore=%s, endScore=%s, error message: " + e.getMessage(), key, startScore, endScore));
+			if (pool!=null && conn!=null) {
+				pool.returnResource(conn);
+				pool = null;
+				conn = null;
+			}
+		} finally {
+			if (pool!=null && conn!=null) 
+				pool.returnResource(conn);
+		}
+		return value;
+	}
+	
+	/**
+	 * 按照score，从大到小获取值。 起始score为endScore，从0开始获取count个值
+	 * @return
+	 */
+	public Set<String> zrevRangeByScore(String key, double endScore, double startScore, int count) {
+		JedisPool pool = null;
+		Jedis conn = null;
+		Set<String> value = null;
+		try {
+			pool = getPool();
+			conn = pool.getResource();
+			value = conn.zrevrangeByScore(key, endScore, startScore,  0, count);
+			log.debug("Redis-SortedGet: Key=" + key + ",Value=" + value);
+		} catch (Exception e) {
+			log.error(String.format("Error occur in Redis.set, key=%s startScore=%s, endScore=%s, error message: " + e.getMessage(), key, startScore, endScore));
+			if (pool!=null && conn!=null) {
+				pool.returnResource(conn);
+				pool = null;
+				conn = null;
+			}
+		} finally {
+			if (pool!=null && conn!=null) 
+				pool.returnResource(conn);
+		}
+		return value;
+	}
+	
+	
 	public  void clearDB()
 	{
 		JedisPool pool = null;

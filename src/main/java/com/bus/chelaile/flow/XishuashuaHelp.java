@@ -54,7 +54,7 @@ public class XishuashuaHelp implements InterfaceFlowHelp {
 	 * 从喜刷刷接口获得内容
 	 */
 	@Override
-	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int id) throws Exception {
+	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int id, boolean isShowAd) throws Exception {
 		String token = (String) CacheUtil.getApiInfo("xishuashuatoken");
 		if (token == null) {
 			logger.error("洗刷刷token为空");
@@ -74,12 +74,12 @@ public class XishuashuaHelp implements InterfaceFlowHelp {
 					advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getS(),
 					advParam.getV(), advParam.getLineId(), advParam.getNw(), advParam.getIp(),
 					advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getStatsAct(), 1,advParam.getRefer());
-			return parseResponse(advParam, ftime, recoid, token, "100"); // 默认
+			return parseResponse(advParam, ftime, recoid, token, "100", true); // 默认
 		} else {
 			int contentNumber = 21 / apiChannelIds.size();
 			List<FlowContent> UcContents = new ArrayList<>();
 			for (String chennelId : apiChannelIds) {
-				List<FlowContent> reponseUcContent = parseResponse(advParam, ftime, recoid, token, chennelId);
+				List<FlowContent> reponseUcContent = parseResponse(advParam, ftime, recoid, token, chennelId, true);
 				if (reponseUcContent != null && reponseUcContent.size() > 0) {
 					UcContents.addAll(reponseUcContent.subList(0,
 							contentNumber >= reponseUcContent.size() ? reponseUcContent.size() - 1 : contentNumber));
@@ -101,7 +101,7 @@ public class XishuashuaHelp implements InterfaceFlowHelp {
 	 * 调用接口获取数据
 	 */
 	@Override
-	public List<FlowContent> parseResponse(AdvParam advParam, long ftime, String recoid, String token, String channelId) {
+	public List<FlowContent> parseResponse(AdvParam advParam, long ftime, String recoid, String token, String channelId, boolean isShowAd) {
 		List<FlowContent> contents = New.arrayList();
 		String url = null;
 		String response = null;

@@ -9,7 +9,7 @@ public class PushMessageBody {
 	public static JSONObject getMessageBody(int type, String content, String pushKey, Platform platform,String title){
 		 if (platform == Platform.IOS) {
 			 return getIosMessage(type, content, pushKey);
-		 }else	if( platform == Platform.ANDROID || platform == Platform.GT || platform == Platform.YM ){
+		 }else	if( platform == Platform.ANDROID || platform == Platform.GT || platform == Platform.YM  || platform == Platform.JG){
 			 return getAndroidMessage(type, content, title, pushKey);
 		 }
 		 throw new IllegalArgumentException("没有找到要推送的类型:"+type);

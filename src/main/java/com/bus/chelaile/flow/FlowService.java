@@ -38,6 +38,8 @@ public class FlowService {
 	@Autowired
 	private ToutiaoHelp toutiaoHelp;
 	@Autowired
+	private WuliToutiaoHelp wuliToutiaoHelp;
+	@Autowired
 	private ActivityService activityService;
 	@Autowired
 	private FlowOcs flowOcs;
@@ -168,9 +170,11 @@ public class FlowService {
 			List<FlowContent> contentsFromApi = null;
 			if (channelType == ChannelType.TOUTIAO) {
 //				return null;	// FOR TEST
-				contentsFromApi = toutiaoHelp.getInfoByApi(advParam, ftime, recoid, id);
+				contentsFromApi = toutiaoHelp.getInfoByApi(advParam, ftime, recoid, id, false);
 			} else if (channelType == ChannelType.UC) {
-				contentsFromApi = xishuashuaHelp.getInfoByApi(advParam, ftime, recoid, id);
+				contentsFromApi = xishuashuaHelp.getInfoByApi(advParam, ftime, recoid, id, false);
+			} else if(channelType == ChannelType.WULITOUTIAO) {
+				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(advParam, recoid, id);
 			}
 			contents = flowOcs.merageList(null, contentsFromApi, contentActivity, contentAdv, advParam.getUdid(), channelType);
 			FlowUtil.setImagsType(contents);

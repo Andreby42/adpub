@@ -49,6 +49,8 @@ public class StartService {
 	private InfoSteamForAdvClick infoSteamForAdvClick;
 	@Autowired
 	private LinkActiveHelp linkActiveHelp;
+	@Autowired
+	private DynamicRegulation dynamicRegulation;
 
 	private static final String minuteTimesFile = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"minuteTimesFile", "/data/advConfig/commonMinuteTimesFile.csv");
@@ -60,15 +62,15 @@ public class StartService {
 		startThread();
 		StaticAds.init();
 		activityService.initActivitity (); // 信息流活动初始化
-		try{
-			infoStreamDispatcher.readKafka();
-			infoSteamForAdvClick.readKafka();
-		} catch(Exception e) {
-			e.printStackTrace();
-			logger.error("启动kafka出错！ e={}", e.getMessage());
-		}
+//		try{
+//			infoStreamDispatcher.readKafka();
+//			infoSteamForAdvClick.readKafka();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			logger.error("启动kafka出错！ e={}", e.getMessage());
+//		}
 		
-		linkActiveHelp.initLinkedMePics();	// linkedMe 图片信息初始化
+//		linkActiveHelp.initLinkedMePics();	// linkedMe 图片信息初始化
 		initMinuteTimes(StaticAds.minuteTimes);
 		// 获取当前所有的可以使用的ADS
 		List<AdContent> allAds = advContent.listValidAds();
@@ -150,7 +152,7 @@ public class StartService {
 		}
 		
 		// 启动固定频率更新投放pv到redis，和启动固定频率计算控制投放的比例因子
-		DynamicRegulation.threadUpdateTotalPV();
+		dynamicRegulation.threadUpdateTotalPV();
 		
 		// 从redis中读取 ‘不投广告的用户’到内存中
 		// 改成 spring配置的定时任务了

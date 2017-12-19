@@ -95,6 +95,9 @@ public class NoticePushService extends AbstractPushManager {
 			// 友盟需要增加一个序列号
 			jsonObject.put("serialNumber", PushSerialNumberCreateUtil.getSerialNumber());
 			return jsonObject;
+		} else if (Platform.JG.getValue().equals(platform)) {
+			return PushMessageBody.getMessageBody(type, singlePushParam.getBody(), singlePushParam.getPushKey(),
+					Platform.JG, singlePushParam.getTitle());
 		}
 		throw new IllegalArgumentException("未找到类型的platform:" + platform);
 	}
@@ -122,6 +125,8 @@ public class NoticePushService extends AbstractPushManager {
 			return Platform.GT;
 		} else if (Platform.YM.getValue().equals(platform)) {
 			return Platform.YM;
+		} else if (Platform.JG.getValue().equals(platform)) {
+			return Platform.JG;
 		}
 		throw new IllegalArgumentException("未找到类型的platform:" + platform);
 	}

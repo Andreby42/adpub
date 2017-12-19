@@ -109,6 +109,8 @@ public class AbstractPushManager {
 					platform = TokenType.GTTOKEN.getPlatform().getValue();
 				} else if (TokenType.YMTOKEN.getName().equalsIgnoreCase(tokenType)) {
 					platform = TokenType.YMTOKEN.getPlatform().getValue();
+				} else if(TokenType.JGTOKEN.getName().equalsIgnoreCase(tokenType)) {
+					platform = TokenType.JGTOKEN.getPlatform().getValue();
 				}
 			}
 		}

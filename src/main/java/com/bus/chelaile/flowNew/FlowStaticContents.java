@@ -15,9 +15,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.flow.model.ActivityContent;
 import com.bus.chelaile.flowNew.model.ArticleContent;
-import com.bus.chelaile.flowNew.model.FlowContent;
+import com.bus.chelaile.flowNew.model.FlowNewContent;
 import com.bus.chelaile.flowNew.qingmang.QMHelper;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.DateUtil;
@@ -34,7 +35,7 @@ public class FlowStaticContents {
 	public static final List<ActivityContent> activityContens = New.arrayList();
 	
 	// 详情页下方滚动栏内容
-	public static final Map<Integer, List<FlowContent>> LINE_DETAIL_FLOWS = New.hashMap();
+	public static final Map<Integer, List<FlowNewContent>> LINE_DETAIL_FLOWS = New.hashMap();
 	public static final int ARTICLE_NUMBER_LIMIT = 100;
 	private static final int ARTICLE_RETURN_NUMBER = 10;
 
@@ -160,16 +161,16 @@ public class FlowStaticContents {
 			int articleNo = getArticleNo(date + "#" + channelId); // 获取上次拉取的最后一篇文章id
 			
 			String key = AdvCache.getQMArticleFirstNo(date + "#" + channelId);
-			CacheUtil.setToRedis(key, Constants.ONE_DAY_NEW_USER_PERIOD, String.valueOf(articleNo + 1));
+			CacheUtil.setToRedis(key, Constants.ONE_DAY_TIME, String.valueOf(articleNo + 1));
 		}
 	}
 
 
-	public static void addFlowsToMap(int type, FlowContent flow) {
+	public static void addFlowsToMap(int type, FlowNewContent flow) {
 		if (LINE_DETAIL_FLOWS.containsKey(type)) {
 			LINE_DETAIL_FLOWS.get(type).add(flow);
 		} else {
-			List<FlowContent> flowList = New.arrayList();
+			List<FlowNewContent> flowList = New.arrayList();
 			flowList.add(flow);
 			LINE_DETAIL_FLOWS.put(type, flowList);
 		}
@@ -263,8 +264,38 @@ public class FlowStaticContents {
 		return value;
 	}
 	
-	public static Map<Integer, List<FlowContent>> getLineDetailFlows() {
+	public static Map<Integer, List<FlowNewContent>> getLineDetailFlows() {
 		return LINE_DETAIL_FLOWS;
+	}
+	
+	
+	/**
+	 * 是否返回详情页下方入口
+	 * @param param
+	 * @return
+	 */
+	public static  boolean isReturnLineDetailFlows(AdvParam param) {
+		if(isFirstWord(param.getUdid(), FlowServiceManager.HEADLIST)) {
+			return true;					// udid开头的一些用户打开详情页入口||支持小说的，全部打开详情页入口
+		}
+		if (ActivityService.FLOWUDIDS.contains(param.getUdid())) {
+			return true;
+		}
+		if (Constants.ISTEST) {
+			return true; 			// FOR TEST
+		}
+		return false;
+	}
+	
+	private static boolean isFirstWord(String udid, List<String> headlist) {
+		if(headlist != null && udid != null) {
+			for(String s : headlist) {
+				if(udid.startsWith(s)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public static void main(String[] args) throws IOException {

@@ -7,7 +7,8 @@ public enum Platform {
     ANDROID("android", "android"),
     H5("h5", "h5"),
     YM("androidyoumeng", "androidyoumeng"),
-    GT("androidgetui", "androidgetui");
+    GT("androidgetui", "androidgetui"),
+    JG("androidjpush", "androidjpush");
 
 
     private String value;

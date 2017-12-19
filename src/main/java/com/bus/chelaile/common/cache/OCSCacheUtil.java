@@ -19,6 +19,7 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 
 
 
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -209,13 +210,24 @@ public class OCSCacheUtil implements ICache{
 
 	@Override
 	public void incrBy(String key, int incNumber, int exp) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public Set<String> getSet(String key) {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setSortedSet(String key, double score, String value, int expire) {
+	}
+
+	@Override
+	public Set<String> zrangeByScore(String key, double startScore, double endScore, int count) {
+		return null;
+	}
+
+	@Override
+	public Set<String> zrevRangeByScore(String key, double endScore, double startScore, int count) {
 		return null;
 	}
 }

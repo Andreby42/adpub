@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.TimeLong;
+import com.bus.chelaile.innob.request.AndroidDevice;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.rule.Rule;
@@ -55,6 +56,7 @@ public class PushRequestTask implements Runnable {
 		try {
 			// 需要注意，如果中断了某次的推送，后面如何能够继续？已经发送了的udid是否能够不再进行发送？
 			List<String> andriodGeTuiTokenList = new ArrayList<String>();
+			List<String> andriodJGTokenList = new ArrayList<String>();
 			List<String> andriodYouMengTokenList = new ArrayList<String>();
 			List<String> iosTokenList = new ArrayList<String>();
 			Map<String, String> tokenMap = adsPushService
@@ -65,7 +67,10 @@ public class PushRequestTask implements Runnable {
 					adv.getId(), rule.getRuleId(), udidList.size());
 			String platform = null;
 			String token =null;
+			// TODO  log FOR test   tokenMap
+			logger.info("tokenMap信息： size={}", tokenMap.size());
 			for (String udid : tokenMap.keySet()) {
+				logger.info("tokenMap信息： key={}, value={}", udid, tokenMap.get(udid));
 				String tokenStr = tokenMap.get(udid);
 				if(tokenStr == null ) {
 					continue;
@@ -75,12 +80,15 @@ public class PushRequestTask implements Runnable {
 					token= tokens[0];
 					platform = adsPushService.getPlatform(udid, tokenStr);
 					if (StringUtils.isBlank(platform)) {
+						logger.info("tokenMap信息：PushRequestTask udid:{}, token {} is not valid,adv={}",
+								udid, tokenStr, adv.getId());
 						TimeLong.info(
 								"PushRequestTask udid:{}, token {} is not valid,adv={}",
 								udid, tokenStr, adv.getId());
 						continue;
 					}
 				}catch( Exception e ){
+					logger.info("tokenMap信息： token处理出错， udid, tokenStr={}", udid, tokenStr);
 					logger.error(e.getMessage(),e);
 					continue;
 				}
@@ -102,6 +110,7 @@ public class PushRequestTask implements Runnable {
 						TimeLong.info("内推记录：udid={},token={}", udid, token);
 					}
 				}
+//				logger.info("SEN_UDID_TOKEN,udid={},token={}", udid, token);
 				TimeLong.info("SEN_UDID_TOKEN,udid={},token={}", udid, token);
 				if (Platform.IOS.getValue().equals(platform)) {
 					iosTokenList.add(token + "#" + udid);
@@ -109,6 +118,8 @@ public class PushRequestTask implements Runnable {
 					andriodGeTuiTokenList.add(token + "#" + udid);
 				} else if (Platform.YM.getValue().equals(platform)) {
 					andriodYouMengTokenList.add(token + "#" + udid);
+				} else if(Platform.JG.getValue().equals(platform)) {
+					andriodJGTokenList.add(token + "#" + udid);
 				}
 
 			}
@@ -119,6 +130,8 @@ public class PushRequestTask implements Runnable {
 					iosTokenList.size(), adv.getId());
 			TimeLong.info("PushRequestTask All andriodYM tokens: {},adv={}",
 					andriodYouMengTokenList.size(), adv.getId());
+			TimeLong.info("PushRequestTask All andriodJG tokens: {},adv={}",
+					andriodJGTokenList.size(), adv.getId());
 			String pushKey = getPushKey(adv);
 			int pushKeyRecordId = -1;
 			st = System.currentTimeMillis();
@@ -150,6 +163,8 @@ public class PushRequestTask implements Runnable {
 			adsPushService.sendNotice(iosTokenList, adv, Platform.IOS, endDate,
 					pushKey, pushKeyRecordId, rule);
 			adsPushService.sendNotice(andriodYouMengTokenList, adv, Platform.YM,
+					endDate, pushKey, pushKeyRecordId, rule);
+			adsPushService.sendNotice(andriodJGTokenList, adv, Platform.JG, 
 					endDate, pushKey, pushKeyRecordId, rule);
 		} catch (Exception e) {
 			e.printStackTrace();

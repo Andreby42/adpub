@@ -15,6 +15,7 @@ public class ActivityEntity {
 	private int chatRoomId;
 	private int total;  //在线聊天人数
 	private TopicInfo topic;
+	private int openType;// 打开方式
 	
 	
 	public int getType() {
@@ -77,5 +78,11 @@ public class ActivityEntity {
 		return "ActivityEntity [type=" + type + ", imageUrl=" + imageUrl + ", linkUrl=" + linkUrl + ", tagId=" + tagId
 				+ ", tag=" + tag + ", feedId=" + feedId + ", chatRoomId=" + chatRoomId + ", total=" + total
 				+ ", topic=" + topic + "]";
+	}
+	public int getOpenType() {
+		return openType;
+	}
+	public void setOpenType(int openType) {
+		this.openType = openType;
 	}
 }

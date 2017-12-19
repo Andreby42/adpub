@@ -100,16 +100,6 @@ public class HttpUtils {
 						}
 					}
 					return 20 * 1000;
-					// HttpHost target = (HttpHost) context
-					// .getAttribute(HttpClientContext.HTTP_TARGET_HOST);
-					// if ("www.naughty-server.com".equalsIgnoreCase(target
-					// .getHostName())) {
-					// // Keep alive for 5 seconds only
-					// return 5 * 1000;
-					// } else {
-					// otherwise keep alive for 30 seconds
-					// return 30 * 1000;
-					// }
 				}
 			}).setDefaultRequestConfig(REQUEST_CONFIG).build();
 

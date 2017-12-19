@@ -15,6 +15,13 @@ public class Thumbnail{	//缩略图的图片url列表
 		this.url = url;
 	}
 	
+	public Thumbnail(String url, int width, int height) {
+		super();
+		this.url = url;
+		this.width = width;
+		this.height = height;
+	}
+
 	public String getUrl() {
 		return url;
 	}

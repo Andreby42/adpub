@@ -30,4 +30,9 @@ public interface ICache {
 	 // 从redis直接获取set
 	 public Set<String> getSet(String key);
 	 
+	 
+	 // redis 有序集合
+	 public void setSortedSet(String key, double score,String value, int expire);
+	 public Set<String> zrangeByScore(String key, double startScore, double endScore, int count);
+	 public Set<String> zrevRangeByScore(String key, double endScore, double startScore, int count);
 }

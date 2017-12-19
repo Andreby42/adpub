@@ -55,6 +55,8 @@
 	<!-- 更新会员不展示广告的缓存 -->
 	<bean id="reloadInvalidAccountIdTimer" class="com.bus.chelaile.thread.ReloadInvalidAccountIdTimer" >
 	</bean>
+	<bean id="dynamicRegulation" class="com.bus.chelaile.service.DynamicRegulation" >
+	</bean>
 	
 	<!-- 获取所有类型可投放广告 -->
 	<!-- 
@@ -82,6 +84,8 @@
 	</bean>
 	<bean id="toutiaoHelp" class="com.bus.chelaile.flow.ToutiaoHelp">
 	</bean>
+	<bean id="wuliToutiaoHelp" class="com.bus.chelaile.flow.WuliToutiaoHelp">
+	</bean>
 	<!-- kafka先关的处理类 infoStreamDispatcher -->
 	<bean id="infoStreamDispatcher" class="com.bus.chelaile.kafka.InfoStreamDispatcher">
 	</bean>
@@ -97,6 +101,10 @@
 	
 	<!-- 新版信息流相关 -->
 	<bean id="flowServiceManager" class="com.bus.chelaile.flowNew.FlowServiceManager"  init-method="initFlows">
+	</bean>
+	<bean id="FeedService" class="com.bus.chelaile.flowNew.FeedService" >
+	</bean>
+	<bean id="PayService" class="com.bus.chelaile.flowNew.PayService">
 	</bean>
 	
 	<!--    定时任务          -->

@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.model.chatRoom.TopicInfo;
+import com.bus.chelaile.flowNew.model.FlowNewContent;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
@@ -176,6 +177,37 @@ public class FlowContent {
 
 		this.url = adEntity.getLink(); // TODO 此处需要加上一些参数
 	}
+	
+	/*
+	 * 构建 信息流2.0版本的样式
+	 */
+	public FlowNewContent createNewContents() {
+		FlowNewContent f = new FlowNewContent();
+		f.setDestType(2);
+		f.setFlowTitle(this.title);
+		f.setFlowTag("热门文章");
+		f.setFlowTagColor("52,152,219");
+		f.setFlowIcon("https://image3.chelaile.net.cn/3cd56eeb33c8434daf2e17bdc9fde48d");
+		f.setArticleUrl(this.url);
+		return f;
+	}
+	
+	/*
+	 * 构建 信息流2.0版本的样式
+	 */
+	public FlowNewContent createFeeds() {
+		FlowNewContent f = new FlowNewContent();
+		f.setDestType(2);
+		f.setFlowTitle(this.title);
+		f.setFlowTag("大家都在看");
+		f.setFlowTagColor("52,152,219");
+		f.setFlowTagColor("255,193,7");
+		f.setFlowDesc("2567人浏览");
+		f.setLink(this.url);
+		f.setPic(this.imgs.get(0).getUrl());
+		return f;
+	}
+	
 
 	public String getId() {
 		return id;

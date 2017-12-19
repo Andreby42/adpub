@@ -7,7 +7,8 @@ import com.bus.chelaile.model.Platform;
  */
 public enum TokenType {
     GTTOKEN("0", Platform.GT),
-    YMTOKEN("1", Platform.YM);
+    YMTOKEN("1", Platform.YM),
+    JGTOKEN("3", Platform.JG);
 
     private String name;
     private Platform platform;

@@ -344,4 +344,14 @@ public class AdvCache {
 
 		logger.debug(record.toJson());
 	}
+
+
+	/**
+	 * wuliToutiao 缓存文章的集合 key
+	 * @param channelId
+	 * @return
+	 */
+	public static String getWuliArticleCacheKey(int channelId) {
+		return new StringBuilder("WULITOUTIAO#").append(channelId).toString();
+	}
 }

@@ -45,7 +45,7 @@ public class ToutiaoHelp implements InterfaceFlowHelp{
 	private static final String TOUTIAO_ADS_URL = "http://open.snssdk.com/log/app_log_for_partner/v2/";
 
 	@Override
-	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int id) throws Exception {
+	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int id, boolean isShowAd) throws Exception {
 		String token = getToutiaoToken(advParam.getUdid());
 		if (token == null) {
 			logger.error("获取头条token为空! ");
@@ -63,13 +63,13 @@ public class ToutiaoHelp implements InterfaceFlowHelp{
 							advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getS(),
 							advParam.getV(), advParam.getLineId(), advParam.getNw(), advParam.getIp(),
 							advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getStatsAct(), 1 ,advParam.getRefer());
-			return parseResponse(advParam, ftime, recoid, token, "__all__"); // 默认
+			return parseResponse(advParam, ftime, recoid, token, "__all__", isShowAd); // 默认
 		} else {
 
 			int contentNumber = 21 / apiChannelIds.size();
 			List<FlowContent> UcContents = new ArrayList<>();
 			for (String chennelId : apiChannelIds) {
-				List<FlowContent> reponseUcContent = parseResponse(advParam, ftime, recoid, token, chennelId);
+				List<FlowContent> reponseUcContent = parseResponse(advParam, ftime, recoid, token, chennelId, isShowAd);
 				if (reponseUcContent != null && reponseUcContent.size() > 0) {
 					UcContents.addAll(reponseUcContent.subList(0,
 							contentNumber >= reponseUcContent.size() ? reponseUcContent.size() - 1 : contentNumber));
@@ -88,7 +88,7 @@ public class ToutiaoHelp implements InterfaceFlowHelp{
 	}
 
 	@Override
-	public List<FlowContent> parseResponse(AdvParam advParam, long ftime, String recoid, String token, String channelId) {
+	public List<FlowContent> parseResponse(AdvParam advParam, long ftime, String recoid, String token, String channelId, boolean isShowAd) {
 		List<FlowContent> contents = New.arrayList();
 		String response = getArticles(advParam, ftime, recoid, token, channelId);
 		if (response == null) {
@@ -111,8 +111,15 @@ public class ToutiaoHelp implements InterfaceFlowHelp{
 			}
 			FlowContent content = toutiaoData.dealDate(advParam, channelId);
 			if (toutiaoData.getLabel() != null && toutiaoData.getLabel().equals("广告")) { // 广告
+				content.setDesc("广告");
 				logger.info("上报广告, toutiaoData={}", JSONObject.toJSONString(toutiaoData));
 				handleToutiaoShow(toutiaoData, advParam); // 上报 广告 展示事件
+				if(! isShowAd) {
+					Random r = new Random();
+					if(r.nextInt(3) < 2) {
+						continue; //不展示广告
+					}
+				}
 			}
 			if (content != null && content.getImgs() != null && content.getImgs().size() > 0) { // 不允许没有图片的文章结构
 				contents.add(content);
@@ -464,15 +471,23 @@ public class ToutiaoHelp implements InterfaceFlowHelp{
 		//
 		// System.out.println(JSONObject.toJSONString(contents));
 
-		String url = "<190>Apr  6 17:45:40 web7 nginx: 117.136.79.227 |# - |# 2017-04-06 17:45:40 |# GET /?link=https%3A%2F%2Fopen.toutiao.com%2Fa6405467749933383937%2F%3Futm_campaign%3Dopen%26utm_medium%3Dapi%26utm_source%3Dtt%26ad_id%3D58857685260%26cid%3D58858128136%26req_id%3D1491472086853814819%26linkRefer%3Ddirect&log_extra=%7B%22rit%22%3A+1%2C+%22convert_id%22%3A+0%2C+%22req_id%22%3A+%221491472086853814819%22%2C+%22ad_price%22%3A+%22WOYOCgAL2i9Y5g4KAAvaL4ufE0FHPUDeSyQnIA%22%7D&nt=0&category=open&tag=go_detail&value=6405467749933383937&label=click&udid=aaa&is_ad_event=1 HTTP/1.1 |# 302 |# 0.000 |# 264 |# - |# Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Mobile/14D27 Chelaile/5.20.0 |# - |# ad.chelaile.net.cn |# - |# -";
-		toutiaoHelp.handleToutiaoClick(url);
-		// System.exit(0);
-
-		Map<String, String> map = New.hashMap();
-		String tag = "11";
-		map.put("11", tag);
-		tag = "22";
-		map.put("11", tag);
-		System.out.println(map.get("11"));
+//		String url = "<190>Apr  6 17:45:40 web7 nginx: 117.136.79.227 |# - |# 2017-04-06 17:45:40 |# GET /?link=https%3A%2F%2Fopen.toutiao.com%2Fa6405467749933383937%2F%3Futm_campaign%3Dopen%26utm_medium%3Dapi%26utm_source%3Dtt%26ad_id%3D58857685260%26cid%3D58858128136%26req_id%3D1491472086853814819%26linkRefer%3Ddirect&log_extra=%7B%22rit%22%3A+1%2C+%22convert_id%22%3A+0%2C+%22req_id%22%3A+%221491472086853814819%22%2C+%22ad_price%22%3A+%22WOYOCgAL2i9Y5g4KAAvaL4ufE0FHPUDeSyQnIA%22%7D&nt=0&category=open&tag=go_detail&value=6405467749933383937&label=click&udid=aaa&is_ad_event=1 HTTP/1.1 |# 302 |# 0.000 |# 264 |# - |# Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Mobile/14D27 Chelaile/5.20.0 |# - |# ad.chelaile.net.cn |# - |# -";
+//		toutiaoHelp.handleToutiaoClick(url);
+//		// System.exit(0);
+//
+//		Map<String, String> map = New.hashMap();
+//		String tag = "11";
+//		map.put("11", tag);
+//		tag = "22";
+//		map.put("11", tag);
+//		System.out.println(map.get("11"));
+		
+		
+		for(int i = 0; i < 30; i ++ ) {
+			Random r = new Random();
+			System.out.println(r.nextInt(3));
+		}
+		
+		
 	}
 }

@@ -8,13 +8,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.flow.WuliToutiaoHelp;
 import com.bus.chelaile.thread.CalculatePerMinCount;
-import com.bus.chelaile.thread.DowQMArticles;
+import com.bus.chelaile.thread.DownArticles;
 import com.bus.chelaile.thread.UpdateSendPV;
 
 public class DynamicRegulation {
-
+	@Autowired
+	private WuliToutiaoHelp wuliToutiaoHelp;
 	private static final Logger logger = LoggerFactory.getLogger(DynamicRegulation.class);
 
 	// 临时存放广告发送的pv量,按照ruleId存放
@@ -24,7 +28,7 @@ public class DynamicRegulation {
 	/*
 	 * 更新发送pv到redis线程
 	 */
-	public static void threadUpdateTotalPV() {
+	public void threadUpdateTotalPV() {
 		if (!hasStartThread) {
 			ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
@@ -40,11 +44,15 @@ public class DynamicRegulation {
 			logger.info("启动计算pv投放比例因子");
 			
 			
-			// 启动缓存QM文章内容
-//			Runnable QMThread = new DowQMArticles();
-//			service.scheduleWithFixedDelay(QMThread, 1, 5, TimeUnit.MINUTES);
-//			logger.info("启动缓存QM文章内容#########");
-
+			// 启动缓存文章内容
+			if (Constants.IS_FLOW) {
+				Runnable QMThread = new DownArticles(wuliToutiaoHelp);
+				int interval = 60;
+				if (Constants.ISTEST) {
+					interval = 600;
+				}
+				service.scheduleWithFixedDelay(QMThread, 30, interval, TimeUnit.SECONDS);
+			}
 			hasStartThread = true;
 		}
 	}

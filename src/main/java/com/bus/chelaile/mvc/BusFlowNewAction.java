@@ -16,6 +16,7 @@ import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.flowNew.FeedService;
 import com.bus.chelaile.flowNew.FlowServiceManager;
 import com.bus.chelaile.flowNew.FlowStaticContents;
 import com.bus.chelaile.util.DateUtil;
@@ -30,9 +31,29 @@ public class BusFlowNewAction extends AbstractController {
 	protected static final Logger logger = LoggerFactory.getLogger(BusFlowNewAction.class);
 	@Resource
 	private FlowServiceManager flowServiceManager;
+	@Resource
+	private FeedService feedService;
 
 	/**
 	 * 获取详情页下方滚动单栏内容
+	 * 
+	 * @param request
+	 * @param response
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "flow!getLineDetailFeeds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String getLineDetailFeeds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		AdvParam param = getActionParam(request);
+
+		return feedService.getResponseLineDetailFeeds(param);
+	}
+	
+	
+	/**
+	 * 获取详情页下方滚动单栏内容 3.0版本
 	 * 
 	 * @param request
 	 * @param response
@@ -47,31 +68,34 @@ public class BusFlowNewAction extends AbstractController {
 
 		return flowServiceManager.getResponseLineDetailFlows(param);
 	}
+	
+	
 
-	/**
-	 * 获取文章列表
-	 * 
-	 * @param request
-	 * @param response
-	 * @param session
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "flow!getArticleList.action", produces = "Content-Type=text/plain;charset=UTF-8")
-	public String getArticleList(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-		AdvParam param = getActionParam(request);
-		String channelId = request.getParameter("channelId");
-		String articleId = request.getParameter("articleId");
-
-		if (!flowServiceManager.paramCheck(param, channelId)) {
-			logger.error("参数异常 ");
-			return flowServiceManager.getClientErrMap("参数异常", Constants.STATUS_PARAM_ERROR);
-		}
-
-		logger.info("channelId={}, articleId={}", channelId, articleId);
-		return flowServiceManager.getResponseArticleList(param, channelId, articleId);
-	}
+//	/**
+//	 * 获取文章列表
+//	 * 来能量馆 ‘阅读’模块的功能, 2017-12-01已下线
+//	 * 
+//	 * @param request
+//	 * @param response
+//	 * @param session
+//	 * @return
+//	 */
+//	@ResponseBody
+//	@RequestMapping(value = "flow!getArticleList.action", produces = "Content-Type=text/plain;charset=UTF-8")
+//	public String getArticleList(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+//
+//		AdvParam param = getActionParam(request);
+//		String channelId = request.getParameter("channelId");
+//		String articleId = request.getParameter("articleId");
+//
+//		if (!flowServiceManager.paramCheck(param, channelId)) {
+//			logger.error("参数异常 ");
+//			return flowServiceManager.getClientErrMap("参数异常", Constants.STATUS_PARAM_ERROR);
+//		}
+//
+//		logger.info("channelId={}, articleId={}", channelId, articleId);
+//		return flowServiceManager.getResponseArticleList(param, channelId, articleId);
+//	}
 
 	/**
 	 * 查询过杂志的真实‘阅读过’人数

@@ -20,7 +20,6 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 import com.bus.chelaile.util.DateUtil;
 import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
-import com.bus.chelaile.util.UrlUtil;
 
 
 /***
@@ -151,7 +150,7 @@ public class QMHelper {
 //				channelId, myAr.getSource(), myAr.getTitle());
 		myAr.setLink(articleLinkHost + link);
 		
-		// 压缩封面图			//不压缩看看效果
+		// 压缩封面图	
 //		if (myAr.getType() == 1) {
 //			// 原始图片
 //			String picDownName;

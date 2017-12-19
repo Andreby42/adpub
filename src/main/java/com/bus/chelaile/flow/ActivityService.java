@@ -63,6 +63,8 @@ public class ActivityService {
 	public static final Map<String, String> CITIES = New.hashMap();
 	private static final String HEADSTRS = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"detail.flow.udidHEADS", "4|5|6|7");
+	private static final int CHANNEL_TYPE = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"flow.channelType", "1"));
 	private static final List<Channel> FAVCHANNELS = New.arrayList();
 	private static final List<String> HEADLIST = New.arrayList();
 
@@ -459,7 +461,11 @@ public class ActivityService {
 			}
 		}
 		
-		return ChannelType.TOUTIAO;	 //TODO
+		if(CHANNEL_TYPE == ChannelType.WULITOUTIAO.getType()) {
+			return ChannelType.WULITOUTIAO;
+		}
+		else 
+			return ChannelType.TOUTIAO;
 	}
 	
 
@@ -617,6 +623,9 @@ public class ActivityService {
 			return true;
 		}
 		if (platform.isIOS(platform.getDisplay()) && advParam.getVc() > 10361) {
+			return true;
+		}
+		if (platform.isH5(platform.getDisplay())) {
 			return true;
 		}
 		return false;

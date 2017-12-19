@@ -3,13 +3,6 @@ package com.bus.chelaile.common;
 
 import net.spy.memcached.internal.OperationFuture;
 
-
-
-
-
-
-
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
 import com.bus.chelaile.common.cache.RedisCacheImplUtil;
-import com.bus.chelaile.common.cache.RedisWowCacheImplUtil;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
@@ -117,7 +109,6 @@ public class CacheUtil {
     	   throw new IllegalArgumentException("未找到cacheType类型");
        }
        redisClient = new RedisCacheImplUtil();
-//       redisWow = new RedisWowCacheImplUtil();
        isInitSuccess = true;
     }
     
@@ -165,6 +156,19 @@ public class CacheUtil {
     
     public static void redisIncrBy(String key, int number, int exp) {
     	redisClient.incrBy(key, number, exp);
+    }
+    
+    // redis 有序集合 3个方法
+    public static void setSortedSet(String key, double score,String value, int expire) {
+    	redisClient.setSortedSet(key, score, value, expire);
+    }
+    
+    public static Set<String> getRangeSet(String key, double startScore, double endScore, int count) {
+    	return redisClient.zrangeByScore(key, startScore, endScore, count);
+    }
+    
+    public static Set<String> getRevRangeSet(String key, double startScore, double endScore, int count) {
+    	return redisClient.zrevRangeByScore(key, endScore, startScore, count);
     }
     
     /**
@@ -224,5 +228,32 @@ public class CacheUtil {
 //	public static OperationFuture<Boolean> activitiesDelete(String key) {
 //        return cacheActivitiesClient.delete(key);
 //    }
-  
+    
+    public static void main(String[] args) throws InterruptedException {
+    	initClient();
+    	setToRedis("a", -1, "12");
+    	System.out.println(getFromRedis("a"));
+    	
+    	System.out.println(System.currentTimeMillis());
+    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"11111\"}", -1);
+    	Thread.sleep(1);
+    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"22222\"}", -1);
+    	Thread.sleep(1);
+    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"33333\"}", -1);
+    	Thread.sleep(1);
+    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"44444\"}", -1);
+    	Thread.sleep(1);
+    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"55555\"}", -1);
+    	Thread.sleep(1);
+    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"66666\"}", -1);
+    	System.out.println(System.currentTimeMillis());
+    	
+    	
+    	Set<String> tops = getRangeSet("wuli_hot", 1513067900290d, System.currentTimeMillis(), 20); // 最新内容
+    	System.out.println(tops);
+    	
+    	
+    	Set<String> ends = getRevRangeSet("wuli_hot", 0d, 1513067900290d, 20);  // 历史 
+    	System.out.println(ends);
+    }
 }
