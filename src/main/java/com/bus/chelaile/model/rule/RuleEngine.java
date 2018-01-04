@@ -210,6 +210,16 @@ public class RuleEngine {
             rule.setChatOrRide(getChildAsInt(rInfo, "chatOrRide"));
             rule.setIsClickEndPush(getChildAsInt(rInfo, "isClickEndPush"));
             
+            //开屏最小时间间隔 和 feed流广告最小间隔
+            String minIntervalTimeStr = getChildAsText(rInfo, "minIntervalTime");
+            if(StringUtils.isNoneBlank(minIntervalTimeStr)) {
+            	rule.setMinIntervalTime(Integer.parseInt(minIntervalTimeStr) * 60 * 1000);
+            }
+            String minIntervalPagesStr = getChildAsText(rInfo, "minIntervalPages");
+            if(StringUtils.isNoneBlank(minIntervalPagesStr)) {
+            	rule.setMinIntervalPages(Integer.parseInt(minIntervalPagesStr));
+            }
+            
             return rule;
         } catch (Exception e) {
             logger.error("parseRule exception", e);

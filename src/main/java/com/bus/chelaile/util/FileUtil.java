@@ -4,6 +4,20 @@ import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
 
 
+
+
+
+
+
+
+
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -236,6 +250,48 @@ public class FileUtil {
 //    public List<String> getFiles(String paths){
 //    	
 //    }
+    
+    public static void main(String[] args) {
+    	String path = "D://temp//1";
+    	File file = new File(path);
+    	File[] files = file.listFiles();
+    	for(int i = 0; i < files.length; i ++) {
+    		File file1 = files[i];
+            file1.getName();   //根据后缀判断
+            System.out.println(file1.getName());
+            
+//            uploadFile(file1, "http://test.yg84.com:7000/wow/upd!updImage.action");
+    	}
+    }
+    
+    public static void uploadFile(File file, String url) {
+        if (!file.exists()) {
+            return;
+        }
+        PostMethod postMethod = new PostMethod(url);
+        try {
+            //FilePart：用来上传文件的类
+        FilePart fp = new FilePart("file", file);
+            Part[] parts = { fp };
+
+            //对于MIME类型的请求，httpclient建议全用MulitPartRequestEntity进行包装
+            MultipartRequestEntity mre = new MultipartRequestEntity(parts, postMethod.getParams());
+            postMethod.setRequestEntity(mre);
+            HttpClient client = new HttpClient();
+            client.getHttpConnectionManager().getParams().setConnectionTimeout(50000);// 设置连接时间
+            int status = client.executeMethod(postMethod);
+            if (status == HttpStatus.SC_OK) {
+                System.out.println(postMethod.getResponseBodyAsString());
+            } else {
+                System.out.println("fail");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //释放连接
+            postMethod.releaseConnection();
+        }
+    }
 }
 
 

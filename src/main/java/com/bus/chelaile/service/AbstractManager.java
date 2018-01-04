@@ -151,7 +151,7 @@ public abstract class AbstractManager {
 				return null;
 			}
 
-			// 没有第三方广告,处理自才买广告
+			// 没有第三方广告,处理自采买广告
 			return getEntity(null, advParam, cacheRecord, adMap, showType, queryParam, isRecord);
 
 		} else {
@@ -164,7 +164,6 @@ public abstract class AbstractManager {
 
 		}
 
-		// 从训哥儿那里获取策略
 		// 到这一步的都是 isNeedApid=true，目前只有新版的详情页和新版的开屏
 		AdCategory cateGory = null;
 		try {
@@ -237,7 +236,8 @@ public abstract class AbstractManager {
 				if (!lineDetailIsSilentTimePassed(ad, cacheRecord, advParam)) {
 					continue;
 				}
-			} else if (ad.getShowType().equals(ShowType.DOUBLE_COLUMN.getType())) {
+			} else if (ad.getShowType().equals(ShowType.DOUBLE_COLUMN.getType())
+					|| ad.getShowType().equals(ShowType.FEED_ADV.getType())) {
 				// 当点击了双栏不感兴趣
 				if (cacheRecord.isUninterest(ad.getId())) {
 					logger.info("isSilentTimePassed return false,adtype={}, advId={},udid={}", showType, ad.getId(),
@@ -388,9 +388,9 @@ public abstract class AbstractManager {
 
 		if (!rule.isLineStationMap(advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
 				advParam.getUdid())) {
-//			logger.info("isLineStationMap return false,ruleId={},lineId={},stnName={},order={},udid={}",
-//					rule.getRuleId(), advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
-//					advParam.getUdid());
+			logger.info("isLineStationMap return false,ruleId={},lineId={},stnName={},order={},udid={}",
+					rule.getRuleId(), advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
+					advParam.getUdid());
 			return false;
 		}
 		if (!rule.isStationMatch(advParam.getStnName())) {
@@ -444,6 +444,23 @@ public abstract class AbstractManager {
 //			logger.info("hasAdTimeCounts return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
 
 			return false;
+		}
+		
+		
+		// 最小时间间隔，热启动 开屏广告用
+		if (advParam.getStartMode() == 1 && ad.getShowType().equals(ShowType.OPEN_SCREEN.getType()) && rule.getMinIntervalTime() > 0) {
+			if(cacheRecord != null && !cacheRecord.hasPassIntervalTime(ad.getId(), rule.getMinIntervalTime())) {
+				logger.info("cannot pub OpenAd, because of minInterval time not past, ruleId={}, udid={}", rule.getRuleId(), advParam.getUdid());
+				return false;
+			}
+		}
+		
+		// 最小次数间隔，feed流广告用。 两次广告展示之间最少间隔几次调用
+		if(rule.getMinIntervalPages() > 0 && ad.getShowType().equals(ShowType.FEED_ADV.getType())) {
+			if(cacheRecord != null && !cacheRecord.canPubFeedAd(ad, rule)) {
+				logger.info("cannot pub feedAdv because of pages minInterval, ruleId={}, udid={}", rule.getRuleId(), advParam.getUdid());
+				return false;
+			}
 		}
 		
 		// 乘车页广告和聊天室广告
@@ -541,7 +558,7 @@ public abstract class AbstractManager {
 	 * @return
 	 * @throws Exception
 	 */
-	private BaseAdEntity getEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
+	protected BaseAdEntity getEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
 			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord) {
 		BaseAdEntity entity = null;
 		try {
@@ -571,9 +588,10 @@ public abstract class AbstractManager {
 			isAutoRefresh = true;
 		}
 		if (isSelfAd && !(isAutoRefresh && hasSendSelfAd)) { // 记录自采买广告的次数
-			cacheRecord.buildAdPubCacheRecord(adId);
+			if(showType != ShowType.OPEN_SCREEN)	// 2017.12.28， 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+				cacheRecord.buildAdPubCacheRecord(adId);
 			if (adMap.get(adId).getRule().getUvLimit() > 0) {
-				// 首次访问
+				// 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误  // TODO
 				if (!cacheRecord.getUvMap().containsKey(adId)) {
 					adMap.get(adId).getRule().setUvCount();
 					cacheRecord.setAdToUvMap(adId);
@@ -584,7 +602,8 @@ public abstract class AbstractManager {
 		if (showType == ShowType.LINE_DETAIL) {
 			RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
 		} else {
-			RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
+			if(showType != ShowType.OPEN_SCREEN)	// 2017.12.28， 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+				RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
 		}
 
 		return entity;
@@ -615,7 +634,7 @@ public abstract class AbstractManager {
 
 
 
-	private void handleAds(Map<Integer, AdContentCacheEle> adMap, List<AdContentCacheEle> adsList, ShowType showType,
+	protected void handleAds(Map<Integer, AdContentCacheEle> adMap, List<AdContentCacheEle> adsList, ShowType showType,
 			AdvParam advParam, AdPubCacheRecord cacheRecord, boolean isNeedApid, QueryParam queryParam) {
 		if (isNeedApid) {
 			setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid, queryParam);

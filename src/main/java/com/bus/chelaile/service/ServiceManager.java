@@ -31,12 +31,14 @@ import com.bus.chelaile.model.TypeNumber;
 import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.model.record.DisplayUserCache;
 import com.bus.chelaile.model.rule.version.VersionEntity;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.impl.ActiveManager;
 import com.bus.chelaile.service.impl.DoubleAndSingleManager;
+import com.bus.chelaile.service.impl.FeedAdsManager;
 import com.bus.chelaile.service.impl.LineDetailsManager;
 import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.RideManager;
@@ -54,7 +56,8 @@ public class ServiceManager {
 	private LineDetailsManager lineDetailsManager;
 	@Autowired
 	private StationAdsManager stationAdsManager;
-
+	@Autowired
+	private FeedAdsManager feedAdsManager;
 	@Autowired
 	private OpenManager openManager;
 
@@ -182,13 +185,6 @@ public class ServiceManager {
 		} else if (methodName.equals("getNewOpen")) { // 新版本开屏、浮层、乘车页浮层
 			entity = getNewOpen(advParam);
 			object.put("ads", entity);
-		} else if (methodName.equals("getOldOpen")) { // 旧版本开屏、浮层
-			entity = getOldOpen(advParam);
-			object.put("ads", entity);
-		} else if (methodName.equals("preLoadAds")) { // 旧版本开屏浮层预加载
-			entity = preLoadAds(advParam);
-			object = (JSONObject) entity;
-			// object.put("ads", entity);
 		} else if (methodName.equals("precacheResource")) { // 预缓存广告资源图片
 			entity = precacheResource(advParam);
 			object = (JSONObject) entity;
@@ -213,7 +209,14 @@ public class ServiceManager {
 		} else if(methodName.equals("getAboardText")) { // 上车提醒文案
 			entity = getAboardText(advParam);
 			object = (JSONObject) entity;
-		}
+		} else if (methodName.equals("getOldOpen")) { // 旧版本开屏、浮层
+			entity = getOldOpen(advParam);
+			object.put("ads", entity);
+		} else if (methodName.equals("preLoadAds")) { // 旧版本开屏浮层预加载
+			entity = preLoadAds(advParam);
+			object = (JSONObject) entity;
+			// object.put("ads", entity);
+		} 
 		if (entity == null)
 			return null;
 		return object;
@@ -320,11 +323,23 @@ public class ServiceManager {
 				return stnAds;
 			}
 		}
-		
-		
 		return lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
 	}
 
+	
+	/**
+	 * feed流广告
+	 * 
+	 * @param advParam
+	 * @return
+	 * @throws Exception
+	 */
+	public List<FeedAdEntity> getFeedAds(AdvParam advParam) throws Exception {
+		QueryParam queryParam = new QueryParam();
+		
+		return feedAdsManager.doFeedAdService(advParam, ShowType.FEED_ADV, false, queryParam, true);
+	}
+	
 
 	// 1107后的新版支持站点广告
 	// 版本控制
@@ -589,6 +604,9 @@ public class ServiceManager {
 		
 		JSONObject resultMap = new JSONObject();
 		// 取得所有刻意投放广告
+		if(Constants.ISTEST && advParam.getUdid().equals("forPushAboard")) {
+			return resultMap;
+		}
 		QueryParam queryParam = new QueryParam();
 		BaseAdEntity audioAds = rideManager.doService(advParam, ShowType.RIDE_AUDIO, false, queryParam, true);
 		System.out.println(JSONObject.toJSONString(audioAds));

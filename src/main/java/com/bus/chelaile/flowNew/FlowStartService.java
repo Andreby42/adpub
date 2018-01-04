@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
@@ -78,7 +79,8 @@ public class FlowStartService {
 				commonAc ++;
 			}
 			
-			f.setFlowDesc("6234人在玩");	 // TODO 
+			int random = (int) (6000 + Math.random() * 1000);
+			f.setFlowDesc(random + "人在玩");
 			initFlows.add(f);
 			if (commonAc + gameAc + wealAc >= LINEDETAIL_NUM) {
 				break;

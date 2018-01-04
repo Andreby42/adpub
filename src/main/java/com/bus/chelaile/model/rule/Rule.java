@@ -72,6 +72,9 @@ public class Rule {
 	private Long cacheTime; // 一个用户线路详情放到缓存中有效时间
 	
 	private int isClickEndPush; // 0点击后无影响，1点击后不投放
+	
+	private long minIntervalTime; // 开屏广告最小投放时间间隔， 单位：min转成的毫秒
+	private int minIntervalPages;	// feed流广告最小投放间隔，单位：次。
 
 	protected static final Logger logger = LoggerFactory.getLogger(Rule.class);
 
@@ -128,9 +131,9 @@ public class Rule {
 			cacheRecord.setCacheTime(cacheTime);
 			// 把第一次访问时间放回到缓存中
 //			cacheRecord.setQueryTimeAndCount(ruleId, minuteStr);
-			if (cacheTime > 0) {
-				cacheRecord.setQueryTimeAndCount(ruleId);
-			}
+//			if (cacheTime > 0) {
+//				cacheRecord.setQueryTimeAndCount(ruleId);
+//			}
 
 			return true;
 		}
@@ -969,5 +972,21 @@ public class Rule {
 
 	public void setIsClickEndPush(int isClickEndPush) {
 		this.isClickEndPush = isClickEndPush;
+	}
+
+	public long getMinIntervalTime() {
+		return minIntervalTime;
+	}
+
+	public void setMinIntervalTime(long minIntervalTime) {
+		this.minIntervalTime = minIntervalTime;
+	}
+
+	public int getMinIntervalPages() {
+		return minIntervalPages;
+	}
+
+	public void setMinIntervalPages(int minIntervalPages) {
+		this.minIntervalPages = minIntervalPages;
 	}
 }

@@ -199,9 +199,9 @@ public class ToutiaoResponseData {
 			paramsMap.put("log_extra", AdvUtil.encodeUrl(this.getLog_extra()));
 			paramsMap.put("ip", advParam.getIp());
 			
-			logger.info("构建广告上报事件：ip={}, title={}, id={}", advParam.getIp(), this.title, this.group_id);
+//			logger.info("构建广告上报事件：ip={}, title={}, id={}", advParam.getIp(), this.title, this.group_id);
 			
-			logger.info("构建广告 点击链接: paramsMap={}", JSONObject.toJSONString(paramsMap));
+//			logger.info("构建广告 点击链接: paramsMap={}", JSONObject.toJSONString(paramsMap));
 		} else {
 //			logger.info("构建普通文章点击链接: paramsMap={}", JSONObject.toJSONString(paramsMap));
 		}

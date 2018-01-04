@@ -1,5 +1,7 @@
 package com.bus.chelaile.kafka;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -8,10 +10,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.linkActive.LinkActiveHelp;
 import com.bus.chelaile.model.PropertiesName;
+import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.record.AdPubCacheRecord;
+import com.bus.chelaile.service.RecordManager;
+import com.bus.chelaile.service.StaticAds;
+import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 import com.chelaile.logcenter2.sdk.api.Consumer;
 import com.chelaile.logcenter2.sdk.api.LcFactory;
@@ -35,7 +45,7 @@ public class InfoStreamDispatcher {
 	public volatile static boolean kafkaStarted = false;
 	public static final Logger logger = LoggerFactory.getLogger(InfoStreamDispatcher.class);
 
-	public static ExecutorService adClickLogExec = Executors.newFixedThreadPool(5); // 固定5个线程执行解析的任务。
+	public static ExecutorService logAnalysisExec = Executors.newFixedThreadPool(5); // 固定5个线程执行解析的任务。
 
 	public InfoStreamDispatcher() {
 	}
@@ -52,10 +62,10 @@ public class InfoStreamDispatcher {
 		if (str.contains(Constants.AD_DOMAIN_NAME) && str.contains(Constants.TOUTIAO_CLICK_KEYWORD)) { // 头条点击
 			return Constants.ROW_TOUTIAO_CLICK;
 		} 
-//		else if ((str.contains(Constants.AD_DOMAIN_NAME) || str.contains(Constants.REDIRECT_DOMAIN_NAME))
-//				&& (str.contains(Constants.PARAM_AD_ID) && !str.contains(Constants.FOR_DEVELOP_EXHIBIT))) { 									// 广告点击
-//			return Constants.ROW_ADV_CLICK;
-//		} 
+		else if(str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
+			return Constants.ROW_OPEN_ADV_EXHIBIT;
+		}
+			
 //		else if (str.contains(Constants.LINEDETAIL)) {
 //			return Constants.ROW_LINEDETAIL;
 //		}
@@ -70,11 +80,11 @@ public class InfoStreamDispatcher {
 
 	// 处理kafka日志（已被过滤过的）
 	private void processLog(String line, int filterCode) {
-//		if(filterCode == Constants.ROW_LINEDETAIL) {
-//			InfoStreamHelp.analysisLineDetail(line);
-//		}
-//		else 
-			if (filterCode == Constants.ROW_TOUTIAO_CLICK) {
+		// if(filterCode == Constants.ROW_LINEDETAIL) {
+		// InfoStreamHelp.analysisLineDetail(line);
+		// }
+		// else
+		if (filterCode == Constants.ROW_TOUTIAO_CLICK) {
 //			logger.info("<Info-Stream top-k> 收到头条点击点击日志：{}", line);
 			try {
 				toutiaoHelp.handleToutiaoClick(line);
@@ -82,13 +92,13 @@ public class InfoStreamDispatcher {
 				logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
-		} 
-		else if (filterCode == Constants.ROW_ADV_CLICK) {
-			InfoStreamHelp.analysisClick(line);
+		} else if (filterCode == Constants.ROW_OPEN_ADV_EXHIBIT) {
+			logger.info("<Info-Stream> 收到开屏广告展示日志：{}", line);
+			analysisOpenAdvExhibit(line);
 		}
-//		else if (filterCode == Constants.ROW_APP_INFO) {
-//			linkActiveHelp.analysisMaidian(line);
-//		} 
+		// else if (filterCode == Constants.ROW_APP_INFO) {
+		// linkActiveHelp.analysisMaidian(line);
+		// }
 	}
 
 
@@ -123,7 +133,7 @@ public class InfoStreamDispatcher {
 						final String log = new String(bt, "UTF-8");
 						final int filterCode = filterContent(log.trim());
 						if (filterCode != Constants.ROW_SKIP) {
-							adClickLogExec.submit(new Runnable() {
+							logAnalysisExec.submit(new Runnable() {
 								@Override
 								public void run() {
 									processLog(log, filterCode);
@@ -147,6 +157,76 @@ public class InfoStreamDispatcher {
 		}
 	}
 
+	/**
+	 * 解析开屏广告展示埋点日志
+	 * 并且记录进缓存
+	 * @param line
+	 */
+	private void analysisOpenAdvExhibit(String line) {
+		String[] segs = line.split(" \\|# ");
+		String content = segs[3].trim();
+		int endIdx = content.lastIndexOf(" ");
+		content = content.substring(0, endIdx);
+		String encodedURL = null;
+		try {
+			encodedURL = URLDecoder.decode(content, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return;
+		}
+		int index = encodedURL.indexOf("ADV_EXHIBIT");
+		System.out.println(encodedURL.substring(index + 12));
+
+		Map<String, String> params = paramsAnalysis(encodedURL.substring(index + 12));
+		if (params != null) {
+			String udid = params.get("udid");
+			String advId = params.get("adv_id");
+			if(udid == null || advId == null) {
+				logger.info("广告为空 line={}", line);
+				return;
+			}
+			
+			if(StaticAds.allAds.get(advId) == null) {
+//				if(! Constants.ISTEST) {	// 线上需要打印这种情况，测试无需
+					logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
+//				}
+				return;
+			}
+			
+			// 记录缓存， 开屏广告‘展示’|‘发送’ + 1
+			logger.info("更新开屏 udid={}, advId={}", udid, advId);
+			AdPubCacheRecord cacheRecord = null;
+			try {
+				cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.DOUBLE_COLUMN.getType());
+			} catch (Exception e) {
+				e.printStackTrace();
+				cacheRecord = new AdPubCacheRecord();
+			}
+			logger.info("更新开屏广告前***， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
+			cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId));
+			cacheRecord.setOpenAdHistory(new AdCategory(Integer.parseInt(advId), 1, -1));
+			cacheRecord.setAndUpdateOpenAdPubTime(Integer.parseInt(advId));
+			RecordManager.recordAdd(udid, ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
+			logger.info("更新开屏广告后###， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
+		}
+	}
+	
+	
+	private static Map<String, String> paramsAnalysis(String url) {
+		Map<String, String> params = New.hashMap();
+		String entrys[] = url.split(" \\|# ");
+		for (String s : entrys) {
+			String[] maps = s.split(":");
+			try {
+				if (maps != null && maps.length >= 2)
+					params.put(maps[0], URLDecoder.decode(maps[1], "UTF-8"));
+			} catch (Exception e) {
+				logger.error("参数解析出错: map={}", maps.toString());
+				e.printStackTrace();
+			}
+		}
+		return params;
+	}
 //	public void getTopKArticles() {
 //		logger.info("<Info-Stream top-k>: Get top k articles task started");
 //		int curHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
@@ -295,26 +375,29 @@ public class InfoStreamDispatcher {
 //	}
 
 	public static void main(String[] args) {
-//		 InfoStreamDispatcher st = new InfoStreamDispatcher();
-////		 st.runGetTopKArticles();
-//		// st.readKafka();
-//
-//		 String
-//		 str = "line=<190>Apr 14 17:41:39 web6 nginx: 123.147.244.13 |# - |# 2017-04-14 17:41:39 |# GET /?link=http://m.lemall.com/cn/sale/hongse414/index.html?cps_id=QT_sspmj_chelaile_youshangjiaotp_zh&deviceType=m1 metal&advId=3028&adtype=05&lng=106.53626518425347&udid=44785918-549e-4c2a-b99e-1c2d0b78e2a3&nw=MOBILE_LTE&lat=29.584922334963398&ip=123.147.244.13&utm_medium=floating&adv_id=3028&last_src=app_qq_sj&s=android&stats_referer=lineDetail&push_open=1&stats_act=auto_refresh&userId=unknown&provider_id=1&geo_lt=5&timestamp=1492158320493&geo_lat=29.578926&line_id=023-319-1&vc=78&sv=5.1&v=3.30.0&imei=868024027752105&udid=44785918-549e-4c2a-b99e-1c2d0b78e2a3&platform_v=22&utm_source=app_linedetail&stn_name=大庙&cityId=003&adv_type=5&ad_switch=63&geo_type=gcj&wifi_open=0&mac=68:3e:34:66:b2:08&deviceType=m1 metal&lchsrc=icon&stats_order=1-1&nw=MOBILE_LTE&AndroidID=3dcece3350d1d4f4&api_type=0&stn_order=2&geo_lac=25.0&language=1&first_src=app_meizhu_store&geo_lng=106.529763 HTTP/1.1 |# 302 |# 0.000 |# 264 |# - |# Chelaile/3.30.0 Duiba/1.0.7 Mozilla/5.0 (Linux; Android 5.1; m1 metal Build/LMY47I) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/40.0.2214.127 Mobile Safari/537.36 |# - |# ad.chelaile.net.cn |# - |# -";
-//		 int filterCode = st.filterContent(str.trim());
-//		 System.out.println(filterCode);
-//		 st.processLog(str, filterCode);
-//		 
-//		
-//		 CacheUtil.initClient();
-//		 String msg =
-//		 "<190>Apr 13 15:53:34 web4 nginx: 117.136.40.230 |# - |# 2017-04-13 15:53:34 |# GET /realtimelog?<ADV_EXHIBIT>adv_id:3025+%7C%23+s:android+%7C%23+last_src:app_huawei_store+%7C%23+push_open:1+%7C%23+adv_type:1+%7C%23+userId:unknown+%7C%23+provider_id:1+%7C%23+deviceType:HUAWEI+RIO-TL00+%7C%23+mac:74%3Aa5%3A28%3A3d%3Afb%3Aaa+%7C%23+wifi_open:1+%7C%23+lchsrc:icon+%7C%23+nw:MOBILE_LTE+%7C%23+AndroidID:34933e8aec55710+%7C%23+sv:6.0.1+%7C%23+vc:78+%7C%23+v:3.30.0+%7C%23+imei:867119024362584+%7C%23+udid:ac853978-a760-4ddb-8e83-bf23cdef2734+%7C%23+language:1+%7C%23+first_src:app_huawei_store+%7C%23+cityId:014 HTTP/1.1 |# 200 |# 0.000 |# 67 |# - |# Dalvik/2.1.0 (Linux; U; Android 6.0.1; HUAWEI RIO-TL00 Build/HuaweiRIO-TL00) |# - |# logs.chelaile.net.cn |# - |# -";
-//		 st.processLog(msg, 5);
+		//
+		String str = "<190>Dec 28 17:18:25 web1 nginx: 117.136.38.58 |# - |# 2017-12-28 17:18:25 |# GET /realtimelog?%3CADV_EXHIBIT%3Eadv_id:12092+%7C%23+s:android+%7C%23+last_src:dev_alpha+%7C%23+load_time1:400+%7C%23+push_open:1+%7C%23+userId:unknown+%7C%23+provider_id:1+%7C%23+geo_lt:4+%7C%23+geo_lat:39.996124+%7C%23+sv:7.1.1+%7C%23+vc:94+%7C%23+v:3.43.0_20171221+%7C%23+secret:9cb51a5177224a52abc9a279be83dee2+%7C%23+imei:866822030825525+%7C%23+udid:fb6d0547-b3ba-435b-ba29-001a1bbe261b+%7C%23+cityId:027+%7C%23+adv_type:1+%7C%23+load_time2:15+%7C%23+wifi_open:0+%7C%23+deviceType:MI+6+%7C%23+mac:02%3A00%3A00%3A00%3A00%3A00+%7C%23+geo_type:gcj+%7C%23+lchsrc:icon+%7C%23+nw:MOBILE_LTE+%7C%23+AndroidID:30c3439cc1a1621c+%7C%23+geo_lac:66.0+%7C%23+accountId:4904321+%7C%23+language:1+%7C%23+first_src:app_xiaomi_store+%7C%23+geo_lng:116.40994 HTTP/1.1 |# 200 |# 0.000 |# 67 |# - |# Dalvik/2.1.0 (Linux; U; Android 7.1.1; MI 6 MIUI/V9.0.6.0.NCACNEI) |# - |# dev.logs.chelaile.net.cn |# - |# - |# - |# https";
 
-//		String amc = "20:5d:47:6a:ea:ec";
-//		System.out.println(amc.replace(":", "").toUpperCase());
-//		System.out.println(DigestUtils.md5Hex(amc.replace(":", "")));
-//		System.out.println(DigestUtils.md5Hex(amc.replace(":", "").toUpperCase()));
-		System.out.println(System.currentTimeMillis());
+		String[] segs = str.split(" \\|# ");
+		String content = segs[3].trim();
+		int endIdx = content.lastIndexOf(" ");
+		content = content.substring(0, endIdx);
+		String encodedURL = null;
+		try {
+			encodedURL = URLDecoder.decode(content, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return;
+		}
+		int index = encodedURL.indexOf("ADV_EXHIBIT");
+		System.out.println(encodedURL.substring(index + 12));
+
+		Map<String, String> params = paramsAnalysis(encodedURL.substring(index + 12));
+		if (params != null) {
+			String udid = params.get("udid");
+			System.out.println(udid);
+			System.out.println(params.get("adv_id"));
+			System.out.println(params.get("geo_lng"));
+		}
 	}
 }

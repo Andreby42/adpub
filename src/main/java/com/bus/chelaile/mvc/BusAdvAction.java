@@ -70,6 +70,7 @@ public class BusAdvAction extends AbstractController {
 			HttpServletResponse response, HttpSession session) throws Exception {
 		AdvParam param = getActionParam(request);
 		param.setType(getInt(request, "type"));
+		param.setStartMode(getInt(request, "startMode"));
 
 		return serviceManager.getAdsResponseStr(param, "getNewOpen");
 	}

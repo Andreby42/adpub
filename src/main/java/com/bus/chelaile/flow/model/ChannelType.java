@@ -4,7 +4,8 @@ public enum ChannelType {
 	UC(0),		//UC
 	TOUTIAO(1),	//头条
 	CUSTOM(2),	//自定义模块
-	WULITOUTIAO(3); // wuli头条
+	WULITOUTIAO(3), // wuli头条
+	WANGYI(4); // 网易
 	
 	private int type;
 	

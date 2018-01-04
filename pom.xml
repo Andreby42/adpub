@@ -144,11 +144,11 @@
 			<artifactId>logback-ext-spring</artifactId>
 			<version>0.1.2</version>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.slf4j</groupId>-->
-			<!--<artifactId>log4j-over-slf4j</artifactId>-->
-			<!--<version>1.6.4</version>-->
-		<!--</dependency>-->
+		<!--<dependency> -->
+		<!--<groupId>org.slf4j</groupId> -->
+		<!--<artifactId>log4j-over-slf4j</artifactId> -->
+		<!--<version>1.6.4</version> -->
+		<!--</dependency> -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -215,7 +215,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pinyin4j-2.5.0.jar</systemPath>
 		</dependency>
-		
+
 		<!-- com.aliyun.oss -->
 		<dependency>
 			<groupId>com.aliyun.oss.OSSClient</groupId>
@@ -224,9 +224,9 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/aliyun-sdk-oss-2.0.4.jar</systemPath>
 		</dependency>
-		
-		
-		
+
+
+
 		<!-- ons -->
 		<dependency>
 			<groupId>com.aliyun.openservices.ons.api</groupId>
@@ -235,7 +235,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ons-api-1.1.8.jar</systemPath>
 		</dependency>
-		
+
 
 		<!-- jedis -->
 		<dependency>
@@ -321,45 +321,58 @@
 			<version>2.0.3</version>
 		</dependency>
 		<dependency>
-    		<groupId>com.alibaba.rocketmq</groupId>
-    		<artifactId>rocketmq-client</artifactId>
-    		<version>3.2.5</version>
+			<groupId>com.alibaba.rocketmq</groupId>
+			<artifactId>rocketmq-client</artifactId>
+			<version>3.2.5</version>
 		</dependency>
 		<dependency>
-   			<groupId>com.alibaba.rocketmq</groupId>
-    		<artifactId>rocketmq-common</artifactId>
-    		<version>3.2.5</version>
+			<groupId>com.alibaba.rocketmq</groupId>
+			<artifactId>rocketmq-common</artifactId>
+			<version>3.2.5</version>
 		</dependency>
 		<dependency>
-    		<groupId>com.alibaba.rocketmq</groupId>
-    		<artifactId>rocketmq-remoting</artifactId>
-    		<version>3.2.5</version>
+			<groupId>com.alibaba.rocketmq</groupId>
+			<artifactId>rocketmq-remoting</artifactId>
+			<version>3.2.5</version>
 		</dependency>
 		<dependency>
-    		<groupId>io.netty</groupId>
-    		<artifactId>netty-all</artifactId>
-    		<version>4.0.25.Final</version>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.0.25.Final</version>
 		</dependency>
-		
+
 		<!-- logcenter2 -->
 		<dependency>
 			<groupId>com_chelaile</groupId>
 			<artifactId>logcenter2-sdk</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-		
+
 		<dependency>
-        	<groupId>org.xerial.snappy</groupId>
-        	<artifactId>snappy-java</artifactId>
-        	<version>1.1.1.3</version>
-    	</dependency>
+			<groupId>org.xerial.snappy</groupId>
+			<artifactId>snappy-java</artifactId>
+			<version>1.1.1.3</version>
+		</dependency>
 
 		<!-- google protobuf -->
 		<dependency>
-    		<groupId>com.google.protobuf</groupId>
-    		<artifactId>protobuf-java</artifactId>
-    		<version>2.4.1</version>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>2.4.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.2</version>
+		</dependency>
+
 
 	</dependencies>
 
@@ -367,7 +380,7 @@
 	<profiles>
 		<profile>
 			<id>dev</id>
-			<!-- Dev profile is active-->
+			<!-- Dev profile is active -->
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -471,7 +484,7 @@
 		</profile>
 		<profile>
 			<id>pro</id>
-			<!-- Dev profile is active-->
+			<!-- Dev profile is active -->
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>

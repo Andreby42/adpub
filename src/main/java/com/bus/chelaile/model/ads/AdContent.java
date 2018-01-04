@@ -5,6 +5,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.util.AdvUtil;
 
@@ -60,6 +62,16 @@ public class AdContent {
             AdSingleInnerContent singleInner = new AdSingleInnerContent();
             singleInner.setAndPaseJson(content);
             innerContent = singleInner;
+        }
+        else if(ShowType.FEED_ADV.getType().equals(showType)) {  // feed流广告
+        	AdFeedInnerContent feedInner = new AdFeedInnerContent();
+        	feedInner.setAndPaseJson(content);
+        	innerContent = feedInner;
+        	if(feedInner != null && feedInner.getLikeNum() > 0) {
+        		String key = "feedAdvLike#" + id;
+        		logger.info("初始化点赞数, key={}, likeNum={}", key, feedInner.getLikeNum());
+        		CacheUtil.setToRedis(key, Constants.LONGEST_CACHE_TIME, String.valueOf(feedInner.getLikeNum()));
+        	}
         }
         else if (ShowType.FULL_SCREEN.getType().equals(showType) || ShowType.FULL_SCREEN_RIDE.getType().equals(showType)
         		|| ShowType.FULL_SCREEN_MOBIKE.getType().equals(showType)) { // 浮屏广告--> 包括首页、乘车页、共享单车页

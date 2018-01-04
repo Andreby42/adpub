@@ -26,6 +26,9 @@
 	<!-- 站点广告 -->
 	<bean id="stationAdsManager" class="com.bus.chelaile.service.impl.StationAdsManager" parent="abstractService">
 	</bean>
+	<!-- feed流广告 -->
+	<bean id="feedAdsManager" class="com.bus.chelaile.service.impl.FeedAdsManager" parent="abstractService">
+	</bean>
 	<!-- 线路详情自采买广告 -->
 	<bean id="selfManager" class="com.bus.chelaile.service.impl.SelfManager">
 	</bean>
@@ -85,6 +88,8 @@
 	<bean id="toutiaoHelp" class="com.bus.chelaile.flow.ToutiaoHelp">
 	</bean>
 	<bean id="wuliToutiaoHelp" class="com.bus.chelaile.flow.WuliToutiaoHelp">
+	</bean>
+	<bean id="wangYiYunHelp" class="com.bus.chelaile.flow.WangYiYunHelp">
 	</bean>
 	<!-- kafka先关的处理类 infoStreamDispatcher -->
 	<bean id="infoStreamDispatcher" class="com.bus.chelaile.kafka.InfoStreamDispatcher">

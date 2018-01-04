@@ -4,14 +4,10 @@
  */
 package com.bus.chelaile.flowNew.model;
 
-import java.util.HashMap;
 
 import com.bus.chelaile.flow.model.ActivityContent;
 import com.bus.chelaile.flow.model.ActivityEntity;
-import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.mvc.AdvParam;
-import com.bus.chelaile.util.AdvUtil;
-import com.bus.chelaile.util.New;
 
 public class FlowNewContent {
 	private String id;

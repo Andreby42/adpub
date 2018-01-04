@@ -62,13 +62,13 @@ public class StartService {
 		startThread();
 		StaticAds.init();
 		activityService.initActivitity (); // 信息流活动初始化
-//		try{
-//			infoStreamDispatcher.readKafka();
-//			infoSteamForAdvClick.readKafka();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			logger.error("启动kafka出错！ e={}", e.getMessage());
-//		}
+		try{
+			infoStreamDispatcher.readKafka();
+			infoSteamForAdvClick.readKafka();
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error("启动kafka出错！ e={}", e.getMessage());
+		}
 		
 //		linkActiveHelp.initLinkedMePics();	// linkedMe 图片信息初始化
 		initMinuteTimes(StaticAds.minuteTimes);

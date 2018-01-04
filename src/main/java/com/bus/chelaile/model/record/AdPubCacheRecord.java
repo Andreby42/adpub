@@ -6,8 +6,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+
 
 
 
@@ -18,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.innob.response.ad.NativeResponse;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ads.AdContent;
@@ -43,16 +47,23 @@ public class AdPubCacheRecord {
 	Map<String, TimeAndCount> firstClickMap = New.hashMap();
 	// 保存用户不感兴趣的广告,value是时间
 	Map<String, uninterested> uninterestedMap = New.hashMap();
+	// 存放开屏广告最近一次投放时间,用于‘最小投放时间间隔’
+	private Map<String, Map<Integer, Long>> todayOpenAdPubTime = New.hashMap();
 
 	// Rule中的cacheTime
 	Long cacheTime = 0L;
-
-	// 线路详情的历史记录
+	
+	// 线路详情的历史记录。
+	// 第一个key是日期
+	// 第二个key是广告的AdCategory结构体，如果没有投放广告。详情页会记录历史，adId为-1。 非详情页不会记录
 	private Map<String, Map<AdCategory, Integer>> todayHistoryMap = New
 			.hashMap();
-	// 开屏的历史记录
+	// 开屏的历史记录，规则同上。只不过没记录不投放广告的情况
 	private Map<String, Map<AdCategory, Integer>> todayOpenHistoryMap = New
 			.hashMap();
+	// 新增 feed流广告的历史记录也放入其中。不同的记录的是不投放广告的情况，投放之后置零
+	private Map<String, Map<Integer, Integer>> todayNoFeedAdHistoryMap = New.hashMap();
+	
 	// 取消广告
 	private invalidAdv invalidInfo;
 	// 存储uv的广告 key  广告id,value 日期
@@ -65,23 +76,7 @@ public class AdPubCacheRecord {
 	
 	public static int innmobiSaveTime = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),"innmobiSaveTime","30"));
 
-	public Map<AdCategory, Integer> todayOpenAdHistoryList() {
-		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
-		return todayOpenHistoryMap.get(todayStr);
-	}
 
-	public Map<String, ApiRecord> getApiRecordMap() {
-		return apiRecordMap;
-	}
-
-	public void setApiRecordMap(Map<String, ApiRecord> apiRecordMap) {
-		this.apiRecordMap = apiRecordMap;
-	}
-
-	public invalidAdv getInvalidInfo() {
-		return invalidInfo;
-	}
-	
 	public void setInvalidAdv(String startDate,String endDate,String accountId) throws ParseException{
 		invalidInfo = new invalidAdv();
 		String pattern = "yyyy-MM-dd";
@@ -90,26 +85,26 @@ public class AdPubCacheRecord {
 		invalidInfo.setAccountId(accountId);
 	}
 	
-	/**
-	 * 是否显示广告
-	 * @return	true 显示
-	 */
-	public boolean isDisplayAdv(){
-//		if( invalidInfo == null ){
-//			return true;
-//		}
-//		Date nowDate = new Date();
-//		if( 0 >= nowDate.compareTo(invalidInfo.getEndDate()) ){
-//			return false;
-//		}else{
-//			invalidInfo = null;
-//		}
-		return true;
-	}
+	public void setAdHistory(AdCategory ad) {
+		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+		if (todayHistoryMap.containsKey(todayStr)) {
+			Map<AdCategory, Integer> temp = todayHistoryMap.get(todayStr);
+			Integer value = temp.get(ad);
+			if (value == null) {
+				value = 1;
+			} else {
+				value++;
+			}
 
-	public void setInvalidInfo(invalidAdv invalidInfo) {
-		this.invalidInfo = invalidInfo;
+			temp.put(ad, value);
+
+		} else {
+			Map<AdCategory, Integer> temp = New.hashMap();
+			temp.put(ad, 1);
+			todayHistoryMap.put(todayStr, temp);
+		}
 	}
+	
 
 	public void setOpenAdHistory(AdCategory ad) {
 		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
@@ -131,6 +126,45 @@ public class AdPubCacheRecord {
 		}
 	}
 
+	// feed流广告投放记录。 投放后计数置零。不投放，计数+1
+	public void setNoFeedAdHistoryMap(List<Integer> adIds) {
+		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+		if (todayNoFeedAdHistoryMap.containsKey(todayStr)) {
+			Map<Integer, Integer> temp = todayNoFeedAdHistoryMap.get(todayStr);
+			
+			// 对应的广告置零
+			for(Integer i : adIds) {
+				temp.put(i, 0);
+			}
+			
+			// 如果有其他广告，+1	
+			for(Entry<Integer, Integer> entry : temp.entrySet()) {
+				if(! adIds.contains(entry.getKey())) {
+					entry.setValue(entry.getValue() + 1);
+				}
+			}
+		} else {
+			Map<Integer, Integer> temp = New.hashMap();
+			for(Integer i : adIds) {
+				temp.put(i, 0);
+			}
+			todayNoFeedAdHistoryMap.put(todayStr, temp);
+		}
+	}
+	
+	// 设置开屏广告最近一次打开时间
+	public void setAndUpdateOpenAdPubTime(int adId) {
+		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+		if(todayOpenAdPubTime.containsKey(todayStr)) {
+			Map<Integer, Long> temp = todayOpenAdPubTime.get(todayStr);
+			temp.put(adId, System.currentTimeMillis());
+		} else {
+			Map<Integer, Long> temp = New.hashMap();
+			temp.put(adId, System.currentTimeMillis());
+			todayOpenAdPubTime.put(todayStr, temp);
+		}
+	}
+	
 	/**
 	 * 只返回今天的历史记录
 	 * 
@@ -140,78 +174,48 @@ public class AdPubCacheRecord {
 		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
 		return todayHistoryMap.get(todayStr);
 	}
-
-	public void setAdHistory(AdCategory ad) {
+	
+	public Map<AdCategory, Integer> todayOpenAdHistoryList() {
 		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
-		if (todayHistoryMap.containsKey(todayStr)) {
-			Map<AdCategory, Integer> temp = todayHistoryMap.get(todayStr);
-			Integer value = temp.get(ad);
-			if (value == null) {
-				value = 1;
-			} else {
-				value++;
+		return todayOpenHistoryMap.get(todayStr);
+	}
+	
+	
+	public Map<Integer, Integer> todayNoFeedAdHistoryList() {
+		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+		return todayNoFeedAdHistoryMap.get(todayStr);
+	}
+	
+	public Map<Integer, Long> todayOpenAdPubTimeList() {
+		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+		return todayOpenAdPubTime.get(todayStr);
+	}
+	
+	
+	// feedAd的最小投放间隔
+	// todayNoFeedAdHistoryMap中计数了feedAd投放次数。每次投放置零，不投放+1。达到阈值可以再次投放
+	// 找不到广告记录，可以投放
+	public boolean canPubFeedAd(AdContent ad, Rule rule) {
+		int adId = ad.getId();
+		// 说明今天投放过该广告了
+		if (todayNoFeedAdHistoryList() != null && todayNoFeedAdHistoryList().containsKey(adId)) {
+			if (todayNoFeedAdHistoryList().get(adId) < rule.getMinIntervalPages()) {
+				return false;
 			}
-
-			temp.put(ad, value);
-
-		} else {
-			Map<AdCategory, Integer> temp = New.hashMap();
-			temp.put(ad, 1);
-			todayHistoryMap.put(todayStr, temp);
 		}
+		return true;
 	}
-
-	// public void setCacheTime(Long cacheTime){
-	// this.cacheTime = cacheTime;
-	// }
-	// // 一个时间内总点击次数
-	// private Map<String,Long> adTimeCountsMap = new ConcurrentHashMap<>();
-
-	public Map<String, Map<AdCategory, Integer>> getTodayHistoryMap() {
-		return todayHistoryMap;
+	
+	// 开屏广告最小展示时间间隔
+	public boolean hasPassIntervalTime(int id, long minIntervalTime) {
+		if (todayOpenAdPubTimeList() != null && todayOpenAdPubTimeList().containsKey(id)) {
+			if (System.currentTimeMillis() - todayOpenAdPubTimeList().get(id) < minIntervalTime) {
+				return false;
+			}
+		}
+		return true;
 	}
-
-	public Map<String, Map<AdCategory, Integer>> getTodayOpenHistoryMap() {
-		return todayOpenHistoryMap;
-	}
-
-	// public void setTodayHistoryMap(
-	// Map<String, Map<AdCategory, Integer>> todayHistoryMap) {
-	// this.todayHistoryMap = todayHistoryMap;
-	// }
-
-	public Map<String, uninterested> getUninterestedMap() {
-		return uninterestedMap;
-	}
-
-	public void setUninterestedMap(Map<String, uninterested> uninterestedMap) {
-		this.uninterestedMap = uninterestedMap;
-	}
-
-	// public Map<String, List<AdCategory>> getAdHistoryMap() {
-	// return adHistoryMap;
-	// }
-	//
-	// public void setAdHistoryMap(Map<String, List<AdCategory>> adHistoryMap) {
-	// this.adHistoryMap = adHistoryMap;
-	// }
-
-	public Map<String, TimeAndCount> getFirstClickMap() {
-		return firstClickMap;
-	}
-
-	public void setFirstClickMap(Map<String, TimeAndCount> firstClickMap) {
-		this.firstClickMap = firstClickMap;
-	}
-
-	public Long getCacheTime() {
-		return cacheTime;
-	}
-
-	public void setCacheTime(Long cacheTime) {
-		this.cacheTime = cacheTime;
-	}
-
+	
 
 	// 第一访问时间放到内存中
 	// 当天保留一个第一次访问时间即可。以前的逻辑疑似存在问题。以前会根据adTimeCounts来设置用户投放记录，每个时段最少有一条，其实不够严谨, 2017-06-15
@@ -252,8 +256,9 @@ public class AdPubCacheRecord {
 			// adPubCacheRecord = mapper.readValue(jsonStr,
 			// AdPubCacheRecord.class);
 		} catch (Exception e) {
+			logger.info("取缓存出错, jsonStr={}", jsonStr);
 			logger.error(e.getMessage(), e);
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 		return adPubCacheRecord;
 	}
@@ -566,27 +571,7 @@ public class AdPubCacheRecord {
 
 		return list;
 	}
-
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		if (cacheRecordMap != null) {
-			sb.append("cacheRecordMap={");
-			Set<Integer> keySet = cacheRecordMap.keySet();
-			boolean isFirst = true;
-			for (Integer key : keySet) {
-				CacheRecord record = cacheRecordMap.get(key);
-				if (isFirst)
-					isFirst = false;
-				else
-					sb.append(", ");
-
-				sb.append(key).append(":").append(record);
-			}
-			sb.append("}");
-		}
-		return sb.toString();
-	}
-
+	
 	/*
 	 * 该缓存只保留1个小时
 	 */
@@ -661,6 +646,125 @@ public class AdPubCacheRecord {
 		ar.getMap().put(pos, value);
 	}
 
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (cacheRecordMap != null) {
+			sb.append("cacheRecordMap={");
+			Set<Integer> keySet = cacheRecordMap.keySet();
+			boolean isFirst = true;
+			for (Integer key : keySet) {
+				CacheRecord record = cacheRecordMap.get(key);
+				if (isFirst)
+					isFirst = false;
+				else
+					sb.append(", ");
+
+				sb.append(key).append(":").append(record);
+			}
+			sb.append("}");
+		}
+		return sb.toString();
+	}
+
+
+	// public void setCacheTime(Long cacheTime){
+	// this.cacheTime = cacheTime;
+	// }
+	// // 一个时间内总点击次数
+	// private Map<String,Long> adTimeCountsMap = new ConcurrentHashMap<>();
+
+	public Map<String, Map<AdCategory, Integer>> getTodayHistoryMap() {
+		return todayHistoryMap;
+	}
+
+	public Map<String, Map<AdCategory, Integer>> getTodayOpenHistoryMap() {
+		return todayOpenHistoryMap;
+	}
+
+	// public void setTodayHistoryMap(
+	// Map<String, Map<AdCategory, Integer>> todayHistoryMap) {
+	// this.todayHistoryMap = todayHistoryMap;
+	// }
+
+	public Map<String, uninterested> getUninterestedMap() {
+		return uninterestedMap;
+	}
+
+	public void setUninterestedMap(Map<String, uninterested> uninterestedMap) {
+		this.uninterestedMap = uninterestedMap;
+	}
+
+	// public Map<String, List<AdCategory>> getAdHistoryMap() {
+	// return adHistoryMap;
+	// }
+	//
+	// public void setAdHistoryMap(Map<String, List<AdCategory>> adHistoryMap) {
+	// this.adHistoryMap = adHistoryMap;
+	// }
+
+	public Map<String, TimeAndCount> getFirstClickMap() {
+		return firstClickMap;
+	}
+
+	public void setFirstClickMap(Map<String, TimeAndCount> firstClickMap) {
+		this.firstClickMap = firstClickMap;
+	}
+
+	public Long getCacheTime() {
+		return cacheTime;
+	}
+
+	public void setCacheTime(Long cacheTime) {
+		this.cacheTime = cacheTime;
+	}
+	
+	public Map<Integer,String> getUvMap() {
+		return uvMap;
+	}
+	
+	public void setUvMap(Map<Integer,String> uvMap) {
+		this.uvMap = uvMap;
+	}
+
+	public Map<String, Map<Integer, Integer>> getTodayNoFeedAdHistoryMap() {
+		return todayNoFeedAdHistoryMap;
+	}
+	
+	public Map<String, ApiRecord> getApiRecordMap() {
+		return apiRecordMap;
+	}
+
+	public void setApiRecordMap(Map<String, ApiRecord> apiRecordMap) {
+		this.apiRecordMap = apiRecordMap;
+	}
+
+	public invalidAdv getInvalidInfo() {
+		return invalidInfo;
+	}
+	
+	
+	/**
+	 * 是否显示广告
+	 * @return	true 显示
+	 */
+	public boolean isDisplayAdv(){
+//		if( invalidInfo == null ){
+//			return true;
+//		}
+//		Date nowDate = new Date();
+//		if( 0 >= nowDate.compareTo(invalidInfo.getEndDate()) ){
+//			return false;
+//		}else{
+//			invalidInfo = null;
+//		}
+		return true;
+	}
+
+	public void setInvalidInfo(invalidAdv invalidInfo) {
+		this.invalidInfo = invalidInfo;
+	}
+	
+	
 	public static void main(String[] args) {
 		Map<String, Integer> msp = new ConcurrentHashMap<>();
 		for (int i = 0; i < 10; i++) {
@@ -682,18 +786,21 @@ public class AdPubCacheRecord {
 		for (String key : msp.keySet()) {
 			System.out.println(key + " : " + msp.get(key));
 		}
+		
+		
+		String s = "{\"cacheRecordMap\":{-1:{\"clickCount\":0,\"dayCountMap\":{\"2017-12-20\":8,\"2017-12-11\":19,\"2017-12-21\":8,\"2017-12-13\":100,\"2017-12-12\":39,\"2017-12-23\":20,\"2017-12-15\":37,\"2017-12-26\":15,\"2017-12-14\":1,\"2017-12-06\":6,\"2017-12-28\":3,\"2017-12-27\":30,\"2017-12-08\":72,\"2017-12-19\":95,\"2017-12-07\":41,\"2017-12-18\":44}}},\"cacheTime\":0,\"displayAdv\":true,\"firstClickMap\":{},\"todayHistoryMap\":{\"2017-12-28\":{{\"adId\":-1,\"adType\":-1,\"apiType\":-1}:3}},\"todayOpenHistoryMap\":{},\"111todayOpenHistoryMap\":{},\"uninterestedMap\":{\"-1\":{\"time\":1514428999980}},\"todayOpenAdPubTime\":{},\"uvMap\":{}}";
+//		String s = "{}";
+//		s = "{\"cacheRecordMap\":{12192:{\"clickCount\":0,\"dayCountMap\":{\"2017-12-28\":1}}},\"cacheTime\":0,\"displayAdv\":true,\"firstClickMap\":{},\"openAdPubTime\":{\"111\":{333:222}},\"todayHistoryMap\":{},\"todayNoFeedAdHistoryMap\":{},\"todayOpenHistoryMap\":{},\"uninterestedMap\":{},\"uvMap\":{}}ue,\"firstClickMap\":{},\"todayHistoryMap\":{\"2017-12-28\":{{\"adId\":-1,\"adType\":-1,\"apiType\":-1}:3}},\"todayNoFeedAdHistoryMap\":{},\"todayOpenHistoryMap\":{},\"uninterestedMap\":{\"-1\":{\"time\":1514428999980}},\"uvMap\":{}}";
+		AdPubCacheRecord ad1 = fromJson(s);
+		System.out.println("1---->" + JSONObject.toJSONString(ad1));
+		
+		String s1 = "{\"cacheRecordMap\":{12201:{\"clickCount\":0,\"dayCountMap\":{\"2017-12-28\":1}}},\"cacheTime\":0,\"displayAdv\":true,\"firstClickMap\":{},\"todayOpenAdPubTime\":{},\"todayHistoryMap\":{},\"todayNoFeedAdHistoryMap\":{\"2017-12-28\":{12201:0}},\"todayOpenHistoryMap\":{},\"uninterestedMap\":{},\"uvMap\":{}}";
+		AdPubCacheRecord ad2 = fromJson(s1);
+		System.out.println("2---->" + JSONObject.toJSONString(ad2));
 	}
 
-
-
-	public Map<Integer,String> getUvMap() {
-		return uvMap;
-	}
-
-
-
-	public void setUvMap(Map<Integer,String> uvMap) {
-		this.uvMap = uvMap;
+	public Map<String, Map<Integer, Long>> getTodayOpenAdPubTime() {
+		return todayOpenAdPubTime;
 	}
 }
 
@@ -757,5 +864,5 @@ class invalidAdv{
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
 	}
+	
 }
-

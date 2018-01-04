@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<meta name="description" content="最精准的实时公交App">
+<meta name="apple-mobile-web-app-title" content="车来了">
+
+<!--顺序不可以变，要不360的不使用极速的内核-->
+<meta name="renderer" content="webkit">
+<meta name="force-rendering" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport"
+	content="width=device-width,user-scalable=no,initial-scale=1,minimal-ui">
+
+<!-- uc强制竖屏 -->
+<meta name="screen-orientation" content="portrait">
+<!-- QQ强制竖屏 -->
+<meta name="x5-orientation" content="portrait">
+
+<!--下面两个不能合并写，要不浏览器就都不支持了-->
+<meta name="format-detection" content="telephone=no;">
+<meta name="format-detection" content="address=no;email=no;">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="white">
+<meta name="mobile-web-app-capable" content="yes">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="cleartype" content="on">
+
+<style>
+html, body {
+	width: 100%;
+	overflow-x: hidden;
+}
+
+body {
+	background-color: #ebebf1;
+	font-family: PingFangSC, Helvetica, Arial, sans-serif;
+	margin: 0;
+}
+
+.page {
+	padding: 20px 15px 15px;
+	background-color: #fff;
+}
+
+.title {
+	font-size: 20px;
+	font-weight: 600;
+	color: #333;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-height: 28px;
+	max-height: 84px;
+}
+
+.author-and-time {
+	margin: 5px 0 30px;
+	font-size: 13px;
+	line-height: 1;
+	color: #aaa;
+}
+
+.img-container {
+	width: 100%;
+	height: 150px;
+	background: no-repeat center #fff;
+	background-size: 72px 72px;
+	position: relative;
+}
+
+img {
+	border: none;
+	outline: none;
+	width: 100%;
+}
+
+.img-container img {
+	position: absolute;
+	height: 100%;
+}
+
+p {
+	font-size: 17px;
+	line-height: 1.53;
+	color: #333333;
+}
+
+.footer {
+	display: none;
+	position: fixed;
+	bottom: -1px;
+	width: 100%;
+	height: 59px;
+	z-index: 5;
+	background-color: rgba(0, 0, 0, .85);
+	color: #f2f2f2;
+}
+
+.footer-left {
+	position: relative;
+	display: block;
+	height: 100%;
+	overflow: hidden;
+	padding-left: 62px;
+}
+
+.ico-logo {
+	background-image: url(./logo.png);
+	background-size: 44px 44px;
+	width: 44px;
+	height: 44px;
+	position: absolute;
+	top: 7px;
+	left: 12px;
+}
+
+.footer-title {
+	font-weight: 400;
+	margin: 8px 0 0 0;
+	line-height: 24px;
+	font-size: 16px;
+}
+
+.footer-desc {
+	line-height: 16px;
+	font-size: 13px;
+}
+
+.common-flex {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	display: -webkit-flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	-webkit-flex-direction: row;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
+	-webkit-justify-content: space-between
+}
+
+.footer-right {
+	position: absolute;
+	top: 14px;
+	right: 6px;
+	width: 116px;
+	z-index: 2;
+}
+
+.btn {
+	display: inline-block;
+	width: 80px;
+	line-height: 30px;
+	text-align: center;
+	background: #2498db;
+	color: #fff;
+}
+
+.ico-close {
+	background: url("./close_white.png") no-repeat center;
+	background-size: 12px 12px;
+	width: 30px;
+	height: 30px;
+}
+
+a {
+	user-select: none;
+	outline: none !important;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+</style>
+</head>
+<script src="//www.chelaile.net.cn/web_active/libs/cll-share.js"></script>
+<body>
+
+	<!-- 主页 -->
+	<input id="hidzy" type="hidden" value="#shareText#">
+	<div class="page">
+		<div id="title_wangyi" class="title">#title#</div>
+		<div class="author-and-time">
+			<span id="author_wangyi" class="author">#author#</span>&nbsp;<span
+			id="time_wangyi" class="time">#date#</span>
+		</div>
+		<!-- 主体 -->
+		<div id="content_wangyi">
+			<!-- 内容和图片 -->
+			#content#
+		</div>
+	</div>
+
+
+	<div class="footer">
+		<div class="footer-left">
+			<div class="ico-logo"></div>
+			<div class="footer-title f-16 lh-24">车来了</div>
+			<div class="footer-desc f-13 lh-16">精准的实时公交App</div>
+		</div>
+		<div class="footer-right  common-flex">
+			<div class="btn" onclick="defaultDownLoad()">立即下载</div>
+			<div class="ico-close" onclick="closeFooter()"></div>
+		</div>
+	</div>
+</body>
+<script>
+    function setDefaultImage() {
+        var isIOS = /iP(ad|hone|od)/.test(navigator.userAgent),
+        	isChelaile = /Chelaile/i.test(navigator.userAgent),
+            $imgCon = document.querySelectorAll('.img-container'),
+            len = $imgCon.length,
+            imgRtio=#imgRtio#,
+            ww = document.body.clientWidth - 30;
+        
+        if (!isChelaile) {
+			document.querySelector('.footer').style.display = 'block';
+			document.querySelector('body').style.paddingBottom = '60px';
+		}
+		
+		if (window.innerHeight > document.querySelector('.page').clientHeight) {
+			document.querySelector('.page').style.height = window.innerHeight + 'px';
+		}
+
+        for (var i = 0; i < len; i++) {
+            if (isIOS) {
+                $imgCon[i].style.backgroundImage = 'url(pic_ios.png)';
+                $imgCon[i].style.backgroundColor = '#ebebf1';
+            }
+            else {
+                $imgCon[i].style.backgroundImage = 'url(pic_android.png)';
+                $imgCon[i].style.backgroundColor = '#eeeeee';
+            }
+
+            if (imgRtio[i]) {
+              $imgCon[i].style.height = ww * imgRtio[i] + 'px';
+            }
+        }
+    }
+
+    setTimeout(setDefaultImage, 0);
+    
+
+	function defaultDownLoad() {
+		var isWeiBo = /WeiBo/i.test(navigator.userAgent);
+
+		if (isWeiBo) {
+			window.location.href = 'http://weibo.com/p/1004041535618';
+		} else {
+			window.location.href = 'http://dlink.chelaile.net.cn/download?wxckey=CK1298659594724';
+		}
+	}
+	
+	function closeFooter() {
+		document.querySelector('.footer').style.display = 'none';
+		document.querySelector('body').style.paddingBottom = '0px';
+	}
+</script>
+</html>

@@ -86,18 +86,19 @@ public class Constants {
 	public static final int ROW_CLICK = 2;
 	public static final int ROW_ARTICLE_MAIDIAN_CLICK = 3;
 	public static final int ROW_TOUTIAO_CLICK = 4;
-	public static final int ROW_ADV_EXHIBIT = 5;
+//	public static final int ROW_ADV_EXHIBIT = 5;	// 广告展示
 	public static final int ROW_ADV_CLICK = 6;
 	public static final int ROW_APP_INFO = 7;
 	public static final int ROW_LINEDETAIL = 8;
+	public static final int ROW_OPEN_ADV_EXHIBIT = 9; // 开屏广告展示
 
 	public static final String UC_ACTION_NAME = "adpub/adv!getUCArticles.action";
-	public static final String AD_DOMAIN_NAME = " ad.chelaile.net.cn ";	//第三方广告跳转链接，redirect只用于我们自己内部的活动跳转
+	public static final String AD_DOMAIN_NAME = "ad.chelaile.net.cn ";	//第三方广告跳转链接，redirect只用于我们自己内部的活动跳转
 	public static final String REDIRECT_DOMAIN_NAME = "redirect.chelaile.net.cn"; //redirect
 //	public static final String INFORMATION_FLOW_KEYWORD = "chelaile-iflow";
-	public static final String TOUTIAO_CLICK_KEYWORD = "open.toutiao.com"; // 头条点击url关键字
+	public static final String TOUTIAO_CLICK_KEYWORD = "toutiao"; // 头条点击url关键字
 	public static final String MAIDIAN_LOG = "logs.chelaile";
-	public static final String TEST_MAIDIAN_LOG = "test.logs.chelaile.net.cn";
+	public static final String TEST_MAIDIAN_LOG = "dev.logs.chelaile.net.cn";
 	public static final String ARTICLE_CLICK = "ARTICLE_CLICK";
 	public static final String USER_ID_REG_EX = "&udid=(.*?)&";
 	public static final String ARTICLE_ID_REG_EX = "&aid=(.*?)&";
@@ -105,7 +106,8 @@ public class Constants {
 	public static final String APP_INFO_LOG = "APP_INFO";
 	public static final String LINEDETAIL = "/bus/line!lineDetail.action";
 	public static final String FOR_DEVELOP_EXHIBIT = "FOR_DEVELOP_EXHIBIT";		//开屏广告展示失败的埋点。这个数据可能会影响到点击数统计，so需要滤掉
-	
+	public static final String OPEN_ADV_KEYWORD = "adv_type:1"; // 开屏广告埋点，类型关键字
+ 	
     
     public static final String STATSACT_REFRESH = "refresh";
     public static final String STATSACT_ENTER = "enter";

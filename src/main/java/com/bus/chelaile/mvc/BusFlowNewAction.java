@@ -35,12 +35,7 @@ public class BusFlowNewAction extends AbstractController {
 	private FeedService feedService;
 
 	/**
-	 * 获取详情页下方滚动单栏内容
-	 * 
-	 * @param request
-	 * @param response
-	 * @param session
-	 * @return
+	 * 获取详情页下方滚动单栏内容 3.0
 	 */
 	@ResponseBody
 	@RequestMapping(value = "flow!getLineDetailFeeds.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -53,12 +48,60 @@ public class BusFlowNewAction extends AbstractController {
 	
 	
 	/**
+	 * 获取详情页下方滚动单栏内容  4.0
+	 */
+	@ResponseBody
+	@RequestMapping(value = "flow!getLineDetailNewFeeds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String getLineDetailNewFeeds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		AdvParam param = getActionParam(request);
+
+		return feedService.getResponseLineDetailNewFeeds(param);
+	}
+	
+	/**
+	 * 点赞  4.0
+	 */
+	@ResponseBody
+	@RequestMapping(value = "flow!addLike.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String addLike(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		AdvParam param = getActionParam(request);
+		String id = request.getParameter("id");
+		return feedService.addLike(param, id);
+	}
+	
+	/**
+	 * 取消点赞  4.0
+	 */
+	@ResponseBody
+	@RequestMapping(value = "flow!delLike.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String delLike(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		AdvParam param = getActionParam(request);
+		String id = request.getParameter("id");
+		return feedService.delLike(param, id);
+	}
+	
+	
+	
+	/**
+	 * 取消点赞  4.0
+	 */
+	@ResponseBody
+	@RequestMapping(value = "flow!uninterestNewFeeds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String uninterestNewFeeds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		AdvParam param = getActionParam(request);
+		String id = request.getParameter("id");
+		int destType = getInt(request, "destType");
+		
+		return feedService.uninterestNewFeeds(param, id, destType);
+	}
+	
+	
+	/**
 	 * 获取详情页下方滚动单栏内容 3.0版本
-	 * 
-	 * @param request
-	 * @param response
-	 * @param session
-	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "flow!getLineDetailFlows.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -99,11 +142,6 @@ public class BusFlowNewAction extends AbstractController {
 
 	/**
 	 * 查询过杂志的真实‘阅读过’人数
-	 * 
-	 * @param request
-	 * @param response
-	 * @param session
-	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "flow!getChannelReadNum.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -118,11 +156,6 @@ public class BusFlowNewAction extends AbstractController {
 
 	/**
 	 * 记录阅读过杂志的人数
-	 * 
-	 * @param request
-	 * @param response
-	 * @param session
-	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "flow!recordChannelClick.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -137,11 +170,6 @@ public class BusFlowNewAction extends AbstractController {
 
 	/**
 	 * 记录阅读文章
-	 * 
-	 * @param request
-	 * @param response
-	 * @param session
-	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "flow!recordArticleClick.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -165,11 +193,6 @@ public class BusFlowNewAction extends AbstractController {
 
 	/**
 	 * 分享杂志
-	 * 
-	 * @param request
-	 * @param response
-	 * @param session
-	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "flow!updateShareStatus.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -185,11 +208,6 @@ public class BusFlowNewAction extends AbstractController {
 	// 仅 测试~
 	/**
 	 * 清除用户阅读文章记录的次数
-	 * 
-	 * @param request
-	 * @param response
-	 * @param session
-	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "flow!clearArticleClickRecord.action", produces = "Content-Type=text/plain;charset=UTF-8")

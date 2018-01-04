@@ -112,7 +112,7 @@ public class ToutiaoHelp implements InterfaceFlowHelp{
 			FlowContent content = toutiaoData.dealDate(advParam, channelId);
 			if (toutiaoData.getLabel() != null && toutiaoData.getLabel().equals("广告")) { // 广告
 				content.setDesc("广告");
-				logger.info("上报广告, toutiaoData={}", JSONObject.toJSONString(toutiaoData));
+//				logger.info("上报广告, toutiaoData={}", JSONObject.toJSONString(toutiaoData));
 				handleToutiaoShow(toutiaoData, advParam); // 上报 广告 展示事件
 				if(! isShowAd) {
 					Random r = new Random();
@@ -323,6 +323,7 @@ public class ToutiaoHelp implements InterfaceFlowHelp{
 
 				try {
 					response = HttpUtils.post(url, pairs, "utf-8");
+					logger.info("头条广告点击上报成功：url={}, pairs={}, response={}", url, JSONObject.toJSONString(pairs), response);
 				} catch (Exception e) {
 					logger.error("头条点击上报失败：url={}, pairs={}, response={}", url, JSONObject.toJSONString(pairs),
 							response);
@@ -380,7 +381,7 @@ public class ToutiaoHelp implements InterfaceFlowHelp{
 			url = TOUTIAO_ADS_URL;
 			try {
 				response = HttpUtils.post(url, pairs, "utf-8");
-				logger.info("头条广告展示上报成功：url={}, pairs={}, response={}", url, JSONObject.toJSONString(pairs), response);
+//				logger.info("头条广告展示上报成功：url={}, pairs={}, response={}", url, JSONObject.toJSONString(pairs), response);
 			} catch (Exception e) {
 				logger.error("头条广告展示上报失败：url={}, pairs={}, response={}", url, JSONObject.toJSONString(pairs), response);
 				e.printStackTrace();

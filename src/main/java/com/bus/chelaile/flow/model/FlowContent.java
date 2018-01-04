@@ -2,6 +2,7 @@ package com.bus.chelaile.flow.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
@@ -12,6 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.model.chatRoom.TopicInfo;
+import com.bus.chelaile.flowNew.model.FeedContent;
 import com.bus.chelaile.flowNew.model.FlowNewContent;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.entity.AdEntity;
@@ -19,6 +21,7 @@ import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.AdvUtil;
 import com.bus.chelaile.util.HttpUtils;
+import com.bus.chelaile.util.New;
 
 public class FlowContent {
 
@@ -42,8 +45,7 @@ public class FlowContent {
 	private BaseAdEntity adEntity; // = new AdEntity(10);
 
 	/*
-	 * 填充活动页内容
-	 * 返回值表明 是否填充成功
+	 * 填充活动页内容 返回值表明 是否填充成功
 	 */
 	public boolean fillActivityInfo(ActivityContent activityContent, AdvParam advParam, Map<String, String> paramMap) {
 		if (activityContent == null || advParam == null) {
@@ -53,28 +55,27 @@ public class FlowContent {
 		this.activityEntity = new ActivityEntity();
 		if (activityContent.getType() == 4) { // 聊天室
 			TopicInfo topicInfo = getTopicById(advParam, activityContent.getChat_room_id());
-			if(topicInfo != null) {
+			if (topicInfo != null) {
 				this.activityEntity.setTopic(topicInfo);
-				
-				if(topicInfo.getChatTotal() != -1) {	// -1的时候不予显示
+
+				if (topicInfo.getChatTotal() != -1) { // -1的时候不予显示
 					this.desc = "在线人数 " + topicInfo.getChatTotal();
 				}
 			} else {
-				logger.error("查询得到的聊天室对象为空！ 请检查城市规则是否正确 , udid={}, Chat_room_id={}, cityId={}", 
-						advParam.getUdid(), activityContent.getChat_room_id(), advParam.getCityId());
+				logger.error("查询得到的聊天室对象为空！ 请检查城市规则是否正确 , udid={}, Chat_room_id={}, cityId={}", advParam.getUdid(),
+						activityContent.getChat_room_id(), advParam.getCityId());
 				return false;
 			}
 		}
-		
-		
-		
+
 		this.type = 1; // 信息流是活动的时候，type是1
 		this.title = activityContent.getTitle();
-		if(activityContent.getActivity_id() == 68 || activityContent.getActivity_id() == 197) {	// 特殊处理，68的活动将类型设置为ADV！ TODO 
+		if (activityContent.getActivity_id() == 68 || activityContent.getActivity_id() == 197) { // 特殊处理，68的活动将类型设置为ADV！
+																									// TODO
 			this.type = 2;
 			AdContent adContent = new AdContent();
 			adContent.setLink(activityContent.getLink());
-			adContent.setOpenType(0);	// 0: 内部打开， 1 外部打开
+			adContent.setOpenType(0); // 0: 内部打开， 1 外部打开
 			fillAdvInfo(adContent, advParam, paramMap);
 			this.title = null;
 		}
@@ -85,15 +86,14 @@ public class FlowContent {
 
 		this.activityEntity.setType(activityContent.getType());
 		this.activityEntity.setImageUrl(activityContent.getPic());
-		this.activityEntity.setLinkUrl(AdvUtil.buildRedirectLink(activityContent.getLink(), paramMap, advParam.getUdid(), null,
-				null, false, true, 1));
+		this.activityEntity.setLinkUrl(AdvUtil.buildRedirectLink(activityContent.getLink(), paramMap,
+				advParam.getUdid(), null, null, false, true, 1));
 		this.activityEntity.setTagId(activityContent.getTag_id());
 		this.activityEntity.setTag(activityContent.getTag_name());
 		this.activityEntity.setFeedId(activityContent.getFeed_id());
 
-
 		fillActivityLink(activityContent, advParam, paramMap); // 填充content的pic
-															// 和 title
+																// 和 title
 		return true;
 
 	}
@@ -133,7 +133,7 @@ public class FlowContent {
 			logger.error("获取信息流对象出错，返回对象转json出错，udid={}, resposne={}", advParam.getUdid(), response);
 			return null;
 		}
-		if(topic == null || topic.getTopicId() == null) {
+		if (topic == null || topic.getTopicId() == null) {
 			logger.error("获取信息流对象为空， udid={}, url={}, response={}", advParam.getUdid(), url, response);
 			return null;
 		}
@@ -145,9 +145,9 @@ public class FlowContent {
 		imgs.add(new Thumbnail(activityContent.getPic()));
 		this.setImgs(imgs);
 
-//		this.url = activityContent.getLink(); // TODO 此处需要加上一些参数
-		this.url = AdvUtil.buildRedirectLink(activityContent.getLink(), paramMap, advParam.getUdid(), null,
-				null, false, true, 1);
+		// this.url = activityContent.getLink(); // TODO 此处需要加上一些参数
+		this.url = AdvUtil.buildRedirectLink(activityContent.getLink(), paramMap, advParam.getUdid(), null, null,
+				false, true, 1);
 	}
 
 	/*
@@ -177,9 +177,9 @@ public class FlowContent {
 
 		this.url = adEntity.getLink(); // TODO 此处需要加上一些参数
 	}
-	
+
 	/*
-	 * 构建 信息流2.0版本的样式
+	 * 构建 信息流 文章 2.0版本的样式
 	 */
 	public FlowNewContent createNewContents() {
 		FlowNewContent f = new FlowNewContent();
@@ -191,9 +191,9 @@ public class FlowContent {
 		f.setArticleUrl(this.url);
 		return f;
 	}
-	
+
 	/*
-	 * 构建 信息流2.0版本的样式
+	 * 构建 信息流 文章 3.0版本的样式
 	 */
 	public FlowNewContent createFeeds() {
 		FlowNewContent f = new FlowNewContent();
@@ -202,12 +202,37 @@ public class FlowContent {
 		f.setFlowTag("大家都在看");
 		f.setFlowTagColor("52,152,219");
 		f.setFlowTagColor("255,193,7");
-		f.setFlowDesc("2567人浏览");
+		int random = (int) (1000 + Math.random() * 1000);
+		f.setFlowDesc(random + "人浏览");
 		f.setLink(this.url);
 		f.setPic(this.imgs.get(0).getUrl());
 		return f;
 	}
-	
+
+	/**
+	 * 构建信息流 文章 4.0 版本的样式
+	 */
+	public FeedContent createNewFeeds() {
+		FeedContent f = new FeedContent();
+		f.setId(this.id);
+		f.setDestType(2);
+		f.setFeedTitle(this.title);
+		f.setFeedDesc(this.desc);
+		f.setTime(this.time);
+		f.setLink(this.url);
+//		List<String> imgs = New.arrayList();
+//		for (Thumbnail t : this.imgs) {
+//			imgs.add(t.getUrl());
+//		}
+		f.setImgs(this.imgs);
+		if (imgs.size() == 3) {
+			f.setImgsType(1);
+		} else {
+			f.setImgsType(0);
+		}
+
+		return f;
+	}
 
 	public String getId() {
 		return id;
@@ -345,9 +370,9 @@ public class FlowContent {
 	public void setImgsType(int imgsType) {
 		this.imgsType = imgsType;
 	}
-	
+
 	public static void main(String[] args) throws ClientProtocolException, IOException {
-		
+
 		String url = "http://test.chelaile.net.cn:7000/chatroom/app!getTopicById.action?cityId=027&chatRoomId=123471";
 		String response = HttpUtils.get(url, "utf-8");
 		System.out.println(response);

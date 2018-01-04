@@ -103,7 +103,8 @@ public class OpenManager extends AbstractManager {
 					+ cateGory.getAdType());
 		}
 
-		cacheRecord.setOpenAdHistory(cateGory);
+		// 2017.12.28， 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+//		cacheRecord.setOpenAdHistory(cateGory);
 		return entity;
 	}
 

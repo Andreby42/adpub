@@ -58,7 +58,8 @@ public class TagUtils {
 		f.setTag(object.getString("tag"));
 		f.setTagId(String.valueOf(object.getIntValue("tagId")));
 		f.setFeedId("633123838082781184");
-		f.setFlowDesc("1234人参与");
+		int random = (int) (1000 + Math.random() * 1000);
+		f.setFlowDesc(random + "人参与");
 		f.setPic("https://image3.chelaile.net.cn/4c860c68c14d468b90f29974f036bf96");
 		
 		initFlows.add(f);
@@ -72,33 +73,38 @@ public class TagUtils {
 	 * TODO 待完善
 	 */
 	public static void getInitTagDetails(List<FlowNewContent> initFlows) {
-		String url = FEED_LINK_ONLINE;
+		String urlOrigin = FEED_LINK_ONLINE;
 		if(Constants.ISTEST) {
-			url = FEED_LINK_TEST;
+			urlOrigin = FEED_LINK_TEST;
 		}
+		String url = urlOrigin;
 		
 		String response = null;
-		try{
-			response = HttpUtils.get(url, "utf-8");
-		} catch(Exception e) {
-			logger.error("拉取tag详情页列表出错， url={}, response={}", url, response);
-			return;
-		}
-		
-		if(response != null && response.length() > 12) {
-			String resJ = response.substring(6, response.length() - 6);
-			JSONObject res = JSONObject.parseObject(resJ);
-			JSONArray feedsJ = res.getJSONObject("jsonr").getJSONObject("data").getJSONArray("feeds");
-			for(int count = 0, index = 0; index < feedsJ.size() && count < FlowStartService.LINEDETAIL_NUM; index++ ) {		 // TODO　随机取3条，获取的随机方法有待完善
-				JSONObject feedJ =  (JSONObject) feedsJ.get(index);
-				JSONArray imagesJ = feedJ.getJSONArray("images");
-				if(imagesJ == null || imagesJ.size() == 0) {
-					continue;
-				}
-				createTagDetetailFlow(initFlows,feedJ);
-				count ++ ;
+		for (int count = 0; count < FlowStartService.LINEDETAIL_NUM - 1;) {
+			try {
+				response = HttpUtils.get(url, "utf-8");
+			} catch (Exception e) {
+				logger.error("拉取tag详情页列表出错， url={}, response={}", url, response);
+				return;
 			}
-			logger.info("详情页下方滚动栏，话题详情页数为：{}", feedsJ.size());
+
+			if (response != null && response.length() > 12) {
+				String resJ = response.substring(6, response.length() - 6);
+				JSONObject res = JSONObject.parseObject(resJ);
+				JSONArray feedsJ = res.getJSONObject("jsonr").getJSONObject("data").getJSONArray("feeds");
+				String fid = null;
+				for (int index = 0; index < feedsJ.size() && count < FlowStartService.LINEDETAIL_NUM; index++) { // TODO　随机取3条，获取的随机方法有待完善
+					JSONObject feedJ = (JSONObject) feedsJ.get(index);
+					JSONArray imagesJ = feedJ.getJSONArray("images");
+					fid = feedJ.getString("fid");
+					if (imagesJ == null || imagesJ.size() == 0) {
+						continue;
+					}
+					createTagDetetailFlow(initFlows, feedJ);
+					count++;
+				}
+				url = urlOrigin + "&fid=" + fid;
+			}
 		}
 	}
 
@@ -110,7 +116,8 @@ public class TagUtils {
 		f.setFlowTagColor("255,130,165");
 		f.setFeedId(feedJ.getString("fid"));
 		f.setPic(((JSONObject)feedJ.getJSONArray("images").get(0)).getString("picUrl"));
-		f.setFlowDesc("1234人参与");
+		int random = (int) (1000 + Math.random() * 1000);
+		f.setFlowDesc(random + "人参与");
 		
 		initFlows.add(f);
 	}

@@ -49,6 +49,7 @@ public class InfoStreamHelp {
 			String udid = parameterMap.get("udid");
 			if(udid == null || advId == null) {
 				logger.info("广告为空 line={}", line);
+				return;
 			}
 			if(StaticAds.allAds.get(advId) == null) {
 				if(! Constants.ISTEST) {	// 线上需要打印这种情况，测试无需
