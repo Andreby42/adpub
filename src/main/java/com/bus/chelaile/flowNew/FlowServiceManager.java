@@ -14,6 +14,7 @@ import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.dao.ActivityContentMapper;
 import com.bus.chelaile.flow.ToutiaoHelp;
+import com.bus.chelaile.flow.WangYiYunHelp;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flowNew.model.FlowNewContent;
 import com.bus.chelaile.model.PropertiesName;
@@ -32,6 +33,8 @@ public class FlowServiceManager {
 //	private PayService payService;
 	@Autowired
 	private ToutiaoHelp toutiaoHelp;
+	@Autowired
+	private WangYiYunHelp wangYiYunHelp;
 //	@Autowired
 //	private WuliToutiaoHelp wuliToutiaoHelp;
 	
@@ -74,8 +77,9 @@ public class FlowServiceManager {
 		List<FlowContent> contentsFromApi = null;
 		if (FlowStaticContents.isReturnLineDetailFlows(param)) {
 			try {
-				contentsFromApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
+//				contentsFromApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
 //				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(null, null, -1);
+				contentsFromApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

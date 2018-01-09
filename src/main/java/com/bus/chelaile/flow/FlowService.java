@@ -159,8 +159,8 @@ public class FlowService {
 			// 获取信息流 活动
 			HashMap<Integer, FlowContent> contentActivity = activityService.getActivity(advParam, id, channelType);
 
-			// 获取信息流 广告
-			HashMap<Integer, FlowContent> contentAdv = activityService.getAdv(advParam, id, channelType);
+//			// 获取信息流 广告
+//			HashMap<Integer, FlowContent> contentAdv = activityService.getAdv(advParam, id, channelType);
 			
 //			HashMap<Integer, FlowContent> contentThirdAdv = TanxHelper.getAdv(advParam, id, channelType);
 
@@ -180,8 +180,8 @@ public class FlowService {
 			} else if(channelType == ChannelType.WANGYI) {
 				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, -1, false);
 			}
-			contents = flowOcs.merageList(null, contentsFromApi, contentActivity, contentAdv, advParam.getUdid(), channelType);
-			FlowUtil.setImagsType(contents);
+			contents = flowOcs.merageList(null, contentsFromApi, contentActivity, null, advParam.getUdid(), channelType);
+//			FlowUtil.setImagsType(contents);
 			return contents;
 
 			// // 得到用户不需要展示的id

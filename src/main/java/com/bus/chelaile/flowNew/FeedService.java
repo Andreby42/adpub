@@ -12,11 +12,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.bus.chelaile.common.AdvCache;
+import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.ToutiaoHelp;
+import com.bus.chelaile.flow.WangYiYunHelp;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flow.model.Thumbnail;
+import com.bus.chelaile.flowNew.customContent.FeedInfo;
+import com.bus.chelaile.flowNew.customContent.TagUtils;
 import com.bus.chelaile.flowNew.model.FeedContent;
 import com.bus.chelaile.flowNew.model.FlowNewContent;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
@@ -28,6 +32,8 @@ import com.bus.chelaile.util.New;
 public class FeedService {
 	@Autowired
 	private ToutiaoHelp toutiaoHelp;
+	@Autowired
+	private WangYiYunHelp wangYiYunHelp;
 	@Autowired
 	private ServiceManager serviceManager;
 
@@ -50,7 +56,7 @@ public class FeedService {
 			return getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
 		}
 	}
-
+	
 	/**
 	 * 详情页下方 feed 流 。4.0 版
 	 * 
@@ -68,51 +74,42 @@ public class FeedService {
 			return getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
 		}
 	}
+	
 
-	/**
-	 * 获取详情页下方feed流内容
-	 * 
-	 * @param param
-	 * @return
-	 */
+	public List<FlowNewContent> getLineDetailFeeds(AdvParam param) {
+		List<FlowNewContent> flows = New.arrayList();
+		// 条件判断
+		// if (FlowStaticContents.isReturnLineDetailFlows(param)) {
+		createList(param, flows);
+		// }
+		return flows;
+	}
+
+
 	private List<FeedContent> getLineDetailNewFeeds(AdvParam param) {
 		List<FeedContent> feeds = New.arrayList();
 		List<FeedContent> feedAds = New.arrayList();
 		List<FeedContent> feedArticles = New.arrayList();
 
+		// 广告
 		List<FeedAdEntity> adList = null;
 		try {
 			adList = serviceManager.getFeedAds(param);
-			logger.info("获取到feedads广告数目：{}", adList.size());
+			if(adList != null)
+				logger.info("获取到feedads广告数目：{}", adList.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取feeds广告出错, {}", e, e.getMessage());
 		}
 		if (adList != null && adList.size() > 0) {
-			for (FeedAdEntity ads : adList) {
-//				List<String> imgs = New.arrayList();
-//				imgs.add(ads.getPic());
-				List<Thumbnail> imgs = New.arrayList();
-				Thumbnail img = new Thumbnail(ads.getPic(), ads.getWidth(), ads.getHeight());
-				imgs.add(img);
-				FeedContent feed = null;
-				if (ads.getFeedInfo() != null && StringUtils.isNoneBlank(ads.getFeedInfo().getTitle())) { // TODO
-																											// 看是否有商标名称，来区分是透视，还是feed样式的。这个方式不合理，应该通过一个type
-					feed = new FeedContent(String.valueOf(ads.getId()), 5, imgs, 3, ads.getFeedInfo().getTitle(), null,
-							ads.getFeedInfo().getTime(), ads);
-					feed.getAds().getFeedInfo().setIsLike(getIsLikeAds(ads.getId(), param.getUdid()));
-					feed.getAds().getFeedInfo().setLikeNum(getLikeNum(ads.getId()));
-				} else {
-					feed = new FeedContent(String.valueOf(ads.getId()), 5, imgs, 2, null, null, 0L, ads);
-				}
-
-				feedAds.add(feed);
-			}
+			adAdToFeeds(param, feedAds, adList);
 		}
 
+		// 文章
 		List<FlowContent> flowsApi = null;
 		try {
-			flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
+//			flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
+			flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,11 +121,39 @@ public class FeedService {
 				}
 			}
 		}
-		// 置顶广告
+		
+		// 话题
+		if (Constants.ISTEST) {	 // TODO 测试
+			FeedInfo feedf = TagUtils.getFeedInfo("123");
+			FeedContent ff = new FeedContent();
+			ff.setFeedInfo(feedf);
+			ff.setId(feedf.getFeed().getFid());
+			ff.setDestType(0);
+			feeds.add(ff);
+		}
+		
+		// 排序
+		String ids = sortNewFeeds(feeds, feedAds, feedArticles);
+		
+		// 记录feed流下发的日志
+		AnalysisLog
+		.info("[GET_FEEDS]: accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}, "
+				+ "id={}, stats_act={}, refer={}",
+				param.getAccountId(), param.getUdid(),
+				param.getCityId(), param.getS(), param.getV(), param.getLineId(),
+				param.getStnName(), param.getNw(), param.getIp(), param.getDeviceType(),
+				param.getLng(), param.getLat(), ids, param.getStatsAct(), param.getRefer());
+
+		return feeds;
+	}
+
+	// 排序
+	private String sortNewFeeds(List<FeedContent> feeds, List<FeedContent> feedAds, List<FeedContent> feedArticles) {
 		int index = 0; // 列表计数
 		Iterator<FeedContent> it = feedAds.iterator();
 		while (it.hasNext()) {
 			FeedContent x = it.next();
+			// 置顶广告
 			if (x.getAds().getFeedInfo() != null && x.getAds().getFeedInfo().getIsSetTop() == 1) {
 				feeds.add(x);
 				it.remove();
@@ -142,33 +167,43 @@ public class FeedService {
 		// break;
 		// }
 		// }
+		String ids = "";
 		int aIndex = 0; // 广告计数
 		for (FeedContent f : feedArticles) {
 			feeds.add(f);
 			index++;
+			ids += f.getId() + ";";
 			if (index >= 4 && aIndex < feedAds.size()) {
 				feeds.add(feedAds.get(aIndex));
 				index = 1;
 				aIndex++;
 			}
 		}
-
-		return feeds;
+		return ids;
 	}
 
-	/**
-	 * 获取详情页下方滚动栏内容
-	 * 
-	 * @return
-	 */
-	public List<FlowNewContent> getLineDetailFeeds(AdvParam param) {
-		List<FlowNewContent> flows = New.arrayList();
-		// 条件判断
-		// if (FlowStaticContents.isReturnLineDetailFlows(param)) {
-		createList(param, flows);
-		// }
-		return flows;
+	private void adAdToFeeds(AdvParam param, List<FeedContent> feedAds, List<FeedAdEntity> adList) {
+		for (FeedAdEntity ads : adList) {
+//				List<String> imgs = New.arrayList();
+//				imgs.add(ads.getPic());
+			List<Thumbnail> imgs = New.arrayList();
+			Thumbnail img = new Thumbnail(ads.getPic(), ads.getWidth(), ads.getHeight());
+			imgs.add(img);
+			FeedContent feed = null;
+			if (ads.getFeedInfo() != null && StringUtils.isNoneBlank(ads.getFeedInfo().getTitle())) { // TODO
+																										// 看是否有商标名称，来区分是透视，还是feed样式的。这个方式不合理，应该通过一个type
+				feed = new FeedContent(String.valueOf(ads.getId()), 5, imgs, 3, ads.getFeedInfo().getTitle(), null,
+						ads.getFeedInfo().getTime(), ads);
+				feed.getAds().getFeedInfo().setIsLike(getIsLikeAds(ads.getId(), param.getUdid()));
+				feed.getAds().getFeedInfo().setLikeNum(getLikeNum(ads.getId()));
+			} else {
+				feed = new FeedContent(String.valueOf(ads.getId()), 5, imgs, 2, null, null, 0L, ads);
+			}
+
+			feedAds.add(feed);
+		}
 	}
+
 
 	/*
 	 * 可能涉及到一些链接增加用户id之类的修正
@@ -205,7 +240,8 @@ public class FeedService {
 		List<FlowContent> flowsApi;
 		try {
 			// flowsApi = wuliToutiaoHelp.getArticlesFromCache(null, null, -1);
-			flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
+//			flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
+			flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
 			for (FlowContent f : flowsApi) {
 				flowArticle.add(f.createFeeds());
 			}
@@ -287,19 +323,27 @@ public class FeedService {
 	/*
 	 * 不感兴趣
 	 */
-	public String uninterestNewFeeds(AdvParam param, String id, int destType) {
+	public String uninterestNewFeeds(AdvParam advParam, String id, int destType) {
 		if (destType == 5) { // 广告
 			logger.info("feed流广告不感兴趣, id={}", id);
 			logger.info(
 					"[ENTERuninterestads]: showType={}, advId={}, udid={}, accountId={}, cityId={}, lineId={}, apiType={},"
-							+ " provider_id={}, secret={}", "16", id, param.getUdid(), param.getAccountId(),
-					param.getCityId(), param.getLineId(), 1, -1, null);
-			AdvCache.saveNewUninterestedAds(param.getUdid(), Integer.parseInt(id), param.getLineId(), 16, "1", -1,
-					param.getS(), param.getVc());
+							+ " provider_id={}, secret={}", "16", id, advParam.getUdid(), advParam.getAccountId(),
+					advParam.getCityId(), advParam.getLineId(), 1, -1, null);
+			AdvCache.saveNewUninterestedAds(advParam.getUdid(), Integer.parseInt(id), advParam.getLineId(), 16, "1", -1,
+					advParam.getS(), advParam.getVc());
 			
 		} else if (destType == 2) { // 文章
 			logger.info("feed流文章不感兴趣, id={}", id);
 		}
+		AnalysisLog
+		.info("[UNINTEREST_FEEDS]: accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}, "
+				+ "id={}, destType={}",
+				advParam.getAccountId(), advParam.getUdid(),
+				advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(),
+				advParam.getStnName(), advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
+				advParam.getLng(), advParam.getLat(), id, destType);
+		
 		return getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
 	}
 

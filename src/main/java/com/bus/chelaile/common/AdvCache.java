@@ -354,4 +354,9 @@ public class AdvCache {
 	public static String getWuliArticleCacheKey(int channelId) {
 		return new StringBuilder("WULITOUTIAO#").append(channelId).toString();
 	}
+	
+	//网易文章缓存 key
+	public static String getWangyiArticleCacheKey(String articleId) {
+		return new StringBuilder("WANGYI#").append(articleId).toString();
+	}
 }

@@ -11,11 +11,11 @@ public class WangYiYunListModel {
 	private String infoType;
 	private Boolean hasVideo;
 	private String producer;
-	private Date publishTime;
+	private String publishTime;
 	private String recId;
 	private String source;
 	private String title;
-	private Date updateTime;
+	private String updateTime;
 	private String summary;
 	private Long deliverId;
 	private List<Thumbnail> thumbnails;
@@ -46,10 +46,36 @@ public class WangYiYunListModel {
 		this.infoId = infoId;
 	}
 
+	public List<Thumbnail> getThumbnails() {
+		return thumbnails;
+	}
+
+	public void setThumbnails(List<Thumbnail> thumbnails) {
+		this.thumbnails = thumbnails;
+	}
+
 	public static class Thumbnail{
 		private Integer height;
 		private Integer width;
 		private String url;
+		public Integer getHeight() {
+			return height;
+		}
+		public void setHeight(Integer height) {
+			this.height = height;
+		}
+		public Integer getWidth() {
+			return width;
+		}
+		public void setWidth(Integer width) {
+			this.width = width;
+		}
+		public String getUrl() {
+			return url;
+		}
+		public void setUrl(String url) {
+			this.url = url;
+		}
 	}
 	
 	public static class Ad{

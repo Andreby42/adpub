@@ -19,7 +19,8 @@ public enum ShowType {
     FULL_SCREEN_MOBIKE("13"),		//共享单车页的全屏广告，新增的一种浮层
     ROUTE_PLAN_ADV("14"),		//线路规划页广告
     STATION_ADV("15"),		// 站点广告
-    FEED_ADV("16");		// feed流广告
+    FEED_ADV("16"),		// feed流广告
+    LINEDETAIL_REFRESH_ADV("17");   //详情页刷新位广告
     
     private String type;
     private int val;

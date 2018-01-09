@@ -89,8 +89,9 @@ public class AdContent {
             fullInner.setAndPaseJson(content);
             innerContent = fullInner;
         }
-        else if (ShowType.LINE_DETAIL.getType().equals(showType)||"07".equals(showType)||"08".equals(showType)
-        		|| "12".equals(showType)) {		// 详情页广告，借用这个结构的还包括--->活动页广告，乘车页广告，下车提醒音频广告
+        else if (ShowType.LINE_DETAIL.getType().equals(showType) || ShowType.LINEDETAIL_REFRESH_ADV.getType().equals(showType) 
+        		||"07".equals(showType)||"08".equals(showType)
+        		|| "12".equals(showType)) {		// 详情页广告，借用这个结构的还包括--->详情页刷新位广告，活动页广告，乘车页广告，下车提醒音频广告
             AdLineDetailInnerContent lineDetailInner = new AdLineDetailInnerContent();
             lineDetailInner.setAndPaseJson(content);
             innerContent = lineDetailInner;

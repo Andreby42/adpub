@@ -26,6 +26,9 @@
 	<!-- 站点广告 -->
 	<bean id="stationAdsManager" class="com.bus.chelaile.service.impl.StationAdsManager" parent="abstractService">
 	</bean>
+	<!-- 详情页刷新位广告 -->
+	<bean id="lineRefreshManager" class="com.bus.chelaile.service.impl.LineRefreshManager" parent="abstractService">
+	</bean>
 	<!-- feed流广告 -->
 	<bean id="feedAdsManager" class="com.bus.chelaile.service.impl.FeedAdsManager" parent="abstractService">
 	</bean>
@@ -88,6 +91,8 @@
 	<bean id="toutiaoHelp" class="com.bus.chelaile.flow.ToutiaoHelp">
 	</bean>
 	<bean id="wuliToutiaoHelp" class="com.bus.chelaile.flow.WuliToutiaoHelp">
+	</bean>
+	<bean id="abstractWangYiYunHelp" class="com.bus.chelaile.flow.AbstractWangYiYunHelp">
 	</bean>
 	<bean id="wangYiYunHelp" class="com.bus.chelaile.flow.WangYiYunHelp">
 	</bean>

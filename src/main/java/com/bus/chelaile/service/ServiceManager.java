@@ -40,6 +40,7 @@ import com.bus.chelaile.service.impl.ActiveManager;
 import com.bus.chelaile.service.impl.DoubleAndSingleManager;
 import com.bus.chelaile.service.impl.FeedAdsManager;
 import com.bus.chelaile.service.impl.LineDetailsManager;
+import com.bus.chelaile.service.impl.LineRefreshManager;
 import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.RideManager;
 import com.bus.chelaile.service.impl.SelfManager;
@@ -56,6 +57,8 @@ public class ServiceManager {
 	private LineDetailsManager lineDetailsManager;
 	@Autowired
 	private StationAdsManager stationAdsManager;
+	@Autowired
+	private LineRefreshManager lineRefreshManager;
 	@Autowired
 	private FeedAdsManager feedAdsManager;
 	@Autowired
@@ -178,6 +181,8 @@ public class ServiceManager {
 				return null;
 			} else if (entity1 != null && entity1.getShowType() == ShowType.LINE_DETAIL.getValue()) {
 				object.put("lineAds", entity1);
+			} else if(entity1 != null && entity1.getShowType() == ShowType.LINEDETAIL_REFRESH_ADV.getValue()) {
+				object.put("reBannerAds", entity1);
 			} else if (entity1 != null && entity1.getShowType() == ShowType.STATION_ADV.getValue()) {
 				object.put("stationAds", entity1);
 			}
@@ -323,10 +328,24 @@ public class ServiceManager {
 				return stnAds;
 			}
 		}
+		
+		if(returnRefreshAds(advParam)) {
+			BaseAdEntity refreshAds = lineRefreshManager.doService(advParam, ShowType.LINEDETAIL_REFRESH_ADV, false, queryParam, true);
+			if(refreshAds != null) {
+				return refreshAds;
+			}
+		}
 		return lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
 	}
 
-	
+	/**
+	 * 根据是否灰度，来判断是否返回这个。
+	 * 可以放在配置文件中
+	 */
+	private boolean returnRefreshAds(AdvParam advParam) {
+		return true;
+	}
+
 	/**
 	 * feed流广告
 	 * 

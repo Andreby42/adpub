@@ -11,11 +11,12 @@ public class TestWangYiYun {
 		WangYiYunHelp wangyiYun = new WangYiYunHelp();
 		//575042c1eac22112dcab5620179035829b878a91
 		AdvParam advParam = new AdvParam();
-		advParam.setUdid("575042c1eac22112dcab5620179035829b878a91");
+		advParam.setUdid("fb6d0547-b3ba-435b-ba29-001a1bbe261b");
 		List<FlowContent> list =wangyiYun.getInfoByApi(advParam, 0l, null, 0, false);
 		System.out.println(list.size());
 		for(FlowContent flowContent: list) {
 			System.out.println(flowContent.getUrl());
+			System.out.println(flowContent.getTime());
 		}
 	}
 }

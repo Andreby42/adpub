@@ -1,11 +1,13 @@
 package com.bus.chelaile.flow.wangyiyun;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.bus.chelaile.flow.model.Thumbnail;
 import com.bus.chelaile.flow.wangyiyun.WangYiYunListModel.Ad;
 import com.bus.chelaile.flowNew.qingmang.model.Video;
+import com.bus.chelaile.util.New;
 
 
 
@@ -15,7 +17,7 @@ public class WangYiYunDetailModel {
 	private String 	category;
 	private String 	title;
 	private String producer;
-	private Date 	publishTime;
+	private String 	publishTime;
 	private String 	source;
 	private String 	sourceLink;
 	private String 	content;
@@ -24,7 +26,24 @@ public class WangYiYunDetailModel {
 	private List<Video> videos;
 	private Ad ad;
 	private AppInfo appInfo;
-	private Date updateTime;
+	private String updateTime;
+	
+	
+	public ArrayList<Thumbnail> createImgs(List<com.bus.chelaile.flow.wangyiyun.WangYiYunListModel.Thumbnail> imgsList) {
+		List<Thumbnail> pics = New.arrayList();
+		if (imgsList != null && imgsList.size() > 0) {
+			int count = 0;
+			for (com.bus.chelaile.flow.wangyiyun.WangYiYunListModel.Thumbnail img : imgsList) {
+				Thumbnail th = new Thumbnail(img.getUrl(), img.getWidth(), img.getHeight());
+				pics.add(th);
+				if (++count >= 3) {
+					break;
+				}
+			}
+		}
+		return (ArrayList<Thumbnail>) pics;
+	}
+	
 	
 	public String getCategory() {
 		return category;
@@ -50,11 +69,11 @@ public class WangYiYunDetailModel {
 		this.producer = producer;
 	}
 
-	public Date getPublishTime() {
+	public String getPublishTime() {
 		return publishTime;
 	}
 
-	public void setPublishTime(Date publishTime) {
+	public void setPublishTime(String publishTime) {
 		this.publishTime = publishTime;
 	}
 
@@ -106,11 +125,11 @@ public class WangYiYunDetailModel {
 		this.appInfo = appInfo;
 	}
 
-	public Date getUpdateTime() {
+	public String getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Date updateTime) {
+	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
 
@@ -199,5 +218,4 @@ public class WangYiYunDetailModel {
 		}
 		
 	}
-	
 }

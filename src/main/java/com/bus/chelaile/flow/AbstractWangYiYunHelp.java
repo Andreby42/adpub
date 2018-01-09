@@ -22,17 +22,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.beans.factory.annotation.Value;
 
+import com.bus.chelaile.flow.model.FlowChannel;
+import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flow.wangyiyun.WangYIParamForSignature;
 import com.bus.chelaile.flow.wangyiyun.WangYiYunDetailModel;
 import com.bus.chelaile.flow.wangyiyun.WangYiYunDetailModel.Img;
 import com.bus.chelaile.flow.wangyiyun.WangYiYunResultBaseDto;
+import com.bus.chelaile.model.PropertiesName;
+import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.HttpUtils;
+import com.bus.chelaile.util.config.PropertiesUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public abstract class AbstractWangYiYunHelp implements InterfaceFlowHelp {
+public class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
 	protected final static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -40,22 +45,47 @@ public abstract class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 	protected final static Gson gsonFormat = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
 	protected final static Gson gsonSerNulls = new GsonBuilder().disableHtmlEscaping().serializeNulls().create();
-	@Value("${wangyiyun.secretkey}")
-	protected  String secretkey = "3eb746dfa4a54361964e7b49d0e3e2dc";
-	@Value("${wangyiyun.appkey}")
-	protected  String appkey = "379a2e02a7e24d389a490637891d0514";
-	@Value("${wangyiyun.wangYiYunChannelListUrl}")
-	protected  String wangYiYunChannelListUrl = "https://youliao.163yun.com/api-server/api/v1/channel/list";
-	@Value("${wangyiyun.wangYiYunNewListUrl}")
-	protected  String wangYiYunNewListUrl = "https://youliao.163yun.com/api-server/api/v1/info/list";
-	@Value("${wangyiyun.wangYuYunNewDetailUrl}")
-	protected  String wangYuYunNewDetailUrl = "https://youliao.163yun.com/api-server/api/v1/info/detail";
-	@Value("${wangyiyun.modelFileName}")
-	protected String modelFileName="E:\\wyangyiyun\\ori_text.html";
-	@Value("${wangyiyun.cdnPath}")
-	protected String cdnPath = "D:\\Program Files (x86)\\nginx-1.12.2\\html\\";
-	@Value("${wangyiyun.newUrl}")
-	protected  String newUrl="http://127.0.0.1/";
+//	@Value("${wangyiyun.secretkey}")
+//	protected  String secretkey = "3eb746dfa4a54361964e7b49d0e3e2dc";
+	protected static final String secretkey = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyiyun.secretkey", "3eb746dfa4a54361964e7b49d0e3e2dc");
+	
+	
+//	@Value("${wangyiyun.appkey}")
+//	protected  String appkey = "379a2e02a7e24d389a490637891d0514";
+	protected static final String appkey = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyiyun.appkey", "379a2e02a7e24d389a490637891d0514");
+	
+//	@Value("${wangyiyun.wangYiYunChannelListUrl}")
+//	protected  String wangYiYunChannelListUrl = "https://youliao.163yun.com/api-server/api/v1/channel/list";
+	protected static final String wangYiYunChannelListUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyiyun.wangYiYunChannelListUrl", "https://youliao.163yun.com/api-server/api/v1/channel/list");
+	
+//	@Value("${wangyiyun.wangYiYunNewListUrl}")
+//	protected  String wangYiYunNewListUrl = "https://youliao.163yun.com/api-server/api/v1/info/list";
+	protected static final String wangYiYunNewListUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyiyun.wangYiYunNewListUrl", "https://youliao.163yun.com/api-server/api/v1/info/list");
+	
+//	@Value("${wangyiyun.wangYuYunNewDetailUrl}")
+//	protected  String wangYuYunNewDetailUrl = "https://youliao.163yun.com/api-server/api/v1/info/detail";
+	protected static final String wangYuYunNewDetailUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyiyun.wangYuYunNewDetailUrl", "https://youliao.163yun.com/api-server/api/v1/info/detail");
+	
+//	@Value("${wangyiyun.modelFileName}")
+//	protected String modelFileName="E:\\wyangyiyun\\ori_text.html";
+	protected static final String modelFileName = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyiyun.modelFileName", "D:\\用户目录\\Downloads\\ori_text.html");
+	
+//	@Value("${wangyiyun.cdnPath}")
+//	protected String cdnPath = "D:\\Program Files (x86)\\nginx-1.12.2\\html\\";
+	protected static final String cdnPath = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyiyun.cdnPath", "D:\\temp\\html\\");
+	
+//	@Value("${wangyiyun.newUrl}")
+//	protected  String newUrl="http://127.0.0.1/";
+	protected static final String newUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyiyun.newUrl", "http://127.0.0.1/");
+	
 	
 	protected <T> WangYiYunResultBaseDto<T> getWangYiYunResponse(String url, Set<WangYIParamForSignature> paramSet,Type type) {
 		List<NameValuePair> pairs = new ArrayList<>();
@@ -70,7 +100,6 @@ public abstract class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(response);
 
 		WangYiYunResultBaseDto<T> result = gson.fromJson(response, type);
 		return result;
@@ -82,7 +111,6 @@ public abstract class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 			sb.append(w.getKeyName()).append(w.getValue());
 		}
 		String params = sb.toString();
-		System.out.println(params);
 		byte[] bytes = params.getBytes();
 		MessageDigest md5 = null;
 		try {
@@ -120,7 +148,7 @@ public abstract class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 	protected Set<WangYIParamForSignature> initBaseParam(String platformParam, Long timestampParam) {
 
 		WangYIParamForSignature timestamp = new WangYIParamForSignature("timestamp", System.currentTimeMillis() + "");
-		System.out.println("timestamp:" + timestamp.getValue());
+//		System.out.println("timestamp:" + timestamp.getValue());
 		WangYIParamForSignature platform = new WangYIParamForSignature("platform", 3 + "");
 		WangYIParamForSignature version = new WangYIParamForSignature("version", "v1.4.0");
 		WangYIParamForSignature apk = new WangYIParamForSignature("appkey", appkey);
@@ -161,11 +189,13 @@ public abstract class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 	
 	protected String installNewDetailHtml(String modelHtml,WangYiYunDetailModel model) throws IOException {
 		Document doc = Jsoup.parse(new File(modelHtml), "utf-8");
+		log.info("文件名：{}", modelHtml);
 		doc.getElementById("title_wangyi").text(model.getTitle());
 		doc.getElementById("author_wangyi").text(model.getSource());
-		doc.getElementById("time_wangyi").text(DateFormatUtils.format(model.getPublishTime(), "yyyy-MM-dd hh:mm:ss"));
+//		DateFormatUtils.format(date, pattern)
+//		doc.getElementById("time_wangyi").text(DateFormatUtils.format(model.getPublishTime(), "yyyy-MM-dd hh:mm:ss"));
+		doc.getElementById("time_wangyi").text(model.getPublishTime());
 		doc.getElementById("content_wangyi").text(model.getContent());
-		System.out.println(doc.html());
 		return doc.html();
 	}
 	
@@ -179,5 +209,25 @@ public abstract class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 			}
 			wyDetailModel.setContent(replacesByImgPattern(wyDetailModel.getContent(), imgHtmlLists));
 		}
+	}
+
+	@Override
+	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int channelId, boolean isShowAd)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> parseChannel(FlowChannel ucChannel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FlowContent> parseResponse(AdvParam advParam, long ftime, String recoid, String token,
+			String channelId, boolean isShowAd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

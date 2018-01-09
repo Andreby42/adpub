@@ -110,6 +110,7 @@ public class HttpUtils {
 		if (params != null && params.size() > 0) {
 			url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(params));
 		}
+		logger.info("url={}", url);
 		HttpGet get = new HttpGet(url);
 		CloseableHttpResponse response = null;
 		try {

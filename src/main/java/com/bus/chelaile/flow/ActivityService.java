@@ -60,7 +60,7 @@ public class ActivityService {
 	public static final Set<String> FLOWUDIDS = New.hashSet();
 	public static final Map<Integer, Map<Integer, FlowChannel>> CHANNELS = New.hashMap(); // 第一个key是type，第二个key是id
 	private static final Set<FlowChannel> CUSTOM_CHANNELS = New.hashSet();	// 存放自定义模块的有效频道。比如id是200,201的那些频道。
-	public static final Map<String, String> CITIES = New.hashMap();
+	private static final Map<String, String> CITIES = New.hashMap();
 	private static final String HEADSTRS = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"detail.flow.udidHEADS", "4|5|6|7");
 	private static final int CHANNEL_TYPE = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
@@ -463,6 +463,8 @@ public class ActivityService {
 		
 		if(CHANNEL_TYPE == ChannelType.WULITOUTIAO.getType()) {
 			return ChannelType.WULITOUTIAO;
+		} else if (CHANNEL_TYPE == ChannelType.WANGYI.getType()) {
+			return ChannelType.WANGYI;
 		}
 		else 
 			return ChannelType.TOUTIAO;

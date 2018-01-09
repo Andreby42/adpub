@@ -262,13 +262,14 @@ public class FlowOcs {
 	public List<FlowContent> merageList(List<FlowContent> contentsFromOCS, List<FlowContent> contentsFromUC,
 			HashMap<Integer, FlowContent> contentActivity, HashMap<Integer, FlowContent> contentAdv, String udid, ChannelType channelType) {
 		List<FlowContent> content = new ArrayList<FlowContent>();
-//		if(contentsFromUC == null && contentActivity == null && contentAdv == null) {
-//			logger.info("空空空空");
-//			return content;
-//		}
+		if(contentsFromUC == null && contentActivity == null && contentAdv == null) {
+			logger.info("空空空空");
+			return content;
+		}
 		
 		//增加ocs中推荐的信息流到api获取到的信息罗中
 		addOCSFlows(contentsFromOCS, contentsFromUC, content);
+//		content.addAll(contentsFromUC);
 		
 		if(content.size() == 0 && channelType == ChannelType.CUSTOM && contentActivity != null) {
 			content.addAll(contentActivity.values());

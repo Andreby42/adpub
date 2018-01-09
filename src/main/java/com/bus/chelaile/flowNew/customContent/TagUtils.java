@@ -4,11 +4,14 @@
  */
 package com.bus.chelaile.flowNew.customContent;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.Constants;
@@ -107,7 +110,54 @@ public class TagUtils {
 			}
 		}
 	}
+	
+	public static String getFeedList() {
+		String urlOrigin = FEED_LINK_ONLINE;
+		if (Constants.ISTEST) {
+			urlOrigin = FEED_LINK_TEST;
+		}
+		String url = urlOrigin;
+		String response = null;
+		try {
+			response = HttpUtils.get(url, "utf-8");
+		} catch (Exception e) {
+			logger.error("拉取tag详情页列表出错， url={}, response={}", url, response);
+			return null;
+		}
+		String resJ = response.substring(6, response.length() - 6);
+		JSONObject res = JSONObject.parseObject(resJ);
+		JSONArray feedsJ = res.getJSONObject("jsonr").getJSONObject("data").getJSONArray("feeds");
+		if (feedsJ != null && feedsJ.size() > 0) {
+			String feedJ = feedsJ.getJSONObject(0).toJSONString();
+			System.out.println(feedJ);
+			return feedJ;
+		} else {
+			logger.error("获取到话题列表长度为0 , response={}", response);
+			return null;
+		}
+	}
 
+	public static FeedInfo getFeedInfo(String fid) {
+		String url = "https://api.chelaile.net.cn/feed/native!getFeed.action?fid=644695703197728768";
+		try {
+			String response = HttpUtils.get(url, "utf-8");
+			System.out.println(response);
+			String resJ = response.substring(6, response.length() - 6);
+			JSONObject res = JSONObject.parseObject(resJ);
+			JSONObject feedJ = res.getJSONObject("jsonr").getJSONObject("data");
+			FeedInfo feed = JSON.parseObject(feedJ.toJSONString(), FeedInfo.class);
+			System.out.println(feed.getFeed().getFid());
+			System.out.println(feed.getAccounts().size());
+			return feed;
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	private static void createTagDetetailFlow(List<FlowNewContent> initFlows, JSONObject feedJ) {
 		FlowNewContent f = new FlowNewContent();
 		f.setDestType(7);
@@ -120,5 +170,9 @@ public class TagUtils {
 		f.setFlowDesc(random + "人参与");
 		
 		initFlows.add(f);
+	}
+	
+	public static void main(String[] args) {
+		getFeedInfo("1");
 	}
 }

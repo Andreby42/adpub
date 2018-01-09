@@ -3,6 +3,7 @@ package com.bus.chelaile.flowNew.model;
 import java.util.List;
 
 import com.bus.chelaile.flow.model.Thumbnail;
+import com.bus.chelaile.flowNew.customContent.FeedInfo;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 
 public class FeedContent {
@@ -16,6 +17,7 @@ public class FeedContent {
 	private long time;
 	private FeedAdEntity ads;
 	private String link;
+	private FeedInfo feedInfo;
 	
 	
 	public FeedContent() {
@@ -87,5 +89,11 @@ public class FeedContent {
 	}
 	public void setImgs(List<Thumbnail> imgs) {
 		this.imgs = imgs;
+	}
+	public FeedInfo getFeedInfo() {
+		return feedInfo;
+	}
+	public void setFeedInfo(FeedInfo feedInfo) {
+		this.feedInfo = feedInfo;
 	}
 }
