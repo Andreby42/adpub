@@ -28,23 +28,6 @@ public class WangYiYunDetailModel {
 	private AppInfo appInfo;
 	private String updateTime;
 	
-	
-	public ArrayList<Thumbnail> createImgs(List<com.bus.chelaile.flow.wangyiyun.WangYiYunListModel.Thumbnail> imgsList) {
-		List<Thumbnail> pics = New.arrayList();
-		if (imgsList != null && imgsList.size() > 0) {
-			int count = 0;
-			for (com.bus.chelaile.flow.wangyiyun.WangYiYunListModel.Thumbnail img : imgsList) {
-				Thumbnail th = new Thumbnail(img.getUrl(), img.getWidth(), img.getHeight());
-				pics.add(th);
-				if (++count >= 3) {
-					break;
-				}
-			}
-		}
-		return (ArrayList<Thumbnail>) pics;
-	}
-	
-	
 	public String getCategory() {
 		return category;
 	}

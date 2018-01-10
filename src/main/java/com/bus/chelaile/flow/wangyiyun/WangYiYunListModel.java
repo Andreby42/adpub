@@ -1,13 +1,17 @@
 package com.bus.chelaile.flow.wangyiyun;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.bus.chelaile.flow.model.Thumbnail;
+import com.bus.chelaile.util.New;
 
 public class WangYiYunListModel {
 	private String algInfo;
 	private String channelId;
 	private Integer imgType;
 	private String infoId;
+	
 	private String infoType;
 	private Boolean hasVideo;
 	private String producer;
@@ -21,6 +25,22 @@ public class WangYiYunListModel {
 	private List<Thumbnail> thumbnails;
 	private List<Video> videos;
 	private Ad ad;
+	
+	public ArrayList<com.bus.chelaile.flow.model.Thumbnail> createImgs(List<Thumbnail> imgsList) {
+		List<com.bus.chelaile.flow.model.Thumbnail> pics = New.arrayList();
+		if (imgsList != null && imgsList.size() > 0) {
+			int count = 0;
+			for (Thumbnail img : imgsList) {
+				com.bus.chelaile.flow.model.Thumbnail th = new com.bus.chelaile.flow.model.Thumbnail(img.getUrl(), img.getWidth(), img.getHeight());
+				pics.add(th);
+				if (++count >= 3) {
+					break;
+				}
+			}
+		}
+		return (ArrayList<com.bus.chelaile.flow.model.Thumbnail>) pics;
+	}
+	
 	
 	public String getInfoType() {
 		return infoType;
@@ -53,7 +73,111 @@ public class WangYiYunListModel {
 	public void setThumbnails(List<Thumbnail> thumbnails) {
 		this.thumbnails = thumbnails;
 	}
+	public String getAlgInfo() {
+		return algInfo;
+	}
 
+	public void setAlgInfo(String algInfo) {
+		this.algInfo = algInfo;
+	}
+
+	public String getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
+	}
+
+	public Boolean getHasVideo() {
+		return hasVideo;
+	}
+
+	public void setHasVideo(Boolean hasVideo) {
+		this.hasVideo = hasVideo;
+	}
+
+	public String getProducer() {
+		return producer;
+	}
+
+	public void setProducer(String producer) {
+		this.producer = producer;
+	}
+
+	public String getPublishTime() {
+		return publishTime;
+	}
+
+	public void setPublishTime(String publishTime) {
+		this.publishTime = publishTime;
+	}
+
+	public String getRecId() {
+		return recId;
+	}
+
+	public void setRecId(String recId) {
+		this.recId = recId;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public Long getDeliverId() {
+		return deliverId;
+	}
+
+	public void setDeliverId(Long deliverId) {
+		this.deliverId = deliverId;
+	}
+
+	public List<Video> getVideos() {
+		return videos;
+	}
+
+	public void setVideos(List<Video> videos) {
+		this.videos = videos;
+	}
+
+	public Ad getAd() {
+		return ad;
+	}
+
+	public void setAd(Ad ad) {
+		this.ad = ad;
+	}
+
+	
 	public static class Thumbnail{
 		private Integer height;
 		private Integer width;
@@ -76,6 +200,7 @@ public class WangYiYunListModel {
 		public void setUrl(String url) {
 			this.url = url;
 		}
+		
 	}
 	
 	public static class Ad{

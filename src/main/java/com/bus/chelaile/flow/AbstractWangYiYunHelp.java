@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +25,8 @@ import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Value;
+
+
 
 import com.bus.chelaile.flow.model.FlowChannel;
 import com.bus.chelaile.flow.model.FlowContent;
@@ -86,6 +90,8 @@ public class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 	protected static final String newUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.newUrl", "http://127.0.0.1/");
 	
+    protected static final String wangyiArticleHost = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), 
+    		"wangyiyun.article.host", "https://youliao.163yun.com/h5/#/info?");
 	
 	protected <T> WangYiYunResultBaseDto<T> getWangYiYunResponse(String url, Set<WangYIParamForSignature> paramSet,Type type) {
 		List<NameValuePair> pairs = new ArrayList<>();
@@ -189,12 +195,16 @@ public class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 	
 	protected String installNewDetailHtml(String modelHtml,WangYiYunDetailModel model) throws IOException {
 		Document doc = Jsoup.parse(new File(modelHtml), "utf-8");
-		log.info("文件名：{}", modelHtml);
 		doc.getElementById("title_wangyi").text(model.getTitle());
 		doc.getElementById("author_wangyi").text(model.getSource());
 //		DateFormatUtils.format(date, pattern)
-//		doc.getElementById("time_wangyi").text(DateFormatUtils.format(model.getPublishTime(), "yyyy-MM-dd hh:mm:ss"));
-		doc.getElementById("time_wangyi").text(model.getPublishTime());
+//		doc.getElementById("time_wangyi").text(model.getPublishTime());
+		SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+		try {
+			doc.getElementById("time_wangyi").text(DateFormatUtils.format(sdf.parse(model.getPublishTime()), "MM-dd HH:mm"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		doc.getElementById("content_wangyi").text(model.getContent());
 		return doc.html();
 	}

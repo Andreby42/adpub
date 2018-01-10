@@ -13,8 +13,10 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.dao.ActivityContentMapper;
+import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.flow.WangYiYunHelp;
+import com.bus.chelaile.flow.model.ChannelType;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flowNew.model.FlowNewContent;
 import com.bus.chelaile.model.PropertiesName;
@@ -35,6 +37,8 @@ public class FlowServiceManager {
 	private ToutiaoHelp toutiaoHelp;
 	@Autowired
 	private WangYiYunHelp wangYiYunHelp;
+	@Autowired
+	private ActivityService activityService;
 //	@Autowired
 //	private WuliToutiaoHelp wuliToutiaoHelp;
 	
@@ -75,11 +79,16 @@ public class FlowServiceManager {
 		
 		// 单栏信息流
 		List<FlowContent> contentsFromApi = null;
+		ChannelType channelType = activityService.getChannelType(param.getUdid(), -1);
 		if (FlowStaticContents.isReturnLineDetailFlows(param)) {
 			try {
-//				contentsFromApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
-//				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(null, null, -1);
-				contentsFromApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+				if (channelType == ChannelType.TOUTIAO) {
+					contentsFromApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
+				} else if (channelType == ChannelType.WANGYI) {
+					contentsFromApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+				}
+				// contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(null,
+				// null, -1);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

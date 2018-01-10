@@ -116,6 +116,8 @@
 	</bean>
 	<bean id="PayService" class="com.bus.chelaile.flowNew.PayService">
 	</bean>
+	<bean id="couponService" class="com.bus.chelaile.koubei.CouponService">
+	</bean>
 	
 	<!--    定时任务          -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -164,7 +166,6 @@
 			<value>reloadDatas</value>
 		</property>
 	</bean>
-
 	<context:annotation-config/> 
 	
 </beans>

@@ -15,8 +15,10 @@ import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.flow.WangYiYunHelp;
+import com.bus.chelaile.flow.model.ChannelType;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flow.model.Thumbnail;
 import com.bus.chelaile.flowNew.customContent.FeedInfo;
@@ -36,6 +38,8 @@ public class FeedService {
 	private WangYiYunHelp wangYiYunHelp;
 	@Autowired
 	private ServiceManager serviceManager;
+	@Autowired
+	private ActivityService activityService;
 
 	protected static final Logger logger = LoggerFactory.getLogger(FeedService.class);
 
@@ -107,9 +111,13 @@ public class FeedService {
 
 		// 文章
 		List<FlowContent> flowsApi = null;
+		ChannelType channelType = activityService.getChannelType(param.getUdid(), -1);
 		try {
-//			flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
-			flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+			if (channelType == ChannelType.TOUTIAO) {
+				flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
+			} else if (channelType == ChannelType.WANGYI) {
+				flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -237,11 +245,15 @@ public class FeedService {
 			flowGame = JSON.parseArray(lineFlowsStr, FlowNewContent.class);
 		}
 
-		List<FlowContent> flowsApi;
+		List<FlowContent> flowsApi = null;
+		ChannelType channelType = activityService.getChannelType(param.getUdid(), -1);
 		try {
 			// flowsApi = wuliToutiaoHelp.getArticlesFromCache(null, null, -1);
-//			flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
-			flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+			if (channelType == ChannelType.TOUTIAO) {
+				 flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
+			} else if (channelType == ChannelType.WANGYI) {
+				flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+			}
 			for (FlowContent f : flowsApi) {
 				flowArticle.add(f.createFeeds());
 			}
