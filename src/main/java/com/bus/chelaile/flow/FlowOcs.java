@@ -279,26 +279,26 @@ public class FlowOcs {
 		// content 去重，按照id和title
 		cleanRepeated(content);
 
-		try {
-			//组合活动内容到content中，考虑活动越界情况
-			HashMap<Integer, FlowContent> contentsAdd = New.hashMap();
-			
-			if (content != null && contentActivity != null && contentActivity.size() > 0) {
-				contentActivity.putAll(contentAdv);
-				contentsAdd = contentActivity;
-			} else {
-				contentsAdd = contentAdv;
-			}
-			
-			
-			if (content != null && contentsAdd != null && contentsAdd.size() > 0) {
-				sortFlows(udid, content, contentsAdd);		//排序
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("新增活动和广告到文章列表中失败");
-		}
+//		try {
+//			//组合活动内容到content中，考虑活动越界情况
+//			HashMap<Integer, FlowContent> contentsAdd = New.hashMap();
+//			
+//			if (content != null && contentActivity != null && contentActivity.size() > 0) {
+////				contentActivity.putAll(contentAdv);
+//				contentsAdd = contentActivity;
+//			} else {
+//				contentsAdd = contentAdv;
+//			}
+//			
+//			
+//			if (content != null && contentsAdd != null && contentsAdd.size() > 0) {
+//				sortFlows(udid, content, contentsAdd);		//排序
+//			}
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("新增活动和广告到文章列表中失败");
+//		}
 
 		return content;
 	}

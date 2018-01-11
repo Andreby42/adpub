@@ -2,23 +2,21 @@ package com.bus.chelaile.model.ads.entity;
 
 import com.bus.chelaile.model.ShowType;
 
-public class LineRefreshAdEntity extends BaseAdEntity {
-	private String pic;
+public class LineRefreshAdEntity extends SimpleAdEntity{
+	private int duration;
 
-	public String getPic() {
-		return pic;
+	public int getDuration() {
+		return duration;
 	}
 
-	public void setPic(String pic) {
-		this.pic = pic;
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 
-	// 构造方法
-	public LineRefreshAdEntity() {
-		super(ShowType.LINEDETAIL_REFRESH_ADV.getValue());
-		this.pic = EMPTY_STR;
+	public LineRefreshAdEntity(int duration) {
+		this.showType = ShowType.LINEDETAIL_REFRESH_ADV.getValue();
+		this.duration = duration;
 	}
-
 	@Override
 	protected ShowType gainShowTypeEnum() {
 		return ShowType.LINEDETAIL_REFRESH_ADV;

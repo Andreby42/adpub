@@ -148,6 +148,15 @@ public class BusAdvAction extends AbstractController {
 
 		return serviceManager.getAdsResponseStr(param, "getRide");
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "adv!getH5Banner.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String getH5Banner(HttpServletRequest request,
+			HttpServletResponse response, HttpSession session) throws Exception {
+		AdvParam param = getActionParam(request);
+
+		return serviceManager.getAdsResponseStr(param, "h5BannerAds");
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "adv!getChat.action", produces = "Content-Type=text/plain;charset=UTF-8")

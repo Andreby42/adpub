@@ -90,6 +90,7 @@ public class AdContent {
             innerContent = fullInner;
         }
         else if (ShowType.LINE_DETAIL.getType().equals(showType) || ShowType.LINEDETAIL_REFRESH_ADV.getType().equals(showType) 
+        		|| ShowType.H5_LINEBANNER_ADV.getType().equals(showType)
         		||"07".equals(showType)||"08".equals(showType)
         		|| "12".equals(showType)) {		// 详情页广告，借用这个结构的还包括--->详情页刷新位广告，活动页广告，乘车页广告，下车提醒音频广告
             AdLineDetailInnerContent lineDetailInner = new AdLineDetailInnerContent();

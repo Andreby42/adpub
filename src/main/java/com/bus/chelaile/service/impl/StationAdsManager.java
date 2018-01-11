@@ -64,6 +64,18 @@ public class StationAdsManager extends AbstractManager {
 				res.setAdCard(stationInner.getAdCard());
 			}
 			res.setPic(stationInner.getPic());
+			
+			// 针对口碑券和淘宝客的修改
+			// 口碑券，需要从ocs中获取当前站点的券
+			if(stationInner.getBannerInfo().getBannerType() == 5) {
+				stationInner.getBannerInfo().setSlogan("送你一种周黑鸭 5元 代金券");  // TODO 从ocs提取
+				res.setBannerInfo(stationInner.getBannerInfo());
+			}
+			// 淘宝客，只有slogan，没有name
+			if(stationInner.getBannerInfo().getBannerType() == 6) {
+				stationInner.getBannerInfo().setBannerType(5); // 客户端识别样式，为5
+				res.setBannerInfo(stationInner.getBannerInfo());
+			}
 		} else {
 			throw new IllegalArgumentException("=====> 错误的innerContent类型： "
 					+ ((inner == null) ? null : inner.getClass()) + "; "

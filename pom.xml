@@ -224,6 +224,15 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/aliyun-sdk-oss-2.0.4.jar</systemPath>
 		</dependency>
+		
+		<!-- com.aliyun.oss -->
+		<dependency>
+			<groupId>com.alipay.koubei</groupId>
+			<artifactId>koubei</artifactId>
+			<version>2.0.4</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java-DEV20171012170951.jar</systemPath>
+		</dependency>
 
 
 

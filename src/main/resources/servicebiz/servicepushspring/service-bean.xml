@@ -26,8 +26,8 @@
 	<!-- 站点广告 -->
 	<bean id="stationAdsManager" class="com.bus.chelaile.service.impl.StationAdsManager" parent="abstractService">
 	</bean>
-	<!-- 详情页刷新位广告 -->
-	<bean id="lineRefreshManager" class="com.bus.chelaile.service.impl.LineRefreshManager" parent="abstractService">
+	<!-- 单图片资源的广告, 目前包括：线路刷新位广告、微信下方banner广告 -->
+	<bean id="simpleAdManager" class="com.bus.chelaile.service.impl.SimpleAdManager" parent="abstractService">
 	</bean>
 	<!-- feed流广告 -->
 	<bean id="feedAdsManager" class="com.bus.chelaile.service.impl.FeedAdsManager" parent="abstractService">

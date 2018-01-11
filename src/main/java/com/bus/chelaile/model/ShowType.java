@@ -20,7 +20,8 @@ public enum ShowType {
     ROUTE_PLAN_ADV("14"),		//线路规划页广告
     STATION_ADV("15"),		// 站点广告
     FEED_ADV("16"),		// feed流广告
-    LINEDETAIL_REFRESH_ADV("17");   //详情页刷新位广告
+    LINEDETAIL_REFRESH_ADV("17"),   //详情页刷新位广告
+    H5_LINEBANNER_ADV("18"); // h5 详情页banner广告
     
     private String type;
     private int val;

@@ -2,7 +2,10 @@ package com.bus.chelaile.model.ads;
 
 public class BannerInfo {
 
-	private int bannerType;
+	private int bannerType; //  banner的5种类型：0 商户简称+广告语； 1 商户简称+广告语+标签； 2 商户简称+广告语+标签(图片)；
+							//3 商户简称+广告语+按钮； 4 商户简称+广告语+按钮(图片)；5 广告语+标签（图片）+按钮（图片）
+							//6 的情况也修改为5
+	                        //5 为口碑券专用，6为淘宝客专用
 	private String name;
 	private String color;
 	private String slogan;

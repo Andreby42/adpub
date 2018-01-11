@@ -40,7 +40,7 @@ import com.bus.chelaile.service.impl.ActiveManager;
 import com.bus.chelaile.service.impl.DoubleAndSingleManager;
 import com.bus.chelaile.service.impl.FeedAdsManager;
 import com.bus.chelaile.service.impl.LineDetailsManager;
-import com.bus.chelaile.service.impl.LineRefreshManager;
+import com.bus.chelaile.service.impl.SimpleAdManager;
 import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.RideManager;
 import com.bus.chelaile.service.impl.SelfManager;
@@ -58,7 +58,7 @@ public class ServiceManager {
 	@Autowired
 	private StationAdsManager stationAdsManager;
 	@Autowired
-	private LineRefreshManager lineRefreshManager;
+	private SimpleAdManager simpleAdManager;
 	@Autowired
 	private FeedAdsManager feedAdsManager;
 	@Autowired
@@ -196,6 +196,9 @@ public class ServiceManager {
 		} else if (methodName.equals("getDoubleAndSingleAds")) { // 单双栏
 			entity = getDoubleAndSingleAds(advParam);
 			object.put("ads", entity);
+		} else if (methodName.equals("h5BannerAds")) { // h5 banner广告
+			entity = getH5BannerAd(advParam);
+			object.put("ads", entity);
 		} else if (methodName.equals("getRide")) {
 			entity = getRide(advParam);
 			object = (JSONObject) entity; // 乘车页广告，新增音频广告内容
@@ -330,7 +333,7 @@ public class ServiceManager {
 		}
 		
 		if(returnRefreshAds(advParam)) {
-			BaseAdEntity refreshAds = lineRefreshManager.doService(advParam, ShowType.LINEDETAIL_REFRESH_ADV, false, queryParam, true);
+			BaseAdEntity refreshAds = simpleAdManager.doService(advParam, ShowType.LINEDETAIL_REFRESH_ADV, false, queryParam, true);
 			if(refreshAds != null) {
 				return refreshAds;
 			}
@@ -419,6 +422,15 @@ public class ServiceManager {
 			throw new IllegalArgumentException("type类型错误:type=" + advParam.getType());
 		}
 	}
+	
+	/*
+	 * h5 banner 广告
+	 */
+	private BaseAdEntity getH5BannerAd(AdvParam advParam) {
+		BaseAdEntity h5BannerAd = simpleAdManager.doService(advParam, ShowType.H5_LINEBANNER_ADV, false, new QueryParam(), true);
+		return h5BannerAd;
+	}
+	
 
 	/*
 	 * 乘车页广告单独处理
