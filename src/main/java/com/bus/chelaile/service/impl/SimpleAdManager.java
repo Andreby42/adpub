@@ -11,6 +11,8 @@ import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdLineDetailInnerContent;
+import com.bus.chelaile.model.ads.AdLineRefreshInnerContent;
+import com.bus.chelaile.model.ads.Tag;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineRefreshAdEntity;
 import com.bus.chelaile.model.ads.entity.SimpleAdEntity;
@@ -61,20 +63,24 @@ public class SimpleAdManager extends AbstractManager {
 	private SimpleAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContentCacheEle ad, ShowType showType) {
 		SimpleAdEntity res = null;
 		
+		AdLineRefreshInnerContent inner = (AdLineRefreshInnerContent) ad.getAds().getInnerContent();
 		if (showType == ShowType.LINEDETAIL_REFRESH_ADV) {
 			res = new LineRefreshAdEntity(2);
+			if(inner.getTag() != null && inner.getTagId() != null) {
+				res.setTag(new Tag(inner.getTag(), inner.getTagId()));
+			}
+			res.setFeedId(inner.getFeedId());
+//			res.setPic(res.getPicUrl(advParam.getS(), inner.getIosURL(), inner.getAndroidURL(), inner.getPic()));
 //			res.setDuration(2);
 		} else if (showType == ShowType.H5_LINEBANNER_ADV) {
 			res = new SimpleAdEntity();
 		}
 
+		res.setPic(inner.getPic());
 		res.fillBaseInfo(ad.getAds(), advParam, new HashMap<String, String>());
-
 		res.dealLink(advParam);
 
-		AdLineDetailInnerContent inner = (AdLineDetailInnerContent) ad.getAds().getInnerContent();
 		// 区分ios和android的图片
-		res.setPic(res.getPicUrl(advParam.getS(), inner.getIosURL(), inner.getAndroidURL(), inner.getPic()));
 
 		return res;
 

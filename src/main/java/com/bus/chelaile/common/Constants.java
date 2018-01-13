@@ -53,6 +53,9 @@ public class Constants {
     public static final String PARAM_ANDROID = "AndroidID";
     public static final String PARAM_MAC = "mac";
     public static final String PARAM_ACCOUNTID = "accountId";
+    
+    public static final String PARAM_STATION_LNG = "stnLng";
+    public static final String PARAM_STATION_LAT = "stnLat";
 
     // 代表是积分商城推送的广告类型
     public static final int PUSHTYPE_TARGET_DUIBA = 1;

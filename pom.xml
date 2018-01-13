@@ -382,7 +382,13 @@
 			<version>1.10.2</version>
 		</dependency>
 
-
+<!-- 
+		<dependency>
+			<groupId>com.taobao</groupId>
+			<artifactId>alimama</artifactId>
+			<version>20180110</version>
+		</dependency>
+ -->
 	</dependencies>
 
 

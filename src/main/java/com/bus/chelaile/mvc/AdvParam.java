@@ -72,6 +72,8 @@ public class AdvParam {
      private String stationId; // 站点id
      private int startMode; // 冷热启动模式， 0 冷启动， 1 热启动
      
+     private String stnLng;	// 站点经纬度
+     private String stnLat;
      /**
       * 存入的s都会被转换为小写。
       *
@@ -557,6 +559,26 @@ public class AdvParam {
 
 	public void setStartMode(int startMode) {
 		this.startMode = startMode;
+	}
+
+
+	public String getStnLng() {
+		return stnLng;
+	}
+
+
+	public void setStnLng(String stnLng) {
+		this.stnLng = stnLng;
+	}
+
+
+	public String getStnLat() {
+		return stnLat;
+	}
+
+
+	public void setStnLat(String stnLat) {
+		this.stnLat = stnLat;
 	}
 	
 	

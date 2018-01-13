@@ -1,9 +1,12 @@
 package com.bus.chelaile.model.ads.entity;
 
 import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.ads.Tag;
 
 public class SimpleAdEntity extends BaseAdEntity {
 	private String pic;
+	private Tag tag;
+	private String feedId;
 
 	public String getPic() {
 		return pic;
@@ -22,5 +25,21 @@ public class SimpleAdEntity extends BaseAdEntity {
 	@Override
 	protected ShowType gainShowTypeEnum() {
 		return ShowType.H5_LINEBANNER_ADV;
+	}
+
+	public Tag getTag() {
+		return tag;
+	}
+
+	public void setTag(Tag tag) {
+		this.tag = tag;
+	}
+
+	public String getFeedId() {
+		return feedId;
+	}
+
+	public void setFeedId(String feedId) {
+		this.feedId = feedId;
 	}
 }

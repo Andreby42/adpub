@@ -4,20 +4,21 @@
  */
 package com.bus.chelaile.flowNew.customContent;
 
-import java.io.IOException;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flowNew.FlowStartService;
 import com.bus.chelaile.flowNew.model.FlowNewContent;
+import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.util.HttpUtils;
+import com.bus.chelaile.util.config.PropertiesUtils;
 
 public class TagUtils {
 	
@@ -25,6 +26,10 @@ public class TagUtils {
 	private static final String TAGS＿LINK = "http://api.chelaile.net.cn:7000/feed/native!tags.action?cityId=027";   // TODO　城市有用否？
 	private static final String FEED_LINK_TEST = "https://dev.chelaile.net.cn/feed/native!feeds.action?feedCityId=-1";
 	private static final String FEED_LINK_ONLINE = "https://api.chelaile.net.cn/feed/native!feeds.action?feedCityId=-1";
+	private static final String FEED_LIST_URL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"feed.list.url", "https://dev.chelaile.net.cn/feed/native!feeds.action?refer=lineDetail&fid=%s&psize=%d");
+	private static final String FEED_DETAIL_URL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"feed.detail.url", "https://dev.chelaile.net.cn/feed/native!getFeed.action?fid=%s&accountId=%s");
 	/**
 	 * 获取话题标签
 	 * @param init
@@ -73,7 +78,6 @@ public class TagUtils {
 	/**
 	 * 获取话题详情页
 	 * @param init
-	 * TODO 待完善
 	 */
 	public static void getInitTagDetails(List<FlowNewContent> initFlows) {
 		String urlOrigin = FEED_LINK_ONLINE;
@@ -137,24 +141,62 @@ public class TagUtils {
 		}
 	}
 
-	public static FeedInfo getFeedInfo(String fid) {
-		String url = "https://api.chelaile.net.cn/feed/native!getFeed.action?fid=644695703197728768";
+	public static FeedInfo getFeedInfo(String fid, String accountId) {
+		String url = String.format(FEED_DETAIL_URL, fid, accountId);
 		try {
 			String response = HttpUtils.get(url, "utf-8");
-			System.out.println(response);
+			logger.info("获取话题详情, url={}", url);
+//			System.out.println(response);
 			String resJ = response.substring(6, response.length() - 6);
 			JSONObject res = JSONObject.parseObject(resJ);
 			JSONObject feedJ = res.getJSONObject("jsonr").getJSONObject("data");
 			FeedInfo feed = JSON.parseObject(feedJ.toJSONString(), FeedInfo.class);
-			System.out.println(feed.getFeed().getFid());
-			System.out.println(feed.getAccounts().size());
 			return feed;
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/*
+	 * 获取话题列表，入缓存
+	 */
+	public static void getFeedListToCache() {
+		String fid = "-1";
+		int psize = 0;
+		int index = 0;
+		try {
+			for (int i = 0; i < 3; i++) {
+				String url = String.format(FEED_LIST_URL, fid, psize);
+
+				String response = HttpUtils.get(url, "utf-8");
+				logger.info("开始缓存话题, url={}", url);
+				System.out.println("-----------------" + url);
+				 System.out.println(response);
+				String resJ = response.substring(6, response.length() - 6);
+
+				JSONObject res = JSONObject.parseObject(resJ);
+				JSONObject feedsJ = res.getJSONObject("jsonr").getJSONObject("data");
+				FeedListInfo feeds = JSON.parseObject(feedsJ.toJSONString(), FeedListInfo.class);
+
+				if (feeds != null) {
+					psize += feeds.getFeeds().size();
+
+					// 存入ocs中
+					for (int j = 0; j < feeds.getFeeds().size(); j++) {
+						fid = feeds.getFeeds().get(j).getFid();
+						String key = "FEED_SORT_CACHE" + "#" + index;
+						System.out.println(key + "----->" + fid);
+						index++;
+						CacheUtil.set(key, Constants.ONE_DAY_TIME, fid);
+					}
+				} else {
+					i--;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -173,6 +215,9 @@ public class TagUtils {
 	}
 	
 	public static void main(String[] args) {
-		getFeedInfo("1");
+//		getFeedInfo("1", "");
+		System.out.println(String.format("https://dev.chelaile.net.cn/feed/native!feeds.action?refer=lineDetail&fid=%s&psize=%d", "1", 1));
+	
+		getFeedListToCache();
 	}
 }

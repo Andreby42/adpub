@@ -1,5 +1,6 @@
 package com.bus.chelaile.model.ads.entity;
 
+import java.net.URLEncoder;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -192,11 +193,16 @@ public abstract class BaseAdEntity {
 			param.put(Constants.PARAM_IP, advParam.getIp());
 			param.put(Constants.PARAM_IMEI, advParam.getImei());
 			param.put(Constants.PARAM_IDFA, advParam.getIdfa());
-			param.put(Constants.PARAM_UA, advParam.getUa());
+			param.put(Constants.PARAM_UA, URLEncoder.encode(advParam.getUa()));
 			param.put(Constants.PARAM_S, advParam.getS());
 			param.put(Constants.PARAM_ANDROID, advParam.getAndroidID());
 			param.put(Constants.PARAM_MAC, advParam.getMac());
 
+		}
+		//站点广告，加上站点的经纬度
+		if(ShowType.STATION_ADV.getType().equals(ad.getShowType())) {
+			param.put(Constants.PARAM_STATION_LNG, advParam.getStnLng());
+			param.put(Constants.PARAM_STATION_LAT, advParam.getStnLat());
 		}
 		link = AdvUtil.buildRedirectLink(ad.getLink(), genLinkParamMap(ad, param), advParam.getUdid(), false, true,
 				ad.getLink_extra());

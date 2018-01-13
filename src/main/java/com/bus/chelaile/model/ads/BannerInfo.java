@@ -1,6 +1,6 @@
 package com.bus.chelaile.model.ads;
 
-public class BannerInfo {
+public class BannerInfo implements Cloneable{
 
 	private int bannerType; //  banner的5种类型：0 商户简称+广告语； 1 商户简称+广告语+标签； 2 商户简称+广告语+标签(图片)；
 							//3 商户简称+广告语+按钮； 4 商户简称+广告语+按钮(图片)；5 广告语+标签（图片）+按钮（图片）
@@ -67,5 +67,16 @@ public class BannerInfo {
 		this.sloganColor = sloganColor;
 		this.tag = tag;
 		this.button = button;
+	}
+	
+	@Override
+	public Object clone() {
+		BannerInfo stu = null;  
+        try{  
+            stu = (BannerInfo)super.clone();  
+        }catch(CloneNotSupportedException e) {  
+            e.printStackTrace();  
+        }  
+        return stu; 
 	}
 }

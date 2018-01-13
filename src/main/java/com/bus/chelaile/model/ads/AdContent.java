@@ -89,13 +89,17 @@ public class AdContent {
             fullInner.setAndPaseJson(content);
             innerContent = fullInner;
         }
-        else if (ShowType.LINE_DETAIL.getType().equals(showType) || ShowType.LINEDETAIL_REFRESH_ADV.getType().equals(showType) 
-        		|| ShowType.H5_LINEBANNER_ADV.getType().equals(showType)
+        else if (ShowType.LINE_DETAIL.getType().equals(showType)
         		||"07".equals(showType)||"08".equals(showType)
         		|| "12".equals(showType)) {		// 详情页广告，借用这个结构的还包括--->详情页刷新位广告，活动页广告，乘车页广告，下车提醒音频广告
             AdLineDetailInnerContent lineDetailInner = new AdLineDetailInnerContent();
             lineDetailInner.setAndPaseJson(content);
             innerContent = lineDetailInner;
+        }
+        else if (ShowType.LINEDETAIL_REFRESH_ADV.getType().equals(showType) || ShowType.H5_LINEBANNER_ADV.getType().equals(showType)) {
+        	AdLineRefreshInnerContent lineReInner = new AdLineRefreshInnerContent(); // 刷新位广告， 至简结构广告（仅图片和h5跳转）
+        	lineReInner.setAndPaseJson(content);
+        	innerContent = lineReInner;
         }
         else {
             logger.error("[Unsupport_ShowType] 无法识别的showType: {}", showType);

@@ -4,26 +4,41 @@ package com.bus.chelaile.koubei;
  * Created by zhaoling on 2018/1/10.
  */
 public class CouponInfo {
-    private String name;
+    private String itemId;
+    private String itemName;
     private String distance;
     private String condition;
-    private String price;
+    private String shopName;
+    private String imageUrl;
     // 0(未领取),1(可用),2(已使用),3(已过期),4(已关闭),5(已冻结)
     private int status;
 
-    public CouponInfo(String name, String distance, String condition, String price) {
-        this.name = name;
+    public CouponInfo() {
+    }
+
+    public CouponInfo(String itemId, String itemName, String distance, String condition, String shopName, String imageUrl) {
+        this.itemId = itemId;
+        this.itemName = itemName;
         this.distance = distance;
         this.condition = condition;
-        this.price = price;
+        this.shopName = shopName;
+        this.imageUrl = imageUrl;
     }
 
-    public String getName() {
-        return name;
+    public String getItemId() {
+        return itemId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getDistance() {
@@ -42,19 +57,39 @@ public class CouponInfo {
         this.condition = condition;
     }
 
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
     public int getStatus() {
         return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    @Override
+    public String toString() {
+        return "CouponInfo{" +
+                "itemId='" + itemId + '\'' +
+                ", itemName='" + itemName + '\'' +
+                ", distance='" + distance + '\'' +
+                ", condition='" + condition + '\'' +
+                ", shopName='" + shopName + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

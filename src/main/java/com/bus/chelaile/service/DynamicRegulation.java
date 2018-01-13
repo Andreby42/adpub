@@ -43,15 +43,19 @@ public class DynamicRegulation {
 			service.scheduleWithFixedDelay(calculateThread, 3, 20, TimeUnit.MINUTES);
 			logger.info("启动计算pv投放比例因子");
 			
-			
-			// 启动缓存文章内容
 			if (Constants.IS_FLOW) {
-				Runnable QMThread = new DownArticles(wuliToutiaoHelp);
+				// 启动缓存文章内容
+				Runnable qMThread = new DownArticles(wuliToutiaoHelp);
 				int interval = 60;
 				if (Constants.ISTEST) {
-					interval = 600;
+					interval = 10;
 				}
-				service.scheduleWithFixedDelay(QMThread, 30, interval, TimeUnit.SECONDS);
+				service.scheduleWithFixedDelay(qMThread, 30, interval, TimeUnit.SECONDS);
+				
+				// 启动缓存话题list
+//				Runnable feedCacheThread = new FeedCacheThread();
+//				service.scheduleWithFixedDelay(feedCacheThread, 30, 10, TimeUnit.SECONDS);
+				
 			}
 			hasStartThread = true;
 		}

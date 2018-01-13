@@ -16,7 +16,6 @@ public class AdStationlInnerContent extends AdInnerContent {
 	private BannerInfo bannerInfo;
 	
 	
-	
 	@Override
 	protected void parseJson(String jsonr) {
 		AdStationlInnerContent ad = null;

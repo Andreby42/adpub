@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -47,6 +48,16 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 				advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getStatsAct(), 1 ,advParam.getRefer());
 		List<FlowContent> flowContentList = new ArrayList<>();
 		for (WangYiYunListModel model : resultNewList.getData().getInfos()) {
+			// 去掉部分视频、和图集
+			Random r = new Random();
+			if(model.getInfoType().equals("video")) {
+				if(r.nextInt(3) < 2) // 1/3的概率留下视频
+					continue;
+			} else if (model.getInfoType().equals("picset")) {
+				if(r.nextInt(2) < 1) // 1/2的概率留下图集
+					continue;
+			}
+			
 			Map<String, String> params = New.hashMap();
 			params.put("fss", "1");
 			params.put("st", model.getSource());
@@ -150,6 +161,7 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 		HashMap<String, String> paramsMap = New.hashMap();
 		paramsMap.put("gse", "1");		//放在最外层的参数，未编码进link参数里面，如果跳转是ad，最终页面会丢失这个参数
 		paramsMap.put("wse", "1");	
+//		return url.toString();
 		return AdvUtil.buildRedirectLink(url.toString(), paramsMap, udid, null,
 				null, false, true, 0);
 	}

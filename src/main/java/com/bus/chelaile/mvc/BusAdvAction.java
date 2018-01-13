@@ -60,7 +60,8 @@ public class BusAdvAction extends AbstractController {
 		param.setStnOrder(getInt(request, "stnOrder"));
 		param.setCshow(request.getParameter("cshow"));
 		param.setStationId(request.getParameter("stationId"));
-
+		param.setStnLng(request.getParameter("stnLng"));
+		param.setStnLat(request.getParameter("stnLat"));
 		return serviceManager.getAdsResponseStr(param, "getLineDetails");
 	}
 

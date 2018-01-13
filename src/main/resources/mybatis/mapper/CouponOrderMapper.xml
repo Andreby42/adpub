@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bus.chelaile.dao.CouponOrderMapper">
+
+	<sql id="selectColumns">
+		`id`, `accountId`,`aliUserId`,`couponId`,`itemName`,`shopName`,`condition`,`imageUrl`,`benefitId`,`createTime`,`status`
+	</sql>
+
+	<sql id="columns">
+		`accountId`,`aliUserId`,`couponId`,`itemName`,`shopName`,`condition`,`imageUrl`,`benefitId`,`createTime`
+	</sql>
+
+	<select id="listCouponOrders" resultType="com.bus.chelaile.koubei.CouponOrder">
+		SELECT <include refid="selectColumns"/>
+		FROM koubei_coupon_order
+	</select>
+
+	<insert id="insertCouponOrder" parameterType="com.bus.chelaile.koubei.CouponOrder">
+		INSERT INTO koubei_coupon_order (<include refid="columns"/>)
+		VALUES (
+		#{order.accountId},#{order.aliUserId},#{order.couponId},#{order.itemName},#{order.shopName}
+		,#{order.condition},#{order.imageUrl},#{order.benefitId},now()
+		)
+    </insert>
+
+	<update id="updateStatus" parameterType="com.bus.chelaile.koubei.CouponOrder">
+		UPDATE koubei_coupon_order
+		SET `status`=#{order.status}
+		WHERE `id`=#{order.id}
+	</update>
+
+</mapper>

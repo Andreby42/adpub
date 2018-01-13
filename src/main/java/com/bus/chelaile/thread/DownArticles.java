@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.bus.chelaile.flow.WuliToutiaoHelp;
 import com.bus.chelaile.flowNew.FlowStartService;
 import com.bus.chelaile.flowNew.FlowStaticContents;
+import com.bus.chelaile.flowNew.customContent.TagUtils;
 
 public class DownArticles implements Runnable {
 	
@@ -28,6 +29,9 @@ public class DownArticles implements Runnable {
 //			getWuliToutiaoHelp().setSortArticlesToCache();
 			// 合并文章和其他内容，更新缓存
 			FlowStartService.initLineDetailFlows(FlowStaticContents.activityContens);  // 这样不可行，需要用static方法
+			
+			// 缓存话题列表
+			TagUtils.getFeedListToCache();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

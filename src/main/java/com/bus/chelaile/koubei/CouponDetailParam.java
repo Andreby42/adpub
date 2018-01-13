@@ -7,8 +7,9 @@ public class CouponDetailParam {
     private String user_id;
     private String voucher_id;
 
-    public CouponDetailParam(String user_id) {
+    public CouponDetailParam(String user_id, String voucher_id) {
         this.user_id = user_id;
+        this.voucher_id = voucher_id;
     }
 
     public String getUser_id() {

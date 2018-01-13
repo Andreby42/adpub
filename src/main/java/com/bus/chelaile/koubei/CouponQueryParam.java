@@ -10,6 +10,10 @@ public class CouponQueryParam {
     private String city_code;
     private String user_id;
 
+    public CouponQueryParam(String city_code) {
+        this.city_code = city_code;
+    }
+
     public CouponQueryParam(String longitude, String latitude, String city_code) {
         this.longitude = longitude;
         this.latitude = latitude;

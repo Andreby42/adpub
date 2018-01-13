@@ -25,6 +25,7 @@ import com.bus.chelaile.flowNew.customContent.FeedInfo;
 import com.bus.chelaile.flowNew.customContent.TagUtils;
 import com.bus.chelaile.flowNew.model.FeedContent;
 import com.bus.chelaile.flowNew.model.FlowNewContent;
+import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.mvc.AdvParam;
@@ -42,6 +43,8 @@ public class FeedService {
 	private ActivityService activityService;
 
 	protected static final Logger logger = LoggerFactory.getLogger(FeedService.class);
+	private static final int FEEDSIZE_LIMIT = 3;
+	private static final int FEED_NEW_LIMIT = 20;	 // TODO 线上放12个
 
 	/**
 	 * 详情页下方 feed 流 。3.0 版
@@ -94,6 +97,7 @@ public class FeedService {
 		List<FeedContent> feeds = New.arrayList();
 		List<FeedContent> feedAds = New.arrayList();
 		List<FeedContent> feedArticles = New.arrayList();
+		List<FeedContent> flowsFeed = New.arrayList();
 
 		// 广告
 		List<FeedAdEntity> adList = null;
@@ -129,19 +133,42 @@ public class FeedService {
 				}
 			}
 		}
-		
-		// 话题
-		if (Constants.ISTEST) {	 // TODO 测试
-			FeedInfo feedf = TagUtils.getFeedInfo("123");
-			FeedContent ff = new FeedContent();
-			ff.setFeedInfo(feedf);
-			ff.setId(feedf.getFeed().getFid());
-			ff.setDestType(0);
-			feeds.add(ff);
+
+		// 获取更多的时候，拉取历史，否则获取最新的额
+		int index = 0;
+		if (StringUtils.isNoneBlank(param.getStatsAct()) && param.getStatsAct().equals("get_more")) {
+			index = Integer.parseInt((String) CacheUtil.get("FEED_CACHE_USER_INDEX#" + param.getUdid()));
 		}
-		
+		logger.info("用户话题index, udid={}, index={}", param.getUdid(), index);
+
+		// TODO 给测试用的特殊例子
+		if (returnFeedNew(param)) {
+			FeedInfo feedTemp = TagUtils.getFeedInfo("646277590927118336", param.getAccountId());
+			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp);
+			FeedInfo feedTemp1 = TagUtils.getFeedInfo("646277359619641344", param.getAccountId());
+			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp1);
+			FeedInfo feedTemp2 = TagUtils.getFeedInfo("646277180946485248", param.getAccountId());
+			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp2);
+			FeedInfo feedTemp3 = TagUtils.getFeedInfo("646276268542758912", param.getAccountId());
+			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp3);
+
+			// 每次返回3条feed
+			for (int size = 0; size < FEEDSIZE_LIMIT; size++) {
+				String fid = (String) CacheUtil.get("FEED_SORT_CACHE" + "#" + index);
+				if (fid == null) {
+					index = 0;
+					fid = (String) CacheUtil.get("FEED_SORT_CACHE" + "#" + index);
+				}
+
+				FeedInfo feedf = TagUtils.getFeedInfo(fid, param.getAccountId());
+				index = createFeedFromFeedInfo(flowsFeed, index, feedf);
+			}
+			// 保存获取话题的位置
+			CacheUtil.set("FEED_CACHE_USER_INDEX#" + param.getUdid(), Constants.ONE_DAY_TIME, String.valueOf(index));
+		}
+
 		// 排序
-		String ids = sortNewFeeds(feeds, feedAds, feedArticles);
+		String ids = sortNewFeeds(feeds, feedAds, feedArticles, flowsFeed);
 		
 		// 记录feed流下发的日志
 		AnalysisLog
@@ -155,36 +182,72 @@ public class FeedService {
 		return feeds;
 	}
 
+	// 信息流是否返回话题
+	private boolean returnFeedNew(AdvParam advParam) {
+		// 01-13,应对android 3.45.0及 以上的版本, ios 5.43.0及 以上的版本， 返回话题内容
+		Platform platform = Platform.from(advParam.getS());
+		if (platform.isAndriod(platform.getDisplay()) && advParam.getVc() >= 96) {
+			return true;
+		}
+		if (platform.isIOS(platform.getDisplay()) && advParam.getVc() >= 10480) {
+			return true;
+		}
+		return false;
+	}
+
+	private int createFeedFromFeedInfo(List<FeedContent> flowsFeed, int index, FeedInfo feedTemp) {
+		if(feedTemp != null) {
+			index ++;
+			FeedContent ff = new FeedContent();
+			ff.setFeedInfo(feedTemp);
+			ff.setId(feedTemp.getFeed().getFid());
+			ff.setDestType(0);
+			flowsFeed.add(ff);
+		}
+		return index;
+	}
+
 	// 排序
-	private String sortNewFeeds(List<FeedContent> feeds, List<FeedContent> feedAds, List<FeedContent> feedArticles) {
-		int index = 0; // 列表计数
+	private String sortNewFeeds(List<FeedContent> feeds, List<FeedContent> feedAds, List<FeedContent> feedArticles, List<FeedContent> flowsFeed) {
+		int index = 0; // 列表组合，计数间隔使用
+		int limitsize = 0; // 列表记录，总数
 		Iterator<FeedContent> it = feedAds.iterator();
+		boolean hasTopAd = false; // 是否有顶置广告
 		while (it.hasNext()) {
 			FeedContent x = it.next();
 			// 置顶广告
 			if (x.getAds().getFeedInfo() != null && x.getAds().getFeedInfo().getIsSetTop() == 1) {
 				feeds.add(x);
 				it.remove();
-				index++;
+				index++;limitsize++;
+				hasTopAd = true;
 				break;
 			}
 		}
-		// for(FeedContent f : feedAds) {
-		// if(f.getAds().getFeedInfo().getIsSetTop() == 1) {
-		// feedAds.remove(f);
-		// break;
-		// }
-		// }
+		int fIndex = 0; // 话题计数
+		if(!hasTopAd && flowsFeed != null && flowsFeed.size() > 0) {
+			feeds.add(flowsFeed.get(0));	// 没有顶置广告，那么放一个话题
+			fIndex ++;
+			index ++;limitsize++;
+		}
+
 		String ids = "";
 		int aIndex = 0; // 广告计数
 		for (FeedContent f : feedArticles) {
 			feeds.add(f);
-			index++;
+			index++;limitsize++;
 			ids += f.getId() + ";";
-			if (index >= 4 && aIndex < feedAds.size()) {
+			if(limitsize >= FEED_NEW_LIMIT)		// 默认给12条即可
+				break;
+			if (index >= 4 && aIndex < feedAds.size() && aIndex < 1) {	 // 除去顶置外，最多一条广告
 				feeds.add(feedAds.get(aIndex));
-				index = 1;
-				aIndex++;
+				index = 1;limitsize++;
+				aIndex ++;
+			}
+			if(index >= 4 && fIndex < flowsFeed.size()) {
+				feeds.add(flowsFeed.get(fIndex));
+				index = 1;limitsize++;
+				fIndex ++;
 			}
 		}
 		return ids;

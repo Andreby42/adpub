@@ -14,6 +14,7 @@ import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdStationlInnerContent;
+import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -68,13 +69,17 @@ public class StationAdsManager extends AbstractManager {
 			// 针对口碑券和淘宝客的修改
 			// 口碑券，需要从ocs中获取当前站点的券
 			if(stationInner.getBannerInfo().getBannerType() == 5) {
-				stationInner.getBannerInfo().setSlogan("送你一种周黑鸭 5元 代金券");  // TODO 从ocs提取
-				res.setBannerInfo(stationInner.getBannerInfo());
+				BannerInfo bann = (BannerInfo) stationInner.getBannerInfo().clone();
+				
+				bann.setSlogan("送你一种周黑鸭 5元 代金券");  // TODO 从ocs提取
+				res.setBannerInfo(bann);
 			}
 			// 淘宝客，只有slogan，没有name
-			if(stationInner.getBannerInfo().getBannerType() == 6) {
-				stationInner.getBannerInfo().setBannerType(5); // 客户端识别样式，为5
-				res.setBannerInfo(stationInner.getBannerInfo());
+			else if(stationInner.getBannerInfo().getBannerType() == 6) {
+				BannerInfo bann = (BannerInfo) stationInner.getBannerInfo().clone();
+				
+				bann.setBannerType(5);
+				res.setBannerInfo(bann);
 			}
 		} else {
 			throw new IllegalArgumentException("=====> 错误的innerContent类型： "

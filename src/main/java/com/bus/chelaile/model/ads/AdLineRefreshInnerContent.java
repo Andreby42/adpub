@@ -12,6 +12,9 @@ import com.bus.chelaile.mvc.AdvParam;
  */
 public class AdLineRefreshInnerContent extends AdInnerContent {
 	private String pic; // 广告图片的URL
+    private String tag;	//话题标签名
+    private String tagId;	//话题标签id
+    private String feedId; //话题详情页id
 	
 	@Override
 	protected void parseJson(String jsonr) {
@@ -24,6 +27,9 @@ public class AdLineRefreshInnerContent extends AdInnerContent {
 //				this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
 //				this.setHeight(Integer.parseInt(ad.pic.split("#")[1].split(",")[1]));
 			}
+			this.tagId = ad.tagId;
+            this.tag = ad.tag;
+            this.feedId = ad.feedId;
 		}
 	}
 
@@ -60,5 +66,29 @@ public class AdLineRefreshInnerContent extends AdInnerContent {
 
 	public void setPic(String pic) {
 		this.pic = pic;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public String getTagId() {
+		return tagId;
+	}
+
+	public void setTagId(String tagId) {
+		this.tagId = tagId;
+	}
+
+	public String getFeedId() {
+		return feedId;
+	}
+
+	public void setFeedId(String feedId) {
+		this.feedId = feedId;
 	}
 }
