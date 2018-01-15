@@ -29,6 +29,8 @@ public class Constants {
 			PropertiesName.PUBLIC.getValue(), "isTest", "false"));
     public static final boolean IS_FLOW = Boolean.parseBoolean(PropertiesUtils.getValue(
 			PropertiesName.PUBLIC.getValue(), "isFlow", "false"));
+    public static final boolean IS_CACHE_KOUBEI = Boolean.parseBoolean(PropertiesUtils.getValue(
+			PropertiesName.PUBLIC.getValue(), "isCacheKoubei", "false"));
     
     // position属性未设定。
     public static final int NULL_POSITION = -99;

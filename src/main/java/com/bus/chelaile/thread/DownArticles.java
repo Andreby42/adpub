@@ -35,7 +35,7 @@ public class DownArticles implements Runnable {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("计算投放pv比例因子出错！ " + e.getMessage(), e);
+			logger.error("刷新文章和话题缓存出错！ " + e.getMessage(), e);
 		}
 	}
 

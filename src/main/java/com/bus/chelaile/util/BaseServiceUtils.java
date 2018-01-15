@@ -31,7 +31,7 @@ public class BaseServiceUtils {
 	
 	
 	// 获取线路详情，包括站点信息
-	public List<StopInfo> getStopInfo(String lineId, String cityId) {
+	public static List<StopInfo> getStopInfo(String lineId, String cityId) {
 		List<StopInfo> allStops = New.arrayList();
 		String url = String.format(LINE_DETAIL_URL, cityId, lineId);
 		try{

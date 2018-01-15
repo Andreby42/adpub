@@ -204,6 +204,8 @@ public abstract class BaseAdEntity {
 			param.put(Constants.PARAM_STATION_LNG, advParam.getStnLng());
 			param.put(Constants.PARAM_STATION_LAT, advParam.getStnLat());
 		}
+		// TODO 临时for测试！！！
+//		link = ad.getLink();
 		link = AdvUtil.buildRedirectLink(ad.getLink(), genLinkParamMap(ad, param), advParam.getUdid(), false, true,
 				ad.getLink_extra());
 	}

@@ -12,13 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.WuliToutiaoHelp;
+import com.bus.chelaile.koubei.CouponService;
 import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.thread.DownArticles;
+import com.bus.chelaile.thread.KoubeiThread;
 import com.bus.chelaile.thread.UpdateSendPV;
 
 public class DynamicRegulation {
 	@Autowired
 	private WuliToutiaoHelp wuliToutiaoHelp;
+	@Autowired
+	private CouponService couponService;
+	
 	private static final Logger logger = LoggerFactory.getLogger(DynamicRegulation.class);
 
 	// 临时存放广告发送的pv量,按照ruleId存放
@@ -56,6 +61,11 @@ public class DynamicRegulation {
 //				Runnable feedCacheThread = new FeedCacheThread();
 //				service.scheduleWithFixedDelay(feedCacheThread, 30, 10, TimeUnit.SECONDS);
 				
+			}
+			// 缓存口碑券
+			if(Constants.IS_CACHE_KOUBEI) {
+				Runnable koubeiThread = new KoubeiThread(couponService);
+				service.scheduleWithFixedDelay(koubeiThread, 30, 600, TimeUnit.SECONDS);
 			}
 			hasStartThread = true;
 		}
