@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 
+
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
@@ -156,7 +157,12 @@ public class BusAdvAction extends AbstractController {
 			HttpServletResponse response, HttpSession session) throws Exception {
 		AdvParam param = getActionParam(request);
 
-		return serviceManager.getAdsResponseStr(param, "h5BannerAds");
+		Object object = serviceManager.getQueryValue(param, "h5BannerAds");
+		if (object == null) {
+			return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);
+		} else {
+			return serviceManager.getClienSucMapWithNoHead(object, Constants.STATUS_REQUEST_SUCCESS);
+		}
 	}
 
 	@ResponseBody

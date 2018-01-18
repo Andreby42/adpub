@@ -9,8 +9,8 @@ import com.bus.chelaile.util.model.StopInfo;
 
 public class BaseServiceUtils {
 
-	private static final String ALL_LINES_URL = "100.98.168.166/baseservice/client/getCityLineList.action?cityId=%s";
-	private static final String LINE_DETAIL_URL = "100.98.168.166/baseservice/client/getLineAndStopDetails.action?cityId=%s&lineId=%s";
+	private static final String ALL_LINES_URL = "http://100.98.168.166/baseservice/client/getCityLineList.action?cityId=%s";
+	private static final String LINE_DETAIL_URL = "http://100.98.168.166/baseservice/client/getLineAndStopDetails.action?cityId=%s&lineId=%s";
 	
 	//获取城市所有线路
 	public static List<String> getAllLines(String cityId) {

@@ -115,10 +115,12 @@ public class StartService {
 			if (ad.getShowType() != null) {
 				// 只要线路详情
 				if (isLineDetails.equals("0") && ! (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
-						|| ad.getShowType().equals(ShowType.STATION_ADV.getType()) )) {
+						|| ad.getShowType().equals(ShowType.STATION_ADV.getType()) 
+						|| ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType()))) {
 					continue;
 				} else if (isLineDetails.equals("2") && (ad.getShowType().equals(ShowType.LINE_DETAIL.getType()) 
-						|| ad.getShowType().equals(ShowType.STATION_ADV.getType()) )) {
+						|| ad.getShowType().equals(ShowType.STATION_ADV.getType()) 
+						|| ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType()))) {
 					continue;
 				}
 			}

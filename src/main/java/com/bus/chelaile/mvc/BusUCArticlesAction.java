@@ -70,7 +70,12 @@ public class BusUCArticlesAction extends AbstractController {
 		advParam.setPicHeight(request.getParameter("picHeight"));
 		advParam.setPicWidth(request.getParameter("picWidth"));
 		advParam.setRefer(request.getParameter("stats_referer")); // 指明是‘详情页’的信息流，还是‘发现’信息流
-
+		// X-Forwarded-For 设置
+		// 直接来自h5的请求，取x_forwarded_for作为ip
+		String ip = request.getParameter("x_forwarded_for");
+		if(StringUtils.isNoneBlank(ip))
+			advParam.setIp(ip);
+		
 		long ftime = getLong(request, "ftime");
 		String recoid = request.getParameter("recoid");
 		int id = getInt(request, "channelId");

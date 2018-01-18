@@ -213,7 +213,7 @@ public class CacheUtil {
 //    }
     
     // 用户是否领取了乘车码
-    public static String getIsSupportAccountId(String key) {
+    public static String getFromCommonOcs(String key) {
     	return (String) cachePayInfoClient.get(key);
     }
  

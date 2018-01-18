@@ -200,49 +200,49 @@
 		</dependency>
 		<!-- ocs -->
 		<dependency>
-			<groupId>com.car.ocs</groupId>
-			<artifactId>spymemcached-2.8.4</artifactId>
+			<groupId>com.ali</groupId>
+			<artifactId>spymemcached</artifactId>
 			<version>2.8.4</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/spymemcached-2.8.4.jar</systemPath>
 		</dependency>
 
 		<!-- chineses to pinyin -->
 		<dependency>
-			<groupId>net.sourceforge.pinyin4j</groupId>
+			<groupId>com.belerweb</groupId>
 			<artifactId>pinyin4j</artifactId>
 			<version>2.5.0</version>
-			<scope>system</scope>
+			<!-- <scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pinyin4j-2.5.0.jar</systemPath>
+			-->
 		</dependency>
 
 		<!-- com.aliyun.oss -->
 		<dependency>
-			<groupId>com.aliyun.oss.OSSClient</groupId>
-			<artifactId>oss</artifactId>
-			<version>2.0.4</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/aliyun-sdk-oss-2.0.4.jar</systemPath>
+			<groupId>com.aliyun.oss</groupId>
+			<artifactId>aliyun-sdk-oss</artifactId>
+			<version>2.0.5</version>
 		</dependency>
 		
-		<!-- com.aliyun.oss -->
+		<!-- koubei -->
 		<dependency>
-			<groupId>com.alipay.koubei</groupId>
-			<artifactId>koubei</artifactId>
-			<version>2.0.4</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java-DEV20171012170951.jar</systemPath>
+			<groupId>com.ali</groupId>
+			<artifactId>kbdev</artifactId>
+			<version>20180116</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.alipay.tbk</groupId>
+			<artifactId>tbk</artifactId>
+			<version>20180115</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1516002625303-20180115.jar</systemPath>
+		</dependency>
 
 
 		<!-- ons -->
 		<dependency>
-			<groupId>com.aliyun.openservices.ons.api</groupId>
-			<artifactId>onsapi</artifactId>
+			<groupId>com.ali</groupId>
+			<artifactId>ons-api</artifactId>
 			<version>1.1.8</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ons-api-1.1.8.jar</systemPath>
 		</dependency>
 
 
@@ -382,13 +382,11 @@
 			<version>1.10.2</version>
 		</dependency>
 
-<!-- 
-		<dependency>
+	<dependency>
 			<groupId>com.taobao</groupId>
 			<artifactId>alimama</artifactId>
 			<version>20180110</version>
 		</dependency>
- -->
 	</dependencies>
 
 

@@ -3,6 +3,7 @@ package com.bus.chelaile.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +67,8 @@ public class SimpleAdManager extends AbstractManager {
 		AdLineRefreshInnerContent inner = (AdLineRefreshInnerContent) ad.getAds().getInnerContent();
 		if (showType == ShowType.LINEDETAIL_REFRESH_ADV) {
 			res = new LineRefreshAdEntity(2);
-			if(inner.getTag() != null && inner.getTagId() != null) {
+			if(StringUtils.isNoneBlank(inner.getTag())
+					&& StringUtils.isNoneBlank(inner.getTagId())) {
 				res.setTag(new Tag(inner.getTag(), inner.getTagId()));
 			}
 			res.setFeedId(inner.getFeedId());

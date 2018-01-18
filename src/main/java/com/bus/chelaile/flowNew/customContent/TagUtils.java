@@ -133,7 +133,7 @@ public class TagUtils {
 		JSONArray feedsJ = res.getJSONObject("jsonr").getJSONObject("data").getJSONArray("feeds");
 		if (feedsJ != null && feedsJ.size() > 0) {
 			String feedJ = feedsJ.getJSONObject(0).toJSONString();
-			System.out.println(feedJ);
+//			System.out.println(feedJ);
 			return feedJ;
 		} else {
 			logger.error("获取到话题列表长度为0 , response={}", response);
@@ -167,12 +167,11 @@ public class TagUtils {
 		int index = 0;
 		try {
 			for (int i = 0; i < 3; i++) {
+				logger.info("开始缓存话题, url={}", FEED_LIST_URL);
 				String url = String.format(FEED_LIST_URL, fid, psize);
-
+				logger.info("url={}", url);
 				String response = HttpUtils.get(url, "utf-8");
-				logger.info("开始缓存话题, url={}", url);
-				System.out.println("-----------------" + url);
-				 System.out.println(response);
+//				System.out.println(response);
 				String resJ = response.substring(6, response.length() - 6);
 
 				JSONObject res = JSONObject.parseObject(resJ);
@@ -186,7 +185,6 @@ public class TagUtils {
 					for (int j = 0; j < feeds.getFeeds().size(); j++) {
 						fid = feeds.getFeeds().get(j).getFid();
 						String key = "FEED_SORT_CACHE" + "#" + index;
-						System.out.println(key + "----->" + fid);
 						index++;
 						CacheUtil.set(key, Constants.ONE_DAY_TIME, fid);
 					}

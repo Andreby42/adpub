@@ -7,7 +7,13 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AnalysisLog;
+import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.koubei.CouponInfo;
+import com.bus.chelaile.koubei.KBUtil;
+import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -70,8 +76,18 @@ public class StationAdsManager extends AbstractManager {
 			// 口碑券，需要从ocs中获取当前站点的券
 			if(stationInner.getBannerInfo().getBannerType() == 5) {
 				BannerInfo bann = (BannerInfo) stationInner.getBannerInfo().clone();
-				
-				bann.setSlogan("送你一种周黑鸭 5元 代金券");  // TODO 从ocs提取
+				CouponInfo ocsCoupon = null;
+				String key = KBUtil.getKbCouponOcsKey(advParam.getCityId(), advParam.getStnName());
+				String ocsValue = (String) CacheUtil.get(key);
+	            if (StringUtils.isNotBlank(ocsValue)) {
+	                ocsCoupon = JSONObject.parseObject(ocsValue, CouponInfo.class);
+	            }
+	            if(null != ocsCoupon && StringUtils.isNoneBlank(ocsCoupon.getShopName())) {
+	            	bann.setSlogan("送你一张优惠券：" + ocsCoupon.getShopName());
+	            } else {
+	            	logger.error("获取不到站点缓存的优惠券信息, stopName={}, key={}", advParam.getStnName(), key);
+	            	return null;	// 返回空
+	            }
 				res.setBannerInfo(bann);
 			}
 			// 淘宝客，只有slogan，没有name
@@ -87,6 +103,15 @@ public class StationAdsManager extends AbstractManager {
 					+ inner + ",udid=" + advParam.getUdid());
 		}
 
+		// 版本控制，老版本，targetOrder都设置为0。否则无法打开card
+		Platform platform = Platform.from(advParam.getS());
+		if (platform.isAndriod(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_ANDROID_0118) {
+			res.setTargetType(0);
+		} else if (platform.isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0117) {
+			res.setTargetType(0);
+		}
+		
+		
 		return res;
 	}
 	

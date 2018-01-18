@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -59,6 +60,18 @@ public abstract class AbstractManager {
 		// 详情页cshow非空，不等于linedetail的不返回
 		if(showType.getType().equals(ShowType.LINE_DETAIL)) {
 			if(StringUtils.isNoneBlank(advParam.getCshow()) && !advParam.getCshow().equals(Constants.CSHOW_LINEDETAIL)) {
+				return false;
+			}
+		}
+		
+		// TODO android 内核4.4一下的，不返回广告 20180118
+		// 这个方法不够眼镜，当android更新到版本10的时候，会出错
+		Platform platform = Platform.from(advParam.getS());
+		if(StringUtils.isNoneBlank(advParam.getUdid()) && advParam.getUdid().equals("e02bda79-1349-4a6b-a474-cb3677ee69c6")) {
+			return true;
+		}
+		if(platform.isAndriod(platform.getDisplay())) {
+			if(StringUtils.isNoneBlank(advParam.getSv()) && (advParam.getSv().compareTo("4.4") < 0)) {
 				return false;
 			}
 		}

@@ -1,12 +1,10 @@
 package com.bus.chelaile.mvc;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bus.chelaile.koubei.CouponInfo;
-import com.bus.chelaile.koubei.CouponService;
-import com.bus.chelaile.koubei.KBUtil;
-import com.bus.chelaile.koubei.KoubeiInfo;
+import com.bus.chelaile.koubei.*;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.util.koubei.WowUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -56,18 +54,18 @@ public class KbCouponController {
 
     @ResponseBody
     @RequestMapping("/myCoupons.action")
-    public ClientDto myCoupons(String udid, String accountId, String secret) {
+    public ClientDto myCoupons(String udid, String accountId, String secret, int pn) {
         ClientDto clientDto = new ClientDto();
-        if (KBUtil.isBlankParam(new String[]{udid, accountId, secret})) {
+        if (KBUtil.isBlankParam(new String[]{udid, accountId, secret}) || pn <= 0) {
             clientDto.setErrorObject("paramError", "01");
             return clientDto;
         }
-        if (WowUtil.verifyAccount(accountId, secret, udid)) {
+        if (!WowUtil.verifyAccount(accountId, secret, udid)) {
             clientDto.setErrorObject("verifyError", "03");
             return clientDto;
         }
         try {
-            KoubeiInfo info = couponService.myCoupons(accountId);
+            KoubeiInfo info = couponService.myCoupons(accountId, pn);
             logger.info("myCoupons param {} result {}", accountId, info);
             clientDto.setSuccessObject(info, "00");
             return clientDto;
@@ -86,16 +84,18 @@ public class KbCouponController {
             clientDto.setErrorObject("paramError", "01");
             return clientDto;
         }
-        if (WowUtil.verifyAccount(accountId, secret, udid)) {
+        if (!WowUtil.verifyAccount(accountId, secret, udid)) {
             clientDto.setErrorObject("verifyError", "03");
             return clientDto;
         }
         try {
-            boolean isSuccess = couponService.getCoupon(accountId, couponInfo);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("state", isSuccess ? 0 : 1);
-            logger.info("getCoupons result {}", isSuccess);
-            clientDto.setSuccessObject(jsonObject, "00");
+            CouponUseInfo useInfo = couponService.getCoupon(accountId, couponInfo);
+            logger.info("getCoupons result {}", useInfo);
+            if (null == useInfo) {
+                clientDto.setErrorObject("getFailed", "03");
+                return clientDto;
+            }
+            clientDto.setSuccessObject(useInfo, "00");
             return clientDto;
         } catch (Throwable e) {
             logger.error("getCoupons param {}-{} Exception", accountId, couponInfo, e);

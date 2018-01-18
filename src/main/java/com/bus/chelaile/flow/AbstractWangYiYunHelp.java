@@ -93,7 +93,7 @@ public class AbstractWangYiYunHelp implements InterfaceFlowHelp {
     protected static final String wangyiArticleHost = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), 
     		"wangyiyun.article.host", "https://youliao.163yun.com/h5/#/info?");
 	
-	protected <T> WangYiYunResultBaseDto<T> getWangYiYunResponse(String url, Set<WangYIParamForSignature> paramSet,Type type) {
+	protected <T> WangYiYunResultBaseDto<T> getWangYiYunResponse(String url, Set<WangYIParamForSignature> paramSet,Type type, String ip) {
 		List<NameValuePair> pairs = new ArrayList<>();
 		String signature = makeSignature(paramSet);
 		for (WangYIParamForSignature wp : paramSet) {
@@ -102,7 +102,7 @@ public class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 		pairs.add(new BasicNameValuePair("signature", signature));
 		String response = null;
 		try {
-			response = HttpUtils.get(url, pairs, "utf-8");
+			response = HttpUtils.getUriAndSetIp(url, pairs, "utf-8", ip);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -183,7 +183,7 @@ public class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 		Set<WangYIParamForSignature> set = initBaseParam(platformParam, timestampParam);
 		WangYIParamForSignature scene = new WangYIParamForSignature("scene", "f");
 		WangYIParamForSignature channelid = new WangYIParamForSignature("channelid", channelidParam);
-		WangYIParamForSignature num = new WangYIParamForSignature("num", 20 + "");
+		WangYIParamForSignature num = new WangYIParamForSignature("num", 12 + "");
 		WangYIParamForSignature userid = new WangYIParamForSignature("userid",
 				useridParam); //575042c1eac22112dcab5620179035829b878a91
 		set.add(channelid);

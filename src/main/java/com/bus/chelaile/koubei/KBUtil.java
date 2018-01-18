@@ -8,7 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 public class KBUtil {
     public static boolean isBlankParam(String ... params) {
         for (int i = 0; i < params.length; i++) {
-            if (StringUtils.isBlank(params[i])) {
+            if (StringUtils.isBlank(params[i])
+                    || "null".equalsIgnoreCase(params[i])) {
                 return true;
             }
         }

@@ -41,6 +41,7 @@ public class Constants {
     public static final String PARAM_STATION_ORDER = "storder";
     public static final String PARAM_LINE_ORDER = "lorder";
     public static final String PARAM_STATION_NAME = "stname";
+    public static final String PARAM_STATION_NAME_H5 = "stn_name";
     public static final String PARAM_DISTANCE = "distance";
     
     public static final String PARAM_DEVICE = "deviceType";
@@ -56,8 +57,8 @@ public class Constants {
     public static final String PARAM_MAC = "mac";
     public static final String PARAM_ACCOUNTID = "accountId";
     
-    public static final String PARAM_STATION_LNG = "stnLng";
-    public static final String PARAM_STATION_LAT = "stnLat";
+    public static final String PARAM_STATION_LNG = "stn_lng";
+    public static final String PARAM_STATION_LAT = "stn_lat";
 
     // 代表是积分商城推送的广告类型
     public static final int PUSHTYPE_TARGET_DUIBA = 1;
@@ -125,4 +126,8 @@ public class Constants {
     // redis 分布式锁
     public static final int EXPIREMSECS = 1000;		// 1 S
     public static String LOCKKEY = "lockKey";
+    
+    // 版本控制号
+    public static final int PLATFORM_LOG_ANDROID_0118 = 96;
+	public static final int PLATFORM_LOG_IOS_0117 = 10480;
 }

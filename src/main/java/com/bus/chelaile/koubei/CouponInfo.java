@@ -10,6 +10,8 @@ public class CouponInfo {
     private String condition;
     private String shopName;
     private String imageUrl;
+    private String partnerId;
+    private String benefitId;
     // 0(未领取),1(可用),2(已使用),3(已过期),4(已关闭),5(已冻结)
     private int status;
 
@@ -23,6 +25,29 @@ public class CouponInfo {
         this.condition = condition;
         this.shopName = shopName;
         this.imageUrl = imageUrl;
+    }
+
+    public CouponInfo(String itemId, String distance, String shopName, String imageUrl) {
+        this.itemId = itemId;
+        this.distance = distance;
+        this.shopName = shopName;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getBenefitId() {
+        return benefitId;
+    }
+
+    public void setBenefitId(String benefitId) {
+        this.benefitId = benefitId;
+    }
+
+    public String getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(String partnerId) {
+        this.partnerId = partnerId;
     }
 
     public String getItemId() {

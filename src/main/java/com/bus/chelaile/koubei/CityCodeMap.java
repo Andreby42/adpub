@@ -22,8 +22,9 @@ public class CityCodeMap {
      兰州 620100
      * */
     static {
-        cityCodeMap.put("006", "120000");
-        cityCodeMap.put("003", "500000");
+        cityCodeMap.put("027", "110100");
+        cityCodeMap.put("006", "120100");
+        cityCodeMap.put("003", "500100");
         cityCodeMap.put("014", "440300");
         cityCodeMap.put("034", "310100");
         cityCodeMap.put("019", "440600");

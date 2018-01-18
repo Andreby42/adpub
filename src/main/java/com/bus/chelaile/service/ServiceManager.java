@@ -113,6 +113,19 @@ public class ServiceManager {
 			return "";
 		}
 	}
+	
+	public String getClienSucMapWithNoHead(Object obj, String status) {
+		ClientDto clientDto = new ClientDto();
+		clientDto.setSuccessObject(obj, status);
+		try {
+			String json = JSON.toJSONString(clientDto, SerializerFeature.BrowserCompatible);
+			// JsonBinder.toJson(clientDto, JsonBinder.always);
+			return json;
+		} catch (Exception e1) {
+			logger.error(e1.getMessage(), e1);
+			return "";
+		}
+	}
 
 	public String getClientErrMap(String errmsg, String status) {
 		ClientDto clientDto = new ClientDto();
@@ -120,6 +133,18 @@ public class ServiceManager {
 		try {
 			String json = JSON.toJSONString(clientDto);
 			return "**YGKJ" + json + "YGKJ##";
+		} catch (Exception e1) {
+			logger.error(e1.getMessage(), e1);
+			return "";
+		}
+	}
+	
+	public String getClientErrMapWithNoHead(String errmsg, String status) {
+		ClientDto clientDto = new ClientDto();
+		clientDto.setErrorObject(errmsg, status);
+		try {
+			String json = JSON.toJSONString(clientDto);
+			return json;
 		} catch (Exception e1) {
 			logger.error(e1.getMessage(), e1);
 			return "";

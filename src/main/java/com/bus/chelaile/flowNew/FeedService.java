@@ -143,14 +143,14 @@ public class FeedService {
 
 		// TODO 给测试用的特殊例子
 		if (returnFeedNew(param)) {
-			FeedInfo feedTemp = TagUtils.getFeedInfo("646277590927118336", param.getAccountId());
-			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp);
-			FeedInfo feedTemp1 = TagUtils.getFeedInfo("646277359619641344", param.getAccountId());
-			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp1);
-			FeedInfo feedTemp2 = TagUtils.getFeedInfo("646277180946485248", param.getAccountId());
-			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp2);
-			FeedInfo feedTemp3 = TagUtils.getFeedInfo("646276268542758912", param.getAccountId());
-			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp3);
+//			FeedInfo feedTemp = TagUtils.getFeedInfo("646277590927118336", param.getAccountId());
+//			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp);
+//			FeedInfo feedTemp1 = TagUtils.getFeedInfo("646277359619641344", param.getAccountId());
+//			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp1);
+//			FeedInfo feedTemp2 = TagUtils.getFeedInfo("646277180946485248", param.getAccountId());
+//			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp2);
+//			FeedInfo feedTemp3 = TagUtils.getFeedInfo("646276268542758912", param.getAccountId());
+//			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp3);
 
 			// 每次返回3条feed
 			for (int size = 0; size < FEEDSIZE_LIMIT; size++) {
@@ -186,10 +186,10 @@ public class FeedService {
 	private boolean returnFeedNew(AdvParam advParam) {
 		// 01-13,应对android 3.45.0及 以上的版本, ios 5.43.0及 以上的版本， 返回话题内容
 		Platform platform = Platform.from(advParam.getS());
-		if (platform.isAndriod(platform.getDisplay()) && advParam.getVc() >= 96) {
+		if (platform.isAndriod(platform.getDisplay()) && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0118) {
 			return true;
 		}
-		if (platform.isIOS(platform.getDisplay()) && advParam.getVc() >= 10480) {
+		if (platform.isIOS(platform.getDisplay()) && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0117) {
 			return true;
 		}
 		return false;

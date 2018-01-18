@@ -1,5 +1,6 @@
 package com.bus.chelaile.koubei;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -34,13 +35,15 @@ public class CouponService {
 
     private final String OCSALIUSERIDKEYPRE = "KouBeiUserInfo_accountId:";
     private final String OCSALITONKENKEYPRE = "KouBeiUserInfo_userId:";
-    private final String kbAliServerUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.name(), "kb.ali.url", "https://openapi.alipay.com/gateway.do");
-    private final String kbAliAppId = PropertiesUtils.getValue(PropertiesName.PUBLIC.name(), "kb.ali.appid", "2014030400003751");
-    private final String kbAliGY = PropertiesUtils.getValue(PropertiesName.PUBLIC.name(), "kb.ali.gy", "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB");
-    private final String kbAliSY = PropertiesUtils.getValue(PropertiesName.PUBLIC.name(), "kb.ali.sy", "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKaSaZIkb9e2NjwJfBBaTcGERNnIjWviJ17IHHQgL2gBWt3j0ETrgZP9FCue3TfVOF0+FvkWu7OENV5mTXeAR+nTl4g9qw9HgdRTjvDjfS3zvvc3CKFe9osomncvXeQXvn7+RnwCTJp0OjcGCOJfuTA+pimITbvUS0rCiAw33XFPAgMBAAECgYBU78+ZT68gJa+eCZATnpiLlvCsxJEoc9dzg0LPDCJgPGCjSKlIm3YliiUg4Q8Yi0cEdMauGSN5NG8qRaw2xVjlVfebR9MkMrZLy0BwRh09umcPAdnoVfTCxtNpUbeG6CP4d//7a5SPQ3aPzRqbT6fL24BILM5qIx0OoNso0BuxAQJBANJg9xNdjRCjGmeqn0IUyWfgXBFtA2wBjwCspwZw5oM0MEroavVNh6IiH/ejlIE8aptek+XbNsTNknjsa/IYnA8CQQDKsYoy0WxKfheg8HjdEmGjWcrF75797wzUFy3PG2idqjdxh3/Pa80AmE1y2lqlFgxCEPeinIH0Nd2v3MoHMZbBAkEAilDWIRVQua+CnMXBD2E7SeBop8xUg55Ctt7MsZ9o7rpRRe6o476lfiORgO87o/xk2uHDu0v1Jk9CDd7i2bj0YQJBAIdzGwoYnsgs+PdIm0wIY4z4jSO2nEXPQIBeuPMEuuVZgVFxnfxraoQyQtc0iYx2blyb4BAfjEw4ztsdrTgfcEECQGQyJlJURXaWiYVtYf/LFKqTFuVyyxnrYLq4BhOsVcnDm1HUUYftj0g+PVIY00D3C3yK9+cOmYN/fyHCMGzI0vU=");
+    private final String kbAliServerUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "kb.ali.url", "https://openapi.alipay.com/gateway.do");
+    private final String kbAliAppId = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "kb.ali.appid", "2014030400003751");
+    private final String kbAliGY = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "kb.ali.gy", "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB");
+    private final String kbAliSY = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "kb.ali.sy", "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKaSaZIkb9e2NjwJfBBaTcGERNnIjWviJ17IHHQgL2gBWt3j0ETrgZP9FCue3TfVOF0+FvkWu7OENV5mTXeAR+nTl4g9qw9HgdRTjvDjfS3zvvc3CKFe9osomncvXeQXvn7+RnwCTJp0OjcGCOJfuTA+pimITbvUS0rCiAw33XFPAgMBAAECgYBU78+ZT68gJa+eCZATnpiLlvCsxJEoc9dzg0LPDCJgPGCjSKlIm3YliiUg4Q8Yi0cEdMauGSN5NG8qRaw2xVjlVfebR9MkMrZLy0BwRh09umcPAdnoVfTCxtNpUbeG6CP4d//7a5SPQ3aPzRqbT6fL24BILM5qIx0OoNso0BuxAQJBANJg9xNdjRCjGmeqn0IUyWfgXBFtA2wBjwCspwZw5oM0MEroavVNh6IiH/ejlIE8aptek+XbNsTNknjsa/IYnA8CQQDKsYoy0WxKfheg8HjdEmGjWcrF75797wzUFy3PG2idqjdxh3/Pa80AmE1y2lqlFgxCEPeinIH0Nd2v3MoHMZbBAkEAilDWIRVQua+CnMXBD2E7SeBop8xUg55Ctt7MsZ9o7rpRRe6o476lfiORgO87o/xk2uHDu0v1Jk9CDd7i2bj0YQJBAIdzGwoYnsgs+PdIm0wIY4z4jSO2nEXPQIBeuPMEuuVZgVFxnfxraoQyQtc0iYx2blyb4BAfjEw4ztsdrTgfcEECQGQyJlJURXaWiYVtYf/LFKqTFuVyyxnrYLq4BhOsVcnDm1HUUYftj0g+PVIY00D3C3yK9+cOmYN/fyHCMGzI0vU=");
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final ExecutorService execService = new ThreadPoolExecutor(2, 4, 300L, TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>());
+    private final int pageSize = 10;
+    private final int preCount = 10000;
 
     @Resource
     private CouponOrderMapper couponOrderMapper;
@@ -52,9 +55,9 @@ public class CouponService {
      * @Date: 下午4:20 2018/1/13
      */
     public KoubeiInfo listCoupons(String lng, String lat, String cityId, String accountId, String stnName) throws AlipayApiException {
+        long startTime = System.currentTimeMillis();
         KoubeiInfo koubeiInfo = new KoubeiInfo();
         List<CouponInfo> list = new ArrayList<>();
-        KoubeiAdvertDeliveryDiscountBatchqueryRequest request = new KoubeiAdvertDeliveryDiscountBatchqueryRequest();
         String aliUserId = null;
         if (StringUtils.isNotBlank(accountId)) {
             // ocs 中 获取 userId
@@ -69,7 +72,7 @@ public class CouponService {
                 }
             }
         }
-        List<DiscountInfo> discounts = getDiscounts(cityId, lng, lat, aliUserId, accountId, stnName);
+        List<DiscountInfo> discounts = getDiscounts(cityId, lng, lat, aliUserId, accountId, stnName, true);
         if (null == discounts) {
             return koubeiInfo;
         }
@@ -81,14 +84,25 @@ public class CouponService {
                 ocsCoupon = JSONObject.parseObject(ocsValue, CouponInfo.class);
             }
         }
+        logger.info("listCoupons oscCoupon {}", ocsCoupon);
         boolean isFound = false;
         for (int i = 0; i < discounts.size(); i++) {
             DiscountInfo discountInfo = discounts.get(i);
-            CouponInfo couponInfo = new CouponInfo(discountInfo.getItemId(), discountInfo.getItemName(), discountInfo.getDistance(),
-                    discountInfo.getApplyCondition(), discountInfo.getShopName(), discountInfo.getImageUrl());
+            String type = discountInfo.getType();
+            CouponType couponType = CouponType.getType(type);
+            if (null == couponType) {
+                continue;
+            }
+            CouponInfo couponInfo = new CouponInfo(discountInfo.getItemId(), discountInfo.getDistance()
+                    , discountInfo.getShopName(), discountInfo.getImageUrl());
             if (null != ocsCoupon && couponInfo.getItemId().equals(ocsCoupon.getItemId())
-                    && couponInfo.getItemName().equals(ocsCoupon.getItemName())) {
+                    && couponInfo.getShopName().equals(ocsCoupon.getShopName())) {
                 isFound = true;
+                continue;
+            }
+            parseCouponInfo(discountInfo, couponType, couponInfo);
+            if (StringUtils.isBlank(couponInfo.getItemName()) || couponInfo.getItemName().contains("null") || couponInfo.getItemName().contains("NULL")) {
+                logger.info("listCoupons accountId{} , itemName {} null", accountId, couponInfo.getItemId());
                 continue;
             }
             list.add(couponInfo);
@@ -97,7 +111,41 @@ public class CouponService {
             list.set(0, ocsCoupon);
         }
         koubeiInfo.setCoupons(list);
+        logger.info("listCoupons params {}-{}-{}-{}-{} costs {} ms", accountId, cityId, stnName, lng, lat, (System.currentTimeMillis()-startTime));
         return koubeiInfo;
+    }
+
+    public void parseCouponInfo(DiscountInfo discountInfo, CouponType couponType, CouponInfo couponInfo) {
+        String itemName = "";
+        switch (couponType) {
+            case discount:
+                float discount = Float.valueOf(discountInfo.getDiscount());
+                String discountStr = String.valueOf(discount*10);
+                if (StringUtils.endsWith(discountStr, ".0")) {
+                    discountStr = StringUtils.substringBeforeLast(discountStr, ".0");
+                }
+                itemName = discountStr+"折";
+                break;
+            case cash:
+                if (StringUtils.isNotBlank(discountInfo.getPerPrice())) {
+                    itemName = "满"+discountInfo.getThresholdPrice()+"元减"+discountInfo.getPerPrice()+
+                            "元";
+                    if (StringUtils.isNotBlank(discountInfo.getTopPrice())) {
+                        couponInfo.setCondition("封顶"+discountInfo.getTopPrice()+"元");
+                    }
+                } else {
+                    itemName = discountInfo.getPrice()+"元代金券";
+                    couponInfo.setCondition(discountInfo.getApplyCondition());
+                }
+                break;
+            case exchange:
+                itemName = "兑换券";
+                break;
+            case limit_reduce_cash:
+                itemName = "凭券特价"+discountInfo.getPrice()+"元";
+                break;
+        }
+        couponInfo.setItemName(itemName);
     }
 
 
@@ -107,7 +155,8 @@ public class CouponService {
      *
      * @Date: 下午4:20 2018/1/13
      */
-    public List<DiscountInfo> getDiscounts(String cityId, String lng, String lat, String aliUserId, String accountId, String stnName) throws AlipayApiException {
+    public List<DiscountInfo> getDiscounts(String cityId, String lng, String lat, String aliUserId, String accountId, String stnName, boolean isNeedLog) throws AlipayApiException {
+        long startTime = System.currentTimeMillis();
         String cityCode = CityCodeMap.getCityCodeByCityId(cityId);
         if (StringUtils.isBlank(cityCode)) {
             return null;
@@ -123,7 +172,9 @@ public class CouponService {
         KoubeiAdvertDeliveryDiscountBatchqueryRequest request = new KoubeiAdvertDeliveryDiscountBatchqueryRequest();
         request.setBizContent(JSONObject.toJSONString(couponQueryParam));
         KoubeiAdvertDeliveryDiscountBatchqueryResponse response = getAlipayClient().execute(request);
-        logger.info("getDiscounts param {}-{}-{}-{}-{} body {}", cityId, accountId, stnName, lng, lat, response.getBody());
+        if (isNeedLog) {
+            logger.info("getDiscounts param {}-{}-{}-{}-{}-{} body {} costs {} ms", cityId, accountId, aliUserId, stnName, lng, lat, response.getBody(), (System.currentTimeMillis()-startTime));
+        }
         if(!response.isSuccess()) {
             return null;
         }
@@ -140,61 +191,106 @@ public class CouponService {
      *
      * @Date: 下午4:21 2018/1/13
      */
-    public KoubeiInfo myCoupons(String accountId) throws AlipayApiException {
+    public KoubeiInfo myCoupons(String accountId, int pn) throws AlipayApiException {
+        long startTime = System.currentTimeMillis();
         KoubeiInfo koubeiInfo = new KoubeiInfo();
         List<CouponInfo> list = new ArrayList<>();
         TokenInfo tokenInfo = getTokenInfo(accountId);
-        if (null != tokenInfo && StringUtils.isNotBlank(tokenInfo.getToken())) {
+        if (null == tokenInfo || StringUtils.isBlank(tokenInfo.getAliUserId())) {
+            return koubeiInfo;
+        }
+        if (StringUtils.isNotBlank(tokenInfo.getToken())) {
             koubeiInfo.setStatus(1); // 已授权
         }
-        List<CouponOrder> orders = couponOrderMapper.listCouponOrders();
-        logger.info("myCoupons params{}-{}", accountId, orders);
+        Integer couponCount = couponOrderMapper.couponCount(accountId, tokenInfo.getAliUserId());
+        if (null == couponCount) {
+            return koubeiInfo;
+        } else if (couponCount > pageSize*pn) {
+            koubeiInfo.setMore(1);
+        }
+        List<CouponOrder> orders = couponOrderMapper.listCouponOrders(accountId, tokenInfo.getAliUserId(), (pn-1)*pageSize, pageSize);
+        logger.info("myCoupons params{}-{} costs {} ms", accountId, orders, (System.currentTimeMillis()-startTime));
         if (null == orders) {
             koubeiInfo.setCoupons(list);
             return koubeiInfo;
         }
-        List<CouponOrder> updateOrders = new ArrayList<>();
-        String aliUserId = getAliUserId(accountId);
         for (int i = 0; i < orders.size(); i++) {
              CouponOrder order = orders.get(i);
-             if (StringUtils.isBlank(aliUserId) || order == null
-                     || order.getStatus() == CouponState.DELETED.getIndex()) {
+             if (order == null || order.getStatus() == CouponState.DELETED.getIndex()) {
                  logger.info("myCoupons params{} null", accountId);
                  continue;
              }
-            CouponInfo couponInfo = new CouponInfo(order.getCouponId(), order.getItemName(), "-1", order.getCondition(), order.getShopName(), order.getImageUrl());
-            couponInfo.setStatus(order.getStatus());
-            if (order.getStatus() != CouponState.VALID.getIndex()) {
-                list.add(couponInfo);
-                continue;
-            }
-            try {
-                KoubeiMarketingCampaignVoucherDetailQueryRequest request = new KoubeiMarketingCampaignVoucherDetailQueryRequest();
-                CouponDetailParam couponDetailParam = new CouponDetailParam(aliUserId, order.getBenefitId());
-                request.setBizContent(JSONObject.toJSONString(couponDetailParam));
-                KoubeiMarketingCampaignVoucherDetailQueryResponse response = getAlipayClient().execute(request);
-                logger.info("myCoupons params{}-{}-{} responseBody {}", accountId, aliUserId, order.getBenefitId(), response.getBody());
-                if(response.isSuccess()){
-                    String sta = response.getStatus();
-                    int state = CouponState.getIndex(sta);
-                    if (CouponState.VALID.getIndex() != state) {
-                        CouponOrder couponOrder = new CouponOrder(order.getId(), state);
-                        updateOrders.add(couponOrder);
-                    }
-                    if (-1 == state) {
-                        logger.info("myCoupons params{}-{} -1 == state {}", accountId, aliUserId, sta);
-                        continue;
-                    }
-                    couponInfo.setStatus(state);
-                }
-            } catch (AlipayApiException e) {
-                logger.error("myCoupons params{}-{} exception ", accountId, aliUserId, e);
-            }
-            list.add(couponInfo);
+             CouponInfo couponInfo = new CouponInfo(order.getCouponId(), order.getItemName(),"-1", order.getCondition(), order.getShopName(), order.getImageUrl());
+             couponInfo.setStatus(order.getStatus());
+             couponInfo.setPartnerId(order.getPartnerId());
+             couponInfo.setBenefitId(order.getBenefitId());
+             list.add(couponInfo);
         }
         koubeiInfo.setCoupons(list);
-        updateOrderStatus(updateOrders);
         return koubeiInfo;
+    }
+
+    /**
+     *
+     * @Description: 定时更新口碑券状态
+     *
+     * @Date: 下午2:26 2018/1/15
+     */
+    public void updateCouponStatus() {
+
+        logger.info("updateCouponStatus starting");
+        // 状态是1的coupon数量
+        Integer allCount = couponOrderMapper.allCouponCount();
+        int cycleSize = allCount/preCount;
+        if (allCount%preCount != 0) {
+            cycleSize++;
+        }
+        for (int j = 0; j < cycleSize; j++) {
+            List<CouponOrder> orders = couponOrderMapper.listAllCoupons(cycleSize*preCount, preCount);
+            //logger.info("myCoupons params{}-{} costs {} ms", accountId, orders, (System.currentTimeMillis()-startTime));
+            if (null == orders) {
+                logger.info("updateCouponStatus has no order to updateStatus");
+                return;
+            }
+            List<CouponOrder> updateOrders = new ArrayList<>();
+            for (int i = 0; i < orders.size(); i++) {
+                CouponOrder order = orders.get(i);
+                if (null == order || order.getStatus() != CouponState.VALID.getIndex()) {
+                    continue;
+                }
+                String accountId = order.getAccountId();
+                String aliUserId = getAliUserId(accountId);
+                if (StringUtils.isBlank(aliUserId)) {
+                    continue;
+                }
+                try {
+                    KoubeiMarketingCampaignVoucherDetailQueryRequest request = new KoubeiMarketingCampaignVoucherDetailQueryRequest();
+                    CouponDetailParam couponDetailParam = new CouponDetailParam(aliUserId, order.getBenefitId());
+                    request.setBizContent(JSONObject.toJSONString(couponDetailParam));
+                    KoubeiMarketingCampaignVoucherDetailQueryResponse response = getAlipayClient().execute(request);
+                    logger.info("myCoupons params{}-{}-{} responseBody {}", accountId, aliUserId, order.getBenefitId(), response.getBody());
+                    if(response.isSuccess()){
+                        String sta = response.getStatus();
+                        int state = CouponState.getIndex(sta);
+                        if (CouponState.VALID.getIndex() != state) {
+                            CouponOrder couponOrder = new CouponOrder(order.getId(), state);
+                            updateOrders.add(couponOrder);
+                        }
+                        if (-1 == state) {
+                            logger.info("myCoupons params{}-{} -1 == state {}", accountId, aliUserId, sta);
+                            continue;
+                        }
+                    }
+                } catch (AlipayApiException e) {
+                    logger.error("myCoupons params{}-{} exception ", accountId, aliUserId, e);
+                }
+            }
+            for (int i = 0; i < updateOrders.size(); i++) {
+                couponOrderMapper.updateStatus(updateOrders.get(i));
+            }
+        }
+        logger.info("updateCouponStatus completed!");
+
     }
 
 
@@ -228,16 +324,17 @@ public class CouponService {
      *
      * @Date: 下午4:22 2018/1/13
      */
-    public boolean getCoupon(String accountId, CouponInfo couponInfo) throws AlipayApiException {
+    public CouponUseInfo getCoupon(String accountId, CouponInfo couponInfo) throws AlipayApiException {
+        long startTime = System.currentTimeMillis();
         if (null == couponInfo) {
             logger.info("getCoupon params{}-{} coupon is null", accountId, couponInfo);
-            return false;
+            return null;
         }
         // ocs 中 获取 userId
         TokenInfo tokenInfo = getTokenInfo(accountId);
         if (null == tokenInfo || StringUtils.isBlank(tokenInfo.getToken())) {
             logger.info("getCoupon params{}-{} token is null", accountId, couponInfo);
-            return false;
+            return null;
         }
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         String couponId = couponInfo.getItemId();
@@ -245,19 +342,26 @@ public class CouponService {
         KoubeiAdvertDeliveryItemApplyRequest request = new KoubeiAdvertDeliveryItemApplyRequest();
         request.setBizContent(JSONObject.toJSONString(couponGetParam));
         KoubeiAdvertDeliveryItemApplyResponse response = getAlipayClient().execute(request, tokenInfo.getToken());
-        logger.info("getCoupon params{}-{}-{} responseBody {}", accountId, couponId, uuid, response.getBody());
+        logger.info("getCoupon params{}-{}-{} responseBody {} costs {} ms ", accountId, couponId, uuid, response.getBody(), (System.currentTimeMillis()-startTime));
         if (!response.isSuccess()) {
             logger.info("getCoupon params{}-{} response is null", accountId, couponId);
-            return false;
+            return null;
         }
         String benefitId = response.getBenefitId();
-        CouponOrder order = new CouponOrder(accountId, tokenInfo.getAliUserId(), couponId, benefitId);
+        String benefitDetail = response.getBenefitDetail();
+        JSONObject jsonObject = JSON.parseObject(benefitDetail);
+        String partnerId = jsonObject.getString("partnerId");
+        if (StringUtils.isBlank(benefitId) || StringUtils.isBlank(partnerId)) {
+            return null;
+        }
+        CouponOrder order = new CouponOrder(accountId, tokenInfo.getAliUserId(), couponId, benefitId, partnerId);
         fromInfo2Order(couponInfo, order);
         int count = couponOrderMapper.insertCouponOrder(order);
         if (1 != count) {
             logger.info("getCoupon params{}-{}, insert Failed {}", accountId, couponId, order);
         }
-        return true;
+        logger.info("getCoupon params{}-{} partnerId {}, costs {} ms", accountId, couponId, benefitId+"#"+partnerId, (System.currentTimeMillis()-startTime));
+        return new CouponUseInfo(partnerId, benefitId);
     }
 
     private void fromInfo2Order(CouponInfo info, CouponOrder order) {
@@ -274,7 +378,8 @@ public class CouponService {
      * @Date: 下午4:23 2018/1/13
      */
     private String getAliUserId(String accountId) {
-        String value = (String) CacheUtil.get(OCSALIUSERIDKEYPRE+accountId);
+        long startTime = System.currentTimeMillis();
+        String value = (String) CacheUtil.getFromCommonOcs(OCSALIUSERIDKEYPRE+accountId);
         if (StringUtils.isBlank(value)) {
             return null;
         }
@@ -282,6 +387,7 @@ public class CouponService {
         if (null == userInfo) {
             return null;
         }
+        logger.info("getAliUserId accountId {} costs {} ms", accountId, (System.currentTimeMillis()-startTime));
         return userInfo.getAuthUserId();
     }
 
@@ -292,13 +398,15 @@ public class CouponService {
      * @Date: 下午4:24 2018/1/13
      */
     private TokenInfo getTokenInfo(String accountId) {
+        long startTime = System.currentTimeMillis();
         String aliUserId = getAliUserId(accountId);
         if (StringUtils.isBlank(aliUserId)) {
             return null;
         }
         TokenInfo tokenInfo = new TokenInfo(aliUserId);
-        String value = (String) CacheUtil.get(OCSALITONKENKEYPRE+aliUserId);
+        String value = (String) CacheUtil.getFromCommonOcs(OCSALITONKENKEYPRE+aliUserId);
         tokenInfo.setToken(value);
+        logger.info("getTokenInfo accountId{} costs {} ms", accountId, (System.currentTimeMillis()-startTime));
         return tokenInfo;
     }
 

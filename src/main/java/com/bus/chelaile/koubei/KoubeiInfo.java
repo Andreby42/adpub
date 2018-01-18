@@ -8,6 +8,7 @@ import java.util.List;
 public class KoubeiInfo {
     private int status;  // 用户状态，0未授权，1已授权
     private List<CouponInfo> coupons;
+    private int more; // 0,没有更多; 1,还有更多
 
     public int getStatus() {
         return status;
@@ -25,11 +26,20 @@ public class KoubeiInfo {
         this.coupons = coupons;
     }
 
+    public int getMore() {
+        return more;
+    }
+
+    public void setMore(int more) {
+        this.more = more;
+    }
+
     @Override
     public String toString() {
         return "KoubeiInfo{" +
                 "status=" + status +
                 ", coupons=" + coupons +
+                ", more=" + more +
                 '}';
     }
 }

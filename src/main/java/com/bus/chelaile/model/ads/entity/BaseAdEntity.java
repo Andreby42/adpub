@@ -63,7 +63,7 @@ public abstract class BaseAdEntity {
 			logger.info("monitorType=3, link={}", link);
 			// TODO 这个逻辑设定有问题，历史原因导致的。应该是某一次广告给的同步监控链接附加在 落地页link里面了
 			this.monitorType = 3; //设置广告的监控类型为0，否则客户端监测监控链接为空，与这里的监控类型3不符合。结果无法发送展示埋点
-			if(clickMonitorLink == null && unfoldMonitorLink == null) {
+			if(StringUtils.isBlank(clickMonitorLink) && StringUtils.isBlank(unfoldMonitorLink)) {
 				this.monitorType = 0;
 			}
 		}
@@ -203,6 +203,7 @@ public abstract class BaseAdEntity {
 		if(ShowType.STATION_ADV.getType().equals(ad.getShowType())) {
 			param.put(Constants.PARAM_STATION_LNG, advParam.getStnLng());
 			param.put(Constants.PARAM_STATION_LAT, advParam.getStnLat());
+			param.put(Constants.PARAM_STATION_NAME_H5, advParam.getStnName());
 		}
 		// TODO 临时for测试！！！
 //		link = ad.getLink();
@@ -358,8 +359,16 @@ public abstract class BaseAdEntity {
 	}
 
 	public static void main(String[] args) {
-		String url = "";
-		String ua = null;
-		url = url.replace("__UA__", ua);
+//		String url = "";
+//		String ua = null;
+//		url = url.replace("__UA__", ua);
+		
+		System.out.println(StringUtils.isBlank(null));
+		System.out.println(StringUtils.isBlank(""));
+		System.out.println(StringUtils.isBlank(" "));
+		
+		System.out.println(StringUtils.isEmpty(null));
+		System.out.println(StringUtils.isEmpty(""));
+		System.out.println(StringUtils.isEmpty(" "));
 	}
 }

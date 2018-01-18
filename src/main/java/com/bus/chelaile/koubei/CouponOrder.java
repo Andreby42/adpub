@@ -11,6 +11,7 @@ public class CouponOrder {
     private String aliUserId;
     private String couponId;
     private String benefitId;
+    private String partnerId;
     private String itemName;
     private String condition;
     private String shopName;
@@ -28,11 +29,12 @@ public class CouponOrder {
     }
 
     public CouponOrder(String accountId, String aliUserId, String couponId
-            , String benefitId) {
+            , String benefitId, String partnerId) {
         this.accountId = accountId;
         this.aliUserId = aliUserId;
         this.couponId = couponId;
         this.benefitId = benefitId;
+        this.partnerId = partnerId;
     }
 
     @Override
@@ -43,9 +45,19 @@ public class CouponOrder {
                 ", aliUserId='" + aliUserId + '\'' +
                 ", couponId='" + couponId + '\'' +
                 ", benefitId='" + benefitId + '\'' +
+                ", partnerId='" + partnerId + '\'' +
+                ", itemName='" + itemName + '\'' +
                 ", createTime=" + createTime +
                 ", status=" + status +
                 '}';
+    }
+
+    public String getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(String partnerId) {
+        this.partnerId = partnerId;
     }
 
     public String getItemName() {

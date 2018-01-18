@@ -314,6 +314,54 @@ public class HttpUtils {
 		HttpGet get = new HttpGet(url);
 		CloseableHttpResponse response = null;
 		try {
+//			get.setHeader("X-Forwarded-For", "111.111.111.1");
+			response = HTTP_CLIENT.execute(get, HttpClientContext.create());
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				res = EntityUtils.toString(entity, encode);
+			}
+		} finally {
+			if (response != null) {
+				response.close();
+			}
+		}
+		return res;
+	}
+	
+	public static String getAndSetIp(String url, String encode, String x_forwarded_for)
+			throws ClientProtocolException, IOException {
+		String res = null;
+		HttpGet get = new HttpGet(url);
+		CloseableHttpResponse response = null;
+		try {
+			get.setHeader("X-Forwarded-For", x_forwarded_for);
+			response = HTTP_CLIENT.execute(get, HttpClientContext.create());
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				res = EntityUtils.toString(entity, encode);
+			}
+		} finally {
+			if (response != null) {
+				response.close();
+			}
+		}
+		return res;
+	}
+	
+	public static String getUriAndSetIp(String url, List<NameValuePair> params,
+			String encode, String x_forwarded_for) throws ParseException, UnsupportedEncodingException,
+			IOException, URISyntaxException {
+		String res = null;
+		if (params != null && params.size() > 0) {
+			url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(params));
+		}
+		System.out.println(url);
+//		URL url1 = new URL(url);
+//		URI uri = new URI(url1.getProtocol(), url1.getHost(), url1.getPath(), url1.getQuery(), null);
+		HttpGet get = new HttpGet(url);
+		CloseableHttpResponse response = null;
+		try {
+			get.setHeader("X-Forwarded-For", x_forwarded_for);
 			response = HTTP_CLIENT.execute(get, HttpClientContext.create());
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {

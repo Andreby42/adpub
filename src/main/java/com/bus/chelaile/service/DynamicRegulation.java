@@ -17,6 +17,7 @@ import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.thread.DownArticles;
 import com.bus.chelaile.thread.KoubeiThread;
 import com.bus.chelaile.thread.UpdateSendPV;
+import com.bus.chelaile.koubei.KBUpdateCouponStatusThread;
 
 public class DynamicRegulation {
 	@Autowired
@@ -65,8 +66,14 @@ public class DynamicRegulation {
 			// 缓存口碑券
 			if(Constants.IS_CACHE_KOUBEI) {
 				Runnable koubeiThread = new KoubeiThread(couponService);
-				service.scheduleWithFixedDelay(koubeiThread, 30, 600, TimeUnit.SECONDS);
+				service.scheduleWithFixedDelay(koubeiThread, 600, 7200, TimeUnit.SECONDS);
 			}
+			// 更新口碑券状态
+			if(Constants.IS_CACHE_KOUBEI) {
+				Runnable kBUpdateCouponStatusThread = new KBUpdateCouponStatusThread(couponService);
+				service.scheduleWithFixedDelay(kBUpdateCouponStatusThread, 3, 24, TimeUnit.HOURS);
+			}
+			
 			hasStartThread = true;
 		}
 	}

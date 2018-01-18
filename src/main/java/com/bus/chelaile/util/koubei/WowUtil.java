@@ -19,7 +19,7 @@ public class WowUtil {
 
     public static final String RESPONSE_PREIFX = "**YGKJ";
     public static final String RESPONSE_SURIFX = "YGKJ##";
-    public static final String wowVerifyAccountUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.name(),
+    public static final String wowVerifyAccountUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
             "wow.verify.account", "http://10.168.67.142:6080/wow/user!verifyAccount.action?accountId=%1$s&secret=%2$s&udid=%3$s");
     private static final Logger logger = LoggerFactory.getLogger(WowUtil.class);
 

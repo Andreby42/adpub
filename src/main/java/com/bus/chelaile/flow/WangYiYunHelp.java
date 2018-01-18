@@ -35,8 +35,8 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 	@Override
 	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int channelId, boolean isShowAd)
 			throws Exception {
-		getChannelList("3");// 获取频道列表 现在选择默认推荐1852
-		WangYiYunResultBaseDto<WangYiYunListDataDto> resultNewList = getNewList("3", "2663", advParam.getUdid());
+		getChannelList("3", advParam.getIp());// 获取频道列表 现在选择默认推荐1852
+		WangYiYunResultBaseDto<WangYiYunListDataDto> resultNewList = getNewList("3", "2663", advParam.getUdid(), advParam.getIp());
 		if (!resultNewList.getCode().equals(WangYiYunErrorCode.SUCCESS.getCode())) {
 			log.error(gson.toJson(resultNewList));
 			throw new Exception(gson.toJson(resultNewList));
@@ -60,7 +60,8 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 			
 			Map<String, String> params = New.hashMap();
 			params.put("fss", "1");
-			params.put("st", model.getSource());
+//			params.put("st", model.getSource());
+			params.put("st", model.getTitle());
 			params.put("ak", appkey);
 			params.put("sk", secretkey);
 			params.put("id", model.getInfoId());
@@ -71,14 +72,14 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 			params.put("ff", "1");
 			params.put("ut", "userId");
 			params.put("uk", advParam.getUdid());
-			
+			params.put("cid", model.getChannelId());
 			
 			// 以下为获取文章详情页内容，自己编写html文件内容。最新要求，无需这样做
 //			if (!model.getInfoType().equals(WangYiYunInfoType.ARTICLE.getWangYiType())) {
 //				log.info("网易：获取不到是article类型的文章，infoType={}", model.getInfoType());
 //				continue;
 //			}
-//			WangYiYunResultBaseDto<WangYiYunDetailModel> resultDetailResult = getNewDetail("3", model.getInfoId());
+//			WangYiYunResultBaseDto<WangYiYunDetailModel> resultDetailResult = getNewDetail("3", model.getInfoId(), advParam.getIp());
 //			if (!resultDetailResult.getCode().equals(WangYiYunErrorCode.SUCCESS.getCode())) {
 //				log.info(gson.toJson(resultNewList));
 //				throw new Exception(gson.toJson(resultNewList));
@@ -178,32 +179,32 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 		throw new UnsupportedOperationException();
 	}
 
-	private WangYiYunResultBaseDto<WangYiYunDetailModel> getNewDetail(String platform, String infoId) {
+	private WangYiYunResultBaseDto<WangYiYunDetailModel> getNewDetail(String platform, String infoId, String ip) {
 		Set<WangYIParamForSignature> paramSet = installNewDetailParam(platform, System.currentTimeMillis(), infoId,
 				"recommendation");
 		WangYiYunResultBaseDto<WangYiYunDetailModel> result = getWangYiYunResponse(wangYuYunNewDetailUrl, paramSet,
 				new TypeToken<WangYiYunResultBaseDto<WangYiYunDetailModel>>() {
-				}.getType());
+				}.getType(), ip);
 //		System.out.println(gsonFormat.toJson(result));
 		log.info(gson.toJson(result));	 // TODO
 		return result;
 	}
 
-	private WangYiYunResultBaseDto<WangYiYunListDataDto> getNewList(String plateForm, String channelId, String udid) {
+	private WangYiYunResultBaseDto<WangYiYunListDataDto> getNewList(String plateForm, String channelId, String udid, String ip) {
 		Set<WangYIParamForSignature> paramSet = installNewList(plateForm, System.currentTimeMillis(), channelId, udid);
 		WangYiYunResultBaseDto<WangYiYunListDataDto> result = getWangYiYunResponse(wangYiYunNewListUrl, paramSet,
 				new TypeToken<WangYiYunResultBaseDto<WangYiYunListDataDto>>() {
-				}.getType());
+				}.getType(), ip);
 //		System.out.println(gsonFormat.toJson(result));
 		log.info(gson.toJson(result));	 // TODO
 		return result;
 	}
 
-	private WangYiYunResultBaseDto<WangYiYunChannelDto> getChannelList(String plateForm) {
+	private WangYiYunResultBaseDto<WangYiYunChannelDto> getChannelList(String plateForm, String ip) {
 		Set<WangYIParamForSignature> paramSet = initBaseParam(plateForm, System.currentTimeMillis());
 		WangYiYunResultBaseDto<WangYiYunChannelDto> result = getWangYiYunResponse(wangYiYunChannelListUrl, paramSet,
 				new TypeToken<WangYiYunResultBaseDto<WangYiYunChannelDto>>() {
-				}.getType());
+				}.getType(), ip);
 //		System.out.println(gsonFormat.toJson(result));
 //		log.info(gson.toJson(result));
 		return result;

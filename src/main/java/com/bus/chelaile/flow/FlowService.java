@@ -19,6 +19,7 @@ import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.model.*;
+import com.bus.chelaile.flowNew.TbkUtils;
 import com.bus.chelaile.util.FlowUtil;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
@@ -182,6 +183,14 @@ public class FlowService {
 			}
 			contents = flowOcs.merageList(null, contentsFromApi, contentActivity, null, advParam.getUdid(), channelType);
 //			FlowUtil.setImagsType(contents);
+			
+			// 粗暴的取一条
+			// tbk TODO 
+//			FlowContent flow = TbkUtils.getTbkContent();
+//			if(flow != null) {
+//				contents.add(0, flow);;
+//			}
+			
 			return contents;
 
 			// // 得到用户不需要展示的id

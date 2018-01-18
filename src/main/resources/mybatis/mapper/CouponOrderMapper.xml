@@ -2,24 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bus.chelaile.dao.CouponOrderMapper">
 
+	<sql id="someColumns">
+		`id`, `benefitId`
+	</sql>
+
 	<sql id="selectColumns">
-		`id`, `accountId`,`aliUserId`,`couponId`,`itemName`,`shopName`,`condition`,`imageUrl`,`benefitId`,`createTime`,`status`
+		`id`, `accountId`,`aliUserId`,`couponId`,`itemName`,`shopName`,`condition`,`imageUrl`,`benefitId`,`partnerId`,`createTime`,`status`
 	</sql>
 
 	<sql id="columns">
-		`accountId`,`aliUserId`,`couponId`,`itemName`,`shopName`,`condition`,`imageUrl`,`benefitId`,`createTime`
+		`accountId`,`aliUserId`,`couponId`,`itemName`,`shopName`,`condition`,`imageUrl`,`benefitId`,`partnerId`,`createTime`
 	</sql>
 
 	<select id="listCouponOrders" resultType="com.bus.chelaile.koubei.CouponOrder">
 		SELECT <include refid="selectColumns"/>
 		FROM koubei_coupon_order
+		WHERE `accountId`=#{accountId} and `aliUserId`=#{aliUserId} order by `id` limit #{from}, #{end}
 	</select>
 
 	<insert id="insertCouponOrder" parameterType="com.bus.chelaile.koubei.CouponOrder">
 		INSERT INTO koubei_coupon_order (<include refid="columns"/>)
 		VALUES (
 		#{order.accountId},#{order.aliUserId},#{order.couponId},#{order.itemName},#{order.shopName}
-		,#{order.condition},#{order.imageUrl},#{order.benefitId},now()
+		,#{order.condition},#{order.imageUrl},#{order.benefitId},#{order.partnerId},now()
 		)
     </insert>
 
@@ -28,5 +33,23 @@
 		SET `status`=#{order.status}
 		WHERE `id`=#{order.id}
 	</update>
+
+	<select id="listAllCoupons" resultType="com.bus.chelaile.koubei.CouponOrder">
+		SELECT <include refid="someColumns"/>
+		FROM koubei_coupon_order
+		WHERE `status`=1
+	</select>
+
+	<select id="couponCount" resultType="java.lang.Integer">
+		SELECT count(id)
+		FROM koubei_coupon_order
+		WHERE `accountId`=#{accountId} and `aliUserId`=#{aliUserId}
+	</select>
+
+	<select id="allCouponCount">
+		SELECT COUNT(id)
+		FROM koubei_coupon_order
+		WHERE `status`=1
+	</select>
 
 </mapper>

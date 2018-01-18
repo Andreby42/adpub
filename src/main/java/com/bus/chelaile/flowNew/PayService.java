@@ -44,7 +44,7 @@ public class PayService {
 			}
 			String key = "cllAccountCityKey#" + param.getAccountId() + "#" + param.getCityId();
 			logger.info("********** key={}", key);
-			String isSupportPay = CacheUtil.getIsSupportAccountId(key);
+			String isSupportPay = CacheUtil.getFromCommonOcs(key);
 			logger.info("********** key={}, isSupportPay={}", key, isSupportPay);
 			if(isSupportPay == null || isSupportPay.equals("0")) { //已登录，未领取
 				return payInfo;
