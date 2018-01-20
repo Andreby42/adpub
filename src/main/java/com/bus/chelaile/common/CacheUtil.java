@@ -159,15 +159,15 @@ public class CacheUtil {
     }
     
     // redis 有序集合 3个方法
-    public static void setSortedSet(String key, double score,String value, int expire) {
+    public static void setSortedSet(String key, long score,String value, int expire) {
     	redisClient.setSortedSet(key, score, value, expire);
     }
     
-    public static Set<String> getRangeSet(String key, double startScore, double endScore, int count) {
+    public static Set<String> getRangeSet(String key, long startScore, long endScore, int count) {
     	return redisClient.zrangeByScore(key, startScore, endScore, count);
     }
     
-    public static Set<String> getRevRangeSet(String key, double startScore, double endScore, int count) {
+    public static Set<String> getRevRangeSet(String key, long startScore, long endScore, int count) {
     	return redisClient.zrevRangeByScore(key, endScore, startScore, count);
     }
     
@@ -201,7 +201,7 @@ public class CacheUtil {
     }
 
     public static Map<String, Object> getByList(List<String> list) {
-    	return client.getByList(list);
+    	return cachePayInfoClient.getByList(list);
     }
     
     public static Object getApiInfo(String key){
@@ -212,9 +212,14 @@ public class CacheUtil {
 //    	return redisWow.getSet(key);
 //    }
     
-    // 用户是否领取了乘车码
+    // ocs查询
     public static String getFromCommonOcs(String key) {
     	return (String) cachePayInfoClient.get(key);
+    }
+    
+    // ocs设置值
+    public static void setToCommonOcs(String key, int exp, Object obj) {
+    	cachePayInfoClient.set(key, exp, obj);
     }
  
 //	public static Object getActiveOcs(String key) {
@@ -249,11 +254,11 @@ public class CacheUtil {
     	System.out.println(System.currentTimeMillis());
     	
     	
-    	Set<String> tops = getRangeSet("wuli_hot", 1513067900290d, System.currentTimeMillis(), 20); // 最新内容
+    	Set<String> tops = getRangeSet("wuli_hot", 1513067900290l, System.currentTimeMillis(), 20); // 最新内容
     	System.out.println(tops);
     	
     	
-    	Set<String> ends = getRevRangeSet("wuli_hot", 0d, 1513067900290d, 20);  // 历史 
+    	Set<String> ends = getRevRangeSet("wuli_hot", 0L, 1513067900290L, 20);  // 历史 
     	System.out.println(ends);
     }
 }

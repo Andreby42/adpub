@@ -18,6 +18,7 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.flow.WangYiYunHelp;
+import com.bus.chelaile.flow.WuliToutiaoHelp;
 import com.bus.chelaile.flow.model.ChannelType;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flow.model.Thumbnail;
@@ -37,6 +38,8 @@ public class FeedService {
 	private ToutiaoHelp toutiaoHelp;
 	@Autowired
 	private WangYiYunHelp wangYiYunHelp;
+	@Autowired
+	private WuliToutiaoHelp wuliToutiaoHelp;
 	@Autowired
 	private ServiceManager serviceManager;
 	@Autowired
@@ -121,6 +124,9 @@ public class FeedService {
 				flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
 			} else if (channelType == ChannelType.WANGYI) {
 				flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+			}
+			else if (channelType == ChannelType.WULITOUTIAO) {
+				flowsApi = wuliToutiaoHelp.getArticlesFromCache(param);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -311,11 +317,18 @@ public class FeedService {
 		List<FlowContent> flowsApi = null;
 		ChannelType channelType = activityService.getChannelType(param.getUdid(), -1);
 		try {
-			// flowsApi = wuliToutiaoHelp.getArticlesFromCache(null, null, -1);
-			if (channelType == ChannelType.TOUTIAO) {
+			//TODO  
+			// CITIES 
+			if(StringUtils.isNoneBlank(param.getCityId()) && param.getCityId().equals("014")) {
+				flowsApi = wuliToutiaoHelp.getArticlesFromCache(param);
+			} 
+			
+			else if (channelType == ChannelType.TOUTIAO) {
 				 flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
 			} else if (channelType == ChannelType.WANGYI) {
 				flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+			} else if (channelType == ChannelType.WULITOUTIAO) {
+				flowsApi = wuliToutiaoHelp.getArticlesFromCache(param);
 			}
 			for (FlowContent f : flowsApi) {
 				flowArticle.add(f.createFeeds());

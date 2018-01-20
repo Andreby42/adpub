@@ -138,7 +138,7 @@ public class WuliToutiaoHelp implements InterfaceFlowHelp {
 			// 目前只缓存一个频道的数据 ，默认频道~ 
 			String key = AdvCache.getWuliArticleCacheKey(DEFAULT_CHANNEL_ID);	// 数据库里面默认频道的id
 			List<FlowContent> flows = getInfoByApi(null, 0L, null, -1, false);
-			logger.info("flows={}", JSONObject.toJSON(flows));
+			logger.info("wulitoutiao:flows={}", JSONObject.toJSON(flows));
 			if (flows != null) {
 				for(FlowContent f : flows) {
 //					CacheUtil.setSortedSet(key, System.currentTimeMillis(), JSONObject.toJSONString(f), Constants.ONE_DAY_TIME);
@@ -156,31 +156,45 @@ public class WuliToutiaoHelp implements InterfaceFlowHelp {
 	 * 从缓存获取文章内容
 	 * @return
 	 */
-	public List<FlowContent> getArticlesFromCache(AdvParam advParam, String recoid, int channelId) {
+	public List<FlowContent> getArticlesFromCache(AdvParam advParam) {
 		List<FlowContent> flows = new ArrayList<>();
 		Set<String> flowStrs = null;
-		// 1.0版，第一次进入，从最新的文章，获取历史的内容
+		
+		String udidKey = AdvCache.getWuliUdidCacheKey(advParam.getUdid());
+		String udidRecoid = (String) CacheUtil.get(udidKey);
+		Long recoidid = 0L;
+		if(StringUtils.isNotBlank(udidRecoid)) {
+			recoidid = Long.parseLong(udidRecoid);
+		}
+		
+		
+		// 1.0版，第一次进入，从缓存的第一篇的文章，获取历史的内容
 		// 不是第一次进入，根据ftime，获取ftime时间戳之前的内容
 		String setKey = AdvCache.getWuliArticleCacheKey(DEFAULT_CHANNEL_ID);
-		if(StringUtils.isBlank(recoid)) {
-			flowStrs = CacheUtil.getRevRangeSet(setKey, 0d, System.currentTimeMillis(), ARTICLE_NUM);
-		} else {
-			String act = advParam.getStatsAct();
-			if(StringUtils.isNoneBlank(act) && act.equals("article_refresh")) {  // 按刷新按钮，获取新内容
-				flowStrs = CacheUtil.getRangeSet(setKey, Long.parseLong(recoid) + 1, System.currentTimeMillis(), ARTICLE_NUM);
-			} else {
+//		if(StringUtils.isBlank(recoid)) {
+//			flowStrs = CacheUtil.getRangeSet(setKey, recoidid, System.currentTimeMillis(), ARTICLE_NUM);
+//		} else {
+//			String act = advParam.getStatsAct();
+//			if(StringUtils.isNoneBlank(act) && act.equals("article_refresh")) {  // 按刷新按钮，获取新内容
+//				flowStrs = CacheUtil.getRangeSet(setKey, Long.parseLong(recoid) + 1, System.currentTimeMillis(), ARTICLE_NUM);
+//			} 
+//			else {
+			flowStrs = CacheUtil.getRangeSet(setKey, recoidid + 1 , System.currentTimeMillis(), ARTICLE_NUM);
 				// -1  是为了上一次最后一篇跟这次一次第一篇重复
-				flowStrs = CacheUtil.getRevRangeSet(setKey, 0d, Long.parseLong(recoid) -1 , ARTICLE_NUM);
-			}
-		}
-		logger.info("recoid={}, stat_act={}", recoid, advParam.getStatsAct());
-		logger.info("缓存文章列表：setKey={},value={}", setKey, JSONObject.toJSONString(flowStrs));
+//				flowStrs = CacheUtil.getRevRangeSet(setKey, 0d, Long.parseLong(recoid) -1 , ARTICLE_NUM);
+//			}
+//		}
+		
+		logger.info("wulitoutiao: recoidid={}, udid={}", recoidid, advParam.getUdid());
+//		logger.info("缓存文章列表：setKey={},value={}", setKey, JSONObject.toJSONString(flowStrs));
 		if(flowStrs != null) {
 			for(String s : flowStrs) {
 				FlowContent f = JSONObject.parseObject(s, FlowContent.class);
 				flows.add(f);
+				recoidid = Long.parseLong(f.getRecoid());
 			}
 		}
+		CacheUtil.set(udidKey, Constants.LONGEST_CACHE_TIME, String.valueOf(recoidid));
 		return flows;
 	}
 	

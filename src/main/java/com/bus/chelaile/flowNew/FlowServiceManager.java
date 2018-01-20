@@ -16,6 +16,7 @@ import com.bus.chelaile.dao.ActivityContentMapper;
 import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.flow.WangYiYunHelp;
+import com.bus.chelaile.flow.WuliToutiaoHelp;
 import com.bus.chelaile.flow.model.ChannelType;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flowNew.model.FlowNewContent;
@@ -39,8 +40,8 @@ public class FlowServiceManager {
 	private WangYiYunHelp wangYiYunHelp;
 	@Autowired
 	private ActivityService activityService;
-//	@Autowired
-//	private WuliToutiaoHelp wuliToutiaoHelp;
+	@Autowired
+	private WuliToutiaoHelp wuliToutiaoHelp;
 	
 	private static final String HEADSTRS = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"detail.new.flow.udidHEADS", "4|5|6|7");
@@ -82,7 +83,13 @@ public class FlowServiceManager {
 		ChannelType channelType = activityService.getChannelType(param.getUdid(), -1);
 		if (FlowStaticContents.isReturnLineDetailFlows(param)) {
 			try {
-				if (channelType == ChannelType.TOUTIAO) {
+				// TODO 
+				// CITI 
+				if(StringUtils.isNoneBlank(param.getCityId()) && param.getCityId().equals("014")) {
+					contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(param);
+				}
+				
+				else if (channelType == ChannelType.TOUTIAO) {
 					contentsFromApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
 				} else if (channelType == ChannelType.WANGYI) {
 					contentsFromApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);

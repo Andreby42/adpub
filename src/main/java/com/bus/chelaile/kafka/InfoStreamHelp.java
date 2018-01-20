@@ -118,7 +118,7 @@ public class InfoStreamHelp {
 		if(UserHelper.isNewUser(udid, null, null)) {		// 7天内新增用户的访问详情页记录
 			String key = AdvCache.getBusesDetailKey(udid);
 			if(CacheUtil.get(key) == null) {
-				CacheUtil.setNew(key, Constants.SEVEN_DAY_TIME, System.currentTimeMillis());
+				CacheUtil.setToCommonOcs(key, Constants.SEVEN_DAY_TIME, System.currentTimeMillis());
 			}
 		}
 	}

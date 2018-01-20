@@ -171,13 +171,19 @@ public class FlowService {
 
 			// 得到最新内容
 			List<FlowContent> contentsFromApi = null;
-			if (channelType == ChannelType.TOUTIAO) {
+			// TODO 
+			// CITI 
+			if(StringUtils.isNoneBlank(advParam.getCityId()) && advParam.getCityId().equals("014")) {
+				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(advParam);
+			}
+			
+			else if (channelType == ChannelType.TOUTIAO) {
 //				return null;	// FOR TEST
 				contentsFromApi = toutiaoHelp.getInfoByApi(advParam, ftime, recoid, id, false);
 			} else if (channelType == ChannelType.UC) {
 				contentsFromApi = xishuashuaHelp.getInfoByApi(advParam, ftime, recoid, id, false);
 			} else if(channelType == ChannelType.WULITOUTIAO) {
-				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(advParam, recoid, id);
+				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(advParam);
 			} else if(channelType == ChannelType.WANGYI) {
 				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, -1, false);
 			}
@@ -188,7 +194,7 @@ public class FlowService {
 			// tbk TODO 
 //			FlowContent flow = TbkUtils.getTbkContent();
 //			if(flow != null) {
-//				contents.add(0, flow);;
+//				contents.add(3, flow);;
 //			}
 			
 			return contents;

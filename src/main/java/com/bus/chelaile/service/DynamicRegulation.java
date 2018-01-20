@@ -58,7 +58,7 @@ public class DynamicRegulation {
 				}
 				service.scheduleWithFixedDelay(qMThread, 30, interval, TimeUnit.SECONDS);
 				
-				// 启动缓存话题list
+//				// 启动缓存话题list
 //				Runnable feedCacheThread = new FeedCacheThread();
 //				service.scheduleWithFixedDelay(feedCacheThread, 30, 10, TimeUnit.SECONDS);
 				

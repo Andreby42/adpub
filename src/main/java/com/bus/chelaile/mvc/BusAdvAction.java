@@ -393,7 +393,7 @@ public class BusAdvAction extends AbstractController {
 		CacheUtil.set(key, 3600 * 10 , time);	
 		log.info("udid={}, time={}, date={}", udid, time, DateUtil.getFormatTime(new Date(time), "yyyy-MM-dd HH:mm:SS"));
 		
-		Long timeStr = (Long) CacheUtil.get(key);
+		Long timeStr = Long.parseLong(CacheUtil.getFromCommonOcs(key));
 		String dateOut = DateUtil.getFormatTime(new Date(timeStr), "yyyy-MM-dd HH:mm:SS");
 		
 		return "设置用户创建时间成功,udid=" + udid + ", time=" + dateOut;

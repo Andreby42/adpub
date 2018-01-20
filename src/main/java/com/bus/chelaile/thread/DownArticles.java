@@ -3,6 +3,7 @@ package com.bus.chelaile.thread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.WuliToutiaoHelp;
 import com.bus.chelaile.flowNew.FlowStartService;
 import com.bus.chelaile.flowNew.FlowStaticContents;
@@ -26,7 +27,8 @@ public class DownArticles implements Runnable {
 			
 			// 接口获取文章
 //			FlowStaticContents.initArticleContents();
-//			getWuliToutiaoHelp().setSortArticlesToCache();
+			if(! Constants.ISTEST)
+				getWuliToutiaoHelp().setSortArticlesToCache();
 			// 合并文章和其他内容，更新缓存
 			FlowStartService.initLineDetailFlows(FlowStaticContents.activityContens);  // 这样不可行，需要用static方法
 			

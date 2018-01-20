@@ -35,7 +35,7 @@ public class UserHelper {
         String key = "CREATEUSERTIME#" + udid;
         try {
              // 获取用户的创建时间。
-            Long createTime = (Long)CacheUtil.get(key);
+            Long createTime = Long.parseLong(CacheUtil.getFromCommonOcs(key));
              if (createTime == null) {
                  /**
                   * 由于目前OCS之中用户的创建时间信息只保存了15天，因此当CREATETIME时，默认该用户是老用户。
