@@ -27,6 +27,7 @@ public class LineAdEntity extends BaseAdEntity {
     public static final VersionEntity IOS_DETAIL_ADMODE_VERSION     = new VersionEntity(5, 11, 0);
     public static final VersionEntity BASE_VERSION                  = new VersionEntity(1, 0, 0);
   //  private int type = 1;
+    private int adPriority;
 
 
     public LineAdEntity(){
@@ -126,6 +127,14 @@ public class LineAdEntity extends BaseAdEntity {
 		}else {
 			return ShowType.RIDE_AUDIO;
 		}
+	}
+
+	public int getAdPriority() {
+		return adPriority;
+	}
+
+	public void setAdPriority(int adPriority) {
+		this.adPriority = adPriority;
 	}
     
     

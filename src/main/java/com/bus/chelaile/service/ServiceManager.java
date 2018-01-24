@@ -32,6 +32,8 @@ import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
+import com.bus.chelaile.model.ads.entity.LineAdEntity;
+import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.model.record.DisplayUserCache;
 import com.bus.chelaile.model.rule.version.VersionEntity;
@@ -201,15 +203,9 @@ public class ServiceManager {
 		Object entity = null;
 		JSONObject object = new JSONObject();
 		if (methodName.equals("getLineDetails")) { // 线路详情
-			BaseAdEntity entity1 = getLineDetails(advParam);
-			if (entity1 == null) {
+			object = getLineDetails(advParam);
+			if (object == null) {
 				return null;
-			} else if (entity1 != null && entity1.getShowType() == ShowType.LINE_DETAIL.getValue()) {
-				object.put("lineAds", entity1);
-			} else if(entity1 != null && entity1.getShowType() == ShowType.LINEDETAIL_REFRESH_ADV.getValue()) {
-				object.put("reBannerAds", entity1);
-			} else if (entity1 != null && entity1.getShowType() == ShowType.STATION_ADV.getValue()) {
-				object.put("stationAds", entity1);
 			}
 			return object;
 		} else if (methodName.equals("getNewOpen")) { // 新版本开屏、浮层、乘车页浮层
@@ -338,8 +334,9 @@ public class ServiceManager {
 	 * @return
 	 * @throws Exception
 	 */
-	private BaseAdEntity getLineDetails(AdvParam advParam) throws Exception {
-
+	private JSONObject getLineDetails(AdvParam advParam) throws Exception {
+		JSONObject object = new JSONObject();
+		
 		boolean isNeedApid = false;
 		QueryParam queryParam = new QueryParam();
 		if (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= 10220 && advParam.getScreenHeight() > 0
@@ -350,20 +347,57 @@ public class ServiceManager {
 			isNeedApid = true;
 		}
 		
-		if(returnStnAds(advParam)) {
-			BaseAdEntity stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
-			if(stnAds != null) {
-				return stnAds;
+		BaseAdEntity stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
+		
+		BaseAdEntity lineAds = lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
+
+		// 0208以前的版本，都只返回一条广告
+		// 如果站点和详情页同时存在，需要做一下优先级对比
+		if(onlyOneAdCheck(advParam)) {
+			if(stnAds != null && lineAds != null) {
+				if(((StationAdEntity)stnAds).getAdPriority() < ((LineAdEntity)lineAds).getAdPriority()) {
+					object.put("lineAds", lineAds);
+					return object;
+				} else {
+					object.put("stationAds", stnAds);
+					return object;
+				}
 			}
 		}
 		
+		if (stnAds != null) {
+			object.put("stationAds", stnAds);
+		}
+		if(null != lineAds) {
+			object.put("lineAds", lineAds);
+		}
 		if(returnRefreshAds(advParam)) {
-			BaseAdEntity refreshAds = simpleAdManager.doService(advParam, ShowType.LINEDETAIL_REFRESH_ADV, false, queryParam, true);
-			if(refreshAds != null) {
-				return refreshAds;
+			BaseAdEntity refreshAds = simpleAdManager.doService(advParam, ShowType.LINEDETAIL_REFRESH_ADV, false,
+					queryParam, true);
+			if (refreshAds != null) {
+				object.put("reBannerAds", refreshAds);
+			} else {
+				BaseAdEntity refreshOpenAds = simpleAdManager.doService(advParam, ShowType.LINEDETAIL_REFRESH_OPEN_ADV,
+						false, queryParam, true);
+				if (refreshOpenAds != null) {
+					object.put("reBannerAds", refreshOpenAds);
+				}
 			}
 		}
-		return lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
+		
+		
+		return object;
+	}
+
+	// 0117版本之后，只返回一条广告。 之后，可以多类型广告并存
+	private boolean onlyOneAdCheck(AdvParam advParam) {
+		if (advParam.getS().equalsIgnoreCase("android") && advParam.getVc() > Constants.PLATFORM_LOG_ANDROID_0118) {
+			return false;
+		}
+		if (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() > Constants.PLATFORM_LOG_IOS_0117) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

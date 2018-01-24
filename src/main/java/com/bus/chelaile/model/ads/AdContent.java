@@ -100,6 +100,10 @@ public class AdContent {
         	AdLineRefreshInnerContent lineReInner = new AdLineRefreshInnerContent(); // 刷新位广告， 至简结构广告（仅图片和h5跳转）
         	lineReInner.setAndPaseJson(content);
         	innerContent = lineReInner;
+        } else if(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType().equals(showType)) {
+        	AdLineRefreshOpenInnerContent lineReOpenInner = new AdLineRefreshOpenInnerContent();
+        	lineReOpenInner.setAndPaseJson(content);
+        	innerContent = lineReOpenInner;
         }
         else {
             logger.error("[Unsupport_ShowType] 无法识别的showType: {}", showType);

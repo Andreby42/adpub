@@ -9,12 +9,16 @@ import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import scala.collection.mutable.StringBuilder;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.flow.model.ChannelType;
 import com.bus.chelaile.flow.model.FlowChannel;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flow.wangyiyun.WangYIParamForSignature;
@@ -24,19 +28,34 @@ import com.bus.chelaile.flow.wangyiyun.WangYiYunErrorCode;
 import com.bus.chelaile.flow.wangyiyun.WangYiYunListDataDto;
 import com.bus.chelaile.flow.wangyiyun.WangYiYunListModel;
 import com.bus.chelaile.flow.wangyiyun.WangYiYunResultBaseDto;
+import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.AdvUtil;
 import com.bus.chelaile.util.DateUtil;
 import com.bus.chelaile.util.New;
+import com.bus.chelaile.util.config.PropertiesUtils;
 import com.google.gson.reflect.TypeToken;
 
 public class WangYiYunHelp extends AbstractWangYiYunHelp {
-
+	@Autowired
+	private ActivityService activityService;
+	private static final String DEFAULT_CHANNEL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"wangyi.default.channel", "2663");	 // 推荐频道
+	
 	@Override
-	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int channelId, boolean isShowAd)
+	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int id, boolean isShowAd)
 			throws Exception {
+		
+		FlowChannel wuliChannel = activityService.getChannels(id, ChannelType.WANGYI);
+		List<String> apiChannelIds = parseChannel(wuliChannel);
+		
+		String channelId = DEFAULT_CHANNEL;
+		if (apiChannelIds != null && apiChannelIds.size() > 0) {
+			channelId = apiChannelIds.get(0);
+		}
+		
 		getChannelList("3", advParam.getIp());// 获取频道列表 现在选择默认推荐1852
-		WangYiYunResultBaseDto<WangYiYunListDataDto> resultNewList = getNewList("3", "2663", advParam.getUdid(), advParam.getIp());
+		WangYiYunResultBaseDto<WangYiYunListDataDto> resultNewList = getNewList("3", channelId, advParam.getUdid(), advParam.getIp());
 		if (!resultNewList.getCode().equals(WangYiYunErrorCode.SUCCESS.getCode())) {
 			log.error(gson.toJson(resultNewList));
 			throw new Exception(gson.toJson(resultNewList));
@@ -169,8 +188,14 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 
 	@Override
 	public List<String> parseChannel(FlowChannel ucChannel) {
-		// TODO Auto-generated method stub
-		return null;
+		if (ucChannel == null) {
+			return null;
+		}
+		List<String> ids = new ArrayList<String>();
+		for (String id : ucChannel.getChannelId().split("&")) {
+				ids.add(id);
+		}
+		return ids;
 	}
 
 	@Override
@@ -186,7 +211,8 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 				new TypeToken<WangYiYunResultBaseDto<WangYiYunDetailModel>>() {
 				}.getType(), ip);
 //		System.out.println(gsonFormat.toJson(result));
-		log.info(gson.toJson(result));	 // TODO
+		if(Constants.ISTEST)
+			log.info(gson.toJson(result));
 		return result;
 	}
 
@@ -196,7 +222,8 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 				new TypeToken<WangYiYunResultBaseDto<WangYiYunListDataDto>>() {
 				}.getType(), ip);
 //		System.out.println(gsonFormat.toJson(result));
-		log.info(gson.toJson(result));	 // TODO
+		if(Constants.ISTEST)
+			log.info(gson.toJson(result));
 		return result;
 	}
 
@@ -209,6 +236,15 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 //		log.info(gson.toJson(result));
 		return result;
 
+	}
+	
+	public static void main(String[] args) {
+		WangYiYunHelp yun = new WangYiYunHelp();
+		WangYiYunResultBaseDto<WangYiYunListDataDto> resultNewList = yun.getNewList("3", DEFAULT_CHANNEL, "123", "123.12.12.1");
+		if (!resultNewList.getCode().equals(WangYiYunErrorCode.SUCCESS.getCode())) {
+		}
+		System.out.println(gson.toJson(resultNewList));
+		
 	}
 
 }

@@ -2,6 +2,8 @@ package com.bus.chelaile.flowNew;
 
 import java.util.*;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.dao.ActivityContentMapper;
 import com.bus.chelaile.flow.ActivityService;
+import com.bus.chelaile.flow.FlowService;
 import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.flow.WangYiYunHelp;
 import com.bus.chelaile.flow.WuliToutiaoHelp;
@@ -28,8 +31,6 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 
 public class FlowServiceManager {
 
-//	@Autowired
-//	private FlowOcs flowOcs;
 	@Autowired
 	private ActivityContentMapper activityContentMapper;
 //	@Autowired
@@ -42,6 +43,8 @@ public class FlowServiceManager {
 	private ActivityService activityService;
 	@Autowired
 	private WuliToutiaoHelp wuliToutiaoHelp;
+	@Resource
+	private FlowService flowService;
 	
 	private static final String HEADSTRS = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"detail.new.flow.udidHEADS", "4|5|6|7");
@@ -69,7 +72,7 @@ public class FlowServiceManager {
 		FlowStartService.initLineDetailFlows(FlowStaticContents.activityContens);
 	}
 	
-	public String getResponseLineDetailFlows(AdvParam param) {
+	public String getResponseLineDetailFlows(AdvParam advParam) {
 //		 乘车码banner入口
 //		PayInfo payInfo = payService.getPayInfo(param);
 //		if (payInfo != null) {
@@ -80,22 +83,11 @@ public class FlowServiceManager {
 		
 		// 单栏信息流
 		List<FlowContent> contentsFromApi = null;
-		ChannelType channelType = activityService.getChannelType(param.getUdid(), -1);
-		if (FlowStaticContents.isReturnLineDetailFlows(param)) {
+		ChannelType channelType = activityService.getChannelType(advParam.getUdid(), -1);
+		if (FlowStaticContents.isReturnLineDetailFlows(advParam)) {
 			try {
-				// TODO 
-				// CITI 
-				if(StringUtils.isNoneBlank(param.getCityId()) && param.getCityId().equals("014")) {
-					contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(param);
-				}
-				
-				else if (channelType == ChannelType.TOUTIAO) {
-					contentsFromApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
-				} else if (channelType == ChannelType.WANGYI) {
-					contentsFromApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
-				}
-				// contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(null,
-				// null, -1);
+				long ftime = 0L; String recoid = null;
+				contentsFromApi = flowService.getApiContent(advParam, ftime, recoid, -1, channelType, contentsFromApi);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -181,7 +173,7 @@ public class FlowServiceManager {
 //		List<ArticleContent> articleList = FlowStaticContents.getArticleList(channelId, articlePersonNo, param);
 //		
 ////		for(ArticleContent arContent : articleList) {
-////			// TODO 针对用户，做一些去重之类的处理
+////			// 针对用户，做一些去重之类的处理
 ////		}
 //		return articleList;
 //	}

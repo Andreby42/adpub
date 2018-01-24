@@ -171,49 +171,20 @@ public class FlowService {
 
 			// 得到最新内容
 			List<FlowContent> contentsFromApi = null;
-			// TODO 
-			// CITI 
-			if(StringUtils.isNoneBlank(advParam.getCityId()) && advParam.getCityId().equals("014")) {
-				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(advParam);
-			}
+			contentsFromApi = getApiContent(advParam, ftime, recoid, id, channelType, contentsFromApi);
 			
-			else if (channelType == ChannelType.TOUTIAO) {
-//				return null;	// FOR TEST
-				contentsFromApi = toutiaoHelp.getInfoByApi(advParam, ftime, recoid, id, false);
-			} else if (channelType == ChannelType.UC) {
-				contentsFromApi = xishuashuaHelp.getInfoByApi(advParam, ftime, recoid, id, false);
-			} else if(channelType == ChannelType.WULITOUTIAO) {
-				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(advParam);
-			} else if(channelType == ChannelType.WANGYI) {
-				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, -1, false);
-			}
 			contents = flowOcs.merageList(null, contentsFromApi, contentActivity, null, advParam.getUdid(), channelType);
 //			FlowUtil.setImagsType(contents);
 			
-			// 粗暴的取一条
-			// tbk TODO 
-//			FlowContent flow = TbkUtils.getTbkContent();
-//			if(flow != null) {
-//				contents.add(3, flow);;
-//			}
+			
+			// tbk 缓存取一条
+			FlowContent flow = TbkUtils.getTbkContentFromCache();
+			if(contents != null && contents.size() > 4 && flow != null) {
+				contents.add(3, flow);;
+			}
 			
 			return contents;
 
-			// // 得到用户不需要展示的id
-			// List<String> blockIds = getNotDisplayIds(advParam);
-			// // List<String> blockIds = null;
-			// // 过滤掉不要展示的文章列表
-			// filterTopList(contentsFromOCSTop, contentsFromApi, blockIds);
-			// // 合并
-			// contents = merageList(contentsFromOCSTop,
-			// contentsFromApi,contentActivity, contentAdv);
-			// // 把给用户展示的列表放入队列
-			// if (contents != null) {
-			// setToQueue(contents, advParam);
-			// } else {
-			// logger.error("信息流返回为空! udid={}", advParam.getUdid());
-			// return null;
-			// }
 		} catch (Exception e) {
 			logger.error("信息流出错, udid={}, s={}", advParam.getUdid(), advParam.getS());
 			logger.error(e.getMessage(), e);
@@ -222,7 +193,6 @@ public class FlowService {
 		}
 
 	}
-
 
 
 	/*
@@ -432,73 +402,58 @@ public class FlowService {
 //		return testGetTabActivities(param);
 	}
 	
-	
 	/**
-	 * 获取tab页弹窗位内容
-	 * @param param
+	 * 获取不同源内容
+	 * @param advParam
+	 * @param ftime
+	 * @param recoid
+	 * @param id
+	 * @param channelType
+	 * @param contentsFromApi
 	 * @return
+	 * @throws Exception
 	 */
-	public TabEntity testGetTabActivities(AdvParam param) {
-		//  TODO  Tab点击弹窗
-			TabEntity tabAdEntity1 = new TabEntity();
-			tabAdEntity1.setId(1);
-			tabAdEntity1.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
-			tabAdEntity1.setLink("http://www.chelaile.net.cn");
-			tabAdEntity1.setActivityType(1);
-			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity1));
-			
-			TabEntity tabAdEntity2 = new TabEntity();
-			tabAdEntity2.setId(3);
-			tabAdEntity2.setTagId(81);
-			tabAdEntity2.setTag("公交小事");
-			tabAdEntity2.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
-//			tabAdEntity2.setLink("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
-			tabAdEntity2.setActivityType(3);
-			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity2));
-			
-//			TabEntity tabAdEntity3 = new TabEntity();
-//			tabAdEntity3.setId(4);
-//			tabAdEntity3.setPic("");
-//			tabAdEntity3.setLink("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
-//			tabAdEntity3.setActivityType(4);
-//			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity3));
-			
-			TabEntity tabAdEntity4 = new TabEntity();
-			tabAdEntity4.setId(5);
-			tabAdEntity4.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
-//			tabAdEntity4.setLink("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
-			tabAdEntity4.setActivityType(5);
-			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity4));
-			
-			TabEntity tabAdEntity5 = new TabEntity();
-			tabAdEntity5.setId(6);
-			tabAdEntity5.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
-			tabAdEntity5.setLink("https://activity.m.duiba.com.cn/newtools/index?id=2521608");
-			tabAdEntity5.setActivityType(6);
-			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity5));
-			
-			TabEntity tabAdEntity6 = new TabEntity();
-			tabAdEntity6.setId(7);
-			tabAdEntity6.setPic("https://image3.chelaile.net.cn/5fd5ee4d009344649fc7756addf92e96");
-			tabAdEntity6.setActivityType(7);
-			tabAdEntity6.setFeedId("627093497618468864");
-			logger.info("返回tab弹窗信息={}", JSONObject.toJSONString(tabAdEntity6));
-			
-			if(param.getCityId().equals("027"))
-				return tabAdEntity1;
-			else if(param.getCityId().equals("006"))
-				return tabAdEntity2;
-//			else if(param.getCityId().equals("019"))
-//				return tabAdEntity3;
-			else if(param.getCityId().equals("004"))
-				return tabAdEntity4;
-			else if(param.getCityId().equals("007"))
-				return tabAdEntity5;
-			else
-				return tabAdEntity6;
+	public List<FlowContent> getApiContent(AdvParam advParam, long ftime, String recoid, int id,
+			ChannelType channelType, List<FlowContent> contentsFromApi) throws Exception {
+		boolean isSpecial = false;
+		if (StringUtils.isNoneBlank(advParam.getCityId())) {
+			if (advParam.getCityId().equals("014")) {		 // 深圳，唔哩头条
+				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(advParam);
+				isSpecial = true;
+			} else if (advParam.getCityId().equals("021")) { // 中山，中山本地
+				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, 3, false);
+				isSpecial = true;
+			} else if (advParam.getCityId().equals("003")) { // 重庆，重庆本地
+				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, 4, false);
+				isSpecial = true;
+			} else if (advParam.getCityId().equals("006")) { // 天津，车来了3
+				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, 7, false);
+				isSpecial = true;
+			} else if (advParam.getCityId().equals("040")) { // 广州，车来了2
+				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, 6, false);
+				isSpecial = true;
+			} else if (advParam.getCityId().equals("019")) { // 佛山，头条
+				contentsFromApi = toutiaoHelp.getInfoByApi(advParam, ftime, recoid, id, false);
+				isSpecial = true;
+			}
+		}
+		
+		if (!isSpecial) {
+			if (channelType == ChannelType.TOUTIAO) {
+				contentsFromApi = toutiaoHelp.getInfoByApi(advParam, ftime, recoid, id, false);
+			} else if (channelType == ChannelType.UC) {
+				contentsFromApi = xishuashuaHelp.getInfoByApi(advParam, ftime, recoid, id, false);
+			} else if (channelType == ChannelType.WULITOUTIAO) {
+				contentsFromApi = wuliToutiaoHelp.getArticlesFromCache(advParam);
+			} else if (channelType == ChannelType.WANGYI) {
+				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, -1, false);
+			}
+		}
+		return contentsFromApi;
 	}
-	
 
+	
+	
 	public static void main(String[] args) {
 		
 		String favStr = ",2,3";

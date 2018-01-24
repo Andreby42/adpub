@@ -8,7 +8,6 @@ public class FeedAdInfo {
 	private int likeNum;
 	private String tag;
 	private int isLike;
-	private int isSetTop;
 
 	public FeedAdInfo() {
 		super();
@@ -22,7 +21,6 @@ public class FeedAdInfo {
 		this.icon = icon;
 		this.setLikeNum(likeNum);
 		this.tag = tag;
-		this.isSetTop = isSetTop;
 	}
 
 	public String getTitle() {
@@ -80,13 +78,5 @@ public class FeedAdInfo {
 
 	public void setLikeNum(int likeNum) {
 		this.likeNum = likeNum;
-	}
-
-	public int getIsSetTop() {
-		return isSetTop;
-	}
-
-	public void setIsSetTop(int isSetTop) {
-		this.isSetTop = isSetTop;
 	}
 }

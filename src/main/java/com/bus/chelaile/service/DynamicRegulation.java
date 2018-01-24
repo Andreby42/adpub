@@ -52,9 +52,9 @@ public class DynamicRegulation {
 			if (Constants.IS_FLOW) {
 				// 启动缓存文章内容
 				Runnable qMThread = new DownArticles(wuliToutiaoHelp);
-				int interval = 60;
+				int interval = 600;
 				if (Constants.ISTEST) {
-					interval = 10;
+					interval = 6000;
 				}
 				service.scheduleWithFixedDelay(qMThread, 30, interval, TimeUnit.SECONDS);
 				

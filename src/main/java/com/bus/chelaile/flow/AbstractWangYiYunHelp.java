@@ -49,47 +49,22 @@ public class AbstractWangYiYunHelp implements InterfaceFlowHelp {
 	protected final static Gson gsonFormat = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
 	protected final static Gson gsonSerNulls = new GsonBuilder().disableHtmlEscaping().serializeNulls().create();
-//	@Value("${wangyiyun.secretkey}")
-//	protected  String secretkey = "3eb746dfa4a54361964e7b49d0e3e2dc";
 	protected static final String secretkey = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.secretkey", "3eb746dfa4a54361964e7b49d0e3e2dc");
-	
-	
-//	@Value("${wangyiyun.appkey}")
-//	protected  String appkey = "379a2e02a7e24d389a490637891d0514";
 	protected static final String appkey = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.appkey", "379a2e02a7e24d389a490637891d0514");
-	
-//	@Value("${wangyiyun.wangYiYunChannelListUrl}")
-//	protected  String wangYiYunChannelListUrl = "https://youliao.163yun.com/api-server/api/v1/channel/list";
 	protected static final String wangYiYunChannelListUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.wangYiYunChannelListUrl", "https://youliao.163yun.com/api-server/api/v1/channel/list");
-	
-//	@Value("${wangyiyun.wangYiYunNewListUrl}")
-//	protected  String wangYiYunNewListUrl = "https://youliao.163yun.com/api-server/api/v1/info/list";
 	protected static final String wangYiYunNewListUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.wangYiYunNewListUrl", "https://youliao.163yun.com/api-server/api/v1/info/list");
-	
-//	@Value("${wangyiyun.wangYuYunNewDetailUrl}")
-//	protected  String wangYuYunNewDetailUrl = "https://youliao.163yun.com/api-server/api/v1/info/detail";
 	protected static final String wangYuYunNewDetailUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.wangYuYunNewDetailUrl", "https://youliao.163yun.com/api-server/api/v1/info/detail");
-	
-//	@Value("${wangyiyun.modelFileName}")
-//	protected String modelFileName="E:\\wyangyiyun\\ori_text.html";
 	protected static final String modelFileName = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.modelFileName", "D:\\用户目录\\Downloads\\ori_text.html");
-	
-//	@Value("${wangyiyun.cdnPath}")
-//	protected String cdnPath = "D:\\Program Files (x86)\\nginx-1.12.2\\html\\";
 	protected static final String cdnPath = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.cdnPath", "D:\\temp\\html\\");
-	
-//	@Value("${wangyiyun.newUrl}")
-//	protected  String newUrl="http://127.0.0.1/";
 	protected static final String newUrl = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"wangyiyun.newUrl", "http://127.0.0.1/");
-	
     protected static final String wangyiArticleHost = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), 
     		"wangyiyun.article.host", "https://youliao.163yun.com/h5/#/info?");
 	

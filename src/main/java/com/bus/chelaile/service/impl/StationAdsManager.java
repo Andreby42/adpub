@@ -43,11 +43,12 @@ public class StationAdsManager extends AbstractManager {
 		StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
 
 			AnalysisLog
-					.info("[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}",
+					.info("[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={}",
 							ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
 							advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(),
 							advParam.getStnName(), advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
-							advParam.getLng(), advParam.getLat());
+							advParam.getLng(), advParam.getLat(), advParam.getH5User(),
+							advParam.getH5Src());
 
 		return entity;
 	}
@@ -71,6 +72,7 @@ public class StationAdsManager extends AbstractManager {
 				res.setAdCard(stationInner.getAdCard());
 			}
 			res.setPic(stationInner.getPic());
+			res.setAdPriority(ad.getPriority());
 			
 			// 针对口碑券和淘宝客的修改
 			// 口碑券，需要从ocs中获取当前站点的券

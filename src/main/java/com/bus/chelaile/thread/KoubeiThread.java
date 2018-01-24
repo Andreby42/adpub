@@ -62,10 +62,12 @@ public class KoubeiThread implements Runnable {
 								String type = discountInfo.getType();
 								CouponType couponType = CouponType.getType(type);
 								if (null == couponType) {
+									logger.error("缓存口碑失败 couponType为空，ciytId={}, stopName={}", cityId, stopInfo.getStationName());
 									continue;
 								}
 								couponService.parseCouponInfo(discountInfo, couponType, couponInfo);
 								if (StringUtils.isBlank(couponInfo.getItemName()) || couponInfo.getItemName().contains("null") || couponInfo.getItemName().contains("NULL")) {
+									logger.error("缓存口碑失败 couponType的一些信息为空，ciytId={}, stopName={},couponInfo={}", cityId, stopInfo.getStationName(), JSONObject.toJSONString(couponInfo));
 									continue;
 								}
 								String couponInfoStr = JSONObject.toJSONString(couponInfo);

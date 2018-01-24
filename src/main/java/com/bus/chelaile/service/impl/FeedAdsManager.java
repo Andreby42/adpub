@@ -1,6 +1,7 @@
 package com.bus.chelaile.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -21,6 +22,7 @@ import com.bus.chelaile.model.ads.AdFeedInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.Tag;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.FeedAdArticleInfo;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 import com.bus.chelaile.model.ads.entity.FeedAdInfo;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -91,16 +93,28 @@ public class FeedAdsManager extends AbstractManager {
 			res.setWidth(feedInner.getWidth());
 			res.setHeight(feedInner.getHeight());
 			res.setFeedId(feedInner.getFeedId());
+			res.setFeedAdType(feedInner.getFeedAdType());
+			res.setIsSetTop(feedInner.getIsSetTop());
 			if (feedInner.getTag() != null && feedInner.getTagId() != null 
 					&& StringUtils.isNoneBlank(feedInner.getTag()) && StringUtils.isNoneBlank(feedInner.getTagId())) {
 				res.setTag(new Tag(feedInner.getTag(), feedInner.getTagId()));
 			}
 
-			if (StringUtils.isNoneBlank(feedInner.getFeedAdTitle())) {
+			if (feedInner.getFeedAdType() == 0) {	 // 话题样式
 				res.setFeedInfo(new FeedAdInfo(feedInner.getFeedAdTitle(), date.getTime(), feedInner.getSlogan(),
 						feedInner.getIcon(), feedInner.getLikeNum(), feedInner.getFeedTag(), feedInner.getIsSetTop()));
-			} else {
+			} else if(feedInner.getFeedAdType() == 1) { // 透视样式
 				res.setFeedInfo(new FeedAdInfo(null, 0L, null, null, 0, feedInner.getFeedTag(), feedInner.getIsSetTop()));
+			} else if(feedInner.getFeedAdType() == 2) { // 文章样式
+				res.setArticleInfo(new FeedAdArticleInfo(feedInner.getFeedAdTitle(), date.getTime(), feedInner.getFeedAdArticleTag(),
+					new ArrayList<String>(), feedInner.getSlogan()));  // TODO
+				if(feedInner.getImgs() != null) {
+					for(String s : feedInner.getImgs().split(";")) {
+						res.getArticleInfo().getImgs().add(s);
+					}
+				} else {
+					logger.error("feed流广告 文章样式，没有图片，advId={}, imgs={}", res.getId(), feedInner.getImgs());
+				}
 			}
 		} else {
 			throw new IllegalArgumentException("=====> 错误的innerContent类型： "

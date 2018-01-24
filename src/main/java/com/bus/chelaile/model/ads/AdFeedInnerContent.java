@@ -1,7 +1,6 @@
 package com.bus.chelaile.model.ads;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.mvc.AdvParam;
 
@@ -13,6 +12,9 @@ import com.bus.chelaile.mvc.AdvParam;
  */
 public class AdFeedInnerContent extends AdInnerContent {
 	private String pic; // 广告图片的URL
+	
+	private int feedAdType; // feed流广告类型，0 话题样式， 1 透视样式， 2 文章样式
+	
 	private int width; //图片宽
 	private int height; //图片高
 	private String feedAdTitle;
@@ -27,6 +29,11 @@ public class AdFeedInnerContent extends AdInnerContent {
 	private String feedTag;
 	private int isSetTop;
 	
+	// 文章样式新增字段
+	private String imgs;
+	private String feedAdArticleTag;
+	
+	
 	@Override
 	protected void parseJson(String jsonr) {
 		AdFeedInnerContent ad = null;
@@ -38,6 +45,7 @@ public class AdFeedInnerContent extends AdInnerContent {
 				this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
 				this.setHeight(Integer.parseInt(ad.pic.split("#")[1].split(",")[1]));
 			}
+			this.feedAdType = ad.feedAdType;
 			this.setFeedAdTitle(ad.getFeedAdTitle());
 			this.feedId = ad.feedId;
 			this.tagId = ad.tagId;
@@ -49,6 +57,9 @@ public class AdFeedInnerContent extends AdInnerContent {
 			this.setLikeNum(ad.getLikeNum());
 			this.feedTag = ad.feedTag;
 			this.isSetTop = ad.isSetTop;
+			
+			this.imgs = ad.imgs;
+			this.feedAdArticleTag = ad.feedAdArticleTag;
 		}
 	}
 	
@@ -208,5 +219,35 @@ public class AdFeedInnerContent extends AdInnerContent {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+
+	public int getFeedAdType() {
+		return feedAdType;
+	}
+
+
+	public void setFeedAdType(int feedAdType) {
+		this.feedAdType = feedAdType;
+	}
+
+
+	public String getImgs() {
+		return imgs;
+	}
+
+
+	public void setImgs(String imgs) {
+		this.imgs = imgs;
+	}
+
+
+	public String getFeedAdArticleTag() {
+		return feedAdArticleTag;
+	}
+
+
+	public void setFeedAdArticleTag(String feedAdArticleTag) {
+		this.feedAdArticleTag = feedAdArticleTag;
 	}
 }

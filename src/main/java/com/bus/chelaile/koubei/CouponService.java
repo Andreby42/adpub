@@ -220,7 +220,10 @@ public class CouponService {
                  logger.info("myCoupons params{} null", accountId);
                  continue;
              }
-             CouponInfo couponInfo = new CouponInfo(order.getCouponId(), order.getItemName(),"-1", order.getCondition(), order.getShopName(), order.getImageUrl());
+             CouponInfo couponInfo = new CouponInfo(order.getCouponId(), order.getItemName(),"-1", null, order.getShopName(), order.getImageUrl());
+             if (StringUtils.isNotBlank(order.getCondition()) && !"null".equalsIgnoreCase(order.getCondition())) {
+                 couponInfo.setCondition(order.getCondition());
+             }
              couponInfo.setStatus(order.getStatus());
              couponInfo.setPartnerId(order.getPartnerId());
              couponInfo.setBenefitId(order.getBenefitId());

@@ -3,6 +3,8 @@ package com.bus.chelaile.flowNew;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.ActivityService;
+import com.bus.chelaile.flow.FlowService;
 import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.flow.WangYiYunHelp;
 import com.bus.chelaile.flow.WuliToutiaoHelp;
@@ -44,10 +47,12 @@ public class FeedService {
 	private ServiceManager serviceManager;
 	@Autowired
 	private ActivityService activityService;
+	@Resource
+	private FlowService flowService;
 
 	protected static final Logger logger = LoggerFactory.getLogger(FeedService.class);
 	private static final int FEEDSIZE_LIMIT = 3;
-	private static final int FEED_NEW_LIMIT = 20;	 // TODO 线上放12个
+	private static final int FEED_NEW_LIMIT = 12;	 // 线上放12个
 
 	/**
 	 * 详情页下方 feed 流 。3.0 版
@@ -123,7 +128,7 @@ public class FeedService {
 			if (channelType == ChannelType.TOUTIAO) {
 				flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
 			} else if (channelType == ChannelType.WANGYI) {
-				flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
+				flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, 3, false); // 3 是中山本地的频道id
 			}
 			else if (channelType == ChannelType.WULITOUTIAO) {
 				flowsApi = wuliToutiaoHelp.getArticlesFromCache(param);
@@ -147,7 +152,7 @@ public class FeedService {
 		}
 		logger.info("用户话题index, udid={}, index={}", param.getUdid(), index);
 
-		// TODO 给测试用的特殊例子
+		//给测试用的特殊例子
 		if (returnFeedNew(param)) {
 //			FeedInfo feedTemp = TagUtils.getFeedInfo("646277590927118336", param.getAccountId());
 //			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp);
@@ -174,16 +179,16 @@ public class FeedService {
 		}
 
 		// 排序
-		String ids = sortNewFeeds(feeds, feedAds, feedArticles, flowsFeed);
+		String[] ids = sortNewFeeds(feeds, feedAds, feedArticles, flowsFeed);
 		
 		// 记录feed流下发的日志
 		AnalysisLog
 		.info("[GET_FEEDS]: accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}, "
-				+ "id={}, stats_act={}, refer={}",
+				+ "id={}, feedIds={}, stats_act={}, refer={}",
 				param.getAccountId(), param.getUdid(),
 				param.getCityId(), param.getS(), param.getV(), param.getLineId(),
 				param.getStnName(), param.getNw(), param.getIp(), param.getDeviceType(),
-				param.getLng(), param.getLat(), ids, param.getStatsAct(), param.getRefer());
+				param.getLng(), param.getLat(), ids[0], ids[1],param.getStatsAct(), param.getRefer());
 
 		return feeds;
 	}
@@ -214,7 +219,7 @@ public class FeedService {
 	}
 
 	// 排序
-	private String sortNewFeeds(List<FeedContent> feeds, List<FeedContent> feedAds, List<FeedContent> feedArticles, List<FeedContent> flowsFeed) {
+	private String[] sortNewFeeds(List<FeedContent> feeds, List<FeedContent> feedAds, List<FeedContent> feedArticles, List<FeedContent> flowsFeed) {
 		int index = 0; // 列表组合，计数间隔使用
 		int limitsize = 0; // 列表记录，总数
 		Iterator<FeedContent> it = feedAds.iterator();
@@ -222,7 +227,7 @@ public class FeedService {
 		while (it.hasNext()) {
 			FeedContent x = it.next();
 			// 置顶广告
-			if (x.getAds().getFeedInfo() != null && x.getAds().getFeedInfo().getIsSetTop() == 1) {
+			if (x.getAds() != null && x.getAds().getIsSetTop() == 1) {
 				feeds.add(x);
 				it.remove();
 				index++;limitsize++;
@@ -230,19 +235,21 @@ public class FeedService {
 				break;
 			}
 		}
+		String feedIds = "";
 		int fIndex = 0; // 话题计数
 		if(!hasTopAd && flowsFeed != null && flowsFeed.size() > 0) {
 			feeds.add(flowsFeed.get(0));	// 没有顶置广告，那么放一个话题
-			fIndex ++;
 			index ++;limitsize++;
+			feedIds += flowsFeed.get(0).getId() + ";";
+			fIndex ++;
 		}
 
-		String ids = "";
+		String articleIds = "";
 		int aIndex = 0; // 广告计数
 		for (FeedContent f : feedArticles) {
 			feeds.add(f);
 			index++;limitsize++;
-			ids += f.getId() + ";";
+			articleIds += f.getId() + ";";
 			if(limitsize >= FEED_NEW_LIMIT)		// 默认给12条即可
 				break;
 			if (index >= 4 && aIndex < feedAds.size() && aIndex < 1) {	 // 除去顶置外，最多一条广告
@@ -253,28 +260,42 @@ public class FeedService {
 			if(index >= 4 && fIndex < flowsFeed.size()) {
 				feeds.add(flowsFeed.get(fIndex));
 				index = 1;limitsize++;
+				feedIds += flowsFeed.get(fIndex).getId() + ";";
 				fIndex ++;
 			}
 		}
-		return ids;
+		return new String[]{articleIds, feedIds};
 	}
 
+	
+	// 根据 feed流广告，构建 详情页feed流 FEED
 	private void adAdToFeeds(AdvParam param, List<FeedContent> feedAds, List<FeedAdEntity> adList) {
 		for (FeedAdEntity ads : adList) {
-//				List<String> imgs = New.arrayList();
-//				imgs.add(ads.getPic());
+			// List<String> imgs = New.arrayList();
+			// imgs.add(ads.getPic());
 			List<Thumbnail> imgs = New.arrayList();
 			Thumbnail img = new Thumbnail(ads.getPic(), ads.getWidth(), ads.getHeight());
 			imgs.add(img);
 			FeedContent feed = null;
-			if (ads.getFeedInfo() != null && StringUtils.isNoneBlank(ads.getFeedInfo().getTitle())) { // TODO
-																										// 看是否有商标名称，来区分是透视，还是feed样式的。这个方式不合理，应该通过一个type
-				feed = new FeedContent(String.valueOf(ads.getId()), 5, imgs, 3, ads.getFeedInfo().getTitle(), null,
-						ads.getFeedInfo().getTime(), ads);
+			if (ads.getFeedAdType() == 0) { // 话题样式
+				feed = new FeedContent(String.valueOf(ads.getId()), 5, imgs, 3, ads.getFeedInfo().getTitle(), null, ads
+						.getFeedInfo().getTime(), ads);
 				feed.getAds().getFeedInfo().setIsLike(getIsLikeAds(ads.getId(), param.getUdid()));
 				feed.getAds().getFeedInfo().setLikeNum(getLikeNum(ads.getId()));
-			} else {
+			} else if (ads.getFeedAdType() == 1) { // 透视样式
 				feed = new FeedContent(String.valueOf(ads.getId()), 5, imgs, 2, null, null, 0L, ads);
+			} else if (ads.getFeedAdType() == 2) { // 文章样式
+				logger.info("文章样式的feed流广告， advId={}", ads.getId());
+				List<Thumbnail> imgsAr = New.arrayList();
+				int imgsType = 0;	// 单图
+				if(ads.getArticleInfo().getImgs().size() > 1) {
+					imgsType = 1;   // 三图
+				}
+				for(String s : ads.getArticleInfo().getImgs()) {
+					imgsAr.add(new Thumbnail(s));
+				}
+				feed = new FeedContent(String.valueOf(ads.getId()), 5, imgsAr, imgsType, ads.getArticleInfo().getTitle(),
+						null, ads.getArticleInfo().getTime(), ads);
 			}
 
 			feedAds.add(feed);
@@ -285,7 +306,7 @@ public class FeedService {
 	/*
 	 * 可能涉及到一些链接增加用户id之类的修正
 	 */
-	private void createList(AdvParam param, List<FlowNewContent> flows) {
+	private void createList(AdvParam advParam, List<FlowNewContent> flows) {
 
 		List<FlowNewContent> flowTagDetail = New.arrayList();
 		List<FlowNewContent> flowActivity = New.arrayList();
@@ -314,23 +335,13 @@ public class FeedService {
 			flowGame = JSON.parseArray(lineFlowsStr, FlowNewContent.class);
 		}
 
-		List<FlowContent> flowsApi = null;
-		ChannelType channelType = activityService.getChannelType(param.getUdid(), -1);
+		List<FlowContent> contentsFromApi = null;
+		ChannelType channelType = activityService.getChannelType(advParam.getUdid(), -1);
 		try {
-			//TODO  
-			// CITIES 
-			if(StringUtils.isNoneBlank(param.getCityId()) && param.getCityId().equals("014")) {
-				flowsApi = wuliToutiaoHelp.getArticlesFromCache(param);
-			} 
+			long ftime = 0L; String recoid = null;
+			contentsFromApi = flowService.getApiContent(advParam, ftime, recoid, -1, channelType, contentsFromApi);
 			
-			else if (channelType == ChannelType.TOUTIAO) {
-				 flowsApi = toutiaoHelp.getInfoByApi(param, 0L, null, -1, false);
-			} else if (channelType == ChannelType.WANGYI) {
-				flowsApi = wangYiYunHelp.getInfoByApi(param, 0L, null, -1, false);
-			} else if (channelType == ChannelType.WULITOUTIAO) {
-				flowsApi = wuliToutiaoHelp.getArticlesFromCache(param);
-			}
-			for (FlowContent f : flowsApi) {
+			for (FlowContent f : contentsFromApi) {
 				flowArticle.add(f.createFeeds());
 			}
 		} catch (Exception e) {
@@ -344,14 +355,14 @@ public class FeedService {
 		}
 
 		for (int index = 0; index < FlowStartService.LINEDETAIL_NUM; index++) {
-			addIntoFlows(flowTagDetail, flows, index, param);
-			addIntoFlows(flowActivity, flows, index, param);
-			addIntoFlows(flowGame, flows, index, param);
-			addIntoFlows(flowArticle, flows, index, param);
-			addIntoFlows(flowWeal, flows, index, param);
+			addIntoFlows(flowTagDetail, flows, index, advParam);
+			addIntoFlows(flowActivity, flows, index, advParam);
+			addIntoFlows(flowGame, flows, index, advParam);
+			addIntoFlows(flowArticle, flows, index, advParam);
+			addIntoFlows(flowWeal, flows, index, advParam);
 		}
 
-		// TODO 手动添加活动内容
+		// 手动添加活动内容
 		// FlowNewContent f = new FlowNewContent();
 		// f.setDestType(1);
 		// f.setFlowTitle("活动标题---");

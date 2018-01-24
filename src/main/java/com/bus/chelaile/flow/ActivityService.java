@@ -91,7 +91,7 @@ public class ActivityService {
 		
 		List<ActivityContent> tabActivities = activityContentMapper.listTabActivity(); //获取所有tab弹窗
 //		if(tabActivities != null)
-			ALL_TAB_ACTIVITIES.addAll(tabActivities);	// TODO  测试如果没有任何tab活动的时候，会否出错
+			ALL_TAB_ACTIVITIES.addAll(tabActivities);	// 测试:如果没有任何tab活动的时候，会否出错-->不会
 
 		// 获取内部udid, type=1 或者0 表示 信息流 内推用户
 		// 从文件获取指定投放的udid列表
@@ -396,7 +396,7 @@ public class ActivityService {
 		if (FLOWUDIDS.contains(udid)) {
 			return true;
 		}
-		if (Constants.ISTEST) {			// TODO 
+		if (Constants.ISTEST) {
 			return true; // FOR TEST
 		}
 
@@ -418,7 +418,7 @@ public class ActivityService {
 			return 1;
 		}
 		if (Constants.ISTEST) {
-			return 1; 			// FOR TEST	 // TODO 
+			return 1;
 		}
 		return 0;
 	}
@@ -594,7 +594,12 @@ public class ActivityService {
 			logger.error("频道信息为空");
 			return null;
 		}
-		return CHANNELS.get(channelType.getType()).get(channelId);
+		if(CHANNELS.containsKey(channelType.getType())) {
+			if(CHANNELS.get(channelType.getType()).containsKey(channelId))
+				return CHANNELS.get(channelType.getType()).get(channelId);
+		}
+		logger.info("无法根据channelId 获取频道id ###### , channelType={}, channelId={}", channelType.getType(), channelId);
+		return null;
 	}
 
 	/*

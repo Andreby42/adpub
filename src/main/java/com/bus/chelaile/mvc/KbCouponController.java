@@ -1,19 +1,16 @@
 package com.bus.chelaile.mvc;
 
-import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.koubei.*;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.util.koubei.WowUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * Created by zhaoling on 2018/1/10.
@@ -33,11 +30,11 @@ public class KbCouponController {
     public ClientDto listCoupons(String cityId, String udid, String secret, String accountId, String lng, String lat, String stnName) {
         ClientDto clientDto = new ClientDto();
         if (KBUtil.isBlankParam(new String[]{cityId,udid})) {
-            clientDto.setErrorObject("paramError", "01");
+            clientDto.setErrorObject("参数错误", "01");
             return clientDto;
         }
         if (!KBUtil.isBlankParam(new String[]{accountId, secret}) && !WowUtil.verifyAccount(accountId, secret, udid)) {
-            clientDto.setErrorObject("verifyError", "03");
+            clientDto.setErrorObject("校验失败", "03");
             return clientDto;
         }
         try {
@@ -57,11 +54,11 @@ public class KbCouponController {
     public ClientDto myCoupons(String udid, String accountId, String secret, int pn) {
         ClientDto clientDto = new ClientDto();
         if (KBUtil.isBlankParam(new String[]{udid, accountId, secret}) || pn <= 0) {
-            clientDto.setErrorObject("paramError", "01");
+            clientDto.setErrorObject("参数错误", "01");
             return clientDto;
         }
         if (!WowUtil.verifyAccount(accountId, secret, udid)) {
-            clientDto.setErrorObject("verifyError", "03");
+            clientDto.setErrorObject("校验失败", "03");
             return clientDto;
         }
         try {
@@ -81,18 +78,18 @@ public class KbCouponController {
     public ClientDto getCoupon(String udid, String accountId, String secret, CouponInfo couponInfo) {
         ClientDto clientDto = new ClientDto();
         if (KBUtil.isBlankParam(new String[]{udid, accountId, secret})) {
-            clientDto.setErrorObject("paramError", "01");
+            clientDto.setErrorObject("参数错误", "01");
             return clientDto;
         }
         if (!WowUtil.verifyAccount(accountId, secret, udid)) {
-            clientDto.setErrorObject("verifyError", "03");
+            clientDto.setErrorObject("校验失败", "03");
             return clientDto;
         }
         try {
             CouponUseInfo useInfo = couponService.getCoupon(accountId, couponInfo);
             logger.info("getCoupons result {}", useInfo);
             if (null == useInfo) {
-                clientDto.setErrorObject("getFailed", "03");
+                clientDto.setErrorObject("领取失败", "03");
                 return clientDto;
             }
             clientDto.setSuccessObject(useInfo, "00");

@@ -7,6 +7,7 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.WuliToutiaoHelp;
 import com.bus.chelaile.flowNew.FlowStartService;
 import com.bus.chelaile.flowNew.FlowStaticContents;
+import com.bus.chelaile.flowNew.TbkUtils;
 import com.bus.chelaile.flowNew.customContent.TagUtils;
 
 public class DownArticles implements Runnable {
@@ -34,6 +35,9 @@ public class DownArticles implements Runnable {
 			
 			// 缓存话题列表
 			TagUtils.getFeedListToCache();
+			
+			// 缓存淘宝客软文
+			TbkUtils.cacheTAK();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -10,6 +10,7 @@ public class StationAdEntity extends BaseAdEntity {
 	private String pic; // 图片URL
 	private BannerInfo bannerInfo;
 	private AdCard adCard;
+	private int adPriority;
 	
 	// 构造方法
 	public StationAdEntity() {
@@ -44,6 +45,14 @@ public class StationAdEntity extends BaseAdEntity {
 	@Override
 	protected ShowType gainShowTypeEnum() {
 		return ShowType.STATION_ADV;
+	}
+
+	public int getAdPriority() {
+		return adPriority;
+	}
+
+	public void setAdPriority(int adPriority) {
+		this.adPriority = adPriority;
 	}
 
 }

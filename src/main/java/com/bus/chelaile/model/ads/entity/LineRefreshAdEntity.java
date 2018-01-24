@@ -1,7 +1,6 @@
 package com.bus.chelaile.model.ads.entity;
 
 import com.bus.chelaile.model.ShowType;
-import com.bus.chelaile.model.ads.Tag;
 
 public class LineRefreshAdEntity extends SimpleAdEntity{
 	private int duration;
