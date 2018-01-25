@@ -362,6 +362,12 @@ public class ServiceManager {
 					object.put("stationAds", stnAds);
 					return object;
 				}
+			} else if(lineAds != null) {
+				object.put("lineAds", lineAds);
+				return object;
+			} else if(stnAds != null) {
+				object.put("stationAds", stnAds);
+				return object;
 			}
 		}
 		

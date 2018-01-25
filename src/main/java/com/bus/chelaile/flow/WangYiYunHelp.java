@@ -40,7 +40,9 @@ public class WangYiYunHelp extends AbstractWangYiYunHelp {
 	@Autowired
 	private ActivityService activityService;
 	private static final String DEFAULT_CHANNEL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
-			"wangyi.default.channel", "2663");	 // 推荐频道
+			"wangyi.default.channel", "1852");	 // 推荐频道
+	
+	// 1852,推荐； 2663，车来了；3385，车来了2；
 	
 	@Override
 	public List<FlowContent> getInfoByApi(AdvParam advParam, long ftime, String recoid, int id, boolean isShowAd)

@@ -37,7 +37,8 @@ public class DownArticles implements Runnable {
 			TagUtils.getFeedListToCache();
 			
 			// 缓存淘宝客软文
-			TbkUtils.cacheTAK();
+			if(! Constants.ISTEST)
+				TbkUtils.cacheTAK();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
