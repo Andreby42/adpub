@@ -12,10 +12,10 @@ import com.bus.chelaile.mvc.AdvParam;
  */
 public class AdLineRefreshOpenInnerContent extends AdInnerContent {
 	private String pic; // 图片
-	private String pullText; // 下拉文案
-	private String refreshText; // 刷新文案
-	private String openText; // 打开文案
-	private String backColor; // 背景色
+	private String dropDownDoc; // 下拉文案
+	private String freshDoc; // 刷新文案
+	private String openDoc; // 打开文案
+	private String bgColor; // 背景色
 
 	@Override
 	protected void parseJson(String jsonr) {
@@ -28,10 +28,10 @@ public class AdLineRefreshOpenInnerContent extends AdInnerContent {
 				// this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
 				// this.setHeight(Integer.parseInt(ad.pic.split("#")[1].split(",")[1]));
 			}
-			this.pullText = ad.pullText;
-			this.refreshText = ad.refreshText;
-			this.openText = ad.openText;
-			this.backColor = ad.backColor;
+			this.dropDownDoc = ad.dropDownDoc;
+			this.freshDoc = ad.freshDoc;
+			this.openDoc = ad.openDoc;
+			this.bgColor = ad.bgColor;
 		}
 	}
 
@@ -70,34 +70,34 @@ public class AdLineRefreshOpenInnerContent extends AdInnerContent {
 	}
 
 	public String getPullText() {
-		return pullText;
+		return dropDownDoc;
 	}
 
 	public void setPullText(String pullText) {
-		this.pullText = pullText;
+		this.dropDownDoc = pullText;
 	}
 
 	public String getRefreshText() {
-		return refreshText;
+		return freshDoc;
 	}
 
 	public void setRefreshText(String refreshText) {
-		this.refreshText = refreshText;
+		this.freshDoc = refreshText;
 	}
 
 	public String getOpenText() {
-		return openText;
+		return openDoc;
 	}
 
 	public void setOpenText(String openText) {
-		this.openText = openText;
+		this.openDoc = openText;
 	}
 
 	public String getBackColor() {
-		return backColor;
+		return bgColor;
 	}
 
 	public void setBackColor(String backColor) {
-		this.backColor = backColor;
+		this.bgColor = backColor;
 	}
 }

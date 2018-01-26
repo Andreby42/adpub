@@ -40,10 +40,12 @@ public class AdFeedInnerContent extends AdInnerContent {
 		ad = JSON.parseObject(jsonr, AdFeedInnerContent.class);
 		if (ad != null) {
 			this.pic = ad.pic;
-			if(ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
+			if(ad.pic != null && ad.pic.contains(";")) {
+				
+			} else if(ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
 				this.pic = ad.pic.split("#")[0];
 				this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
-				this.setHeight(Integer.parseInt(ad.pic.split("#")[1].split(",")[1]));
+				this.setHeight(Integer.parseInt(ad.pic.split("#")[1].split(",")[1].split(";")[0]));
 			}
 			this.feedAdType = ad.feedAdType;
 			this.setFeedAdTitle(ad.getFeedAdTitle());

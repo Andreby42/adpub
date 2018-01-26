@@ -108,12 +108,12 @@ public class FeedAdsManager extends AbstractManager {
 			} else if(feedInner.getFeedAdType() == 2) { // 文章样式
 				res.setArticleInfo(new FeedAdArticleInfo(feedInner.getFeedAdTitle(), date.getTime(), feedInner.getFeedAdArticleTag(),
 					new ArrayList<String>(), feedInner.getSlogan()));  // TODO
-				if(feedInner.getImgs() != null) {
-					for(String s : feedInner.getImgs().split(";")) {
+				if(StringUtils.isNoneBlank(feedInner.getPic())) {
+					for(String s : feedInner.getPic().split(";")) {
 						res.getArticleInfo().getImgs().add(s);
 					}
 				} else {
-					logger.error("feed流广告 文章样式，没有图片，advId={}, imgs={}", res.getId(), feedInner.getImgs());
+					logger.error("feed流广告 文章样式，没有图片，advId={}, imgs={}", res.getId(), feedInner.getPic());
 				}
 			}
 		} else {
