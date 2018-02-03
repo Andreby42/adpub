@@ -14,6 +14,8 @@ import org.apache.http.client.ClientProtocolException;
 
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
+import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -48,6 +50,18 @@ public class FeedAdsManager extends AbstractManager {
 			AdContentCacheEle ad = entry.getValue();
 			FeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType, ad.getRule().getStartDate());
 
+			// 低版本，不予返回 ‘文章样式的feed流广告’
+			if(entity.getFeedAdType() == 2) {
+				Platform platform = Platform.from(advParam.getS());
+				if (platform.isAndriod(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_ANDROID_0208) {
+					continue;
+				}
+				if (platform.isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0208) {
+					continue;
+				}
+				
+			}
+			
 			AnalysisLog
 					.info("[FEED_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}",
 							ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
@@ -106,8 +120,8 @@ public class FeedAdsManager extends AbstractManager {
 			} else if(feedInner.getFeedAdType() == 1) { // 透视样式
 				res.setFeedInfo(new FeedAdInfo(null, 0L, null, null, 0, feedInner.getFeedTag(), feedInner.getIsSetTop()));
 			} else if(feedInner.getFeedAdType() == 2) { // 文章样式
-				res.setArticleInfo(new FeedAdArticleInfo(feedInner.getFeedAdTitle(), date.getTime(), feedInner.getFeedAdArticleTag(),
-					new ArrayList<String>(), feedInner.getSlogan()));  // TODO
+				res.setArticleInfo(new FeedAdArticleInfo(feedInner.getSlogan(), date.getTime(), feedInner.getFeedTag(),
+					new ArrayList<String>(), feedInner.getFeedAdTitle()));  // TODO
 				if(StringUtils.isNoneBlank(feedInner.getPic())) {
 					for(String s : feedInner.getPic().split(";")) {
 						res.getArticleInfo().getImgs().add(s);

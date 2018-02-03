@@ -7,6 +7,7 @@ public class AccountElement {
 	private Integer age;
 	private Integer gender;
 	private Integer allCoins;
+	private long birthday;
 	private int vip;
 	public String getAccountId() {
 		return accountId;
@@ -51,6 +52,12 @@ public class AccountElement {
 	}
 	public void setAllCoins(Integer allCoins) {
 		this.allCoins = allCoins;
+	}
+	public long getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(long birthday) {
+		this.birthday = birthday;
 	}
 	
 	

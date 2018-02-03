@@ -130,4 +130,7 @@ public class Constants {
     // 版本控制号
     public static final int PLATFORM_LOG_ANDROID_0118 = 96;
 	public static final int PLATFORM_LOG_IOS_0117 = 10480;
+	
+	public static final int PLATFORM_LOG_ANDROID_0208 = 97;
+	public static final int PLATFORM_LOG_IOS_0208 = 10490;
 }

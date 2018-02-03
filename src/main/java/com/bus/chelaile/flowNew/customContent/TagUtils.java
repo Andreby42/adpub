@@ -186,7 +186,7 @@ public class TagUtils {
 						fid = feeds.getFeeds().get(j).getFid();
 						String key = "FEED_SORT_CACHE" + "#" + index;
 						index++;
-						CacheUtil.set(key, Constants.ONE_DAY_TIME, fid);
+						CacheUtil.set(key, -1, fid);
 					}
 				} else {
 					i--;

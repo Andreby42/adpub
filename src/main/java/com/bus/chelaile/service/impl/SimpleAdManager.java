@@ -95,13 +95,14 @@ public class SimpleAdManager extends AbstractManager {
 		} else if (showType == ShowType.LINEDETAIL_REFRESH_OPEN_ADV) {
 			LineRefreshOpenAdEntity res = new LineRefreshOpenAdEntity();
 			AdLineRefreshOpenInnerContent inner = (AdLineRefreshOpenInnerContent) ad.getAds().getInnerContent();
-			res.setPullText(inner.getPullText());
-			res.setRefreshText(inner.getRefreshText());
-			res.setOpenText(inner.getOpenText());
-			res.setBackColor(inner.getBackColor());
+			res.setPullText(inner.getDropDownDoc());
+			res.setRefreshText(inner.getFreshDoc());
+			res.setOpenText(inner.getOpenDoc());
+			res.setBackColor(inner.getBgColor());
 			res.setPic(inner.getPic());
 			res.fillBaseInfo(ad.getAds(), advParam, new HashMap<String, String>());
 			res.dealLink(advParam);
+			logger.info("****###下拉刷新广告： openText={}", res.getOpenText());
 			return res;
 		} else {
 			logger.error("遇到错误的showType, {}", showType.getType());

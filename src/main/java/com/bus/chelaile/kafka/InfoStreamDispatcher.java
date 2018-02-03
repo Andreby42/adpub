@@ -175,7 +175,7 @@ public class InfoStreamDispatcher {
 			return;
 		}
 		int index = encodedURL.indexOf("ADV_EXHIBIT");
-		System.out.println(encodedURL.substring(index + 12));
+//		System.out.println(encodedURL.substring(index + 12));
 
 		Map<String, String> params = paramsAnalysis(encodedURL.substring(index + 12));
 		if (params != null) {
@@ -390,7 +390,7 @@ public class InfoStreamDispatcher {
 			return;
 		}
 		int index = encodedURL.indexOf("ADV_EXHIBIT");
-		System.out.println(encodedURL.substring(index + 12));
+//		System.out.println(encodedURL.substring(index + 12));
 
 		Map<String, String> params = paramsAnalysis(encodedURL.substring(index + 12));
 		if (params != null) {

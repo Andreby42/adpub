@@ -25,8 +25,6 @@ public class AdLineRefreshOpenInnerContent extends AdInnerContent {
 			this.pic = ad.pic;
 			if (ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
 				this.pic = ad.pic.split("#")[0];
-				// this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
-				// this.setHeight(Integer.parseInt(ad.pic.split("#")[1].split(",")[1]));
 			}
 			this.dropDownDoc = ad.dropDownDoc;
 			this.freshDoc = ad.freshDoc;
@@ -69,35 +67,36 @@ public class AdLineRefreshOpenInnerContent extends AdInnerContent {
 		this.pic = pic;
 	}
 
-	public String getPullText() {
+	public String getDropDownDoc() {
 		return dropDownDoc;
 	}
 
-	public void setPullText(String pullText) {
-		this.dropDownDoc = pullText;
+	public void setDropDownDoc(String dropDownDoc) {
+		this.dropDownDoc = dropDownDoc;
 	}
 
-	public String getRefreshText() {
+	public String getFreshDoc() {
 		return freshDoc;
 	}
 
-	public void setRefreshText(String refreshText) {
-		this.freshDoc = refreshText;
+	public void setFreshDoc(String freshDoc) {
+		this.freshDoc = freshDoc;
 	}
 
-	public String getOpenText() {
+	public String getOpenDoc() {
 		return openDoc;
 	}
 
-	public void setOpenText(String openText) {
-		this.openDoc = openText;
+	public void setOpenDoc(String openDoc) {
+		this.openDoc = openDoc;
 	}
 
-	public String getBackColor() {
+	public String getBgColor() {
 		return bgColor;
 	}
 
-	public void setBackColor(String backColor) {
-		this.bgColor = backColor;
+	public void setBgColor(String bgColor) {
+		this.bgColor = bgColor;
 	}
+
 }

@@ -38,7 +38,8 @@ public class InfoStreamHelp {
 //			String line = URLDecoder.decode(msg, "utf-8");
 			Map<String, String> parameterMap = New.hashMap();
 			try {
-				parameterMap = arrayToMap(line.split("\\|#")[3].trim().split(" ")[1].split("&"), "=");
+				if(line.split("\\|#").length > 3 && line.split("\\|#")[3].trim().split(" ").length > 1)
+					parameterMap = arrayToMap(line.split("\\|#")[3].trim().split(" ")[1].split("&"), "=");
 			} catch(Exception e) {
 				logger.error("广告 解析点击日志出错,line={}", line);
 				e.printStackTrace();

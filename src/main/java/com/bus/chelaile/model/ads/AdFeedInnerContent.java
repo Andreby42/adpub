@@ -39,29 +39,33 @@ public class AdFeedInnerContent extends AdInnerContent {
 		AdFeedInnerContent ad = null;
 		ad = JSON.parseObject(jsonr, AdFeedInnerContent.class);
 		if (ad != null) {
-			this.pic = ad.pic;
-			if(ad.pic != null && ad.pic.contains(";")) {
-				
-			} else if(ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
-				this.pic = ad.pic.split("#")[0];
-				this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
-				this.setHeight(Integer.parseInt(ad.pic.split("#")[1].split(",")[1].split(";")[0]));
-			}
-			this.feedAdType = ad.feedAdType;
-			this.setFeedAdTitle(ad.getFeedAdTitle());
-			this.feedId = ad.feedId;
-			this.tagId = ad.tagId;
-			this.tag = ad.tag;
+			try {
+				this.pic = ad.pic;
+				if (ad.pic != null && ad.pic.contains(";")) {
 
-			this.setTime(ad.getTime());
-			this.slogan = ad.slogan;
-			this.icon = ad.icon;
-			this.setLikeNum(ad.getLikeNum());
-			this.feedTag = ad.feedTag;
-			this.isSetTop = ad.isSetTop;
-			
-			this.imgs = ad.imgs;
-			this.feedAdArticleTag = ad.feedAdArticleTag;
+				} else if (ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
+					this.pic = ad.pic.split("#")[0];
+					this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
+					this.setHeight(Integer.parseInt(ad.pic.split("#")[1].split(",")[1].split(";")[0]));
+				}
+				this.feedAdType = ad.feedAdType;
+				this.setFeedAdTitle(ad.getFeedAdTitle());
+				this.feedId = ad.feedId;
+				this.tagId = ad.tagId;
+				this.tag = ad.tag;
+
+				this.setTime(ad.getTime());
+				this.slogan = ad.slogan;
+				this.icon = ad.icon;
+				this.setLikeNum(ad.getLikeNum());
+				this.feedTag = ad.feedTag;
+				this.isSetTop = ad.isSetTop;
+
+				this.imgs = ad.imgs;
+				this.feedAdArticleTag = ad.feedAdArticleTag;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

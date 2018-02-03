@@ -23,6 +23,7 @@ import com.bus.chelaile.flow.WuliToutiaoHelp;
 import com.bus.chelaile.flow.model.ChannelType;
 import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flowNew.model.FlowNewContent;
+import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.mvc.AdvParam;
@@ -98,7 +99,7 @@ public class FlowServiceManager {
 				flows.add(f.createNewContents());
 			}
 			// 糅和进去话题到指定位置
-			addTagsIntoFlows(flows); // 在第1、5、10放入话题
+			addTagsIntoFlows(flows, advParam); // 在第1、5、10放入话题
 			
 			JSONObject responseJ = new JSONObject();
 			responseJ.put("flows", flows);
@@ -108,7 +109,7 @@ public class FlowServiceManager {
 		}
 	}
 
-	private void addTagsIntoFlows(List<FlowNewContent> flows) {
+	private void addTagsIntoFlows(List<FlowNewContent> flows, AdvParam advParam) {
 		List<FlowNewContent> flowTag = New.arrayList();
 		String key;
 		String lineFlowsStr ;
@@ -128,7 +129,18 @@ public class FlowServiceManager {
 		FlowNewContent flowEnergy = new FlowNewContent(4, "能量馆", "去能量馆充能",
 				"https://image3.chelaile.net.cn/e8817ef0255649e8af326365d994329d", "52,152,219", null, null, null,
 				null, null);
-		flows.add(0, flowEnergy);
+		FlowNewContent flowEnergyNew = new FlowNewContent(4, "福利社", "今天的福利你领了吗？",
+				"https://image3.chelaile.net.cn/02fb259f5a5f421581edef7d38a6d7ab", "255,87,34", null, null, null,
+				null, null);
+		
+		Platform platform = Platform.from(advParam.getS());
+		if ((platform.isAndriod(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_ANDROID_0208)
+				|| (platform.isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0208)) {
+			flows.add(0, flowEnergy);
+		} else {
+			// 新版用这个
+			flows.add(0, flowEnergyNew);
+		}
 	}
 
 

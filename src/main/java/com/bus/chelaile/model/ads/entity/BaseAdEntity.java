@@ -203,7 +203,7 @@ public abstract class BaseAdEntity {
 		if(ShowType.STATION_ADV.getType().equals(ad.getShowType())) {
 			param.put(Constants.PARAM_STATION_LNG, advParam.getStnLng());
 			param.put(Constants.PARAM_STATION_LAT, advParam.getStnLat());
-			param.put(Constants.PARAM_STATION_NAME_H5, advParam.getStnName());
+			param.put(Constants.PARAM_STATION_NAME_H5, URLEncoder.encode(advParam.getStnName()));
 		}
 		// TODO 临时for测试！！！
 //		link = ad.getLink();
