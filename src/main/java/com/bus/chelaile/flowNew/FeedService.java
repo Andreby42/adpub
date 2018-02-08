@@ -146,14 +146,14 @@ public class FeedService {
 		}
 
 		// 获取更多的时候，拉取历史，否则获取最新的额
-		int index = 0;
-		if (StringUtils.isNoneBlank(param.getStatsAct()) && param.getStatsAct().equals("get_more")) {
-			index = Integer.parseInt((String) CacheUtil.get("FEED_CACHE_USER_INDEX#" + param.getUdid()));
-		}
-		logger.info("用户话题index, udid={}, index={}", param.getUdid(), index);
+//		int index = 0;
+//		if (StringUtils.isNoneBlank(param.getStatsAct()) && param.getStatsAct().equals("get_more")) {
+//			index = Integer.parseInt((String) CacheUtil.get("FEED_CACHE_USER_INDEX#" + param.getUdid()));
+//		}
+//		logger.info("用户话题index, udid={}, index={}", param.getUdid(), index);
 
 		//给测试用的特殊例子
-		if (returnFeedNew(param)) {
+//		if (returnFeedNew(param)) {
 //			FeedInfo feedTemp = TagUtils.getFeedInfo("646277590927118336", param.getAccountId());
 //			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp);
 //			FeedInfo feedTemp1 = TagUtils.getFeedInfo("646277359619641344", param.getAccountId());
@@ -164,19 +164,22 @@ public class FeedService {
 //			index = createFeedFromFeedInfo(flowsFeed, index, feedTemp3);
 
 			// 每次返回3条feed
-			for (int size = 0; size < FEEDSIZE_LIMIT; size++) {
-				String fid = (String) CacheUtil.get("FEED_SORT_CACHE" + "#" + index);
-				if (fid == null) {
-					index = 0;
-					fid = (String) CacheUtil.get("FEED_SORT_CACHE" + "#" + index);
-				}
-
-				FeedInfo feedf = TagUtils.getFeedInfo(fid, param.getAccountId());
-				index = createFeedFromFeedInfo(flowsFeed, index, feedf);
-			}
-			// 保存获取话题的位置
-			CacheUtil.set("FEED_CACHE_USER_INDEX#" + param.getUdid(), Constants.ONE_DAY_TIME, String.valueOf(index));
-		}
+//			for (int size = 0; size < FEEDSIZE_LIMIT; size++) {
+//				String fid = (String) CacheUtil.get("FEED_SORT_CACHE" + "#" + index);
+//				if (fid == null) {
+//					index = 0;
+//					fid = (String) CacheUtil.get("FEED_SORT_CACHE" + "#" + index);
+//					if(fid == null) {
+//						continue;
+//					}
+//				}
+//
+//				FeedInfo feedf = TagUtils.getFeedInfo(fid, param.getAccountId());
+//				index = createFeedFromFeedInfo(flowsFeed, index, feedf);
+//			}
+//			// 保存获取话题的位置
+//			CacheUtil.set("FEED_CACHE_USER_INDEX#" + param.getUdid(), Constants.ONE_DAY_TIME, String.valueOf(index));
+//		}
 
 		// 排序
 		String[] ids = sortNewFeeds(feeds, feedAds, feedArticles, flowsFeed);

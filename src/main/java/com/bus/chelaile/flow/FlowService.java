@@ -426,13 +426,8 @@ public class FlowService {
 			} else if (advParam.getCityId().equals("003")) { // 重庆，重庆本地
 				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, 4, false);
 				isSpecial = true;
-			} else if (advParam.getCityId().equals("006")) { // 天津，车来了3
-				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, 7, false);
-				isSpecial = true;
-			} else if (advParam.getCityId().equals("040")) { // 广州，车来了2
-				contentsFromApi = wangYiYunHelp.getInfoByApi(advParam, ftime, recoid, 6, false);
-				isSpecial = true;
-			} else if (advParam.getCityId().equals("019")) { // 佛山，头条
+			} else if (advParam.getCityId().equals("019") || advParam.getCityId().equals("040")
+					|| advParam.getCityId().equals("006")) { // 佛山，天津，广州，头条
 				contentsFromApi = toutiaoHelp.getInfoByApi(advParam, ftime, recoid, id, false);
 				isSpecial = true;
 			}

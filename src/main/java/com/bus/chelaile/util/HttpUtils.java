@@ -210,7 +210,7 @@ public class HttpUtils {
 	            in = urlcon.getInputStream();
 	            
 	            Response res = Response.parseFrom(in);
-	            System.out.println(res.toString());
+//	            System.out.println(res.toString());
 	            
 	            BufferedReader buffer = new BufferedReader(new InputStreamReader(in, charset));
 	            StringBuffer bs = new StringBuffer();
@@ -355,7 +355,7 @@ public class HttpUtils {
 		if (params != null && params.size() > 0) {
 			url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(params));
 		}
-		System.out.println(url);
+//		System.out.println(url);
 //		URL url1 = new URL(url);
 //		URI uri = new URI(url1.getProtocol(), url1.getHost(), url1.getPath(), url1.getQuery(), null);
 		HttpGet get = new HttpGet(url);
@@ -383,7 +383,7 @@ public class HttpUtils {
 		if (params != null && params.size() > 0) {
 			url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(params));
 		}
-		System.out.println(url);
+//		System.out.println(url);
 //		URL url1 = new URL(url);
 //		URI uri = new URI(url1.getProtocol(), url1.getHost(), url1.getPath(), url1.getQuery(), null);
 		HttpGet get = new HttpGet(url);
