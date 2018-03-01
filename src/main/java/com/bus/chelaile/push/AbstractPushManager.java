@@ -87,7 +87,12 @@ public class AbstractPushManager {
 		return resultMap;
 	}
 	
-	
+	/**
+	 * 根据 token的样式，选择通过何种推送渠道
+	 * @param udid
+	 * @param tokenStr
+	 * @return Platform.getValue()
+	 */
 	public String getPlatform(String udid, String tokenStr) {
 		// token|ios|tokenType token|android|tokenType
 		String platform = "";
@@ -100,10 +105,11 @@ public class AbstractPushManager {
 		if (tokens.length == 1) {
 			platform = token.length() == 64 ? Platform.IOS.getValue() : Platform.GT.getValue();
 		} else if (tokens.length == 3) {
-			platform = tokens[1].trim();
+			platform = tokens[1].trim();    // 去第二个部分
 			logger.info("platForm " + platform);
+			 // android 的platform修改
+			String tokenType = tokens[2].trim();
 			if (Platform.ANDROID.getValue().equalsIgnoreCase(platform)) {
-				String tokenType = tokens[2].trim();
 				logger.info("tokeyTyp: " + tokenType);
 				if (TokenType.GTTOKEN.getName().equalsIgnoreCase(tokenType)) {
 					platform = TokenType.GTTOKEN.getPlatform().getValue();
@@ -112,6 +118,11 @@ public class AbstractPushManager {
 				} else if(TokenType.JGTOKEN.getName().equalsIgnoreCase(tokenType)) {
 					platform = TokenType.JGTOKEN.getPlatform().getValue();
 				}
+			}
+			//  ios 的platform修改
+			else if (Platform.IOS.getValue().equalsIgnoreCase(platform) && 
+					TokenType.IOSJGTOKEN.getName().equalsIgnoreCase(tokenType)) {
+				platform = TokenType.IOSJGTOKEN.getPlatform().getValue();
 			}
 		}
 		return platform;

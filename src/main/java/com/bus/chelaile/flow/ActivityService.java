@@ -101,7 +101,7 @@ public class ActivityService {
 		initChannels();
 
 		// 初始化城市列表
-		CITIES.putAll(CitiesList.getAllCities());
+//		CITIES.putAll(CitiesList.getAllCities());
 		
 		// 初始化默认收藏频道
 		initDefaultFavChannels();

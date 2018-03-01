@@ -255,7 +255,7 @@ public class FeedService {
 			articleIds += f.getId() + ";";
 			if(limitsize >= FEED_NEW_LIMIT)		// 默认给12条即可
 				break;
-			if (index >= 4 && aIndex < feedAds.size() && aIndex < 1) {	 // 除去顶置外，最多一条广告
+			if (index >= 2 && aIndex < feedAds.size() && aIndex < 1) {	 // 除去顶置外，最多一条广告
 				feeds.add(feedAds.get(aIndex));
 				index = 1;limitsize++;
 				aIndex ++;

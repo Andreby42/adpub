@@ -70,6 +70,8 @@ public class SinglePushService extends AbstractPushManager {
 				singlePushParam.getPushKey(), singlePushParam.getTitle());
 		if (Platform.IOS.getValue().equals(platform)) {
 			this.sendNotice(token, udid, singlePushParam, Platform.IOS);
+		} else if (Platform.IOSJG.getValue().equals(platform)) {
+			this.sendNotice(token, udid, singlePushParam, Platform.IOSJG);
 		} else if (Platform.GT.getValue().equals(platform)) {
 			this.sendNotice(token, udid, singlePushParam, Platform.GT);
 		} else if (Platform.YM.getValue().equals(platform)) {

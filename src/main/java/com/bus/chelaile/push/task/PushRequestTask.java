@@ -57,6 +57,7 @@ public class PushRequestTask implements Runnable {
 			// 需要注意，如果中断了某次的推送，后面如何能够继续？已经发送了的udid是否能够不再进行发送？
 			List<String> andriodGeTuiTokenList = new ArrayList<String>();
 			List<String> andriodJGTokenList = new ArrayList<String>();
+			List<String> iosJGTokenList = new ArrayList<String>();
 			List<String> andriodYouMengTokenList = new ArrayList<String>();
 			List<String> iosTokenList = new ArrayList<String>();
 			Map<String, String> tokenMap = adsPushService
@@ -114,6 +115,8 @@ public class PushRequestTask implements Runnable {
 				TimeLong.info("SEN_UDID_TOKEN,udid={},token={}", udid, token);
 				if (Platform.IOS.getValue().equals(platform)) {
 					iosTokenList.add(token + "#" + udid);
+				} else if (Platform.IOSJG.getValue().equals(platform)) {
+					iosJGTokenList.add(token + "#" + udid);
 				} else if (Platform.GT.getValue().equals(platform)) {
 					andriodGeTuiTokenList.add(token + "#" + udid);
 				} else if (Platform.YM.getValue().equals(platform)) {

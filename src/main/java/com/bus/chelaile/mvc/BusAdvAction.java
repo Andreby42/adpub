@@ -1,5 +1,6 @@
 package com.bus.chelaile.mvc;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Date;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 
+
+
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
@@ -28,6 +31,7 @@ import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.util.DateUtil;
+import com.bus.chelaile.util.config.PropertiesManager;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
 /**
@@ -351,6 +355,18 @@ public class BusAdvAction extends AbstractController {
 
 		return serviceManager.getAdsResponseStr(param, "getAboardText");
 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "adv!reloadConfigs.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	public String reloadConfigs(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+
+		String fortest = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "fortest", "1");
+		log.info("reload前， for test值为：{}", fortest);
+		PropertiesManager.init();
+		fortest = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "fortest", "1");
+		log.info("reload后， for test值为：{}", fortest);
+		return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
 	}
 	
 	

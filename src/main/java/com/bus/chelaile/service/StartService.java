@@ -380,6 +380,8 @@ public class StartService {
 		BufferedReader fileIn = null;
 		try {
 			logger.info("读取分钟配置文件:{}", minuteTimesFile);
+			logger.info("读取配置文件11111：{}", PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+			"minuteTimesFile", "/data/advConfig/commonMinuteTimesFile.csv"));
 			fileIn = new BufferedReader(new InputStreamReader(new FileInputStream(new File(minuteTimesFile))));
 			String str = null;
 			while ((str = fileIn.readLine()) != null) {

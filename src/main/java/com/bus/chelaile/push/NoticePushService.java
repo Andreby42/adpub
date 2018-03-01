@@ -86,6 +86,9 @@ public class NoticePushService extends AbstractPushManager {
 		if (Platform.IOS.getValue().equals(platform)) {
 			return PushMessageBody.getMessageBody(type, singlePushParam.getBody(), singlePushParam.getPushKey(),
 					Platform.IOS, "");
+		} else if (Platform.IOSJG.getValue().equals(platform)) {
+			return PushMessageBody.getMessageBody(type, singlePushParam.getBody(), singlePushParam.getPushKey(),
+					Platform.IOSJG, "");
 		} else if (Platform.GT.getValue().equals(platform)) {
 			return PushMessageBody.getMessageBody(type, singlePushParam.getBody(), singlePushParam.getPushKey(),
 					Platform.GT, singlePushParam.getTitle());
@@ -127,6 +130,8 @@ public class NoticePushService extends AbstractPushManager {
 			return Platform.YM;
 		} else if (Platform.JG.getValue().equals(platform)) {
 			return Platform.JG;
+		} else if (Platform.IOSJG.getValue().equals(platform)) {
+			return Platform.IOSJG;
 		}
 		throw new IllegalArgumentException("未找到类型的platform:" + platform);
 	}

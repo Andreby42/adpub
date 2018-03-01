@@ -178,10 +178,10 @@ public class FlowService {
 			
 			
 			// tbk 缓存取一条
-			FlowContent flow = TbkUtils.getTbkContentFromCache();
-			if(contents != null && contents.size() > 4 && flow != null) {
-				contents.add(3, flow);;
-			}
+//			FlowContent flow = TbkUtils.getTbkContentFromCache();
+//			if(contents != null && contents.size() > 4 && flow != null) {
+//				contents.add(3, flow);;
+//			}
 			
 			return contents;
 
