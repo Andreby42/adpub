@@ -41,6 +41,8 @@ public enum ShowType {
     }
     
     public static ShowType from(String type) {
+    	
+    	
         if (type == null) {
             return null;
         }

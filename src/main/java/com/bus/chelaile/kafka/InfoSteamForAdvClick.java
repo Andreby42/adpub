@@ -125,6 +125,9 @@ public class InfoSteamForAdvClick {
 		// System.out.println(DigestUtils.md5Hex(amc.replace(":", "")));
 		// System.out.println(DigestUtils.md5Hex(amc.replace(":",
 		// "").toUpperCase()));
+		
+		
+		
 		System.out.println(System.currentTimeMillis());
 	}
 

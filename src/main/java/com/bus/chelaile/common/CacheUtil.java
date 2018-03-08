@@ -25,7 +25,7 @@ public class CacheUtil {
 //	private static ICache redisWow;
 	//	保存用户访问量等信息
 	private static ICache cacheNewClient;
-	//	获取access_token的
+	//	获取access_token的 
 	private static ICache cacheApiTokenClient;
 //	支付信息
 	private static ICache cachePayInfoClient;
@@ -235,30 +235,38 @@ public class CacheUtil {
 //    }
     
     public static void main(String[] args) throws InterruptedException {
-    	initClient();
-    	setToRedis("a", -1, "12");
-    	System.out.println(getFromRedis("a"));
+//    	initClient();
+//    	setToRedis("a", -1, "12");
+//    	System.out.println(getFromRedis("a"));
+//    	
+//    	System.out.println(System.currentTimeMillis());
+//    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"11111\"}", -1);
+//    	Thread.sleep(1);
+//    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"22222\"}", -1);
+//    	Thread.sleep(1);
+//    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"33333\"}", -1);
+//    	Thread.sleep(1);
+//    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"44444\"}", -1);
+//    	Thread.sleep(1);
+//    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"55555\"}", -1);
+//    	Thread.sleep(1);
+//    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"66666\"}", -1);
+//    	System.out.println(System.currentTimeMillis());
+//    	
+//    	
+//    	Set<String> tops = getRangeSet("wuli_hot", 1513067900290l, System.currentTimeMillis(), 20); // 最新内容
+//    	System.out.println(tops);
+//    	
+//    	
+//    	Set<String> ends = getRevRangeSet("wuli_hot", 0L, 1513067900290L, 20);  // 历史 
+//    	System.out.println(ends);
     	
-    	System.out.println(System.currentTimeMillis());
-    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"11111\"}", -1);
-    	Thread.sleep(1);
-    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"22222\"}", -1);
-    	Thread.sleep(1);
-    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"33333\"}", -1);
-    	Thread.sleep(1);
-    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"44444\"}", -1);
-    	Thread.sleep(1);
-    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"55555\"}", -1);
-    	Thread.sleep(1);
-    	setSortedSet("wuli_hot", System.currentTimeMillis(), "{\"text\":\"66666\"}", -1);
-    	System.out.println(System.currentTimeMillis());
+    	
+    	client = new OCSCacheUtil("121.40.210.76","7078","9c0e27d0f09544c9","Yuanguang2014");
+    	client.set("qkk_test1", Constants.ONE_DAY_TIME, "1111");
+    	System.out.println(client.get("qkk_test1"));
+    	System.out.println(client.get("qkk_test2"));
     	
     	
-    	Set<String> tops = getRangeSet("wuli_hot", 1513067900290l, System.currentTimeMillis(), 20); // 最新内容
-    	System.out.println(tops);
-    	
-    	
-    	Set<String> ends = getRevRangeSet("wuli_hot", 0L, 1513067900290L, 20);  // 历史 
-    	System.out.println(ends);
     }
 }

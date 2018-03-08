@@ -37,9 +37,14 @@ public class InfoStreamHelp {
 		try {
 //			String line = URLDecoder.decode(msg, "utf-8");
 			Map<String, String> parameterMap = New.hashMap();
+//			System.out.println(line.split("\\|#")[12]);
 			try {
-				if(line.split("\\|#").length > 3 && line.split("\\|#")[3].trim().split(" ").length > 1)
-					parameterMap = arrayToMap(line.split("\\|#")[3].trim().split(" ")[1].split("&"), "=");
+				if(line.contains(Constants.REDIRECT_DOMAIN_NAME) || line.contains("dev.ad.chelaile.net.cn"))
+					parameterMap = arrayToMap(line.split("\\|#")[3].trim().split(" ")[1].replace("?", "").replace("/", "").split("&"), "=");
+				else if(line.split("\\|#").length > 3 && line.split("\\|#")[12].trim().split(" ").length > 1)
+					parameterMap = arrayToMap(line.split("\\|#")[12].trim().split(" ")[1].replace("?", "").replace("/", "").split("&"), "=");
+				else
+					parameterMap = arrayToMap(line.split("\\|#")[12].trim().split(" ")[0].replace("?", "").replace("/", "").split("&"), "=");
 			} catch(Exception e) {
 				logger.error("广告 解析点击日志出错,line={}", line);
 				e.printStackTrace();
@@ -52,6 +57,8 @@ public class InfoStreamHelp {
 				logger.info("广告为空 line={}", line);
 				return;
 			}
+			System.out.println(advId);
+			System.out.println(udid);
 			if(StaticAds.allAds.get(advId) == null) {
 				if(! Constants.ISTEST) {	// 线上需要打印这种情况，测试无需
 					logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
@@ -261,9 +268,9 @@ public class InfoStreamHelp {
 	public static void main(String[] args){
 		String line = "<134>Jul  5 19:22:51 web1 nginx: 106.91.185.21 |# - |# 2017-07-05 19:22:51 |# GET /bus/line!lineDetail.action?idfa=99501C17-3547-494E-BF7C-5E58E1DCB2E2&geo_type=wgs&language=1&geo_lat=29.633844&geo_lng=106.572242&sv=9.1&s=IOS&deviceType=iPhone6s&stats_referer=searchHistory&lchsrc=icon&lineName=153&screenHeight=1334&stats_order=1-9&lng=106.572242&pushkey=&v=5.32.1&udid=d41d8cd98f00b204e9800998ecf8427ec991ae25&stats_act=enter&sign=mXfNZaM0IoKXzJFiCK18tQ==&userAgent=Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%209_1%20like%20Mac%20OS%20X)%20AppleWebKit/601.1.46%20(KHTML,%20like%20Gecko)%20Mobile/13B143&cityState=0&nw=4G&mac=&lineNo=153&wifi_open=1&geo_lac=30.000000&lat=29.633844&gpstype=wgs&cityId=003&push_open=0&vc=10371&userId= HTTP/1.1 |# 200 |# 0.108 |# 1760 |# - |# lite/5.32.1 (iPhone; iOS 9.1; Scale/2.00) |# - |# api.chelaile.net.cn |# 10.168.197.211:6080 |# 200 |# 1499253771438f8f0082366e4ace5223 |# 0.108 |# https";
 		
-		analysisLineDetail(line);
-		String s = "113.8.68.81 |# - |# 2018-02-11 17:00:14 |# 302 |# 0.000 |# 264 |# - |# Mozilla/5.0 (Linux; Android 6.0; vivo Y67 Build/MRA58K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/51.0.2704.81 Mobile Safari/537.36Chelaile/3.46.2 Duiba/1.0.7 |#- |# ad.chelaile.net.cn |# - |# - |# /?advId=13515&adtype=05&udid=a10f5d74-2920-4840-b6c7-9c1fec62fc56&utm_medium=floating&adv_id=13515&last_src=app_vivo_store&s=android&stats_referer=lineAd&push_open=1&stats_act=refresh&userId=unknown&provider_id=1&geo_lt=4&timestamp=1518339618213&geo_lat=52.293055&line_id=0532-126-0&vc=98&sv=6.0&v=3.46.2&secret=c51c007d638f4ee18c63fafbdfe7d9c8&imei=863708032337655&udid=a10f5d74-2920-4840-b6c7-9c1fec62fc56&platform_v=23&utm_source=app_linedetail&stn_name=%E5%93%88%E5%B0%94%E6%BB%A8%E8%B7%AF&cityId=009&adv_type=5&ad_switch=30&geo_type=gcj&wifi_open=1&mac=02%3A00%3A00%3A00%3A00%3A00&deviceType=vivo+Y67&lchsrc=icon&stats_order=1-1&nw=WIFI&AndroidID=57d8f01e6d32368b&api_type=0&stn_order=10&geo_lac=15.0&accountId=33383070&language=1&first_src=app_vivo_store&beforAds=&geo_lng=124.708092 |# 1 |# 13515 |# https";
+//		analysisLineDetail(line);
 		
+		String s = "223.104.1.96 |# - |# 2018-03-07 03:59:20 |# 302 |# 0.000 |# 264 |# - |# Mozilla/5.0 (iPhone; CPU iPhone OS 9_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13C75 Chelaile/5.36.0 |#- |# ad.chelaile.net.cn |# - |# - |# //?advId=13672&adtype=05&udid=7b64fa9222ac628396a11e46322bb259dc84a63e&line_id=020-02280-0&mac=&userId=&utm_source=app_linedetail&adv_type=5&accountId=59741568&adv_id=13672&vc=10410&sv=9.2&geo_lat=23.149917&pushkey=&provider_id=1&geo_lac=5.000000&secret=646933f32d00449482d9d67149041cde&stats_act=refresh&stn_order=1&deviceType=iPhone6sPlus&idfa=530D1269-62AC-4A8F-A195-E6AE7D953DF2&api_type=0&utm_medium=floating&cityId=040&wifi_open=0&sign=0SeyBVZ0BELgMvJ17wqzPg==&s=IOS&stats_referer=lineAd&push_open=1&ad_switch=30&v=5.36.0&geo_type=wgs&stn_name=%E5%B9%BF%E5%B7%9E%E7%81%AB%E8%BD%A6%E7%AB%99%E6%80%BB%E7%AB%99&nw=4G&language=1&lchsrc=icon&geo_lng=113.252530 |# 1 |# 13672 |# https";
 //		(s.split("\\|#").length > 3 && s.split("\\|#")[3].trim().split(" ").length > 1)
 		analysisClick(s);
 		

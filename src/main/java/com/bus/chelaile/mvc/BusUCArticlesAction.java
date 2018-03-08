@@ -62,6 +62,7 @@ public class BusUCArticlesAction extends AbstractController {
 
 	/*
 	 * 洗刷刷 uc 文章获取 v 1.0 ,仅供h5使用 v 2.0 ,供app客户端使用
+	 * 2018/03/05记：，仅供‘福利社’下方信息流使用
 	 */
 	@ResponseBody
 	@RequestMapping(value = "adv!getUCArticles.action", produces = "Content-Type=text/plain;charset=UTF-8")

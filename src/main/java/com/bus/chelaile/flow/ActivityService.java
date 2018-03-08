@@ -36,7 +36,6 @@ import com.bus.chelaile.flow.model.FlowContent;
 import com.bus.chelaile.flow.model.FlowChannel;
 import com.bus.chelaile.flow.model.TabEntity;
 import com.bus.chelaile.flow.model.Thumbnail;
-import com.bus.chelaile.util.CitiesList;
 import com.bus.chelaile.util.DateUtil;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;

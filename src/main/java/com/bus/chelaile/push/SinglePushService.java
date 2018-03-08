@@ -65,7 +65,7 @@ public class SinglePushService extends AbstractPushManager {
 		String[] tokens = tokenStr.split("\\|");
 		String token = tokens[0];
 		String platform = getPlatform(udid, tokenStr);
-		logger.info("SingleUDID token: {} platform: {}", tokenStr, platform);
+		logger.info("SingleUDID token: {} platform: {}, udid:{}", tokenStr, platform, udid);
 		logger.info("[{}Push-All] udid:{}, pushKey:{}, title:{}", singlePushParam.getPushType(), udid,
 				singlePushParam.getPushKey(), singlePushParam.getTitle());
 		if (Platform.IOS.getValue().equals(platform)) {
@@ -103,8 +103,8 @@ public class SinglePushService extends AbstractPushManager {
 		JSONArray clientList = (JSONArray) objects.get(0);
 		int passMaxClient = (int) objects.get(1);
 		sendMsg.put("clients", clientList);
-		logger.info("Generated Msg: msg={}, passMaxLengthSize={} costs {} ms", sendMsg.toJSONString(), bodyLength,
-				(System.currentTimeMillis() - st));
+		logger.info("Generated Msg: msg={}, passMaxLengthSize={} costs {} ms, udid={}", sendMsg.toJSONString(), bodyLength,
+				(System.currentTimeMillis() - st), udid);
 		if (passMaxClient == 1) {
 			logger.info("udid {}, token {}, pushType:{} platform={}, 超过220长度数={}, costs {} ms", udid, token,
 					singlePushParam.getPushType(), platform, passMaxClient, (System.currentTimeMillis() - st));
@@ -126,7 +126,7 @@ public class SinglePushService extends AbstractPushManager {
 	
 	private List<Object> buildNoticeMsgBody(SinglePushParam singlePushParam, Platform platform, String udid) {
 		String content = singlePushParam.getBody();
-		if (singlePushParam.getPushType().equalsIgnoreCase(PushType.FEEDBACK.getType()) && Platform.IOS == platform) {
+		if (singlePushParam.getPushType().equalsIgnoreCase(PushType.FEEDBACK.getType()) && ((Platform.IOS == platform) || Platform.IOSJG == platform)) {
 			content = singlePushParam.getTitle();
 		}
 		String title = singlePushParam.getTitle();

@@ -173,7 +173,7 @@ public class AbstractPushManager {
 			 * 所有的IOS都采用新的消息格式。
 			 */
 			JSONObject jsonObject = new JSONObject();
-			if (platform == Platform.IOS) {
+			if (platform == Platform.IOS || platform == Platform.IOSJG) {
 				// 使用新版本的消息推送。
 				// jsonObject.put("sound", "default");
 				jsonObject.put("loc-key", content);

@@ -64,11 +64,15 @@ public class StationAdsManager extends AbstractManager {
 		if (inner instanceof AdStationlInnerContent) {
 			AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
 			// 对空串情况做一下处理
-			if(stationInner.getBannerInfo() != null && StringUtils.isNoneBlank(stationInner.getBannerInfo().getName()))
+			if(stationInner.getBannerInfo() != null
+//					&& StringUtils.isNoneBlank(stationInner.getBannerInfo().getName())
+					)
 			{
 				res.setBannerInfo(stationInner.getBannerInfo());
 			}
-			if(stationInner.getAdCard() != null && StringUtils.isNoneBlank(stationInner.getAdCard().getName())) {
+			if(stationInner.getAdCard() != null
+//					&& StringUtils.isNoneBlank(stationInner.getAdCard().getName())
+					) {
 				res.setAdCard(stationInner.getAdCard());
 			}
 			res.setPic(stationInner.getPic());
