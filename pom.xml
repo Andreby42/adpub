@@ -237,7 +237,7 @@
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1516002625303-20180115.jar</systemPath> -->
 			<groupId>com.ali</groupId>
 			<artifactId>alipaydev</artifactId>
-			<version>20180308dev</version>
+			<version>2018030801dev</version>
 		</dependency>
 
 
