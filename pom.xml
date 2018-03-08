@@ -230,11 +230,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.alipay.tbk</groupId>
+<!-- 			<groupId>com.alipay.tbk</groupId>
 			<artifactId>tbk</artifactId>
 			<version>20180115</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1516002625303-20180115.jar</systemPath>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1516002625303-20180115.jar</systemPath> -->
+			<groupId>com.ali</groupId>
+			<artifactId>alipaydev</artifactId>
+			<version>20180308dev</version>
 		</dependency>
 
 
