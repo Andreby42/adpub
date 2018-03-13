@@ -57,8 +57,8 @@ public class InfoStreamHelp {
 				logger.info("广告为空 line={}", line);
 				return;
 			}
-			System.out.println(advId);
-			System.out.println(udid);
+//			System.out.println(advId);
+//			System.out.println(udid);
 			if(StaticAds.allAds.get(advId) == null) {
 				if(! Constants.ISTEST) {	// 线上需要打印这种情况，测试无需
 					logger.error("缓存中未发现广告,advId={}, line={}", advId, line);

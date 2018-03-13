@@ -48,6 +48,7 @@ public class AdPubCacheRecord {
 	// 保存用户不感兴趣的广告,value是时间
 	Map<String, uninterested> uninterestedMap = New.hashMap();
 	// 存放开屏广告最近一次投放时间,用于‘最小投放时间间隔’
+	//格式类似：{"2018-01-18":{13289:1516280051535,13286:1516290063402}}
 	private Map<String, Map<Integer, Long>> todayOpenAdPubTime = New.hashMap();
 
 	// Rule中的cacheTime
@@ -62,6 +63,7 @@ public class AdPubCacheRecord {
 	private Map<String, Map<AdCategory, Integer>> todayOpenHistoryMap = New
 			.hashMap();
 	// 新增 feed流广告的历史记录也放入其中。不同的记录的是不投放广告的情况，投放之后置零
+	// 格式类似：{"2018-03-01":{13633:0,-1:1,13634:2}}
 	private Map<String, Map<Integer, Integer>> todayNoFeedAdHistoryMap = New.hashMap();
 	
 	// 取消广告
