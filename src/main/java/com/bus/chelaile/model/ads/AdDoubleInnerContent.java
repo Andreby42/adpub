@@ -120,7 +120,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
 		} else {
 			if(position == -1 || position > param.getlSize()) {
 				adEntity.setSindex(param.getlSize());
-			} else if(position < param.getlSize()) {
+			} else if(position <= param.getlSize()) {
 				adEntity.setSindex(position);
 			} else {
 				adEntity.setSindex(getStationLevelDefaultPosition());
