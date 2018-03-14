@@ -74,6 +74,8 @@ public class AdvParam {
      
      private String stnLng;	// 站点经纬度
      private String stnLat;
+    
+     private int lSize; // 首页推荐线路的条目数
      /**
       * 存入的s都会被转换为小写。
       *
@@ -579,6 +581,16 @@ public class AdvParam {
 
 	public void setStnLat(String stnLat) {
 		this.stnLat = stnLat;
+	}
+
+
+	public int getlSize() {
+		return lSize;
+	}
+
+
+	public void setlSize(int lSize) {
+		this.lSize = lSize;
 	}
 	
 	

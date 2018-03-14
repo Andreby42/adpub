@@ -111,11 +111,21 @@ public class AdDoubleInnerContent extends AdInnerContent {
         	adEntity.setTag(new Tag(this.tag, this.getTagId()));
         }
         
-        if (position != Constants.NULL_POSITION) {
-            adEntity.setSindex(position == -1 ?(stindex+1):(position == 0?0:1));
-        } else {
-            adEntity.setSindex(getStationLevelDefaultPosition());
-        }
+		if (param.getlSize() == -1) { // 这个参数控制版本，Constants.PLATFORM_LOG_ANDROID_0326 之前的老版本
+			if (position != Constants.NULL_POSITION) {
+				adEntity.setSindex(position == -1 ? (stindex + 1) : (position == 0 ? 0 : 1));
+			} else {
+				adEntity.setSindex(getStationLevelDefaultPosition());
+			}
+		} else {
+			if(position == -1 || position > param.getlSize()) {
+				adEntity.setSindex(param.getlSize());
+			} else if(position < param.getlSize()) {
+				adEntity.setSindex(position);
+			} else {
+				adEntity.setSindex(getStationLevelDefaultPosition());
+			}
+		}
         adEntity.setLindex(0);
     }
     

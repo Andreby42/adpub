@@ -93,6 +93,7 @@ public class BusAdvAction extends AbstractController {
 		param.setDistance(getInt(request, "distance"));	//用户距离站点距离
 		param.setRideStatus(getInt(request, "rideStatus"));//用户骑行状态
 		param.setType(getInt(request, "type")); //type=1的时候，表示线路规划页的单栏广告
+		param.setlSize(getInt(request, "lSize")); //推荐线路的条目数  2018-03-14更新参数
 
 		return serviceManager.getAdsResponseStr(param, "getDoubleAndSingleAds");
 	}

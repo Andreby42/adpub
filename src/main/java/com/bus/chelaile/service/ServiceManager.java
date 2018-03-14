@@ -270,10 +270,10 @@ public class ServiceManager {
 		}
 		
 		List<Station> stList = advParam.getStationList();
-		if (null == stList || stList.size() == 0) {
-			logger.info("单双栏广告获取失败，stList为空，udid={}", advParam.getUdid());
-			return null;
-		}
+//		if (null == stList || stList.size() == 0) {
+//			logger.info("单双栏广告获取失败，stList为空，udid={}", advParam.getUdid());
+//			return null;
+//		}
 		Station lastUnfoldStation = new Station("noUnfold", 0, false);
 		Station firstUnfoldStation = new Station("noUnfold", -1, false);
 		boolean isFirstUnfoldStation = false;
@@ -290,8 +290,10 @@ public class ServiceManager {
 		BaseAdEntity doubleEntity = doubleAndSingleManager.doService(advParam, ShowType.DOUBLE_COLUMN, false,
 				queryParam, true);
 		queryParam.setStation(firstUnfoldStation);
-		BaseAdEntity singleEntity = doubleAndSingleManager.doService(advParam, ShowType.SINGLE_COLUMN, false,
-				queryParam, true);
+		BaseAdEntity singleEntity = null; 
+		if (advParam.getlSize() == -1) {  // 这个参数控制版本，  Constants.PLATFORM_LOG_ANDROID_0326
+			singleEntity = doubleAndSingleManager.doService(advParam, ShowType.SINGLE_COLUMN, false, queryParam, true);
+		}
 
 		if (doubleEntity == null && singleEntity == null) {
 			return null;
