@@ -402,7 +402,8 @@ public class Rule {
 
 		// h5 用户必须是从微信来的才行
 		Platform platform = Platform.from(s);
-		if (platform.isH5(s) && (h5Src == null || !h5Src.equalsIgnoreCase("webapp_weixin_mp"))) {
+		if (platform.isH5(s)
+				&& (h5Src == null || (!h5Src.equalsIgnoreCase("webapp_weixin_mp") && !h5Src.equals("weixinapp_cx")))) {
 			return false;
 		}
 

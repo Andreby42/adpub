@@ -180,6 +180,8 @@ public class BusAdvAction extends AbstractController {
 		AdvParam param = getActionParam(request);
 		param.setWxs(request.getParameter("wxs"));  // 小程序来源
 		param.setSrc(request.getParameter("src"));
+		if(StringUtils.isEmpty(param.getH5Src()))
+			param.setH5Src(request.getParameter("src"));
 		Object object = serviceManager.getQueryValue(param, "getWXBannerAds");
 		if (object == null) {
 			return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);

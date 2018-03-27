@@ -29,6 +29,9 @@
 	<!-- 单图片资源的广告, 目前包括：线路刷新位广告、微信下方banner广告 -->
 	<bean id="simpleAdManager" class="com.bus.chelaile.service.impl.SimpleAdManager" parent="abstractService">
 	</bean>
+	<!-- 小程序banner位广告 -->
+	<bean id="wXBannerManager" class="com.bus.chelaile.service.impl.WXBannerManager" parent="abstractService">
+	</bean>
 	<!-- feed流广告 -->
 	<bean id="feedAdsManager" class="com.bus.chelaile.service.impl.FeedAdsManager" parent="abstractService">
 	</bean>
