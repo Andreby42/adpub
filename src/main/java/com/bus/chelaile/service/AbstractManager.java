@@ -114,8 +114,8 @@ public abstract class AbstractManager {
 					advParam.getUdid(), showType, isNeedApid, advParam.getType(), advParam.getAccountId(),
 					advParam.getS());
 			// 不需要第三方的直接返回
-			if (!isNeedApid || showType == ShowType.DOUBLE_COLUMN || showType == ShowType.SINGLE_COLUMN
-					|| showType == ShowType.FULL_SCREEN) {
+			// 小程序banner 直接返回
+			if (!isNeedApid || showType == ShowType.WECHATAPP_BANNER_ADV) {
 				return null;
 			}
 		} else {
@@ -150,8 +150,8 @@ public abstract class AbstractManager {
 		Map<Integer, AdContentCacheEle> adMap = null;
 		// 单双栏、浮层、乘车页、活动页、和旧版本的开屏接口不走策略
 		// 站点广告不走策略
-		if (!isNeedApid || showType == ShowType.DOUBLE_COLUMN || showType == ShowType.SINGLE_COLUMN
-				|| showType == ShowType.FULL_SCREEN) {
+		// 小程序 banner广告不走策略
+		if (!isNeedApid || showType == ShowType.WECHATAPP_BANNER_ADV) {
 			// 需要排序
 			Collections.sort(adsList, AD_CONTENT_COMPARATOR);
 

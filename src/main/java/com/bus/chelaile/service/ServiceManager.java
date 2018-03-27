@@ -47,6 +47,7 @@ import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.RideManager;
 import com.bus.chelaile.service.impl.SelfManager;
 import com.bus.chelaile.service.impl.StationAdsManager;
+import com.bus.chelaile.service.impl.WXBannerManager;
 import com.bus.chelaile.strategy.UserStrategyJudger;
 import com.bus.chelaile.thread.ReloadInvalidAccountIdTimer;
 import com.bus.chelaile.util.FlowUtil;
@@ -61,6 +62,8 @@ public class ServiceManager {
 	private StationAdsManager stationAdsManager;
 	@Autowired
 	private SimpleAdManager simpleAdManager;
+	@Autowired
+	private WXBannerManager wXBannerManager;
 	@Autowired
 	private FeedAdsManager feedAdsManager;
 	@Autowired
@@ -217,7 +220,10 @@ public class ServiceManager {
 		} else if (methodName.equals("getDoubleAndSingleAds")) { // 单双栏
 			entity = getDoubleAndSingleAds(advParam);
 			object.put("ads", entity);
-		} else if (methodName.equals("h5BannerAds")) { // h5 banner广告
+		} else if(methodName.equals("getWXBannerAds")) {	// 小程序 banner广告
+			entity = getHXBannerAd(advParam);
+			object.put("ads", entity);
+		}else if (methodName.equals("h5BannerAds")) { // h5 banner广告
 			entity = getH5BannerAd(advParam);
 			object.put("ads", entity);
 		} else if (methodName.equals("getRide")) {
@@ -496,6 +502,15 @@ public class ServiceManager {
 	private BaseAdEntity getH5BannerAd(AdvParam advParam) {
 		BaseAdEntity h5BannerAd = simpleAdManager.doService(advParam, ShowType.H5_LINEBANNER_ADV, false, new QueryParam(), true);
 		return h5BannerAd;
+	}
+	
+	/*
+	 * 小程序 banner 广告
+	 * isNeedApi = true
+	 */
+	private BaseAdEntity getHXBannerAd(AdvParam advParam) {
+		BaseAdEntity wxBannerAd = wXBannerManager.doService(advParam, ShowType.WECHATAPP_BANNER_ADV, true, new QueryParam(), true);
+		return wxBannerAd;
 	}
 	
 

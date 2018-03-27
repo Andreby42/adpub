@@ -48,6 +48,11 @@ public class AdContent {
         if (innerContent != null) {
             return innerContent;
         }
+        if(ShowType.WECHATAPP_BANNER_ADV.getType().equals(showType)) {
+        	AdWXBannerInnerContent wxBannerInner = new AdWXBannerInnerContent();
+        	wxBannerInner.setAndPaseJson(content);
+        	innerContent = wxBannerInner;
+        }
         if(ShowType.STATION_ADV.getType().equals(showType)) {		// 站点广告
         	AdStationlInnerContent stationInner = new AdStationlInnerContent();
         	stationInner.setAndPaseJson(content);

@@ -5,7 +5,7 @@ import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.mvc.AdvParam;
 
 /**
- * 推送的广告的内部的内容， 就是数据之中content的结构化表示。
+ * 广告的内部的内容， 就是数据之中content的结构化表示。
  * 
  * @author liujh
  * 

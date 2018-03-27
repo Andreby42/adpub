@@ -76,6 +76,8 @@ public class AdvParam {
      private String stnLat;
     
      private int lSize; // 首页推荐线路的条目数
+     
+     private String wxs; // 小程序来源，比如车来了主小程序OR其他马甲号小程序
      /**
       * 存入的s都会被转换为小写。
       *
@@ -591,6 +593,16 @@ public class AdvParam {
 
 	public void setlSize(int lSize) {
 		this.lSize = lSize;
+	}
+
+
+	public String getWxs() {
+		return wxs;
+	}
+
+
+	public void setWxs(String wxs) {
+		this.wxs = wxs;
 	}
 	
 	
