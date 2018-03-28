@@ -1,5 +1,6 @@
 package com.bus.chelaile.model.ads.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.bus.chelaile.model.ShowType;
 
 public class WXAppBannerAdEntity extends BaseAdEntity {

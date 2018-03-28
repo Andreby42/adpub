@@ -100,7 +100,7 @@ public abstract class AbstractManager {
 
 		AdPubCacheRecord cacheRecord = gainCacheRecord(advParam, showType);
 		// 需要排序
-		Collections.sort(adsList, AD_CONTENT_COMPARATOR);
+//		Collections.sort(adsList, AD_CONTENT_COMPARATOR);
 		Map<Integer, AdContentCacheEle> adMap = New.hashMap();
 		// 把所有符合规则的广告放到map中
 		handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
@@ -116,8 +116,12 @@ public abstract class AbstractManager {
 			return null;
 		}
 		logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
-		
-		return  getEntities(advParam, cacheRecord, adMap, showType, queryParam);
+		List<BaseAdEntity> entities = null;
+		entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
+		if(entities != null && entities.size() > 0) {
+			Collections.sort(entities, ENTITY_COMPARATOR);
+		}
+		return entities;
 	}
 
 	/**
@@ -421,6 +425,18 @@ public abstract class AbstractManager {
 				return 1;
 			return o2.getAds().getPriority() - o1.getAds().getPriority();
 		}
+	};
+	
+	private static final Comparator<BaseAdEntity> ENTITY_COMPARATOR = new Comparator<BaseAdEntity>() {
+		@Override
+		public int compare(BaseAdEntity o1, BaseAdEntity o2) {
+			if(o1 == null)
+				return -1;
+			if(o2 == null)
+				return 1;
+			return o2.getPriority() - o1.getPriority();
+		}
+		
 	};
 
 	/**

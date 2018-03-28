@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.ShowType;
@@ -37,6 +38,9 @@ public abstract class BaseAdEntity {
 	protected int monitorType;
 	private int type = 1; // 1：我们自己广告，2：调用广点通广告，3：调用第三方广告
 	private String provider_id = "1"; // 我们自己的广告
+	
+	@JSONField(serialize=false)  
+	private int priority;
 
 	public BaseAdEntity(int showType) {
 		this.showType = showType;
@@ -370,5 +374,13 @@ public abstract class BaseAdEntity {
 		System.out.println(StringUtils.isEmpty(null));
 		System.out.println(StringUtils.isEmpty(""));
 		System.out.println(StringUtils.isEmpty(" "));
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 }
