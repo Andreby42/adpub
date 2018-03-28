@@ -271,7 +271,7 @@ public abstract class AbstractManager {
 //			logger.info("isUserTypeMatch return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
 			return false;
 		} 
-
+		
 		if (!rule.isLineStationMap(advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(),
 				advParam.getUdid())) {
 			logger.info("isLineStationMap return false,ruleId={},lineId={},stnName={},order={},udid={}",
@@ -279,6 +279,8 @@ public abstract class AbstractManager {
 					advParam.getUdid());
 			return false;
 		}
+		
+		// 站点名匹配
 		if (!rule.isStationMatch(advParam.getStnName())) {
 //			logger.info("isStationMatch return false,ruleId={},stnName={},udid={}", rule.getRuleId(),
 //					advParam.getStnName(), advParam.getUdid());

@@ -23,7 +23,8 @@ public class AdStationlInnerContent extends AdInnerContent {
 		if (ad != null) {
 			this.pic = ad.pic;
 			this.setAdCard(ad.getAdCard());
-			this.getAdCard().setGpsType("gcj"); // 默认站点坐标取自高德地图的经纬度
+			if(this.getAdCard() != null)
+				this.getAdCard().setGpsType("gcj"); // 默认站点坐标取自高德地图的经纬度
 			this.setBannerInfo(ad.getBannerInfo());
 		}
 	}
