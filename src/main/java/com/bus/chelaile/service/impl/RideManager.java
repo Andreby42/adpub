@@ -1,6 +1,7 @@
 package com.bus.chelaile.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -76,6 +77,13 @@ public class RideManager extends AbstractManager {
 
 		return res;
 
+	}
+
+	@Override
+	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

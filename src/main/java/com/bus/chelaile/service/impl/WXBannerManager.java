@@ -1,6 +1,7 @@
 package com.bus.chelaile.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.util.New;
 
 public class WXBannerManager extends AbstractManager {
 
@@ -23,7 +25,28 @@ public class WXBannerManager extends AbstractManager {
 	protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
 			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord)
 			throws Exception {
+		return null;
+	}
 
+	private WXAppBannerAdEntity from(AdContentCacheEle ad, AdvParam advParam) {
+		WXAppBannerAdEntity res = new WXAppBannerAdEntity();
+		res.fillBaseInfo(ad.getAds(), advParam, new HashMap<String, String>());
+		res.dealLink(advParam);
+
+		AdWXBannerInnerContent adWXBanner = (AdWXBannerInnerContent) ad.getAds().getAdInnerContent();
+		res.setPic(adWXBanner.getPic());
+		res.setWxMiniProId(adWXBanner.getWx_miniPro_id());
+		res.setWxMiniProPath(adWXBanner.getWx_miniPro_path());
+
+		return res;
+	}
+
+	@Override
+	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
+		List<BaseAdEntity> entities = New.arrayList();
+		
+		// 遍历所有符合条件的广告体
 		for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
 			AdContentCacheEle ad = entry.getValue();
 			AdWXBannerInnerContent adWXBanner = (AdWXBannerInnerContent) ad.getAds().getAdInnerContent();
@@ -44,7 +67,7 @@ public class WXBannerManager extends AbstractManager {
 											advParam.getLineId(), advParam.getStnName(), advParam.getShareId(),
 											advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
 											advParam.getLng(), advParam.getLat(), advParam.getSrc(), advParam.getWxs());
-							return adEntity;
+							entities.add(adEntity);
 						}
 					}
 				}
@@ -59,27 +82,11 @@ public class WXBannerManager extends AbstractManager {
 									advParam.getLineId(), advParam.getStnName(), advParam.getShareId(),
 									advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(),
 									advParam.getLat(), advParam.getSrc(), advParam.getWxs());
-					return adEntity;
+					entities.add(adEntity);
 				}
 			}
 		}
-
-		return null;
-	}
-
-	
-	
-	private WXAppBannerAdEntity from(AdContentCacheEle ad, AdvParam advParam) {
-		WXAppBannerAdEntity res = new WXAppBannerAdEntity();
-		res.fillBaseInfo(ad.getAds(), advParam, new HashMap<String, String>());
-		res.dealLink(advParam);
-
-		AdWXBannerInnerContent adWXBanner = (AdWXBannerInnerContent) ad.getAds().getAdInnerContent();
-		res.setPic(adWXBanner.getPic());
-		res.setWxMiniProId(adWXBanner.getWx_miniPro_id());
-		res.setWxMiniProPath(adWXBanner.getWx_miniPro_path());
-
-		return res;
+		return entities;
 	}
 
 }

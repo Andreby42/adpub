@@ -221,8 +221,8 @@ public class ServiceManager {
 			entity = getDoubleAndSingleAds(advParam);
 			object.put("ads", entity);
 		} else if(methodName.equals("getWXBannerAds")) {	// 小程序 banner广告
-			entity = getHXBannerAd(advParam);
-			object.put("ads", entity);
+			List<BaseAdEntity> entities = getWXBannerAd(advParam);
+			object.put("ads", entities);
 		}else if (methodName.equals("h5BannerAds")) { // h5 banner广告
 			entity = getH5BannerAd(advParam);
 			object.put("ads", entity);
@@ -508,9 +508,9 @@ public class ServiceManager {
 	 * 小程序 banner 广告
 	 * isNeedApi = true
 	 */
-	private BaseAdEntity getHXBannerAd(AdvParam advParam) {
-		BaseAdEntity wxBannerAd = wXBannerManager.doService(advParam, ShowType.WECHATAPP_BANNER_ADV, true, new QueryParam(), true);
-		return wxBannerAd;
+	private List<BaseAdEntity> getWXBannerAd(AdvParam advParam) {
+		List<BaseAdEntity> wxBannerAds = wXBannerManager.doServiceList(advParam, ShowType.WECHATAPP_BANNER_ADV, new QueryParam());
+		return wxBannerAds;
 	}
 	
 

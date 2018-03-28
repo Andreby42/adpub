@@ -1,5 +1,6 @@
 package com.bus.chelaile.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import com.bus.chelaile.common.AnalysisLog;
@@ -121,6 +122,13 @@ public class DoubleAndSingleManager extends AbstractManager {
 		
 		return entity;
 
+	}
+
+	@Override
+	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 //	@Override

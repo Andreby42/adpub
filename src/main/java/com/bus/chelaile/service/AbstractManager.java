@@ -34,56 +34,6 @@ public abstract class AbstractManager {
 
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractManager.class);
 	
-	/**
-	 * 最初的检测
-	 * 
-	 * @param advParam
-	 * @param showType
-	 * @return true 检测成功,false 检测失败
-	 */
-	protected boolean beforeCheck(AdvParam advParam, ShowType showType) {
-		if (SynchronizationControl.isReload()) {
-			logger.info("reload is Running");
-			return false;
-		}
-
-		// 乘车页和活动页不去除广告
-		if (!showType.getType().equals(ShowType.ACTIVE_DETAIL.getType())
-				&& !showType.getType().equals(ShowType.RIDE_DETAIL.getType())) {
-
-			if (isInvalidAccountId(advParam.getAccountId())) {
-				logger.info("取消了广告,accountId={},udid={}", advParam.getAccountId(), advParam.getUdid());
-				return false;
-			}
-		}
-		
-		// 详情页cshow非空，不等于linedetail的不返回
-		if(showType.getType().equals(ShowType.LINE_DETAIL)) {
-			if(StringUtils.isNoneBlank(advParam.getCshow()) && !advParam.getCshow().equals(Constants.CSHOW_LINEDETAIL)) {
-				return false;
-			}
-		}
-		
-		// TODO android 内核4.4一下的，不返回广告 20180118
-		// 这个方法不够眼镜，当android更新到版本10的时候，会出错
-		Platform platform = Platform.from(advParam.getS());
-		if(StringUtils.isNoneBlank(advParam.getUdid()) && advParam.getUdid().equals("e02bda79-1349-4a6b-a474-cb3677ee69c6")) {
-			return true;
-		}
-		if(platform.isAndriod(platform.getDisplay())) {
-			if(StringUtils.isNoneBlank(advParam.getSv()) && (advParam.getSv().compareTo("4.4") < 0)) {
-				return false;
-			}
-		}
-
-		// // udid不为空
-		// if (StringUtils.isBlank(advParam.getUdid()) ||
-		// advParam.getUdid().equals("null")) {
-		// // logger.error("udid is NULL ,return null! ");
-		// return false;
-		// }
-		return true;
-	}
 
 	/**
 	 * 
@@ -98,138 +48,80 @@ public abstract class AbstractManager {
 		if (!beforeCheck(advParam, showType)) {
 			return null;
 		}
-
-		// //保存有效用户的udid
-		// if((showType == ShowType.OPEN_SCREEN || showType ==
-		// ShowType.FULL_SCREEN)
-		// && advParam.getUdid() != null) {
-		// AdvCache.saveRealUsers(advParam.getUdid());
-		// }
-
-		// 取得所有刻意投放广告
-		List<AdContentCacheEle> adsList = CommonService.getAllAdsList(advParam.getUdid(), advParam.getAccountId(), showType);
-
-		if (adsList == null || adsList.size() == 0) {
-			logger.info("[getallavailableAds ISNULL]:udid={}, adtype={}, isNeedApi={}, type={}, ac={}, s={}",
-					advParam.getUdid(), showType, isNeedApid, advParam.getType(), advParam.getAccountId(),
-					advParam.getS());
-			// 不需要第三方的直接返回
-			// 小程序banner 直接返回
-			if (!isNeedApid || showType == ShowType.WECHATAPP_BANNER_ADV) {
-				return null;
-			}
-		} else {
-			// 合并广告
-			adsList = CommonService.mergeAllAds(adsList); // 需要按照adid和ruleid做合并
-			String adIdStr = "";
-			for (AdContentCacheEle ad : adsList) {
-				adIdStr += ad.getAds().getId();
-				for (Rule rule : ad.getRules()) {
-					adIdStr += "->" + rule.getRuleId();
-				}
-				adIdStr += ";";
-			}
-			logger.info("[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
-					+ "cityId={}, v={}, vc={}, li={}, sn={}", advParam.getUdid(), showType, isNeedApid,
-					advParam.getType(), adIdStr, advParam.getAccountId(), advParam.getS(), advParam.getCityId(),
-					advParam.getV(), advParam.getVc(), advParam.getLineId(), advParam.getStnName());
-		}
-
-		AdPubCacheRecord cacheRecord = null;
-		// 放缓存的时候除了线路详情就是双栏
-		if (showType.getType().equals(ShowType.LINE_DETAIL.getType())) {
-			cacheRecord = AdvCache.getAdPubRecordFromCache(advParam.getUdid(), ShowType.LINE_DETAIL.getType());
-		} else {
-			cacheRecord = AdvCache.getAdPubRecordFromCache(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
-		}
-
-		if (cacheRecord == null) {
-			cacheRecord = new AdPubCacheRecord();
-		}
-
+		// 所有投放的广告
+		List<AdContentCacheEle> adsList = gainAllValidAds(advParam, showType, isNeedApid);
+		if ((adsList == null || adsList.size() == 0) && !isNeedApid)
+			return null;
+		
+		// 用户投放广告的记录
+		AdPubCacheRecord cacheRecord = gainCacheRecord(advParam, showType);
 		Map<Integer, AdContentCacheEle> adMap = null;
 		// 单双栏、浮层、乘车页、活动页、和旧版本的开屏接口不走策略
 		// 站点广告不走策略
 		// 小程序 banner广告不走策略
 		if (!isNeedApid || showType == ShowType.WECHATAPP_BANNER_ADV) {
-			// 需要排序
+			// 按照优先级
 			Collections.sort(adsList, AD_CONTENT_COMPARATOR);
 
 			adMap = New.hashMap();
 			// 把所有符合规则的广告放到map中
 			handleAds(adMap, adsList, showType, advParam, cacheRecord, isNeedApid, queryParam);
-
 			if (adMap.size() == 0) {
-				// throw new IllegalArgumentException("handleAds出错");
 				return null;
 			}
-
 			// 没有第三方广告,处理自采买广告
 			return getEntity(null, advParam, cacheRecord, adMap, showType, queryParam, isRecord);
-
 		} else {
-
 			if (adsList != null && adsList.size() > 0) {
 				adMap = New.hashMap();
 				// 把所有符合规则的广告放到map中
 				handleAds(adMap, adsList, showType, advParam, cacheRecord, isNeedApid, queryParam);
 			}
-
 		}
-
+		
 		// 到这一步的都是 isNeedApid=true，目前只有新版的详情页和新版的开屏
-		AdCategory cateGory = null;
-		try {
-			if (showType != ShowType.OPEN_SCREEN && showType != ShowType.FULL_SCREEN) {
-				cateGory = AdDispatcher.getAdCategory(advParam, cacheRecord, adMap);
-				if (cateGory != null && cateGory.getApiType() > 3) {
-					throw new IllegalArgumentException("请求了线路详情广告,然而返回的广告类型为" + cateGory.getApiType());
-				}
-			} else {
-				cateGory = AdDispatcher.getOpenAdCategory(advParam, cacheRecord, adMap);
-				if (cateGory != null && cateGory.getApiType() <= 3 && cateGory.getApiType() != -1) {
-					throw new IllegalArgumentException("请求了开屏广告,然而返回的广告类型为" + cateGory.getApiType());
-				}
-			}
-
-		} catch (IllegalArgumentException e) {
-			logger.error("udid={},category errormessage={}", advParam.getUdid(), e.getMessage());
-			return null;
-		}
-
-//		logger.info("[cateGoryInfo]:udid={}, cateGory={}", advParam.getUdid(), cateGory);
-		if (cateGory != null) {
-			// 暂时失联的时候不显示第三方广告
-			if (cateGory.getAdType() > 1 && advParam.getInState() != null
-					&& (advParam.getInState().equals("-2") || advParam.getInState().equals("-5"))) {
-				return null;
-			}
-			return getEntity(cateGory, advParam, cacheRecord, adMap, showType, queryParam, isRecord);
-		} else { // cateGory为空的时候记录
-			cacheRecord.buildAdPubCacheRecord(-1);
-			if (showType == ShowType.LINE_DETAIL) {
-				cacheRecord.setAdHistory(new AdCategory(-1, -1, -1));
-				AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.LINE_DETAIL.getType());
-			}
-			// 开屏和浮层
-			else {
-				cacheRecord.setOpenAdHistory(new AdCategory(-1, -1, -1));
-				AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
-			}
-
-			return null;
-		}
+		return needCategoryHandle(advParam, showType, queryParam, isRecord, cacheRecord, adMap);
 	}
 
 
+	
+	/*
+	 * 获取ad List的方法
+	 * 不涉及到策略
+	 */
+	public List<BaseAdEntity> doServiceList(AdvParam advParam, ShowType showType, QueryParam queryParam) {
+		if (!beforeCheck(advParam, showType)) {
+			return null;
+		}
+		// 所有投放的广告
+		List<AdContentCacheEle> adsList = gainAllValidAds(advParam, showType, false);
+		if (adsList == null || adsList.size() == 0)
+			return null;
+
+		AdPubCacheRecord cacheRecord = gainCacheRecord(advParam, showType);
+		// 需要排序
+		Collections.sort(adsList, AD_CONTENT_COMPARATOR);
+		Map<Integer, AdContentCacheEle> adMap = New.hashMap();
+		// 把所有符合规则的广告放到map中
+		handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
+
+		if (adMap.size() == 0) {
+			// 此处，经过规则判断不返回广告，如果是feedAd，需要记录'不投放'的次数
+			if (showType == ShowType.FEED_ADV) {
+				List<Integer> ids = New.arrayList();
+				ids.add(-1);
+				cacheRecord.setNoFeedAdHistoryMap(ids);
+				AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
+			}
+			return null;
+		}
+		logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
+		
+		return  getEntities(advParam, cacheRecord, adMap, showType, queryParam);
+	}
+
 	/**
 	 * 把符合规则的广告放到map中
-	 * 
-	 * @param adMap
-	 * @param adsList
-	 * @param showType
-	 * @param advParam
-	 * @param cacheRecord
 	 * @param num
 	 *            1 的时候只要一个广告,-1的时候全部
 	 */
@@ -319,33 +211,10 @@ public abstract class AbstractManager {
 		return true;
 	}
 
-	/*
-	 * 双栏点击了不感兴趣，默认15分钟 true：继续投放广告 false:不投放广告
-	 */
-	public boolean doubleAdsIsSilentTimePassed(AdContent ad, AdPubCacheRecord cacheRecord, AdvParam advParam) {
-		boolean isUninterest = cacheRecord.isUninterest(ad.getId());
-		if (isUninterest) {
-			if (!ManagerCommon.isSilentTimePassed(advParam.getUdid(), ad.getId(), isUninterest, 15, cacheRecord)) {
-				logger.info("isSilentTimePassed return false,advId={},udid={}", ad.getId(), advParam.getUdid());
-				return false;
-			} else {
-				// 超过时间限制了
-				cacheRecord.removeUninterestAds(ad.getId());
-			}
-		}
-		return true;
-	}
 
 	/***
 	 * 广告规则校验
-	 * 
-	 * @param rule
-	 * @param advParam
-	 * @param ad
-	 * @param cacheRecord
-	 * @param showType
-	 * @param isNeedApid
-	 * @return true 可投放 fasle 不可投放
+	 * @return true 可投放 ; fasle 不可投放
 	 */
 	private boolean ruleCheck(Rule rule, AdvParam advParam, AdContent ad, AdPubCacheRecord cacheRecord,
 			ShowType showType, boolean isNeedApid, QueryParam queryParam, UserClickRate clickRate) {
@@ -522,13 +391,8 @@ public abstract class AbstractManager {
 	}
 
 
-
-
-
 	/**
 	 * 是否通过花钱取消广告
-	 * 
-	 * @param accountId
 	 * @return
 	 */
 	private boolean isInvalidAccountId(String accountId) {
@@ -582,7 +446,7 @@ public abstract class AbstractManager {
 		}
 		boolean isSelfAd = false;
 		int adId = -1;
-		boolean hasSendSelfAd = false;	// 今天之前是否投放过该自采买广告
+		boolean hasSendSelfAd = false; // 今天之前是否投放过该自采买广告
 		if (cateGory == null && entity != null) // 老版，不需要第三方广告，仅处理自采买
 		{
 			isSelfAd = true;
@@ -601,10 +465,11 @@ public abstract class AbstractManager {
 			isAutoRefresh = true;
 		}
 		if (isSelfAd && !(isAutoRefresh && hasSendSelfAd)) { // 记录自采买广告的次数
-			if(showType != ShowType.OPEN_SCREEN)	// 2017.12.28， 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+			if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
+													// 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
 				cacheRecord.buildAdPubCacheRecord(adId);
 			if (adMap.get(adId).getRule().getUvLimit() > 0) {
-				// 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误  // TODO
+				// 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误 // TODO
 				if (!cacheRecord.getUvMap().containsKey(adId)) {
 					adMap.get(adId).getRule().setUvCount();
 					cacheRecord.setAdToUvMap(adId);
@@ -615,12 +480,47 @@ public abstract class AbstractManager {
 		if (showType == ShowType.LINE_DETAIL) {
 			RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
 		} else {
-			if(showType != ShowType.OPEN_SCREEN)	// 2017.12.28， 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+			if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
+													// 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
 				RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
 		}
 
 		return entity;
 
+	}
+	
+	
+	protected List<BaseAdEntity> getEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) {
+		List<BaseAdEntity> entities = null;
+		try {
+			entities = dealEntities(advParam, cacheRecord, adMap, showType, queryParam);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return entities;
+		}
+		// 记录缓存
+		if (entities != null) {
+			for (BaseAdEntity entity : entities) {
+				int adId = entity.getId();
+				if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+					cacheRecord.buildAdPubCacheRecord(adId);
+				if (adMap.get(adId).getRule().getUvLimit() > 0) {
+					// 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误 // TODO
+					if (!cacheRecord.getUvMap().containsKey(adId)) {
+						adMap.get(adId).getRule().setUvCount();
+						cacheRecord.setAdToUvMap(adId);
+					}
+				}
+			}
+		}
+		if (showType == ShowType.LINE_DETAIL) {
+			RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
+		} else {
+			if (showType != ShowType.OPEN_SCREEN) // 2017.12.28开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+				RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
+		}
+		return entities;
 	}
 
 	protected void adTimeCounts(AdPubCacheRecord cacheRecord, String udid, AdContentCacheEle adc) {
@@ -642,8 +542,13 @@ public abstract class AbstractManager {
 		}
 	}
 
+	
 	protected abstract BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
-			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord) throws Exception;
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord)
+			throws Exception;
+
+	protected abstract List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception;
 
 
 
@@ -674,6 +579,169 @@ public abstract class AbstractManager {
 		}
 		
 		return CalculatePerMinCount.getCTRRate(advId + "#" + ruleId);
+	}
+	
+	private List<AdContentCacheEle> mergeAllAds(AdvParam advParam, ShowType showType, List<AdContentCacheEle> adsList) {
+		adsList = CommonService.mergeAllAds(adsList); // 需要按照adid和ruleid做合并
+		String adIdStr = "";
+		for (AdContentCacheEle ad : adsList) {
+			adIdStr += ad.getAds().getId();
+			for (Rule rule : ad.getRules()) {
+				adIdStr += "->" + rule.getRuleId();
+			}
+			adIdStr += ";";
+		}
+		logger.info("[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
+				+ "cityId={}, v={}, vc={}, li={}, sn={}", advParam.getUdid(), showType, false, advParam.getType(),
+				adIdStr, advParam.getAccountId(), advParam.getS(), advParam.getCityId(), advParam.getV(),
+				advParam.getVc(), advParam.getLineId(), advParam.getStnName());
+		return adsList;
+	}
+
+	
+	/*
+	 * 获取用户投放缓存记录
+	 */
+	private AdPubCacheRecord gainCacheRecord(AdvParam advParam, ShowType showType) {
+		AdPubCacheRecord cacheRecord = null;
+		// 放缓存的时候除了线路详情就是双栏
+		if (showType.getType().equals(ShowType.LINE_DETAIL.getType())) {
+			cacheRecord = AdvCache.getAdPubRecordFromCache(advParam.getUdid(), ShowType.LINE_DETAIL.getType());
+		} else {
+			cacheRecord = AdvCache.getAdPubRecordFromCache(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
+		}
+
+		if (cacheRecord == null) {
+			cacheRecord = new AdPubCacheRecord();
+		}
+		return cacheRecord;
+	}
+	
+	private BaseAdEntity needCategoryHandle(AdvParam advParam, ShowType showType, QueryParam queryParam,
+			boolean isRecord, AdPubCacheRecord cacheRecord, Map<Integer, AdContentCacheEle> adMap) {
+		AdCategory cateGory = null;
+		try {
+			if (showType != ShowType.OPEN_SCREEN && showType != ShowType.FULL_SCREEN) {
+				cateGory = AdDispatcher.getAdCategory(advParam, cacheRecord, adMap);
+				if (cateGory != null && cateGory.getApiType() > 3) {
+					throw new IllegalArgumentException("请求了线路详情广告,然而返回的广告类型为" + cateGory.getApiType());
+				}
+			} else {
+				cateGory = AdDispatcher.getOpenAdCategory(advParam, cacheRecord, adMap);
+				if (cateGory != null && cateGory.getApiType() <= 3 && cateGory.getApiType() != -1) {
+					throw new IllegalArgumentException("请求了开屏广告,然而返回的广告类型为" + cateGory.getApiType());
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			logger.error("udid={},category errormessage={}", advParam.getUdid(), e.getMessage());
+			return null;
+		}
+
+		// logger.info("[cateGoryInfo]:udid={}, cateGory={}",
+		// advParam.getUdid(), cateGory);
+		if (cateGory != null) {
+			// 暂时失联的时候不显示第三方广告
+			if (cateGory.getAdType() > 1 && advParam.getInState() != null
+					&& (advParam.getInState().equals("-2") || advParam.getInState().equals("-5"))) {
+				return null;
+			}
+			return getEntity(cateGory, advParam, cacheRecord, adMap, showType, queryParam, isRecord);
+		} else { // cateGory为空的时候记录
+			cacheRecord.buildAdPubCacheRecord(-1);
+			if (showType == ShowType.LINE_DETAIL) {
+				cacheRecord.setAdHistory(new AdCategory(-1, -1, -1));
+				AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.LINE_DETAIL.getType());
+			}
+			// 开屏和浮层
+			else {
+				cacheRecord.setOpenAdHistory(new AdCategory(-1, -1, -1));
+				AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
+			}
+			return null;
+		}
+	}
+
+
+	private List<AdContentCacheEle> gainAllValidAds(AdvParam advParam, ShowType showType, boolean isNeedApid) {
+		// 取得所有手动投放广告
+		List<AdContentCacheEle> adsList = CommonService.getAllAdsList(advParam.getUdid(), advParam.getAccountId(), showType);
+		if (adsList == null || adsList.size() == 0) {
+			logger.info("[getallavailableAds ISNULL]:udid={}, adtype={}, isNeedApi={}, type={}, ac={}, s={}",
+					advParam.getUdid(), showType, isNeedApid, advParam.getType(), advParam.getAccountId(),
+					advParam.getS());
+		} else {
+			// 合并广告
+			adsList = mergeAllAds(advParam, showType, adsList);
+		}
+		return adsList;
+	}
+	
+	/**
+	 * 最初的检测
+	 * 
+	 * @param advParam
+	 * @param showType
+	 * @return true 检测成功,false 检测失败
+	 */
+	protected boolean beforeCheck(AdvParam advParam, ShowType showType) {
+		if (SynchronizationControl.isReload()) {
+			logger.info("reload is Running");
+			return false;
+		}
+
+		// 乘车页和活动页不去除广告
+		if (!showType.getType().equals(ShowType.ACTIVE_DETAIL.getType())
+				&& !showType.getType().equals(ShowType.RIDE_DETAIL.getType())) {
+
+			if (isInvalidAccountId(advParam.getAccountId())) {
+				logger.info("取消了广告,accountId={},udid={}", advParam.getAccountId(), advParam.getUdid());
+				return false;
+			}
+		}
+		
+		// 详情页cshow非空，不等于linedetail的不返回
+		if(showType.getType().equals(ShowType.LINE_DETAIL)) {
+			if(StringUtils.isNoneBlank(advParam.getCshow()) && !advParam.getCshow().equals(Constants.CSHOW_LINEDETAIL)) {
+				return false;
+			}
+		}
+		
+		// TODO android 内核4.4一下的，不返回广告 20180118
+		// 这个方法不够眼镜，当android更新到版本10的时候，会出错
+		Platform platform = Platform.from(advParam.getS());
+		if(StringUtils.isNoneBlank(advParam.getUdid()) && advParam.getUdid().equals("e02bda79-1349-4a6b-a474-cb3677ee69c6")) {
+			return true;
+		}
+		if(platform.isAndriod(platform.getDisplay())) {
+			if(StringUtils.isNoneBlank(advParam.getSv()) && (advParam.getSv().compareTo("4.4") < 0)) {
+				return false;
+			}
+		}
+
+		// // udid不为空
+		// if (StringUtils.isBlank(advParam.getUdid()) ||
+		// advParam.getUdid().equals("null")) {
+		// // logger.error("udid is NULL ,return null! ");
+		// return false;
+		// }
+		return true;
+	}
+	
+	/*
+	 * 双栏点击了不感兴趣，默认15分钟 true：继续投放广告 false:不投放广告
+	 */
+	public boolean doubleAdsIsSilentTimePassed(AdContent ad, AdPubCacheRecord cacheRecord, AdvParam advParam) {
+		boolean isUninterest = cacheRecord.isUninterest(ad.getId());
+		if (isUninterest) {
+			if (!ManagerCommon.isSilentTimePassed(advParam.getUdid(), ad.getId(), isUninterest, 15, cacheRecord)) {
+				logger.info("isSilentTimePassed return false,advId={},udid={}", ad.getId(), advParam.getUdid());
+				return false;
+			} else {
+				// 超过时间限制了
+				cacheRecord.removeUninterestAds(ad.getId());
+			}
+		}
+		return true;
 	}
 
 }

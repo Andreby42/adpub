@@ -1,5 +1,6 @@
 package com.bus.chelaile.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,6 +171,13 @@ public class LineDetailsManager extends AbstractManager {
 					advParam.getNw(), advParam.getIp(),
 					advParam.getDeviceType(),advParam.getLng(),advParam.getLat(),advParam.getStatsAct(),isRecord);
 		}
+	}
+
+	@Override
+	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

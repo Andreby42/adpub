@@ -2,6 +2,7 @@ package com.bus.chelaile.service.impl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -125,5 +126,12 @@ public class StationAdsManager extends AbstractManager {
 	public static void main(String[] args) throws ClientProtocolException, IOException {
 		String url = "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
 		System.out.println(HttpUtils.get(url, "utf-8"));
+	}
+
+	@Override
+	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

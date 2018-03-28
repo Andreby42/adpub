@@ -225,4 +225,11 @@ public class FeedAdsManager extends AbstractManager {
 		}
 	};
 
+	@Override
+	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
