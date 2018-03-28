@@ -222,10 +222,14 @@ public class ServiceManager {
 			object.put("ads", entity);
 		} else if(methodName.equals("getWXBannerAds")) {	// 小程序 banner广告
 			List<BaseAdEntity> entities = getWXBannerAd(advParam);
-			object.put("ads", entities);
+			if(entities != null && entities.size() > 0) {
+				object.put("ads", entities);
+			}
+			return object;
 		}else if (methodName.equals("h5BannerAds")) { // h5 banner广告
 			entity = getH5BannerAd(advParam);
 			object.put("ads", entity);
+			return object;
 		} else if (methodName.equals("getRide")) {
 			entity = getRide(advParam);
 			object = (JSONObject) entity; // 乘车页广告，新增音频广告内容

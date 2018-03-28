@@ -86,6 +86,8 @@ public class WXBannerManager extends AbstractManager {
 				}
 			}
 		}
+		if(entities.size() == 0)
+			return null;
 		return entities;
 	}
 
