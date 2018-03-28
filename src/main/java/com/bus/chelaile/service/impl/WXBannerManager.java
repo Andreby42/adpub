@@ -54,7 +54,7 @@ public class WXBannerManager extends AbstractManager {
 			// 广告结构体有对来源的要求
 			if (adWXBanner.getServingPlaceList() != null && adWXBanner.getServingPlaceList().size() > 0) {
 				if (StringUtils.isEmpty(advParam.getWxs())) {
-					return null;
+					continue;
 				}
 				for (String s : adWXBanner.getServingPlaceList()) {
 					if (s.equals(advParam.getWxs())) {
