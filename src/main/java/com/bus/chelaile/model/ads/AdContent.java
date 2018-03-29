@@ -53,7 +53,7 @@ public class AdContent {
         	wxBannerInner.setAndPaseJson(content);
         	innerContent = wxBannerInner;
         }
-        if(ShowType.STATION_ADV.getType().equals(showType)) {		// 站点广告
+        else if(ShowType.STATION_ADV.getType().equals(showType)) {		// 站点广告
         	AdStationlInnerContent stationInner = new AdStationlInnerContent();
         	stationInner.setAndPaseJson(content);
         	innerContent = stationInner;

@@ -58,9 +58,7 @@ public class StationAdsManager extends AbstractManager {
 		StationAdEntity res = new StationAdEntity();
 
 		res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
-
 		res.dealLink(advParam);
-		
 
 		AdInnerContent inner = ad.getInnerContent();
 		if (inner instanceof AdStationlInnerContent) {
@@ -125,8 +123,11 @@ public class StationAdsManager extends AbstractManager {
 	}
 
 	public static void main(String[] args) throws ClientProtocolException, IOException {
-		String url = "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
-		System.out.println(HttpUtils.get(url, "utf-8"));
+//		String url = "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
+//		System.out.println(HttpUtils.get(url, "utf-8"));
+		int totalWeight=0;
+		int randomOut = new Random().nextInt(totalWeight);
+		System.out.println(randomOut);
 	}
 
 	@Override
@@ -150,6 +151,7 @@ public class StationAdsManager extends AbstractManager {
 		if (stanAdsList != null && stanAdsList.size() > 0) {
 			int totalWeight = 0;
 			for (BaseAdEntity entity : stanAdsList) {
+				logger.info("id={}, title={}", entity.getId(), ((StationAdEntity) entity).getTitle());
 				if (((StationAdEntity) entity).getBuyOut() == 1) {
 					// 买断的广告按照优先级来， stanAdsList 之前已经按照优先级排序过
 					logger.info("买断的广告, udid={}, advId={}", advParam.getUdid(), entity.getId());
@@ -157,13 +159,16 @@ public class StationAdsManager extends AbstractManager {
 				}
 				totalWeight += ((StationAdEntity) entity).getAdWeight();
 			}
-
-			int randomOut = new Random().nextInt(totalWeight); // 取随机值
-			int indexWeight = 0;
-			for (BaseAdEntity entity : stanAdsList) {
-				if ((indexWeight += ((StationAdEntity) entity).getAdWeight()) > randomOut) {
-					return entity;
+			if (totalWeight > 0) {
+				int randomOut = new Random().nextInt(totalWeight); // 取随机值
+				int indexWeight = 0;
+				for (BaseAdEntity entity : stanAdsList) {
+					if ((indexWeight += ((StationAdEntity) entity).getAdWeight()) > randomOut) {
+						return entity;
+					}
 				}
+			} else {
+				return stanAdsList.get(0);	 // 所有站点广告都没有权重，那么直接返回第一个（优先级最高那个）
 			}
 		} else {
 			return null;
