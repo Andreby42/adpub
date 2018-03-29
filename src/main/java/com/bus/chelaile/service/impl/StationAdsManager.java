@@ -46,7 +46,7 @@ public class StationAdsManager extends AbstractManager {
 				entities.add(entity);
 			}
 		}
-
+		logger.info("适配站点广告数:{}", entities.size());
 		StationAdEntity entity = null;
 		if (entities.size() == 0) {
 			return null;

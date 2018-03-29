@@ -65,7 +65,10 @@ public abstract class AbstractManager {
 
 			adMap = New.hashMap();
 			// 把所有符合规则的广告放到map中
-			handleAds(adMap, adsList, showType, advParam, cacheRecord, isNeedApid, queryParam);
+			boolean isneedAllAds = isNeedApid;
+			if(showType == ShowType.STATION_ADV)	 // 站点广告返回所有的
+				isneedAllAds = true;
+			handleAds(adMap, adsList, showType, advParam, cacheRecord, isneedAllAds, queryParam);
 			if (adMap.size() == 0) {
 				return null;
 			}
@@ -581,7 +584,7 @@ public abstract class AbstractManager {
 		if (isNeedApid) {
 			setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid, queryParam);
 		} else {
-			// 不需要走策略的只返回一条广告
+			// 只返回一条广告
 			setAds(adMap, adsList, showType, advParam, cacheRecord, 1, isNeedApid, queryParam);
 		}
 	}
