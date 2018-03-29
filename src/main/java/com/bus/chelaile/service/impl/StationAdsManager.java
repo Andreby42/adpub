@@ -1,6 +1,8 @@
 package com.bus.chelaile.service.impl;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,7 @@ public class StationAdsManager extends AbstractManager {
 		} else if (entities.size() == 1) {
 			entity = (StationAdEntity) entities.get(0);
 		} else {
+			Collections.sort(entities, ENTITY_COMPARATOR);
 			entity = (StationAdEntity) calAdWeightAndByOut(advParam, entities);
 		}
 
@@ -185,4 +188,16 @@ public class StationAdsManager extends AbstractManager {
 		logger.error("权重计算出现错误，没有广告站点返回了 , udid={}, stanAdsList.size={}", advParam.getUdid(), stanAdsList.size());
 		return null;
 	}
+
+	private static final Comparator<BaseAdEntity> ENTITY_COMPARATOR = new Comparator<BaseAdEntity>() {
+		@Override
+		public int compare(BaseAdEntity o1, BaseAdEntity o2) {
+			if (o1 == null)
+				return -1;
+			if (o2 == null)
+				return 1;
+			return o2.getPriority() - o1.getPriority();
+		}
+
+	};
 }
