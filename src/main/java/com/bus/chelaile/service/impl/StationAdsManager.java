@@ -133,15 +133,6 @@ public class StationAdsManager extends AbstractManager {
 		return res;
 	}
 
-	public static void main(String[] args) throws ClientProtocolException, IOException {
-		// String url =
-		// "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
-		// System.out.println(HttpUtils.get(url, "utf-8"));
-		int totalWeight = 0;
-		int randomOut = new Random().nextInt(totalWeight);
-		System.out.println(randomOut);
-	}
-
 	@Override
 	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
 			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
@@ -163,7 +154,8 @@ public class StationAdsManager extends AbstractManager {
 		if (stanAdsList != null && stanAdsList.size() > 0) {
 			int totalWeight = 0;
 			for (BaseAdEntity entity : stanAdsList) {
-				logger.info("多个站点广告，选择一个： id={}, title={}", entity.getId(), ((StationAdEntity) entity).getTitle());
+				logger.info("多个站点广告，选择一个： id={}, title={}, priority={}", entity.getId(),
+						((StationAdEntity) entity).getTitle(), entity.getPriority());
 				if (((StationAdEntity) entity).getBuyOut() == 1) {
 					// 买断的广告按照优先级来， stanAdsList 之前已经按照优先级排序过
 					logger.info("买断的广告, udid={}, advId={}", advParam.getUdid(), entity.getId());
@@ -200,4 +192,28 @@ public class StationAdsManager extends AbstractManager {
 		}
 
 	};
+
+	public static void main(String[] args) throws ClientProtocolException, IOException {
+		// String url =
+		// "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
+		// System.out.println(HttpUtils.get(url, "utf-8"));
+		// int totalWeight = 0;
+		// int randomOut = new Random().nextInt(totalWeight);
+		// System.out.println(randomOut);
+
+		StationAdEntity a = new StationAdEntity();
+		StationAdEntity b = new StationAdEntity();
+
+		a.setPriority(1);
+		b.setPriority(2);
+
+		List<StationAdEntity> enties = New.arrayList();
+		enties.add(b);
+		enties.add(a);
+		Collections.sort(enties, ENTITY_COMPARATOR);
+
+		for (StationAdEntity stn : enties) {
+			System.out.println(stn.getPriority());
+		}
+	}
 }
