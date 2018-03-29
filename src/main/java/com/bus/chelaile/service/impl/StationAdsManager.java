@@ -8,6 +8,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 
+import scala.util.Random;
+
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
@@ -29,6 +31,7 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.util.HttpUtils;
+import com.bus.chelaile.util.New;
 
 public class StationAdsManager extends AbstractManager {
 
@@ -36,19 +39,17 @@ public class StationAdsManager extends AbstractManager {
 	protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
 			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord)
 			throws Exception {
-		AdContentCacheEle ad = null;
-
+		List<BaseAdEntity> entities = New.arrayList();
 		for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
-			ad = entry.getValue();
+			AdContentCacheEle ad = entry.getValue();
+			StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
+			if (entity != null) {
+				entities.add(entity);
+			}
 		}
-		StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
-
-		AnalysisLog
-				.info("[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={}",
-						ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
-						advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(),
-						advParam.getStnName(), advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
-						advParam.getLng(), advParam.getLat(), advParam.getH5User(), advParam.getH5Src());
+		StationAdEntity entity = (StationAdEntity) calAdWeightAndByOut(advParam, entities);
+		if (entity != null)
+			writeSendLog(advParam, entity);
 
 		return entity;
 	}
@@ -59,20 +60,24 @@ public class StationAdsManager extends AbstractManager {
 		res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
 
 		res.dealLink(advParam);
+		
 
 		AdInnerContent inner = ad.getInnerContent();
 		if (inner instanceof AdStationlInnerContent) {
 			AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
+			res.setTitle(ad.getTitle());
+			res.setAdWeight(stationInner.getAdWeight());
+			res.setBuyOut(stationInner.getBuyOut());
+			
+			
 			// 对空串情况做一下处理
 			if (stationInner.getBannerInfo() != null
-			// &&
-			// StringUtils.isNoneBlank(stationInner.getBannerInfo().getName())
+			// && StringUtils.isNoneBlank(stationInner.getBannerInfo().getName())
 			) {
 				res.setBannerInfo(stationInner.getBannerInfo());
 			}
-			if (stationInner.getAdCard() != null
-			// && StringUtils.isNoneBlank(stationInner.getAdCard().getName())
-			) {
+			// banner可以没有名字（对应双图片结构）,但是card是不可能没有商户名的！！！
+			if (stationInner.getAdCard() != null && StringUtils.isNoneBlank(stationInner.getAdCard().getName())) {
 				res.setAdCard(stationInner.getAdCard());
 			}
 			res.setPic(stationInner.getPic());
@@ -127,7 +132,43 @@ public class StationAdsManager extends AbstractManager {
 	@Override
 	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
 			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void writeSendLog(AdvParam advParam, StationAdEntity entity) {
+		AnalysisLog
+				.info("[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={}",
+						entity.buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+						advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(),
+						advParam.getStnName(), advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
+						advParam.getLng(), advParam.getLat(), advParam.getH5User(), advParam.getH5Src());
+	}
+
+	// 按照权重计算，选择一个广告投放
+	private BaseAdEntity calAdWeightAndByOut(AdvParam advParam, List<BaseAdEntity> stanAdsList) {
+		// 获取所有符合规则的站点广告
+		if (stanAdsList != null && stanAdsList.size() > 0) {
+			int totalWeight = 0;
+			for (BaseAdEntity entity : stanAdsList) {
+				if (((StationAdEntity) entity).getBuyOut() == 1) {
+					// 买断的广告按照优先级来， stanAdsList 之前已经按照优先级排序过
+					logger.info("买断的广告, udid={}, advId={}", advParam.getUdid(), entity.getId());
+					return entity;
+				}
+				totalWeight += ((StationAdEntity) entity).getAdWeight();
+			}
+
+			int randomOut = new Random().nextInt(totalWeight); // 取随机值
+			int indexWeight = 0;
+			for (BaseAdEntity entity : stanAdsList) {
+				if ((indexWeight += ((StationAdEntity) entity).getAdWeight()) > randomOut) {
+					return entity;
+				}
+			}
+		} else {
+			return null;
+		}
+		logger.error("权重计算出现错误，没有广告站点返回了 , udid={}, stanAdsList.size={}", advParam.getUdid(), stanAdsList.size());
 		return null;
 	}
 }

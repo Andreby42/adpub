@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import scala.util.Random;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -402,11 +404,10 @@ public class ServiceManager {
 				}
 			}
 		}
-		
-		
 		return object;
 	}
 
+	
 	// 0117版本之后，只返回一条广告。 之后，可以多类型广告并存
 	private boolean onlyOneAdCheck(AdvParam advParam) {
 		if (advParam.getS().equalsIgnoreCase("android") && advParam.getVc() > Constants.PLATFORM_LOG_ANDROID_0118) {

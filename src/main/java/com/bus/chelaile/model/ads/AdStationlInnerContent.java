@@ -14,7 +14,8 @@ public class AdStationlInnerContent extends AdInnerContent {
 	private String pic; // 广告图片的URL
 	private AdCard adCard;
 	private BannerInfo bannerInfo;
-	
+	private int adWeight;    // 轮播权重
+	private int buyOut;		// 买断， 0 没有买断； 1 买断。 2018-03-29
 	
 	@Override
 	protected void parseJson(String jsonr) {
@@ -23,9 +24,11 @@ public class AdStationlInnerContent extends AdInnerContent {
 		if (ad != null) {
 			this.pic = ad.pic;
 			this.setAdCard(ad.getAdCard());
-			if(this.getAdCard() != null)
+			if (this.getAdCard() != null)
 				this.getAdCard().setGpsType("gcj"); // 默认站点坐标取自高德地图的经纬度
 			this.setBannerInfo(ad.getBannerInfo());
+			this.adWeight = ad.getAdWeight();
+			this.buyOut = ad.getBuyOut();
 		}
 	}
 
@@ -86,5 +89,21 @@ public class AdStationlInnerContent extends AdInnerContent {
 
 	public void setBannerInfo(BannerInfo bannerInfo) {
 		this.bannerInfo = bannerInfo;
+	}
+
+	public int getAdWeight() {
+		return adWeight;
+	}
+
+	public void setAdWeight(int adWeight) {
+		this.adWeight = adWeight;
+	}
+
+	public int getBuyOut() {
+		return buyOut;
+	}
+
+	public void setBuyOut(int buyOut) {
+		this.buyOut = buyOut;
 	}
 }

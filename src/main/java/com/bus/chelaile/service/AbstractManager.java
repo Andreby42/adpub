@@ -59,7 +59,7 @@ public abstract class AbstractManager {
 		// 单双栏、浮层、乘车页、活动页、和旧版本的开屏接口不走策略
 		// 站点广告不走策略
 		// 小程序 banner广告不走策略
-		if (!isNeedApid || showType == ShowType.WECHATAPP_BANNER_ADV) {
+		if (!isNeedApid) {
 			// 按照优先级
 			Collections.sort(adsList, AD_CONTENT_COMPARATOR);
 
@@ -118,6 +118,8 @@ public abstract class AbstractManager {
 		logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
 		List<BaseAdEntity> entities = null;
 		entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
+		// 得到的entiy列表，按照优先级排序
+		// 如果是站点广告并且存在买断的，那么需要把非买断的去掉
 		if(entities != null && entities.size() > 0) {
 			Collections.sort(entities, ENTITY_COMPARATOR);
 		}
@@ -153,20 +155,24 @@ public abstract class AbstractManager {
 							advParam.getUdid());
 					continue;
 				}
-				
+
 				// 如果距离太远，不投放单车。
-				if(ad.getTargetType() == Constants.DOUBLE_BICYCLE_ADV) {
-					if( !CommonService.isShowBikeByDistance(advParam)) {
+				if (ad.getTargetType() == Constants.DOUBLE_BICYCLE_ADV) {
+					if (!CommonService.isShowBikeByDistance(advParam)) {
 						continue;
 					}
-					
-					if(advParam.getRideStatus() == 1) {	// 0没骑车 ，1骑行中， 3骑行结束
+
+					if (advParam.getRideStatus() == 1) { // 0没骑车 ，1骑行中， 3骑行结束
 						logger.info("rideStatus is riding, udid={}", advParam.getUdid());
 						continue;
 					}
 				}
 			}
 			// 遍历所有规则
+			// 如果一条广告存在多条规则，那么只会返回第一条满足  ruleCheck条件的广告
+			// 所以后续不可以再涉及到规则判断，否则这里就存在漏洞
+			// ===> 所有的规则都需要在 ruleCheck 这一步搞定
+			// 运营上避免这种情况的完美做法就是： 同一个advId最好不要对应多条ruleId。
 			for (Rule rule : cacheEle.getRules()) {
 				if (!ruleCheck(rule, advParam, ad, cacheRecord, showType, isNeedApid, queryParam, clickRate)) {
 					continue;
@@ -635,6 +641,9 @@ public abstract class AbstractManager {
 		return cacheRecord;
 	}
 	
+	/*
+	 * 详情页|新版开屏广告，策略处理方法
+	 */
 	private BaseAdEntity needCategoryHandle(AdvParam advParam, ShowType showType, QueryParam queryParam,
 			boolean isRecord, AdPubCacheRecord cacheRecord, Map<Integer, AdContentCacheEle> adMap) {
 		AdCategory cateGory = null;
