@@ -30,7 +30,6 @@ import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.strategy.AdCategory;
-import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
 public class StationAdsManager extends AbstractManager {
@@ -47,7 +46,16 @@ public class StationAdsManager extends AbstractManager {
 				entities.add(entity);
 			}
 		}
-		StationAdEntity entity = (StationAdEntity) calAdWeightAndByOut(advParam, entities);
+
+		StationAdEntity entity = null;
+		if (entities.size() == 0) {
+			return null;
+		} else if (entities.size() == 1) {
+			entity = (StationAdEntity) entities.get(0);
+		} else {
+			entity = (StationAdEntity) calAdWeightAndByOut(advParam, entities);
+		}
+
 		if (entity != null)
 			writeSendLog(advParam, entity);
 
@@ -66,11 +74,11 @@ public class StationAdsManager extends AbstractManager {
 			res.setTitle(ad.getTitle());
 			res.setAdWeight(stationInner.getAdWeight());
 			res.setBuyOut(stationInner.getBuyOut());
-			
-			
+
 			// 对空串情况做一下处理
 			if (stationInner.getBannerInfo() != null
-			// && StringUtils.isNoneBlank(stationInner.getBannerInfo().getName())
+			// &&
+			// StringUtils.isNoneBlank(stationInner.getBannerInfo().getName())
 			) {
 				res.setBannerInfo(stationInner.getBannerInfo());
 			}
@@ -123,9 +131,10 @@ public class StationAdsManager extends AbstractManager {
 	}
 
 	public static void main(String[] args) throws ClientProtocolException, IOException {
-//		String url = "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
-//		System.out.println(HttpUtils.get(url, "utf-8"));
-		int totalWeight=0;
+		// String url =
+		// "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
+		// System.out.println(HttpUtils.get(url, "utf-8"));
+		int totalWeight = 0;
 		int randomOut = new Random().nextInt(totalWeight);
 		System.out.println(randomOut);
 	}
@@ -151,7 +160,7 @@ public class StationAdsManager extends AbstractManager {
 		if (stanAdsList != null && stanAdsList.size() > 0) {
 			int totalWeight = 0;
 			for (BaseAdEntity entity : stanAdsList) {
-				logger.info("id={}, title={}", entity.getId(), ((StationAdEntity) entity).getTitle());
+				logger.info("多个站点广告，选择一个： id={}, title={}", entity.getId(), ((StationAdEntity) entity).getTitle());
 				if (((StationAdEntity) entity).getBuyOut() == 1) {
 					// 买断的广告按照优先级来， stanAdsList 之前已经按照优先级排序过
 					logger.info("买断的广告, udid={}, advId={}", advParam.getUdid(), entity.getId());
@@ -168,7 +177,7 @@ public class StationAdsManager extends AbstractManager {
 					}
 				}
 			} else {
-				return stanAdsList.get(0);	 // 所有站点广告都没有权重，那么直接返回第一个（优先级最高那个）
+				return stanAdsList.get(0); // 所有站点广告都没有权重，那么直接返回第一个（优先级最高那个）
 			}
 		} else {
 			return null;
