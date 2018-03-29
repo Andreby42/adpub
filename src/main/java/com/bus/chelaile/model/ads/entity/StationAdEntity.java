@@ -11,7 +11,6 @@ public class StationAdEntity extends BaseAdEntity {
 	private String pic; // 图片URL
 	private BannerInfo bannerInfo;
 	private AdCard adCard;
-	private int adPriority; 	// 优先级
 	@JSONField(serialize=false)
 	private int adWeight;    // 轮播权重
 	@JSONField(serialize=false)
@@ -64,14 +63,6 @@ public class StationAdEntity extends BaseAdEntity {
 		this.adCard = adCard;
 	}
 	
-	public int getAdPriority() {
-		return adPriority;
-	}
-
-	public void setAdPriority(int adPriority) {
-		this.adPriority = adPriority;
-	}
-
 	public int getAdWeight() {
 		return adWeight;
 	}

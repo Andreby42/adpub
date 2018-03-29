@@ -91,7 +91,7 @@ public class StationAdsManager extends AbstractManager {
 				res.setAdCard(stationInner.getAdCard());
 			}
 			res.setPic(stationInner.getPic());
-			res.setAdPriority(ad.getPriority());
+			res.setPriority(ad.getPriority());
 
 			// 针对口碑券和淘宝客的修改
 			// 口碑券，需要从ocs中获取当前站点的券

@@ -138,7 +138,7 @@ public class SelfManager {
 		}
 		// 处理通配符
 		res.dealLink(advParam);
-		res.setAdPriority(ad.getPriority());
+		res.setPriority(ad.getPriority());
 		
 
 		return res;

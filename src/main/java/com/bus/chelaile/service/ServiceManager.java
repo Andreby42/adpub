@@ -369,7 +369,7 @@ public class ServiceManager {
 		// 如果站点和详情页同时存在，需要做一下优先级对比
 		if(onlyOneAdCheck(advParam)) {
 			if(stnAds != null && lineAds != null) {
-				if(((StationAdEntity)stnAds).getAdPriority() < ((LineAdEntity)lineAds).getAdPriority()) {
+				if(((StationAdEntity)stnAds).getPriority() < ((LineAdEntity)lineAds).getPriority()) {
 					object.put("lineAds", lineAds);
 					return object;
 				} else {
