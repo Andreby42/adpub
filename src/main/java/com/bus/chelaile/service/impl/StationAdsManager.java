@@ -43,6 +43,7 @@ public class StationAdsManager extends AbstractManager {
 		List<BaseAdEntity> entities = New.arrayList();
 		for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
 			AdContentCacheEle ad = entry.getValue();
+			logger.info("********************id={}, priority={}", ad.getAds().getId(), ad.getAds().getPriority());
 			StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
 			if (entity != null) {
 				entities.add(entity);
