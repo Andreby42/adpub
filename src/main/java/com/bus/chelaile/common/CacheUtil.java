@@ -262,10 +262,10 @@ public class CacheUtil {
 //    	System.out.println(ends);
     	
     	
-    	client = new OCSCacheUtil("121.40.210.76","7078","9c0e27d0f09544c9","Yuanguang2014");
-    	client.set("qkk_test1", Constants.ONE_DAY_TIME, "1111");
-    	System.out.println(client.get("qkk_test1"));
-    	System.out.println(client.get("qkk_test2"));
+    	ICache client1 = new OCSCacheUtil("121.40.210.76","7078","9c0e27d0f09544c9","Yuanguang2014");
+    	client1.set("qkk_test1", Constants.ONE_DAY_TIME, "1111");
+    	System.out.println(client1.get("qkk_test1"));
+    	System.out.println(client1.get("qkk_test2"));
     	
     	
     }
