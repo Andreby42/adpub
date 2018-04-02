@@ -823,4 +823,28 @@ public class RedisCacheImplUtil implements ICache{
 		}
 
 	}
+
+	public Map<String, String> getHsetAll(String key) {
+        JedisPool pool = null;
+        Jedis conn = null;
+        Map<String, String> result = null;
+        try {
+            pool = getPool();
+            conn = pool.getResource();
+            result = conn.hgetAll(key);
+
+            log.debug("Redis-Hget: Key={}, value={}", key, result);
+        } catch (Exception e) {
+            log.error("Error occur in Redis.Hget, key={}, error message: {}", key, e.getMessage());
+            if (pool != null && conn != null) {
+                pool.returnResource(conn);
+                pool = null;
+                conn = null;
+            }
+        } finally {
+            if (pool != null && conn != null)
+                pool.returnResource(conn);
+        }
+        return result;
+    }
 }

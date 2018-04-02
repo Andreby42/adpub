@@ -30,6 +30,9 @@ public interface ICache {
 	 // 从redis直接获取set
 	 public Set<String> getSet(String key);
 	 
+	 // redis hash结构
+	 public Map<String, String> getHsetAll(String key);
+	 
 	 
 	 // redis 有序集合
 	 public void setSortedSet(String key, double score,String value, int expire);

@@ -5,6 +5,7 @@ import net.spy.memcached.internal.OperationFuture;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
 import com.bus.chelaile.common.cache.RedisCacheImplUtil;
+import com.bus.chelaile.common.cache.RedisTokenCacheImplUtil;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
@@ -21,6 +23,8 @@ public class CacheUtil {
 	private static ICache client;
 	//	redis缓存
 	private static ICache redisClient;
+	// 存储token的redis
+	private static ICache redisToken;
 	//  用来获取用户头像的redis
 //	private static ICache redisWow;
 	//	保存用户访问量等信息
@@ -109,6 +113,7 @@ public class CacheUtil {
     	   throw new IllegalArgumentException("未找到cacheType类型");
        }
        redisClient = new RedisCacheImplUtil();
+       redisToken = new RedisTokenCacheImplUtil();
        isInitSuccess = true;
     }
     
@@ -221,6 +226,21 @@ public class CacheUtil {
     public static void setToCommonOcs(String key, int exp, Object obj) {
     	cachePayInfoClient.set(key, exp, obj);
     }
+    
+    // token存储升级，在这一步做一些处理，保证输出跟老版本一致 2018-04-02
+    // 输出类似：120c83f760217151408|android|3
+    public static String getTokenFromRedis(String udid) {
+        Map<String, String> tokenMap = redisToken.getHsetAll("UDID2TOKEN" + udid);
+        if(tokenMap == null) {
+            return null;
+        } else {
+            String token = tokenMap.get("token");
+            String sys = tokenMap.get("sys");
+            String tokenType = tokenMap.get("tokenType");
+            return new StringBuilder().append(token).append("|").append(sys).append("|").append(tokenType).toString();
+        }
+    }
+    
  
 //	public static Object getActiveOcs(String key) {
 //		return cacheActivitiesClient.get(key);
@@ -267,6 +287,6 @@ public class CacheUtil {
     	System.out.println(client1.get("qkk_test1"));
     	System.out.println(client1.get("qkk_test2"));
     	
-    	
+    	System.out.println(client1.get("REMINDERTOKEN#fb6d0547-b3ba-435b-ba29-001a1bbe261b"));
     }
 }

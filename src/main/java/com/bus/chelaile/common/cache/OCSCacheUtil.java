@@ -230,4 +230,10 @@ public class OCSCacheUtil implements ICache{
 	public Set<String> zrevRangeByScore(String key, double endScore, double startScore, int count) {
 		return null;
 	}
+
+    @Override
+    public Map<String, String> getHsetAll(String key) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
