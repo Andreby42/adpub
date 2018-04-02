@@ -2,6 +2,9 @@ package com.bus.chelaile.common;
 
 
 import net.spy.memcached.internal.OperationFuture;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +20,8 @@ import com.bus.chelaile.common.cache.RedisCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTokenCacheImplUtil;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.util.config.PropertiesUtils;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 
 public class CacheUtil {
     //	访问得到token缓存
@@ -230,8 +235,10 @@ public class CacheUtil {
     // token存储升级，在这一步做一些处理，保证输出跟老版本一致 2018-04-02
     // 输出类似：120c83f760217151408|android|3
     public static String getTokenFromRedis(String udid) {
-        Map<String, String> tokenMap = redisToken.getHsetAll("UDID2TOKEN" + udid);
-        if(tokenMap == null) {
+        Map<String, String> tokenMap = redisToken.getHsetAll("UDID2TOKEN#" + udid);
+        logger.info("tokenMap.content={}", tokenMap.toString());
+        logger.info("tokenMap.size={}", tokenMap.size());
+        if(tokenMap == null || tokenMap.size() < 3) {
             return null;
         } else {
             String token = tokenMap.get("token");
@@ -288,5 +295,39 @@ public class CacheUtil {
     	System.out.println(client1.get("qkk_test2"));
     	
     	System.out.println(client1.get("REMINDERTOKEN#fb6d0547-b3ba-435b-ba29-001a1bbe261b"));
+    	
+    	
+    	// ************8  redis test
+    	JedisPoolConfig config = new JedisPoolConfig();
+        String host = "127.0.0.1";
+        int port = 6379;
+        config.setMaxTotal(400);
+        //config.setMaxActive(400);
+        config.setMaxIdle(200);
+        config.setMinIdle(20);
+
+        //config.setMaxWait(2000000);
+        //config.setMaxWaitMillis();
+        config.setTestWhileIdle(true);
+        config.setTestOnBorrow(true);
+        config.setTestOnReturn(true);
+
+        JedisPool pool = new JedisPool(config, host, port);
+        Map<String, String> result = null;
+        Jedis conn = null;
+        //set
+        conn = pool.getResource();
+        long result1 = conn.hset("testMap", "1", "1");
+        pool.returnResource(conn);
+        
+        conn = pool.getResource();
+        result = conn.hgetAll("testMap");
+        pool.returnResource(conn);
+        
+        for(Entry<String, String> s : result.entrySet()) {
+            System.out.println(s.getKey() + "--->" + s.getValue());
+        }
+        System.out.println(result.get("1"));
+    	System.exit(1);
     }
 }
