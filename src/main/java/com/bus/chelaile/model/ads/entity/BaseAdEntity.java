@@ -363,9 +363,10 @@ public abstract class BaseAdEntity {
 	}
 
 	public static void main(String[] args) {
-//		String url = "";
-//		String ua = null;
-//		url = url.replace("__UA__", ua);
+		String url = "www.baidu.com?ua=__UA__&imei=__IMEI__&ua1=__UA__";
+		String ua = "111";
+		url = url.replace("__UA__", ua);
+		System.out.println(url);
 		
 		System.out.println(StringUtils.isBlank(null));
 		System.out.println(StringUtils.isBlank(""));
