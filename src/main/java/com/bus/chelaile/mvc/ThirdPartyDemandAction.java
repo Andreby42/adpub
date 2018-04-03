@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AnalysisLog;
@@ -25,6 +26,7 @@ public class ThirdPartyDemandAction extends AbstractController {
     private ServiceManager serviceManager;
     Logger logger = LoggerFactory.getLogger(ThirdPartyDemandAction.class);
 
+    @ResponseBody
     @RequestMapping(value = "adv!leyuansuActivationBack.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public String activationBack(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
@@ -33,6 +35,8 @@ public class ThirdPartyDemandAction extends AbstractController {
         logger.info("来自乐元素的回调请求： imei={}, idfa={}, appid={}", param.getImei(), param.getIdfa(), appid);
         AnalysisLog.info("leyuansu callback, imei={}, idfa={}, appid={}", param.getImei(), param.getIdfa(), appid);
 
-        return serviceManager.getClienSucMapWithNoHead(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
+        logger.info("return 空白");
+        return "";
+//        return serviceManager.getClienSucMapWithNoHead(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
 }
