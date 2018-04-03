@@ -920,6 +920,7 @@ public class ServiceManager {
 		
 		//System.out.println(getClientErrMap("", Constants.STATUS_NO_DATA));
 		
+//	    System.out.println(getClienSucMapWithNoHead(new JSONObject(), "00"));
 		System.exit(0);
 		
 	}
