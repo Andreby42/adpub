@@ -17,6 +17,9 @@ public class AdStationlInnerContent extends AdInnerContent {
 	private int adWeight;    // 轮播权重
 	private int buyOut;		// 买断， 0 没有买断； 1 买断。 2018-03-29
 	
+	private String wx_miniPro_id; 
+    private String wx_miniPro_path; // 跳转小程序， 2018-04-09
+	
 	@Override
 	protected void parseJson(String jsonr) {
 		AdStationlInnerContent ad = null;
@@ -29,6 +32,8 @@ public class AdStationlInnerContent extends AdInnerContent {
 			this.setBannerInfo(ad.getBannerInfo());
 			this.adWeight = ad.getAdWeight();
 			this.buyOut = ad.getBuyOut();
+			this.wx_miniPro_id = ad.getWx_miniPro_id();
+			this.wx_miniPro_path = ad.getWx_miniPro_path();
 		}
 	}
 
@@ -106,4 +111,20 @@ public class AdStationlInnerContent extends AdInnerContent {
 	public void setBuyOut(int buyOut) {
 		this.buyOut = buyOut;
 	}
+
+    public String getWx_miniPro_id() {
+        return wx_miniPro_id;
+    }
+
+    public void setWx_miniPro_id(String wx_miniPro_id) {
+        this.wx_miniPro_id = wx_miniPro_id;
+    }
+
+    public String getWx_miniPro_path() {
+        return wx_miniPro_path;
+    }
+
+    public void setWx_miniPro_path(String wx_miniPro_path) {
+        this.wx_miniPro_path = wx_miniPro_path;
+    }
 }
