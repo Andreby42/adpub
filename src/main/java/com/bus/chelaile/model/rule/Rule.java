@@ -395,17 +395,30 @@ public class Rule {
 		return UserHelper.isTodayNewUser(param.getUdid(), param.getAccountId());
 	}
 
+	/**
+	 * 平台是否符合
+	 * 来自客户端的请求，s分为三种：android|ios|h5
+	 * 对于服务器的判断，s为h5的时候，再分为h5和wechatApp，wechatApp来自参数‘src’
+	 *                  在数据库中，针对小程序，platform记录为 ‘wechatApp’
+	 * @param s
+	 * @param h5Src
+	 * @return
+	 */
 	public boolean isPlatformMatch(String s, String h5Src) {
 		if (s == null) {
 			return false;
 		}
 
 		// h5 用户必须是从微信来的才行
-		Platform platform = Platform.from(s);
-		if (platform.isH5(s)
-				&& (h5Src == null || (!h5Src.equalsIgnoreCase("webapp_weixin_mp") && !h5Src.equals("weixinapp_cx")))) {
-			return false;
-		}
+        Platform platform = Platform.from(s);
+        if (platform.isH5(s)) {
+            if (h5Src == null || (!h5Src.equalsIgnoreCase("webapp_weixin_mp") && !h5Src.equals("weixinapp_cx"))) {
+                return false;
+            }
+            if (h5Src.equals("weixinapp_cx")) {//小程序
+                return isStrMatch(platforms, "wechatApp");
+            }
+        }
 
 		return isStrMatch(platforms, s);
 	}

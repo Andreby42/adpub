@@ -11,6 +11,9 @@ public class StationAdEntity extends BaseAdEntity {
 	private String pic; // 图片URL
 	private BannerInfo bannerInfo;
 	private AdCard adCard;
+	private String wxMiniProId; // 小程序appId
+	private String wxMiniProPath;
+	
 	@JSONField(serialize=false)
 	private int adWeight;    // 轮播权重
 	@JSONField(serialize=false)
@@ -86,4 +89,20 @@ public class StationAdEntity extends BaseAdEntity {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+    public String getWxMiniProId() {
+        return wxMiniProId;
+    }
+
+    public void setWxMiniProId(String wxMiniProId) {
+        this.wxMiniProId = wxMiniProId;
+    }
+
+    public String getWxMiniProPath() {
+        return wxMiniProPath;
+    }
+
+    public void setWxMiniProPath(String wxMiniProPath) {
+        this.wxMiniProPath = wxMiniProPath;
+    }
 }

@@ -77,6 +77,8 @@ public class StationAdsManager extends AbstractManager {
             res.setTitle(ad.getTitle());
             res.setAdWeight(stationInner.getAdWeight());
             res.setBuyOut(stationInner.getBuyOut());
+            res.setWxMiniProId(stationInner.getWx_miniPro_id());
+            res.setWxMiniProPath(stationInner.getWx_miniPro_path());
 
             // 对空串情况做一下处理
             if (stationInner.getBannerInfo() != null
@@ -135,6 +137,7 @@ public class StationAdsManager extends AbstractManager {
         return res;
     }
 
+    // app低版本判断
     private boolean isLowPlatfomr(AdvParam advParam) {
         Platform platform = Platform.from(advParam.getS());
         return ((platform.isAndriod(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_ANDROID_0118) || (platform

@@ -257,8 +257,8 @@ public abstract class AbstractManager {
             return false;
         }
         if (rule.hasPlatforms() && !rule.isPlatformMatch(advParam.getS(), advParam.getH5Src())) {
-            //			logger.info("isPlatformMatch return false,ruleId={},s={},src={},udid={}", rule.getRuleId(), advParam.getS(),
-            //					advParam.getH5Src(), advParam.getUdid());
+            logger.info("isPlatformMatch return false,ruleId={},s={},src={},udid={},userId={}", rule.getRuleId(), advParam.getS(),
+                    advParam.getH5Src(), advParam.getUdid(), advParam.getUserId());
             return false;
         }
         if (rule.hasVersions() && !rule.isVersionMatch(advParam.getV())) {
@@ -329,7 +329,8 @@ public abstract class AbstractManager {
         }
 
         // 每个时间段的发送次数，目前是考察到分钟
-        if (rule.getTotalCount() > 0 && !rule.adTimeCounts(ad.getId(), rule.getRuleId(), cacheRecord, advParam.getUdid(), false)) {
+        if (rule.getTotalCount() > 0
+                && !rule.adTimeCounts(ad.getId(), rule.getRuleId(), cacheRecord, advParam.getUdid(), false)) {
             //			logger.info("hasAdTimeCounts return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
 
             return false;
@@ -484,7 +485,7 @@ public abstract class AbstractManager {
         }
         if (isSelfAd && !(isAutoRefresh && hasSendSelfAd)) { // 记录自采买广告的次数
             if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
-                                                  // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+                                                      // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
                 cacheRecord.buildAdPubCacheRecord(adId);
             if (adMap.get(adId).getRule().getUvLimit() > 0) {
                 // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误 // TODO
@@ -499,7 +500,7 @@ public abstract class AbstractManager {
             RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
         } else {
             if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
-                                                  // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+                                                      // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
                 RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
         }
 
@@ -600,10 +601,11 @@ public abstract class AbstractManager {
             }
             adIdStr += ";";
         }
-        logger.info("[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
-                + "cityId={}, v={}, vc={}, li={}, sn={}", advParam.getUdid(), showType, false, advParam.getType(), adIdStr,
-                advParam.getAccountId(), advParam.getS(), advParam.getCityId(), advParam.getV(), advParam.getVc(),
-                advParam.getLineId(), advParam.getStnName());
+        logger.info(
+                "[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
+                        + "cityId={}, v={}, vc={}, li={}, sn={}",
+                advParam.getUdid(), showType, false, advParam.getType(), adIdStr, advParam.getAccountId(), advParam.getS(),
+                advParam.getCityId(), advParam.getV(), advParam.getVc(), advParam.getLineId(), advParam.getStnName());
         return adsList;
     }
 

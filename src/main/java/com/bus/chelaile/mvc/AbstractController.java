@@ -37,6 +37,9 @@ public class AbstractController {
 		param.setScreenHeight(getInt(request, "screenHeight"));
 		param.setCityId(request.getParameter("cityId"));
 		param.setH5Src(request.getParameter("h5_src"));
+		// 如果h5_src参数为空，取src参数
+		if (StringUtils.isEmpty(param.getH5Src()))
+            param.setH5Src(request.getParameter("src"));
 		param.setH5User(request.getParameter("h5_user"));
 		if(StringUtils.isNoneBlank(param.getH5User()) && ! param.getH5User().equals("null")) {
 			param.setUdid(param.getH5User());
