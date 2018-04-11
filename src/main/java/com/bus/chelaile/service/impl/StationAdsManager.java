@@ -129,17 +129,17 @@ public class StationAdsManager extends AbstractManager {
                 res.setBannerInfo(bann);
             }
             // 淘宝客，只有slogan，没有name
+            // 客户端只支持bannerType到5，所以这个地方需要修改成5
             else if (stationInner.getBannerInfo().getBannerType() == 6) {
                 // 用clone，保持 静态缓存 不受修改的影响
                 BannerInfo bann = (BannerInfo) stationInner.getBannerInfo().clone();
 
                 bann.setBannerType(5);
                 res.setBannerInfo(bann);
-                long t1 = System.currentTimeMillis();
-                if(StaticAds.advTBKTitleKey.containsKey(res.getId())) {
-                    bann.setSlogan(CacheUtil.getTBKTitle(res.getId()));
-                }
-                logger.info("get TBKTitle cost:{} ms", System.currentTimeMillis() - t1);
+            }
+            // 针对指定的几个淘宝客广告，替换slogan, 不用忧虑修改了innerContent的内容，无妨
+            if(StaticAds.advTBKTitleKey.containsKey(res.getId())) {
+                res.getBannerInfo().setSlogan(CacheUtil.getTBKTitle(res.getId()));
             }
         } else {
             throw new IllegalArgumentException("=====> 错误的innerContent类型： " + ((inner == null) ? null : inner.getClass()) + "; "

@@ -303,7 +303,9 @@ public class ServiceManager {
 				queryParam, true);
 		queryParam.setStation(firstUnfoldStation);
 		BaseAdEntity singleEntity = null; 
-		if (advParam.getlSize() == -1) {  // 这个参数控制版本，  Constants.PLATFORM_LOG_ANDROID_0326
+//		     这个参数控制版本，  
+//		    Constants.PLATFORM_LOG_ANDROID_0326;
+		if (advParam.getlSize() == -1) { 
 			singleEntity = doubleAndSingleManager.doService(advParam, ShowType.SINGLE_COLUMN, false, queryParam, true);
 		}
 
