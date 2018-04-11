@@ -128,12 +128,12 @@ public class Constants {
     public static String LOCKKEY = "lockKey";
     
     // 版本控制号
-    public static final int PLATFORM_LOG_ANDROID_0118 = 96;
-	public static final int PLATFORM_LOG_IOS_0117 = 10480;
+    public static final int PLATFORM_LOG_ANDROID_0118 = 96; // 3.45.0
+	public static final int PLATFORM_LOG_IOS_0117 = 10480; // 5.43.0
 	
-	public static final int PLATFORM_LOG_ANDROID_0208 = 97;
-	public static final int PLATFORM_LOG_IOS_0208 = 10490;
+	public static final int PLATFORM_LOG_ANDROID_0208 = 97; // 3.46.0
+	public static final int PLATFORM_LOG_IOS_0208 = 10490; // 5.44.0
 	
-	public static final int PLATFORM_LOG_ANDROID_0326 = 100;
-	public static final int PLATFORM_LOG_IOS_0326 = 10510;
+	public static final int PLATFORM_LOG_ANDROID_0326 = 100; // 3.48.0
+	public static final int PLATFORM_LOG_IOS_0326 = 10510; // 5.46.0
 }

@@ -38,6 +38,8 @@ public class StaticAds {
 	public static Map<String, Double> minuteTimes = New.hashMap();
 	// key=advId#ruleId, value=《key=minute(eg. 17:06, value=该分钟需要投放的次数)》
 	public static Map<String, Map<String, Integer>> minuteNumber = New.hashMap();
+	// key=advId, value=tbkTitle存储到redis中的key
+	public static Map<Integer, String> advTBKTitleKey = New.hashMap();
 	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;
@@ -126,6 +128,7 @@ public class StaticAds {
 		blackListMap.clear();
 		minuteTimes.clear();
 		minuteNumber.clear();
+		advTBKTitleKey.clear();
 	}
 
 	public static boolean isBlack(int advId, String udid) {

@@ -20,17 +20,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class RedisTokenCacheImplUtil implements ICache {
-    private static Logger log = LoggerFactory.getLogger(RedisTokenCacheImplUtil.class);
+public class RedisTBKCacheImplUtil implements ICache {
+    private static Logger log = LoggerFactory.getLogger(RedisTBKCacheImplUtil.class);
     //	private static final String DEFAULT_REDIS_HOST = "127.0.0.1";
     //	private static final int DEFAULT_REDIS_PORT = 6379;
 
     //private static String REDIS_HOST = PropertiesReaderWrapper.read("redisCount.host", DEFAULT_REDIS_HOST);
     //private static int REDIS_PORT = PropertiesReaderWrapper.readInt("redisCount.port", DEFAULT_REDIS_PORT);
 
-    private static String REDIS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisToken.host");
-    private static int REDIS_PORT =
-            Integer.parseInt(PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisToken.port"));
+    private static String REDIS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisTBK.host");
+    private static int REDIS_PORT = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisTBK.port"));
 
     private static JedisPool pool = null;
 
@@ -55,7 +54,7 @@ public class RedisTokenCacheImplUtil implements ICache {
 
         pool = new JedisPool(config, host, port);
 
-        log.info("Redis_TOKEN_CacheImplUtil init success,ip={},host={}", REDIS_HOST, REDIS_PORT);
+        log.info("Redis_TBK_CacheImplUtil init success,ip={},host={}", REDIS_HOST, REDIS_PORT);
     }
 
     private static JedisPool getPool() {
@@ -822,7 +821,7 @@ public class RedisTokenCacheImplUtil implements ICache {
         }
 
     }
-    
+
     public Map<String, String> getHsetAll(String key) {
         JedisPool pool = null;
         Jedis conn = null;

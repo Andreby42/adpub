@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
@@ -31,10 +32,14 @@ import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
+import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.util.New;
 
 public class StationAdsManager extends AbstractManager {
+    
+    static Set<String> TBK_TITLE_KEY = New.hashSet();
+    
 
     @Override
     protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
@@ -107,6 +112,7 @@ public class StationAdsManager extends AbstractManager {
             // 针对口碑券和淘宝客的修改
             // 口碑券，需要从ocs中获取当前站点的券
             if (stationInner.getBannerInfo().getBannerType() == 5) {
+             // 用clone，保持 静态缓存 不受修改的影响
                 BannerInfo bann = (BannerInfo) stationInner.getBannerInfo().clone();
                 CouponInfo ocsCoupon = null;
                 String key = KBUtil.getKbCouponOcsKey(advParam.getCityId(), advParam.getStnName());
@@ -124,10 +130,14 @@ public class StationAdsManager extends AbstractManager {
             }
             // 淘宝客，只有slogan，没有name
             else if (stationInner.getBannerInfo().getBannerType() == 6) {
+                // 用clone，保持 静态缓存 不受修改的影响
                 BannerInfo bann = (BannerInfo) stationInner.getBannerInfo().clone();
 
                 bann.setBannerType(5);
                 res.setBannerInfo(bann);
+                if(StaticAds.advTBKTitleKey.containsKey(res.getId())) {
+                    bann.setSlogan(CacheUtil.getTBKTitle(res.getId()));
+                }
             }
         } else {
             throw new IllegalArgumentException("=====> 错误的innerContent类型： " + ((inner == null) ? null : inner.getClass()) + "; "

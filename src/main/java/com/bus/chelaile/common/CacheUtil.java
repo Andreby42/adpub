@@ -9,16 +9,21 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
 import com.bus.chelaile.common.cache.RedisCacheImplUtil;
+import com.bus.chelaile.common.cache.RedisTBKCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTokenCacheImplUtil;
 import com.bus.chelaile.model.PropertiesName;
+import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
@@ -30,6 +35,8 @@ public class CacheUtil {
 	private static ICache redisClient;
 	// 存储token的redis
 	private static ICache redisToken;
+	// 存储tbk title的redis
+    private static ICache redisTBK;
 	//  用来获取用户头像的redis
 //	private static ICache redisWow;
 	//	保存用户访问量等信息
@@ -81,6 +88,8 @@ public class CacheUtil {
     private static final String PAY_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.password");
     //private static String cacheType = PropertiesReaderWrapper.read("cacheType", "ocs");
     
+    private static final String defauleTBKTitle = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "default.tbk.title");
+    
 //    /**
 //     * 屈臣氏活动专用
 //     */
@@ -119,6 +128,7 @@ public class CacheUtil {
        }
        redisClient = new RedisCacheImplUtil();
        redisToken = new RedisTokenCacheImplUtil();
+       redisTBK = new RedisTBKCacheImplUtil();
        isInitSuccess = true;
     }
     
@@ -246,6 +256,24 @@ public class CacheUtil {
             String tokenType = tokenMap.get("tokenType");
             return new StringBuilder().append(token).append("|").append(sys).append("|").append(tokenType).toString();
         }
+    }
+    
+    // 从redis中获取淘宝客title，随机拿出一个
+    public static String getTBKTitle(int advId) {
+        if (StaticAds.advTBKTitleKey.containsKey(advId)) {
+            String key = StaticAds.advTBKTitleKey.get(advId);
+            String value = (String) redisTBK.get(key);
+            if (StringUtils.isNotEmpty(value)) {
+                JSONObject dataJ = JSONObject.parseObject(value);
+                if(dataJ.getString("status") != null && dataJ.getString("status").equals("00")) {
+                    String data = dataJ.getString("data");
+                    String[] titles = data.split("#");
+                    int size = titles.length;
+                    return titles[new Random().nextInt(size)];
+                }
+            }
+        }
+        return defauleTBKTitle;
     }
     
  
