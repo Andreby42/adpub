@@ -135,9 +135,11 @@ public class StationAdsManager extends AbstractManager {
 
                 bann.setBannerType(5);
                 res.setBannerInfo(bann);
+                long t1 = System.currentTimeMillis();
                 if(StaticAds.advTBKTitleKey.containsKey(res.getId())) {
                     bann.setSlogan(CacheUtil.getTBKTitle(res.getId()));
                 }
+                logger.info("get TBKTitle cost:{} ms", System.currentTimeMillis() - t1);
             }
         } else {
             throw new IllegalArgumentException("=====> 错误的innerContent类型： " + ((inner == null) ? null : inner.getClass()) + "; "

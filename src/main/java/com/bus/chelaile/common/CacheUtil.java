@@ -264,13 +264,9 @@ public class CacheUtil {
             String key = StaticAds.advTBKTitleKey.get(advId);
             String value = (String) redisTBK.get(key);
             if (StringUtils.isNotEmpty(value)) {
-                JSONObject dataJ = JSONObject.parseObject(value);
-                if(dataJ.getString("status") != null && dataJ.getString("status").equals("00")) {
-                    String data = dataJ.getString("data");
-                    String[] titles = data.split("#");
-                    int size = titles.length;
-                    return titles[new Random().nextInt(size)];
-                }
+                String[] titles = value.split("#");
+                int size = titles.length;
+                return titles[new Random().nextInt(size)];
             }
         }
         return defauleTBKTitle;
