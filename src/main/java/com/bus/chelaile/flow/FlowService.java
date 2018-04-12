@@ -397,9 +397,7 @@ public class FlowService {
 				return tabEntity;
 			} 
 		}
-		// TODO 
-		// 为何之前是 return null？？？
-		return tabs.get(0);
+		return null;
 		
 //		return testGetTabActivities(param);
 	}
