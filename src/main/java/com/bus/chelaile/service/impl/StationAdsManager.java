@@ -47,13 +47,13 @@ public class StationAdsManager extends AbstractManager {
         List<BaseAdEntity> entities = New.arrayList();
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
-            logger.info("********************id={}, priority={}", ad.getAds().getId(), ad.getAds().getPriority());
+//            logger.info("********************id={}, priority={}", ad.getAds().getId(), ad.getAds().getPriority());
             StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
             if (entity != null) {
                 entities.add(entity);
             }
         }
-        logger.info("适配站点广告数:{}", entities.size());
+//        logger.info("适配站点广告数:{}", entities.size());
         StationAdEntity entity = null;
         if (entities.size() == 0) {
             return null;
@@ -177,8 +177,8 @@ public class StationAdsManager extends AbstractManager {
         if (stanAdsList != null && stanAdsList.size() > 0) {
             int totalWeight = 0;
             for (BaseAdEntity entity : stanAdsList) {
-                logger.info("多个站点广告，选择一个： id={}, title={}, priority={}", entity.getId(), ((StationAdEntity) entity).getTitle(),
-                        entity.getPriority());
+//                logger.info("多个站点广告，选择一个： id={}, title={}, priority={}", entity.getId(), ((StationAdEntity) entity).getTitle(),
+//                        entity.getPriority());
                 if (((StationAdEntity) entity).getBuyOut() == 1) {
                     // 买断的广告按照优先级来， stanAdsList 之前已经按照优先级排序过
                     logger.info("买断的广告, udid={}, advId={}", advParam.getUdid(), entity.getId());
