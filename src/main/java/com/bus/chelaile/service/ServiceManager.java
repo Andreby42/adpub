@@ -208,7 +208,9 @@ public class ServiceManager {
 		Object entity = null;
 		JSONObject object = new JSONObject();
 		if (methodName.equals("getLineDetails")) { // 线路详情
+	        long startTime = System.currentTimeMillis();
 			object = getLineDetails(advParam);
+			logger.info("getLineDetailAds cost time :{}", System.currentTimeMillis() - startTime);
 			if (object == null) {
 				return null;
 			}
