@@ -48,7 +48,7 @@ public class BusAdvAction extends AbstractController {
     @RequestMapping(value = "adv!getLineDetailAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public String getLineDetailAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws Exception {
-
+        long startTime = System.currentTimeMillis();
         AdvParam param = getActionParam(request);
         param.setStnList(request.getParameter("stnList"));
         param.setStationList(Station.parseStationList(request.getParameter("stnList")));
@@ -59,6 +59,7 @@ public class BusAdvAction extends AbstractController {
         param.setStationId(request.getParameter("stationId"));
         param.setStnLng(request.getParameter("stnLng"));
         param.setStnLat(request.getParameter("stnLat"));
+        log.info("getLineDetailAds cost time :{}", System.currentTimeMillis() - startTime);
         return serviceManager.getAdsResponseStr(param, "getLineDetails");
     }
 

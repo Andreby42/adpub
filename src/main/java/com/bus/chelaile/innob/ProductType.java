@@ -7,7 +7,11 @@ public enum ProductType {
     INMOBI("3"),    //inmobi
     ANWO("4"),		//安沃
     BAIDULIANMENG("5"),   //百度联盟
-    AILIMAMA("6");			// 阿里妈妈
+    AILIMAMA("6"),			// 阿里妈妈
+    TOUTIAO("7"), // 今日头条
+    YUEMENG("8"), // 阅盟
+    ECOOOK("9"), // Ecoook
+    KEDAXUNFEI("10"); //科大讯飞
     
     
     
