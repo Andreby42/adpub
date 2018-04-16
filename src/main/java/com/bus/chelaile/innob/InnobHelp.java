@@ -21,6 +21,7 @@ import com.bus.chelaile.innob.request.NativeImp;
 import com.bus.chelaile.innob.request.Request;
 import com.bus.chelaile.innob.response.ad.BannerResponse;
 import com.bus.chelaile.innob.response.ad.NativeResponse;
+import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ads.entity.ApiLineEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -141,11 +142,6 @@ public class InnobHelp {
 
 	public static ApiLineEntity getApiLineEntityFromCache(AdPubCacheRecord cacheRecord, String showType, int apiType,
 			String udid) throws Exception {
-		// 霍力测试udid
-		if (udid != null && udid.equals("5a3e8dcc-e316-4d2e-9488-e1d4de998bd0")) {
-			return null;
-		}
-
 		ApiRecord ar = cacheRecord.getapiRecord(showType);
 		if (ar == null) {
 			return null;

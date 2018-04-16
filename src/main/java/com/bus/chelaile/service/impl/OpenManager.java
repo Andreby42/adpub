@@ -16,6 +16,7 @@ import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.innob.AdvType;
 import com.bus.chelaile.model.Platform;
+import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
@@ -69,6 +70,7 @@ public class OpenManager extends AbstractManager {
 			}
 		}
 
+		// 自采买
 		if (cateGory.getAdType() == 1) {
 
 			entity = getSelfAdEntity(advParam, cacheRecord, adMap.get(cateGory.getAdId()), showType, queryParam);
@@ -81,7 +83,9 @@ public class OpenManager extends AbstractManager {
 						    advParam.getNw(), advParam.getIp(),
 							advParam.getDeviceType(),advParam.getLng(),advParam.getLat());
 
-		} else if (cateGory.getAdType() == 3 && showType == ShowType.OPEN_SCREEN) { // 开屏现在是有innobe
+		} 
+		// 开屏的 inmobe
+		else if (cateGory.getAdType() == 3 && showType == ShowType.OPEN_SCREEN) { // 开屏现在是有innobe
 			
 			ApiLineEntity apiEntity = apiDetailsManager.from(Platform.from(advParam.getS()), advParam, cacheRecord,
 					cateGory, showType.getType());
@@ -98,6 +102,17 @@ public class OpenManager extends AbstractManager {
 							advParam.getNw(), advParam.getIp(),
 							advParam.getDeviceType(),advParam.getLng(),advParam.getLat());
 
+		} 
+		// 四种客户端 sdk
+		else if(cateGory.getAdType() == 2 || cateGory.getAdType() == 8 || cateGory.getAdType() == 9 || cateGory.getAdType() == 10 ) {
+		    entity = createSDKOpenAds(cateGory.getAdType());
+		    AnalysisLog
+            .info("[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},provider_id={},nw={},ip={},deviceType={}",
+                    entity.getId(), showType.getType(), "",
+                    advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+                    advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getProvider_id(),
+                    advParam.getNw(), advParam.getIp(),
+                    advParam.getDeviceType());
 		} else {
 			throw new IllegalArgumentException("开屏的类型错误showType:" + showType + ",cateGory.getAdType()="
 					+ cateGory.getAdType());
@@ -108,7 +123,18 @@ public class OpenManager extends AbstractManager {
 		return entity;
 	}
 
-	/*
+	private OpenAdEntity createSDKOpenAds(int adType) {
+	    OpenAdEntity entity = new OpenAdEntity(ShowType.OPEN_SCREEN.getValue());
+	    entity.setProvider_id(adType + "");
+	    entity.setDuration(4);      // 广告持续时间，单位-S
+	    entity.setOpenType(0);      // 页面打开方式，0-内部
+	    entity.setIsDisplay(0);    // 是否展示秒数，0-展示
+	    entity.setIsSkip(0);       // 是否展示跳过按钮，0-展示
+	    entity.setIsFullShow(0);  // 是否全屏展示，0-否
+        return null;
+    }
+
+    /*
 	 * 自采买 开屏广告，以及浮层广告
 	 */
 	private OpenAdEntity getSelfAdEntity(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContentCacheEle adc,

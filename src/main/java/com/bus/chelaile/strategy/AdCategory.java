@@ -15,6 +15,9 @@ package com.bus.chelaile.strategy;
  * 5 -> 百度
  * 6 -> 阿里妈妈
  * 7 -> LinkActive
+ * 8 ->阅盟
+ * 9 ->Ecoook
+ * 10 ->科大讯飞
  * 参数apiType决定使用第三方广告时（即adType != 1）需要具体请求哪种广告,前三个一组,针对线路详情的处理
  * 1 -> 原生广告 (Native)
  * 2 -> 横幅广告 (Banner)
@@ -57,6 +60,12 @@ public class AdCategory {
 				return "Alimama";
 			case 7:
 				return "LinkActive";
+			case 8:
+                return "YueMeng";
+			case 9:
+                return "Ecoook";
+			case 10:
+                return "KeDaXunFei";
 		}
 		return "Error_Ad_Type";
 	}

@@ -646,8 +646,7 @@ public abstract class AbstractManager {
             return null;
         }
 
-        // logger.info("[cateGoryInfo]:udid={}, cateGory={}",
-        // advParam.getUdid(), cateGory);
+        logger.info("[cateGoryInfo]:udid={}, cateGory={}", advParam.getUdid(), cateGory);
         if (cateGory != null) {
             // 暂时失联的时候不显示第三方广告
             if (cateGory.getAdType() > 1 && advParam.getInState() != null

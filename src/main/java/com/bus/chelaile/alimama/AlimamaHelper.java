@@ -11,7 +11,7 @@ import com.bus.chelaile.alimama.response.AlimamaResponse;
 import com.bus.chelaile.alimama.response.Creative;
 import com.bus.chelaile.innob.AdvType;
 import com.bus.chelaile.innob.ApiType;
-import com.bus.chelaile.innob.ProductType;
+import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.ads.entity.ApiLineEntity;
 
 

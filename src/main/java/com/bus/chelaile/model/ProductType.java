@@ -1,4 +1,4 @@
-package com.bus.chelaile.innob;
+package com.bus.chelaile.model;
 
 
 public enum ProductType {
