@@ -226,13 +226,14 @@ public abstract class AbstractManager {
      */
     private boolean ruleCheck(Rule rule, AdvParam advParam, AdContent ad, AdPubCacheRecord cacheRecord, ShowType showType,
             boolean isNeedApid, QueryParam queryParam, UserClickRate clickRate) {
-
-        if (advParam.getUdid() != null && advParam.getUdid().equals("yuanxiang")) {
-            return false;
-        }
         // 存在黑名单中
         if (StaticAds.isBlack(ad.getId(), advParam.getUdid())) {
             //			logger.info("black list,advId={},udid={}", ad.getId(), advParam.getUdid());
+            return false;
+        }
+        if (rule.hasPlatforms() && !rule.isPlatformMatch(advParam.getS(), advParam.getH5Src())) {
+            logger.info("isPlatformMatch return false,ruleId={},s={},src={},udid={},userId={}", rule.getRuleId(), advParam.getS(),
+                    advParam.getH5Src(), advParam.getUdid(), advParam.getUserId());
             return false;
         }
         // 开屏和浮层的老接口preloadAds需要返回两天的数据
@@ -254,11 +255,6 @@ public abstract class AbstractManager {
         if (rule.hasCities() && !rule.isCityMatch(advParam.getCityId())) {
             //			logger.info("isCityMatch return false,ruleId={},cityId={},udid={}", rule.getRuleId(), advParam.getCityId(),
             //					advParam.getUdid());
-            return false;
-        }
-        if (rule.hasPlatforms() && !rule.isPlatformMatch(advParam.getS(), advParam.getH5Src())) {
-            logger.info("isPlatformMatch return false,ruleId={},s={},src={},udid={},userId={}", rule.getRuleId(), advParam.getS(),
-                    advParam.getH5Src(), advParam.getUdid(), advParam.getUserId());
             return false;
         }
         if (rule.hasVersions() && !rule.isVersionMatch(advParam.getV())) {

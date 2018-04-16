@@ -50,16 +50,16 @@ public class RedisCacheImplUtil implements ICache{
 		JedisPoolConfig config = new JedisPoolConfig();
 		String host = REDIS_HOST;
 		int port = REDIS_PORT;
-		config.setMaxTotal(400);
+		config.setMaxTotal(600);
 		//config.setMaxActive(400);
 		config.setMaxIdle(200);
 		config.setMinIdle(20);
 		
 		//config.setMaxWait(2000000);
 		//config.setMaxWaitMillis();
-		config.setTestWhileIdle(true);
-		config.setTestOnBorrow(true);
-		config.setTestOnReturn(true);
+//		config.setTestWhileIdle(true);
+//		config.setTestOnBorrow(true);
+//		config.setTestOnReturn(true);
 		
 		pool = new JedisPool(config, host, port);
 		

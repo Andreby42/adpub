@@ -41,16 +41,16 @@ public class RedisTBKCacheImplUtil implements ICache {
         JedisPoolConfig config = new JedisPoolConfig();
         String host = REDIS_HOST;
         int port = REDIS_PORT;
-        config.setMaxTotal(400);
+        config.setMaxTotal(600);
         //config.setMaxActive(400);
         config.setMaxIdle(200);
         config.setMinIdle(20);
 
         //config.setMaxWait(2000000);
         //config.setMaxWaitMillis();
-        config.setTestWhileIdle(true);
-        config.setTestOnBorrow(true);
-        config.setTestOnReturn(true);
+//        config.setTestWhileIdle(true);
+//        config.setTestOnBorrow(true);
+//        config.setTestOnReturn(true);
 
         pool = new JedisPool(config, host, port);
 
@@ -296,6 +296,7 @@ public class RedisTBKCacheImplUtil implements ICache {
     }
 
     public String get(String key) {
+        long startTime = System.currentTimeMillis();
         JedisPool pool = null;
         Jedis conn = null;
         String ret = null;
@@ -305,7 +306,7 @@ public class RedisTBKCacheImplUtil implements ICache {
             ret = conn.get(key);
             log.debug("Redis-Get: Key=" + key + ",Value=" + ret);
         } catch (Exception e) {
-            log.error(String.format("Error occur in Redis.set, key=%s, error message: " + e.getMessage(), key));
+            log.error(String.format("Error occur in Redis.get, key=%s, error message: " + e.getMessage(), key));
             if (pool != null && conn != null) {
                 pool.returnResource(conn);
                 pool = null;
@@ -315,7 +316,10 @@ public class RedisTBKCacheImplUtil implements ICache {
             if (pool != null && conn != null)
                 pool.returnResource(conn);
         }
-
+        if(System.currentTimeMillis() - startTime > 50) {
+            log.info("TBK redis.get cost time :{}", System.currentTimeMillis() - startTime);
+        }
+        
         return ret;
     }
 
@@ -329,7 +333,7 @@ public class RedisTBKCacheImplUtil implements ICache {
             ret = conn.lrange(key, 0, -1);
             log.debug("Redis-Get: Key=" + key + ",Value=" + ret);
         } catch (Exception e) {
-            log.error(String.format("Error occur in Redis.set, key=%s, error message: " + e.getMessage(), key));
+            log.error(String.format("Error occur in Redis.getList, key=%s, error message: " + e.getMessage(), key));
             if (pool != null && conn != null) {
                 pool.returnResource(conn);
                 pool = null;
