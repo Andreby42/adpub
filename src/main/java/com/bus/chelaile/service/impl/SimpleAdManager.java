@@ -103,7 +103,6 @@ public class SimpleAdManager extends AbstractManager {
 			res.setPic(inner.getPic());
 			res.fillBaseInfo(ad.getAds(), advParam, new HashMap<String, String>());
 			res.dealLink(advParam);
-			logger.info("****###下拉刷新广告： openText={}", res.getOpenText());
 			return res;
 		} else {
 			logger.error("遇到错误的showType, {}", showType.getType());

@@ -125,6 +125,7 @@ public class OpenManager extends AbstractManager {
 
 	private OpenAdEntity createSDKOpenAds(int adType) {
 	    OpenAdEntity entity = new OpenAdEntity(ShowType.OPEN_SCREEN.getValue());
+	    entity.setId(adType * -1);
 	    entity.setProvider_id(adType + "");
 	    entity.setDuration(4);      // 广告持续时间，单位-S
 	    entity.setOpenType(0);      // 页面打开方式，0-内部
