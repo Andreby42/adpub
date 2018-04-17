@@ -301,6 +301,7 @@ public class AdPubCacheRecord {
 
 		if (isClick) {
 			cacheRecord.incrClickCount();
+			cacheRecord.putDayClickMap(todayStr, 1);
 		} else {
 			cacheRecord.putDayCountMap(todayStr, 1);
 		}
@@ -321,7 +322,9 @@ public class AdPubCacheRecord {
 		if (cacheRecordMap.containsKey(adId)) {
 			CacheRecord cacheRecord = cacheRecordMap.get(adId);
 			Map<String, Integer> dayCountMap = cacheRecord.getDayCountMap();
+			Map<String ,Integer> dayClickMap = cacheRecord.getDayClickMap();
 			int clickCount = rule.getClickCount();
+			int pclickCount = rule.getPclickCount();
 			int days = rule.getDays();
 			int perDayCount = rule.getPerDayCount();
 //			int totalCount = rule.getTotalCount(); // 针对一个人的
@@ -331,6 +334,15 @@ public class AdPubCacheRecord {
 					return false;
 				}
 			}
+			if (pclickCount > 0) { // 每人每天点击次数上限
+			    if (!dayClickMap.containsKey(todayStr)) {
+                    return false;
+                }
+			    if(dayClickMap.get(todayStr) > pclickCount) {
+			        return false;
+			    }
+			}
+			
 			if (days > 0 && perDayCount > 0) { // 说明没有配置点击次数属性，配置了每天多少次规则
 				if (dayCountMap.size() > days) { // 大于是不可能的，正确的情况下。
 					return false;

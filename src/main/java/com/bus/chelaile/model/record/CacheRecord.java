@@ -13,6 +13,7 @@ import com.bus.chelaile.util.New;
 public class CacheRecord {
     int clickCount;
     Map<String, Integer> dayCountMap = New.hashMap();
+    Map<String, Integer> dayClickMap = New.hashMap();
 
     public CacheRecord() {
     }
@@ -49,6 +50,15 @@ public class CacheRecord {
         dayCountMap.put(dayStr, zcount);
     }
     
+    public void putDayClickMap(String dayStr, int dayClick) {
+        int zcount = dayClick;
+        if (dayClickMap.containsKey(dayStr)) {
+            zcount += dayClickMap.get(dayStr);
+        }
+        dayClickMap.put(dayStr, zcount);
+    }
+    
+    
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer("CacheRecord{");
@@ -65,4 +75,12 @@ public class CacheRecord {
         
         return sb.toString();
     }
+
+    public Map<String, Integer> getDayClickMap() {
+        return dayClickMap;
+    }
+
+//    public void setDayClickMap(Map<String, Integer> dayClickMap) {
+//        this.dayClickMap = dayClickMap;
+//    }
 }

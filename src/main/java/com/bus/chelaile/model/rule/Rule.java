@@ -52,6 +52,7 @@ public class Rule {
 	private List<String> userIds; // userId是旧的遗留，不再使用userId。然而实际上还是用的这个属性，只是存储的是用户的udid罢了
 	private int sendType; // 1按照accoutId投放
 	private int clickCount; // 每人点击次数
+	private int pclickCount; // 每人每天点击次数
 	private int totalClickPV; // 每天点击次数上限
 	private int days; // 投放天数
 	private int perDayCount; // 每天投放次数
@@ -1003,4 +1004,12 @@ public class Rule {
 	public void setMinIntervalPages(int minIntervalPages) {
 		this.minIntervalPages = minIntervalPages;
 	}
+
+    public int getPclickCount() {
+        return pclickCount;
+    }
+
+    public void setPclickCount(int pclickCount) {
+        this.pclickCount = pclickCount;
+    }
 }

@@ -115,6 +115,8 @@ public class OpenManager extends AbstractManager {
                         entity.getId(), showType.getType(), "", advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
                         advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getProvider_id(), advParam.getNw(),
                         advParam.getIp(), advParam.getDeviceType());
+            } else {
+                // TODO 
             }
         } else {
 			throw new IllegalArgumentException("开屏的类型错误showType:" + showType + ",cateGory.getAdType()="
