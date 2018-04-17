@@ -136,4 +136,7 @@ public class Constants {
 	
 	public static final int PLATFORM_LOG_ANDROID_0326 = 100; // 3.48.0
 	public static final int PLATFORM_LOG_IOS_0326 = 10510; // 5.46.0
+	
+	public static final int PLATFORM_LOG_ANDROID_0420 = 102; //3.50.0
+	public static final int PLATFORM_LOG_IOS_0420 = 10530; // 5.48.0
 }

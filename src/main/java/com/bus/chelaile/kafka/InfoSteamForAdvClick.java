@@ -8,20 +8,17 @@ import kafka.consumer.KafkaStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bus.chelaile.flow.ToutiaoHelp;
 import com.bus.chelaile.kafka.thread.ConsumerHandle;
-import com.bus.chelaile.linkActive.LinkActiveHelp;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
 public class InfoSteamForAdvClick {
 
-	@Autowired
-	private ToutiaoHelp toutiaoHelp;
-	@Autowired
-	private LinkActiveHelp linkActiveHelp;
+//	@Autowired
+//	private ToutiaoHelp toutiaoHelp;
+//	@Autowired
+//	private LinkActiveHelp linkActiveHelp;
 
 	private static final String TOPIC_ID = "adv_log";
 	private static final String GROUP_ID = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "group_id_adv_click",

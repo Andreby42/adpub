@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AnalysisLog;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.innob.AdvType;
 import com.bus.chelaile.model.Platform;
@@ -103,17 +104,19 @@ public class OpenManager extends AbstractManager {
 							advParam.getDeviceType(),advParam.getLng(),advParam.getLat());
 
 		} 
-		// 四种客户端 sdk
-		else if(cateGory.getAdType() == 2 || cateGory.getAdType() == 8 || cateGory.getAdType() == 9 || cateGory.getAdType() == 10 ) {
-		    entity = createSDKOpenAds(cateGory.getAdType());
-		    AnalysisLog
-            .info("[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},provider_id={},nw={},ip={},deviceType={}",
-                    entity.getId(), showType.getType(), "",
-                    advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
-                    advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getProvider_id(),
-                    advParam.getNw(), advParam.getIp(),
-                    advParam.getDeviceType());
-		} else {
+		// 四种客户端 sdk, 新版本才支持
+        else if (cateGory.getAdType() == 2 || cateGory.getAdType() == 8 || cateGory.getAdType() == 9
+                || cateGory.getAdType() == 10) {
+            if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
+                    || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420)) {
+                entity = createSDKOpenAds(cateGory.getAdType());
+                AnalysisLog.info(
+                        "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},provider_id={},nw={},ip={},deviceType={}",
+                        entity.getId(), showType.getType(), "", advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+                        advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getProvider_id(), advParam.getNw(),
+                        advParam.getIp(), advParam.getDeviceType());
+            }
+        } else {
 			throw new IllegalArgumentException("开屏的类型错误showType:" + showType + ",cateGory.getAdType()="
 					+ cateGory.getAdType());
 		}
@@ -129,7 +132,7 @@ public class OpenManager extends AbstractManager {
 	    entity.setProvider_id(adType + "");
 	    entity.setDuration(4);      // 广告持续时间，单位-S
 	    entity.setOpenType(0);      // 页面打开方式，0-内部
-	    entity.setIsDisplay(0);    // 是否展示秒数，0-展示
+	    entity.setIsDisplay(1);    // 是否展示秒数，0-展示
 	    entity.setIsSkip(0);       // 是否展示跳过按钮，0-展示
 	    entity.setIsFullShow(0);  // 是否全屏展示，0-否
         return entity;
