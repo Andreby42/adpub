@@ -479,7 +479,7 @@ public class ServiceManager {
 		if (advParam.getType() == 0) {
 		    // TODO for test ，改变udid，让对应城市投放对应的第三方SDK
 		    if(advParam.getCityId().equals("027"))  //北京
-		        advParam.setUdid("0" + advParam.getUdid());
+		        advParam.setUdid("1" + advParam.getUdid());
 		    if(advParam.getCityId().equals("006"))  // 天津
                 advParam.setUdid("4" + advParam.getUdid());
 		    if(advParam.getCityId().equals("019"))  // 佛山

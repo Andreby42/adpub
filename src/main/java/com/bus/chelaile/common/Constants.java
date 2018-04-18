@@ -112,7 +112,7 @@ public class Constants {
 	public static final String APP_INFO_LOG = "APP_INFO";
 	public static final String LINEDETAIL = "/bus/line!lineDetail.action";
 	public static final String FOR_DEVELOP_EXHIBIT = "FOR_DEVELOP_EXHIBIT";		//开屏广告展示失败的埋点。这个数据可能会影响到点击数统计，so需要滤掉
-	public static final String OPEN_ADV_KEYWORD = "adv_type:1"; // 开屏广告埋点，类型关键字
+	public static final String OPEN_ADV_KEYWORD = "adv_type:1 "; // 开屏广告埋点，类型关键字
  	
     
     public static final String STATSACT_REFRESH = "refresh";
