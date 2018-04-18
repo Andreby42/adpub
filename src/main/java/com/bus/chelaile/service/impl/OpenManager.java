@@ -137,6 +137,7 @@ public class OpenManager extends AbstractManager {
 	    entity.setIsDisplay(0);    // 是否展示秒数，0-展示
 	    entity.setIsSkip(0);       // 是否展示跳过按钮，0-展示
 	    entity.setIsFullShow(0);  // 是否全屏展示，0-否
+	    entity.setType(3);   // 第三方广告
         return entity;
     }
 
