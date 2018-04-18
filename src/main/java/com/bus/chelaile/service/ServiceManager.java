@@ -17,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import scala.util.Random;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -445,12 +443,11 @@ public class ServiceManager {
 	}
 	
 
-	// 1107后的新版支持站点广告
-	// 版本控制
-	private boolean returnStnAds(AdvParam advParam) {
-//		 TODO Auto-generated method stub
-		return true;
-	}
+//	// 1107后的新版支持站点广告
+//	// 版本控制
+//	private boolean returnStnAds(AdvParam advParam) {
+//		return true;
+//	}
 
 	/*
 	 * 新版本开屏
@@ -480,6 +477,16 @@ public class ServiceManager {
 
 		// 0 开屏, 1 首页浮层 , 2 乘车页浮层
 		if (advParam.getType() == 0) {
+		    // TODO for test ，改变udid，让对应城市投放对应的第三方SDK
+		    if(advParam.getCityId().equals("027"))  //北京
+		        advParam.setUdid("0" + advParam.getUdid());
+		    if(advParam.getCityId().equals("006"))  // 天津
+                advParam.setUdid("4" + advParam.getUdid());
+		    if(advParam.getCityId().equals("019"))  // 佛山
+                advParam.setUdid("8" + advParam.getUdid());
+		    if(advParam.getCityId().equals("004"))  // 杭州
+                advParam.setUdid("c" + advParam.getUdid());
+		    
 			return openManager.doService(advParam, ShowType.OPEN_SCREEN, isNeedApi, queryParam, true);
 		} else if (advParam.getType() == 1) {
 			return baseAdEntity;
