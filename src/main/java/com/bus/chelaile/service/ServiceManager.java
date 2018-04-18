@@ -478,13 +478,13 @@ public class ServiceManager {
 		// 0 开屏, 1 首页浮层 , 2 乘车页浮层
 		if (advParam.getType() == 0) {
 		    // TODO for test ，改变udid，让对应城市投放对应的第三方SDK
-		    if(advParam.getCityId().equals("027"))  //北京
+		    if(advParam.getCityId().equals("080"))  //台北
 		        advParam.setUdid("1" + advParam.getUdid());
-		    if(advParam.getCityId().equals("006"))  // 天津
+		    else if(advParam.getCityId().equals("105"))  // 宝泉岭
                 advParam.setUdid("4" + advParam.getUdid());
-		    if(advParam.getCityId().equals("019"))  // 佛山
+		    else if(advParam.getCityId().equals("079"))  // 精河县
                 advParam.setUdid("8" + advParam.getUdid());
-		    if(advParam.getCityId().equals("004"))  // 杭州
+		    else if(advParam.getCityId().equals("115"))  // 陇南
                 advParam.setUdid("c" + advParam.getUdid());
 		    
 			return openManager.doService(advParam, ShowType.OPEN_SCREEN, isNeedApi, queryParam, true);
