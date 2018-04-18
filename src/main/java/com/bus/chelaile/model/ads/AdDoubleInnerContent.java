@@ -118,13 +118,14 @@ public class AdDoubleInnerContent extends AdInnerContent {
 				adEntity.setSindex(getStationLevelDefaultPosition());
 			}
 		} else {
-			if(position == -1 || position > param.getlSize()) {
-				adEntity.setSindex(param.getlSize());
-			} else if(position <= param.getlSize()) {
-				adEntity.setSindex(position);
-			} else {
-				adEntity.setSindex(getStationLevelDefaultPosition());
-			}
+		    adEntity.setSindex(position == 0 ? 0 : 1);  // 仅限 0 和 1
+//			if(position == -1 || position > param.getlSize()) {
+//				adEntity.setSindex(param.getlSize());
+//			} else if(position <= param.getlSize()) {
+//				adEntity.setSindex(position);
+//			} else {
+//				adEntity.setSindex(getStationLevelDefaultPosition());
+//			}
 		}
         adEntity.setLindex(0);
     }
