@@ -335,10 +335,7 @@ public class AdPubCacheRecord {
 				}
 			}
 			if (pclickCount > 0) { // 每人每天点击次数上限
-			    if (!dayClickMap.containsKey(todayStr)) {
-                    return false;
-                }
-			    if(dayClickMap.get(todayStr) > pclickCount) {
+			    if(dayClickMap.containsKey(todayStr) && dayClickMap.get(todayStr) >= pclickCount) {
 			        return false;
 			    }
 			}

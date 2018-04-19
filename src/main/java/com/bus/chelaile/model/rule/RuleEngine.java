@@ -189,6 +189,7 @@ public class RuleEngine {
             rule.setUserType(getChildAsInt(rInfo, "userType"));
             rule.setClickCount(getChildAsInt(rInfo, "clickCount"));
             rule.setTotalClickPV(getChildAsInt(rInfo, "totalClickPV"));
+            rule.setPclickCount(getChildAsInt(rInfo, "pclickCount"));
             rule.setDays(getChildAsInt(rInfo, "days"));
             rule.setPerDayCount(getChildAsInt(rInfo, "perDayCount"));
             rule.setTotalCount(getChildAsInt(rInfo, "totalCount"));
