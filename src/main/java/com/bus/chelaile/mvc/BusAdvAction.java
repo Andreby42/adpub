@@ -357,6 +357,14 @@ public class BusAdvAction extends AbstractController {
         log.info("reload后， for test值为：{}", fortest);
         return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
+    
+    public String getFeedAds(HttpServletRequest request) {
+        
+        AdvParam param = getActionParam(request);
+        
+        
+        return serviceManager.getAdsResponseStr(param, "getFeedAds");
+    }
 
     /*
      * setNewUserstoOCS(往ocs中塞入用户创建时间，测试新用户不投放广告的时候使用)

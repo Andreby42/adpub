@@ -232,6 +232,9 @@ public class ServiceManager {
 			entity = getH5BannerAd(advParam);
 			object.put("ads", entity);
 			return object;
+		} else if(methodName.equals("getFeedAds")) { // feed流广告
+		    entity = getFeedAds(advParam);
+		    object.put("ads", entity);
 		} else if (methodName.equals("getRide")) {
 			entity = getRide(advParam);
 			object = (JSONObject) entity; // 乘车页广告，新增音频广告内容
