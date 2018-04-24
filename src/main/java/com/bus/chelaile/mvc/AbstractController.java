@@ -27,6 +27,8 @@ public class AbstractController {
 		param.setDeviceType(request.getParameter("deviceType"));
 		param.setIdfa(request.getParameter("idfa"));
 		param.setImei(request.getParameter("imei"));
+		param.setMac(request.getParameter("mac"));
+		param.setAndroidID(request.getParameter("AndroidID"));
 		param.setUa(request.getParameter("userAgent"));
 		param.setO1(request.getParameter("o1"));
 
