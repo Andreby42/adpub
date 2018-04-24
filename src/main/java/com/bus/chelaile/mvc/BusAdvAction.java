@@ -358,6 +358,8 @@ public class BusAdvAction extends AbstractController {
         return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
     
+    @ResponseBody
+    @RequestMapping(value = "adv!getFeedAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public String getFeedAds(HttpServletRequest request) {
         
         AdvParam param = getActionParam(request);
