@@ -13,7 +13,7 @@ import com.bus.chelaile.mvc.AdvParam;
 public class AdFeedInnerContent extends AdInnerContent {
 	private String pic; // 广告图片的URL
 	
-	private int feedAdType; // feed流广告类型，0 话题样式， 1 透视样式， 2 文章样式
+	private int feedAdType; // feed流广告类型，0 话题样式， 1 透视样式， 2 文章样式， 3 图片样式
 	
 	private int width; //图片宽
 	private int height; //图片高
@@ -32,6 +32,8 @@ public class AdFeedInnerContent extends AdInnerContent {
 	// 文章样式新增字段
 	private String imgs;
 	private String feedAdArticleTag;
+	
+	private int imgsType;  // 图片样式：0：单图小图，1：三图小图，2：透视大图样式, 3:话题样式, 4 宽图窄图(置顶用)， 5 宽图大图
 	
 	
 	@Override
@@ -63,6 +65,8 @@ public class AdFeedInnerContent extends AdInnerContent {
 
 				this.imgs = ad.imgs;
 				this.feedAdArticleTag = ad.feedAdArticleTag;
+				
+				this.imgsType = ad.imgsType;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -256,4 +260,14 @@ public class AdFeedInnerContent extends AdInnerContent {
 	public void setFeedAdArticleTag(String feedAdArticleTag) {
 		this.feedAdArticleTag = feedAdArticleTag;
 	}
+
+
+    public int getImgsType() {
+        return imgsType;
+    }
+
+
+    public void setImgsType(int imgsType) {
+        this.imgsType = imgsType;
+    }
 }

@@ -109,6 +109,7 @@ public class FeedAdsManager extends AbstractManager {
 			res.setFeedId(feedInner.getFeedId());
 			res.setFeedAdType(feedInner.getFeedAdType());
 			res.setIsSetTop(feedInner.getIsSetTop());
+			res.setImgsType(feedInner.getImgsType());
 			if (feedInner.getTag() != null && feedInner.getTagId() != null 
 					&& StringUtils.isNoneBlank(feedInner.getTag()) && StringUtils.isNoneBlank(feedInner.getTagId())) {
 				res.setTag(new Tag(feedInner.getTag(), feedInner.getTagId()));
@@ -119,7 +120,7 @@ public class FeedAdsManager extends AbstractManager {
 						feedInner.getIcon(), feedInner.getLikeNum(), feedInner.getFeedTag(), feedInner.getIsSetTop()));
 			} else if(feedInner.getFeedAdType() == 1) { // 透视样式
 				res.setFeedInfo(new FeedAdInfo(null, 0L, null, null, 0, feedInner.getFeedTag(), feedInner.getIsSetTop()));
-			} else if(feedInner.getFeedAdType() == 2) { // 文章样式
+			} else if(feedInner.getFeedAdType() == 2 || feedInner.getFeedAdType() == 3) { // 文章样式 | 图片样式
 				res.setArticleInfo(new FeedAdArticleInfo(feedInner.getSlogan(), date.getTime(), feedInner.getFeedTag(),
 					new ArrayList<String>(), feedInner.getFeedAdTitle()));  // TODO
 				if(StringUtils.isNoneBlank(feedInner.getPic())) {

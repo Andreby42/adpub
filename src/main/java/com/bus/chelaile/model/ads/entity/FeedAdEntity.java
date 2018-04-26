@@ -12,8 +12,9 @@ public class FeedAdEntity extends BaseAdEntity {
 	private Tag tag;
 	private FeedAdInfo feedInfo;
 	private FeedAdArticleInfo articleInfo;
-	private int feedAdType;    // feed流广告类型，0 话题样式， 1 透视样式， 2 文章样式
+	private int feedAdType;    // feed流广告类型，0 话题样式， 1 透视样式， 2 文章样式， 3 图片样式信息流
 	private int isSetTop;	// 是否置顶
+	private int imgsType; // 图片样式  
 
 	// 构造方法
 	public FeedAdEntity() {
@@ -98,5 +99,13 @@ public class FeedAdEntity extends BaseAdEntity {
 	public void setIsSetTop(int isSetTop) {
 		this.isSetTop = isSetTop;
 	}
+
+    public int getImgsType() {
+        return imgsType;
+    }
+
+    public void setImgsType(int imgsType) {
+        this.imgsType = imgsType;
+    }
 
 }
