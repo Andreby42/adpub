@@ -32,6 +32,7 @@ public class AdDispatcher {
 		AdShowBaseStrategy adShowStrategy = UserStrategyJudger.getStrategy(udid, platform);
 		// If the given strategy is "own ad block", then clear the available ads list
 		// Thus if current visit doesn't need 3rd party ad, the method returns null
+		logger.info("udid={}, strategyName={}", udid, adShowStrategy.getStrategyName());
 		if (adShowStrategy.getStrategyName().startsWith("own_ad_block")) {
 			if (availableAds != null) {
 				availableAds.clear();

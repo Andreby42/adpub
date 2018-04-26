@@ -587,7 +587,7 @@ public abstract class AbstractManager {
         return CalculatePerMinCount.getCTRRate(advId + "#" + ruleId);
     }
 
-    private List<AdContentCacheEle> mergeAllAds(AdvParam advParam, ShowType showType, List<AdContentCacheEle> adsList) {
+    private List<AdContentCacheEle> mergeAllAds(AdvParam advParam, ShowType showType, List<AdContentCacheEle> adsList, boolean isNeedApid) {
         adsList = CommonService.mergeAllAds(adsList); // 需要按照adid和ruleid做合并
         String adIdStr = "";
         for (AdContentCacheEle ad : adsList) {
@@ -600,7 +600,7 @@ public abstract class AbstractManager {
         logger.info(
                 "[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
                         + "cityId={}, v={}, vc={}, li={}, sn={}",
-                advParam.getUdid(), showType, false, advParam.getType(), adIdStr, advParam.getAccountId(), advParam.getS(),
+                advParam.getUdid(), showType, isNeedApid, advParam.getType(), adIdStr, advParam.getAccountId(), advParam.getS(),
                 advParam.getCityId(), advParam.getV(), advParam.getVc(), advParam.getLineId(), advParam.getStnName());
         return adsList;
     }
@@ -677,7 +677,7 @@ public abstract class AbstractManager {
                     showType, isNeedApid, advParam.getType(), advParam.getAccountId(), advParam.getS());
         } else {
             // 合并广告
-            adsList = mergeAllAds(advParam, showType, adsList);
+            adsList = mergeAllAds(advParam, showType, adsList, isNeedApid);
         }
         return adsList;
     }
