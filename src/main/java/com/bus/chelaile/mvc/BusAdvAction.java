@@ -52,7 +52,6 @@ public class BusAdvAction extends AbstractController {
         param.setStnList(request.getParameter("stnList"));
         param.setStationList(Station.parseStationList(request.getParameter("stnList")));
         param.setLnState(getInt(request, "lnState"));
-        param.setStnName(request.getParameter("stnName"));
         param.setStnOrder(getInt(request, "stnOrder"));
         param.setCshow(request.getParameter("cshow"));
         param.setStationId(request.getParameter("stationId"));
@@ -339,7 +338,6 @@ public class BusAdvAction extends AbstractController {
     public String getAboardText(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam param = getActionParam(request);
-        param.setStnName(request.getParameter("stnName"));
 
         return serviceManager.getAdsResponseStr(param, "getAboardText");
 
@@ -363,7 +361,6 @@ public class BusAdvAction extends AbstractController {
     public String getFeedAds(HttpServletRequest request) {
         
         AdvParam param = getActionParam(request);
-        
         
         return serviceManager.getAdsResponseStr(param, "getFeedAds");
     }

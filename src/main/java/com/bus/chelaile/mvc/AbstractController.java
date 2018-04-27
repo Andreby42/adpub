@@ -22,8 +22,12 @@ public class AbstractController {
 		param.setVc(getInt(request, "vc"));
 		param.setNw(request.getParameter("nw"));
 		param.setFirst_src(request.getParameter("first_src"));
+		
+		// 位置相关
 		param.setLng(getDouble(request, "lng"));
 		param.setLat(getDouble(request, "lat"));
+	    param.setStnName(request.getParameter("stnName"));
+	    
 		param.setDeviceType(request.getParameter("deviceType"));
 		param.setIdfa(request.getParameter("idfa"));
 		param.setImei(request.getParameter("imei"));
@@ -35,6 +39,7 @@ public class AbstractController {
 		param.setLineId(request.getParameter("lineId"));
 		param.setLineNo(request.getParameter("lineNo"));
 		param.setLineName(request.getParameter("lineName"));
+		
 
 		param.setScreenHeight(getInt(request, "screenHeight"));
 		param.setCityId(request.getParameter("cityId"));

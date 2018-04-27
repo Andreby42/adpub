@@ -244,7 +244,6 @@ public class BusUCArticlesAction extends AbstractController {
 
 		AdvParam param = getActionParam(request);
 		int entryId = getInt(request, "entryId");	//接口定义 0 Tab3, 1 Tab4。 与数据库定义小3（数据库需要默认值0作为不选择任何tab）
-		param.setStnName(request.getParameter("stnName"));
 		try {
 			TabEntity tabAdEntity = flowService.getTabActivities(param, entryId);
 			if (tabAdEntity != null) {
