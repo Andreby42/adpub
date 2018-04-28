@@ -63,6 +63,11 @@ public class AdDispatcher {
 				reqAdType);
 	}
 
+	/**
+	 * 获取优先级最高的那一批详情页广告
+	 * @param availableAds
+	 * @return
+	 */
 	private static List<AdInfo> filterAvailableAdsByPriority(
 			List<AdInfo> availableAds) {
 		if (availableAds == null || availableAds.size() == 0) {

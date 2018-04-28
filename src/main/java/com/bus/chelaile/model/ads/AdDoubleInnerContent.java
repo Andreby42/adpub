@@ -1,6 +1,7 @@
 package com.bus.chelaile.model.ads;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ads.entity.AdEntity;
@@ -8,14 +9,13 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.GpsUtils;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
-
 /**
  * 双栏广告的内部内容， 需要解析之后在转储到返回给调用者的对象之中
  * @author liujh
  *
  */
 public class AdDoubleInnerContent extends AdInnerContent {
-    
+
     private String brandIcon;
     private String brandName;
     private String promoteTitle;
@@ -27,24 +27,27 @@ public class AdDoubleInnerContent extends AdInnerContent {
     private String buttonIcon;
     private String buttonTitle;
     private String buttonColor;
-    
+
     private String iosURL;
     private String androidURL;
-    
+
     //新增加的属性
     private double lng = -1.0;
     private double lat = -1.0;
-    
-    private String tag;	//话题标签名
-    private String tagId;	//话题标签id
+
+    private String tag; //话题标签名
+    private String tagId; //话题标签id
     private String feedId; //话题详情页id
-    
-   /**
+
+    /**
     * 站级别位置，双栏广告的显示位置：第n位， 0表示第一条线前面（首位），
     * 1表示第一条线后面，2表示第二条线后面，等，而-1表示最后一条线后面（末位）。
     */
-    private int position = Constants.NULL_POSITION; 
-    
+    // 2018-04-28更新， 只支持0 OR 1
+    private int position = Constants.NULL_POSITION;
+
+    private int provider_id; // 广告提供商， 0 自采买， 1 广点通
+
     @Override
     public void parseJson(String jsonr) {
         AdDoubleInnerContent ad = null;
@@ -61,14 +64,16 @@ public class AdDoubleInnerContent extends AdInnerContent {
             this.buttonIcon = ad.buttonIcon;
             this.buttonTitle = ad.buttonTitle;
             this.buttonColor = ad.buttonColor;
-            
+
             this.lng = ad.lng;
             this.lat = ad.lat;
             this.position = ad.position;
-            
+
             this.tag = ad.tag;
             this.tagId = ad.tagId;
             this.feedId = ad.feedId;
+
+            this.provider_id = ad.provider_id;
         }
     }
 
@@ -76,29 +81,29 @@ public class AdDoubleInnerContent extends AdInnerContent {
     public String extractFullPicUrl(String s) {
         return null;
     }
-    
-	@Override
-	public String extractAudiosUrl(String s, int type) {
-		return null;
-	}
+
+    @Override
+    public String extractAudiosUrl(String s, int type) {
+        return null;
+    }
 
     @Override
     public void fillAdEntity(AdEntity adEntity, AdvParam param, int stindex) {
         if (adEntity == null) {
             return;
         }
-        
+
         adEntity.setBrandIcon(this.brandIcon);
         adEntity.setBrandName(this.brandName);
         adEntity.setPromoteTitle(this.promoteTitle);
-        
+
         if (this.showDistance == 1 && this.lng > 0 && this.lat > 0 && param != null) {
             double dist = GpsUtils.geo_distance(this.lng, this.lat, param.getLng(), param.getLat());
-            adEntity.setDistance((int)(dist * 1000));
+            adEntity.setDistance((int) (dist * 1000));
         } else {
             adEntity.setDistance(-1);
         }
-        
+
         adEntity.setBarColor(this.barColor);
         adEntity.setHead(this.head);
         adEntity.setSubhead(this.subhead);
@@ -107,191 +112,208 @@ public class AdDoubleInnerContent extends AdInnerContent {
         adEntity.setButtonTitle(nullToEmpty(this.buttonTitle));
         adEntity.setButtonColor(nullToEmpty(this.buttonColor));
         adEntity.setFeedId(this.getFeedId());
-        if(this.tag != null && this.tagId != null) {
-        	adEntity.setTag(new Tag(this.tag, this.getTagId()));
+        if (this.tag != null && this.tagId != null) {
+            adEntity.setTag(new Tag(this.tag, this.getTagId()));
         }
-        
-		if (param.getlSize() == -1) { // 这个参数控制版本，Constants.PLATFORM_LOG_ANDROID_0326 之前的老版本
-			if (position != Constants.NULL_POSITION) {
-				adEntity.setSindex(position == -1 ? (stindex + 1) : (position == 0 ? 0 : 1));
-			} else {
-				adEntity.setSindex(getStationLevelDefaultPosition());
-			}
-		} else {
-		    adEntity.setSindex(position == 0 ? 0 : 1);  // 仅限 0 和 1
-//			if(position == -1 || position > param.getlSize()) {
-//				adEntity.setSindex(param.getlSize());
-//			} else if(position <= param.getlSize()) {
-//				adEntity.setSindex(position);
-//			} else {
-//				adEntity.setSindex(getStationLevelDefaultPosition());
-//			}
-		}
+
+        if (param.getlSize() == -1) { // 这个参数控制版本，Constants.PLATFORM_LOG_ANDROID_0326 之前的老版本
+            if (position != Constants.NULL_POSITION) {
+                adEntity.setSindex(position == -1 ? (stindex + 1) : (position == 0 ? 0 : 1));
+            } else {
+                adEntity.setSindex(getStationLevelDefaultPosition());
+            }
+        } else {
+            adEntity.setSindex(position == 0 ? 0 : 1); // 仅限 0 和 1
+        }
         adEntity.setLindex(0);
+        if (provider_id != 0) { // 如果是第三方广告，加一些版本控制
+            if ((param.getS().equalsIgnoreCase("android") && param.getVc() >= Constants.PLATFOMR_LOG_ANDROID_0502)
+                    || (param.getS().equalsIgnoreCase("ios") && param.getVc() >= Constants.PLATFOMR_LOG_IOS_0502)) {
+                adEntity.setProvider_id(provider_id + ""); // 新增第三方广告
+            }
+        }
     }
-    
+
     private String nullToEmpty(String str) {
         return str == null ? "" : str;
     }
+
     public static int getStationLevelDefaultPosition() {
-    	return Integer.parseInt( PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "adv.station.level.default.pos","1") );
+        return Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "adv.station.level.default.pos", "1"));
         //return PropertiesReaderWrapper.readInt("adv.station.level.default.pos", 1);
     }
-    
-    public void completePicUrl(){
+
+    public void completePicUrl() {
         this.brandIcon = getFullPicUrl(brandIcon);
         this.buttonIcon = getFullPicUrl(buttonIcon);
     }
+    
+    public static void main(String[] args) {
+        String s = "{\"provider_id\":2,\"position\":1,\"promoteTitle\":\"活动\",\"showDistance\":0,\"subhead\":\"上班不迟到，放心睡懒觉\"}";
+        
+        AdDoubleInnerContent ad = new AdDoubleInnerContent();
+        ad.parseJson(s);
+        
+        System.out.println(JSONObject.toJSONString(ad));
+    }
 
-	public String getBrandIcon() {
-		return brandIcon;
-	}
+    public String getBrandIcon() {
+        return brandIcon;
+    }
 
-	public void setBrandIcon(String brandIcon) {
-		this.brandIcon = brandIcon;
-	}
+    public void setBrandIcon(String brandIcon) {
+        this.brandIcon = brandIcon;
+    }
 
-	public String getBrandName() {
-		return brandName;
-	}
+    public String getBrandName() {
+        return brandName;
+    }
 
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
-	}
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
 
-	public String getPromoteTitle() {
-		return promoteTitle;
-	}
+    public String getPromoteTitle() {
+        return promoteTitle;
+    }
 
-	public void setPromoteTitle(String promoteTitle) {
-		this.promoteTitle = promoteTitle;
-	}
+    public void setPromoteTitle(String promoteTitle) {
+        this.promoteTitle = promoteTitle;
+    }
 
-	public int getShowDistance() {
-		return showDistance;
-	}
+    public int getShowDistance() {
+        return showDistance;
+    }
 
-	public void setShowDistance(int showDistance) {
-		this.showDistance = showDistance;
-	}
+    public void setShowDistance(int showDistance) {
+        this.showDistance = showDistance;
+    }
 
-	public String getBarColor() {
-		return barColor;
-	}
+    public String getBarColor() {
+        return barColor;
+    }
 
-	public void setBarColor(String barColor) {
-		this.barColor = barColor;
-	}
+    public void setBarColor(String barColor) {
+        this.barColor = barColor;
+    }
 
-	public String getHead() {
-		return head;
-	}
+    public String getHead() {
+        return head;
+    }
 
-	public void setHead(String head) {
-		this.head = head;
-	}
+    public void setHead(String head) {
+        this.head = head;
+    }
 
-	public String getSubhead() {
-		return subhead;
-	}
+    public String getSubhead() {
+        return subhead;
+    }
 
-	public void setSubhead(String subhead) {
-		this.subhead = subhead;
-	}
+    public void setSubhead(String subhead) {
+        this.subhead = subhead;
+    }
 
-	public int getButtonType() {
-		return buttonType;
-	}
+    public int getButtonType() {
+        return buttonType;
+    }
 
-	public void setButtonType(int buttonType) {
-		this.buttonType = buttonType;
-	}
+    public void setButtonType(int buttonType) {
+        this.buttonType = buttonType;
+    }
 
-	public String getButtonIcon() {
-		return buttonIcon;
-	}
+    public String getButtonIcon() {
+        return buttonIcon;
+    }
 
-	public void setButtonIcon(String buttonIcon) {
-		this.buttonIcon = buttonIcon;
-	}
+    public void setButtonIcon(String buttonIcon) {
+        this.buttonIcon = buttonIcon;
+    }
 
-	public String getButtonTitle() {
-		return buttonTitle;
-	}
+    public String getButtonTitle() {
+        return buttonTitle;
+    }
 
-	public void setButtonTitle(String buttonTitle) {
-		this.buttonTitle = buttonTitle;
-	}
+    public void setButtonTitle(String buttonTitle) {
+        this.buttonTitle = buttonTitle;
+    }
 
-	public String getButtonColor() {
-		return buttonColor;
-	}
+    public String getButtonColor() {
+        return buttonColor;
+    }
 
-	public void setButtonColor(String buttonColor) {
-		this.buttonColor = buttonColor;
-	}
+    public void setButtonColor(String buttonColor) {
+        this.buttonColor = buttonColor;
+    }
 
-	public String getIosURL() {
-		return iosURL;
-	}
+    public String getIosURL() {
+        return iosURL;
+    }
 
-	public void setIosURL(String iosURL) {
-		this.iosURL = iosURL;
-	}
+    public void setIosURL(String iosURL) {
+        this.iosURL = iosURL;
+    }
 
-	public String getAndroidURL() {
-		return androidURL;
-	}
+    public String getAndroidURL() {
+        return androidURL;
+    }
 
-	public void setAndroidURL(String androidURL) {
-		this.androidURL = androidURL;
-	}
+    public void setAndroidURL(String androidURL) {
+        this.androidURL = androidURL;
+    }
 
-	public double getLng() {
-		return lng;
-	}
+    public double getLng() {
+        return lng;
+    }
 
-	public void setLng(double lng) {
-		this.lng = lng;
-	}
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
 
-	public double getLat() {
-		return lat;
-	}
+    public double getLat() {
+        return lat;
+    }
 
-	public void setLat(double lat) {
-		this.lat = lat;
-	}
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
 
-	public int getPosition() {
-		return position;
-	}
+    public int getPosition() {
+        return position;
+    }
 
-	public void setPosition(int position) {
-		this.position = position;
-	}
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
-	public String getTag() {
-		return tag;
-	}
+    public String getTag() {
+        return tag;
+    }
 
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
-	public String getFeedId() {
-		return feedId;
-	}
+    public String getFeedId() {
+        return feedId;
+    }
 
-	public void setFeedId(String feedId) {
-		this.feedId = feedId;
-	}
+    public void setFeedId(String feedId) {
+        this.feedId = feedId;
+    }
 
-	public String getTagId() {
-		return tagId;
-	}
+    public String getTagId() {
+        return tagId;
+    }
 
-	public void setTagId(String tagId) {
-		this.tagId = tagId;
-	}
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
+    }
+
+    public int getProvider_id() {
+        return provider_id;
+    }
+
+    public void setProvider_id(int provider_id) {
+        this.provider_id = provider_id;
+    }
 }
