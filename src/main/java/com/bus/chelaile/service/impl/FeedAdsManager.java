@@ -202,9 +202,8 @@ public class FeedAdsManager extends AbstractManager {
 
 	}
 
-	public static void main(String[] args) throws ClientProtocolException, IOException {
+	public static void main(String[] args){
 		String url = "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
-		System.out.println(HttpUtils.get(url, "utf-8"));
 	}
 
 	@Override
