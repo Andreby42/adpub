@@ -1,7 +1,5 @@
 package com.bus.chelaile.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -50,21 +48,12 @@ public class DoubleAndSingleManager extends AbstractManager {
         AdEntity entity = new AdEntity(showType.getValue());
         AdContentCacheEle ad = null;
 
-        // map会自动排序，根据key的asic码。所以此处需要打乱顺序
-        if (cateGory == null) {
-            if (adMap.size() > 1) {
-                List<Integer> ids = new ArrayList<>(adMap.keySet());
-                Collections.shuffle(ids);
-                ad = adMap.get(ids.get(0));
-            } else {
-                for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
-                    ad = entry.getValue();
-                    break;
-                }
+        if (cateGory == null) { //双栏策略控制 ---> not valid
+            for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+                ad = entry.getValue();
+                break;
             }
-        } 
-        // 双栏走策略已经被排除了 
-        else if (cateGory.getAdType() == 1) {
+        } else if (cateGory.getAdType() == 1) {
             ad = adMap.get(cateGory.getAdId());
             cacheRecord.setOpenAdHistory(cateGory); //将双栏投放记录，放到openAdHistory中，理论上会影响开屏广告的长尾投放和分组轮播。  // TODO 
         } else {

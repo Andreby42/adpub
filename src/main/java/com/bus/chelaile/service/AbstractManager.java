@@ -1,5 +1,6 @@
 package com.bus.chelaile.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.Platform;
@@ -25,6 +27,7 @@ import com.bus.chelaile.model.rule.UserClickRate;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
+import com.bus.chelaile.strategy.AdInfo;
 import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.util.New;
 
@@ -60,6 +63,7 @@ public abstract class AbstractManager {
         // 小程序 banner广告不走策略
         if (!isNeedApid) {
             // 按照优先级
+            Collections.shuffle(adsList);  // 打乱顺序，然后再进行优先级排序  2018-04-28
             Collections.sort(adsList, AD_CONTENT_COMPARATOR);
 
             adMap = New.hashMap();
@@ -565,6 +569,14 @@ public abstract class AbstractManager {
             setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid, queryParam);
         } else {
             // 只返回一条广告
+            // 04-28，增加逻辑： 去掉优先级低的广告，然后打乱排序
+//            List<AdContentCacheEle> filterAvailabelAds = adsList;
+//            if (adMap.size() > 1) {
+//                List<AdContentCacheEle> availableAds = new ArrayList<>(adMap.values());
+//                filterAvailabelAds = filterAvailableAdsByPriority(availableAds);
+//                
+//                Collections.shuffle(filterAvailabelAds);
+//            }
             setAds(adMap, adsList, showType, advParam, cacheRecord, 1, isNeedApid, queryParam);
         }
     }
@@ -749,5 +761,64 @@ public abstract class AbstractManager {
         }
         return true;
     }
+    
+    /**
+     * 获取优先级最高的那一批详情页广告
+     * @param availableAds
+     * @return
+     */
+    private static List<AdContentCacheEle> filterAvailableAdsByPriority(
+            List<AdContentCacheEle> availableAds) {
+        if (availableAds == null || availableAds.size() == 0) {
+            return null;
+        }
+        ArrayList<AdContentCacheEle> highestPriorityAdsList = new ArrayList<>();
+        int highestPriority = 0;
+        for (AdContentCacheEle adInfo : availableAds) {
+            int currentPriority = adInfo.getAds().getPriority();
+            if (currentPriority < highestPriority) {
+                continue;
+            }
+            if (currentPriority > highestPriority) {
+                highestPriority = currentPriority;
+                highestPriorityAdsList.clear();
+            }
+            highestPriorityAdsList.add(adInfo);
+        }
+        return highestPriorityAdsList;
+    }
 
+    public static void main(String[] args) {
+        List<AdContentCacheEle> adsList  = new ArrayList<>();
+        AdContentCacheEle a1 = new AdContentCacheEle();
+        AdContent add1 = new AdContent();
+        add1.setId(1);
+        a1.setAds(add1);
+        a1.getAds().setPriority(1);
+        
+        AdContentCacheEle a2 = new AdContentCacheEle();
+        AdContent add2 = new AdContent();
+        add2.setId(2);
+        a2.setAds(add2);
+        a2.getAds().setPriority(2);
+        
+        AdContentCacheEle a3 = new AdContentCacheEle();
+        AdContent add3 = new AdContent();
+        add3.setId(3);
+        a3.setAds(add3);
+        a3.getAds().setPriority(2);
+        adsList.add(a1);adsList.add(a2);adsList.add(a3);
+        
+        logger.info("1***adsList={}", JSONObject.toJSONString(adsList));
+        System.out.println(JSONObject.toJSONString(adsList));
+        
+        Collections.shuffle(adsList);  // 打乱顺序
+        System.out.println(JSONObject.toJSONString(adsList));
+        logger.info("2***adsList={}", JSONObject.toJSONString(adsList));
+        
+        Collections.sort(adsList, AD_CONTENT_COMPARATOR);
+        System.out.println(JSONObject.toJSONString(adsList));
+        logger.info("3***adsList={}", JSONObject.toJSONString(adsList));
+    }
+    
 }
