@@ -78,7 +78,7 @@ public class DoubleAndSingleManager extends AbstractManager {
                         throw new IllegalArgumentException(
                                 "错误的双栏provider_id, advId=" + ad.getAds().getId() + ", provider_id=" + adInner.getProvider_id());
                     }
-                    if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFOMR_LOG_ANDROID_0502)
+                    if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
                             || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0502)) {
                         entity.setProvider_id(adInner.getProvider_id() + ""); // 新增第三方广告
                     } else {

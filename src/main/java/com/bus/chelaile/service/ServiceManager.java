@@ -487,7 +487,7 @@ public class ServiceManager {
                 advParam.setUdid("4" + advParam.getUdid());
 		    else if(advParam.getCityId().equals("079"))  // 精河县
                 advParam.setUdid("8" + advParam.getUdid());
-		    else if(advParam.getCityId().equals("115"))  // 陇南
+		    else if(advParam.getCityId().equals("062"))  // 淮安
                 advParam.setUdid("c" + advParam.getUdid());
 		    
 			return openManager.doService(advParam, ShowType.OPEN_SCREEN, isNeedApi, queryParam, true);
