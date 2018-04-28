@@ -126,12 +126,6 @@ public class AdDoubleInnerContent extends AdInnerContent {
             adEntity.setSindex(position == 0 ? 0 : 1); // 仅限 0 和 1
         }
         adEntity.setLindex(0);
-        if (provider_id != 0) { // 如果是第三方广告，加一些版本控制
-            if ((param.getS().equalsIgnoreCase("android") && param.getVc() >= Constants.PLATFOMR_LOG_ANDROID_0502)
-                    || (param.getS().equalsIgnoreCase("ios") && param.getVc() >= Constants.PLATFOMR_LOG_IOS_0502)) {
-                adEntity.setProvider_id(provider_id + ""); // 新增第三方广告
-            }
-        }
     }
 
     private String nullToEmpty(String str) {
