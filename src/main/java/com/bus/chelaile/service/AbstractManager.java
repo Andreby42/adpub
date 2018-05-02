@@ -725,9 +725,9 @@ public abstract class AbstractManager {
         }
 
         // TODO android 内核4.4一下的，不返回广告 20180118
-        // 这个方法不够眼镜，当android更新到版本10的时候，会出错
+        // 这个方法不够严谨，当android更新到版本10的时候，会出错
         Platform platform = Platform.from(advParam.getS());
-        if (StringUtils.isNoneBlank(advParam.getUdid()) && advParam.getUdid().equals("e02bda79-1349-4a6b-a474-cb3677ee69c6")) {
+        if (StringUtils.isNoneBlank(advParam.getUdid()) && advParam.getUdid().contains("e02bda79-1349-4a6b-a474-cb3677ee69c6")) {
             return true;
         }
         if (platform.isAndriod(platform.getDisplay())) {
