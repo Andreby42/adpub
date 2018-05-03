@@ -281,6 +281,8 @@ public class InnobHelp {
 		}
 
 		entity.setLink(response.getDecodedAd(pos).getLandingURL());
+		
+		// 如果需要下载，那么用外部浏览器打开
 		if (response.getDecodedAd(pos).getCta().equalsIgnoreCase("install")
 				|| response.getDecodedAd(pos).getCta().indexOf("下载") != -1) {
 			entity.setOpenType(1);

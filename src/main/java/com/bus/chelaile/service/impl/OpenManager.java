@@ -17,7 +17,6 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.innob.AdvType;
 import com.bus.chelaile.model.Platform;
-import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;

@@ -47,9 +47,18 @@ public class Request implements Validator {
     // private AdTypeRequested adTypeRequested;
     public class Ext {
         private String responseformat = "json";
+        private boolean externalSupported = true;    // TODO  , inmobe 3.0 新增参数
 
         public String getResponseformat() {
             return responseformat;
+        }
+
+        public boolean isExternalSupported() {
+            return externalSupported;
+        }
+
+        public void setExternalSupported(boolean externalSupported) {
+            this.externalSupported = externalSupported;
         }
     }
 
