@@ -1,6 +1,7 @@
 package com.bus.chelaile.innob.request;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.innob.utils.Validator;
 /**
  * Created by Administrator on 2016/8/8.
@@ -89,5 +90,14 @@ public class Request implements Validator {
         valid &= isNotNullAndValid(imp, "NativeImp");
         // valid &= (adTypeRequested == null);
         return valid;
+    }
+    
+    public static void main(String[] args) {
+        App a = new App("1", "1");
+        Device d = new IOSDevice();
+        Imp i = new NativeImp(3);
+        Request r = new Request(a, d, i);
+        System.out.println(JSONObject.toJSONString(r));
+        
     }
 }

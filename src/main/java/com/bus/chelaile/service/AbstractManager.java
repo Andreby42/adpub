@@ -236,8 +236,8 @@ public abstract class AbstractManager {
             return false;
         }
         if (rule.hasPlatforms() && !rule.isPlatformMatch(advParam.getS(), advParam.getH5Src())) {
-            logger.info("isPlatformMatch return false,ruleId={},s={},src={},udid={},userId={}", rule.getRuleId(), advParam.getS(),
-                    advParam.getH5Src(), advParam.getUdid(), advParam.getUserId());
+//            logger.info("isPlatformMatch return false,ruleId={},s={},src={},udid={},userId={}", rule.getRuleId(), advParam.getS(),
+//                    advParam.getH5Src(), advParam.getUdid(), advParam.getUserId());
             return false;
         }
         // 开屏和浮层的老接口preloadAds需要返回两天的数据
