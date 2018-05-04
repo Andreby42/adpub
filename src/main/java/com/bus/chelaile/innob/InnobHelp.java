@@ -375,7 +375,7 @@ public class InnobHelp {
 		logger.info("inmobe pic save, picName={},title={}", picName, title);
 
 		// 大的开屏
-		if (appIosOpenNativeAds.getId().equals("1479589943065")) {
+		if (appIosOpenNativeAds.getId().equals("1522609003688")) {
 			File file = new File(picName);
 
 			return OSSUtil.putPhoto(title + ".jpg", file, "image/jpeg", folder);
