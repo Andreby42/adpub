@@ -23,6 +23,8 @@ public class AdFullInnerContent extends AdInnerContent {
     private String tagId;	//话题标签id,数据库存储的是String类型。
     private String feedId; //话题详情页id
     
+    private int provider_id; // 广告提供商， 0：自采买广告；8：阅盟；9：Ecoook；10：科大讯飞【其他说明：3 inmobi】
+    
     @Override
     protected void parseJson(String jsonr) {
         AdFullInnerContent ad = null;
@@ -38,6 +40,7 @@ public class AdFullInnerContent extends AdInnerContent {
             this.tag = ad.tag;
             this.tagId = ad.tagId;
             this.feedId = ad.feedId;
+            this.provider_id = ad.provider_id;
         }
     }
 
@@ -149,4 +152,12 @@ public class AdFullInnerContent extends AdInnerContent {
 	public void setFeedId(String feedId) {
 		this.feedId = feedId;
 	}
+
+    public int getProvider_id() {
+        return provider_id;
+    }
+
+    public void setProvider_id(int provider_id) {
+        this.provider_id = provider_id;
+    }
 }

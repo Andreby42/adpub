@@ -36,7 +36,7 @@ public abstract class BaseAdEntity {
 	protected int targetType;
 	protected String clickMonitorLink = "";
 	protected int monitorType;
-	private int type = 1; // 1：我们自己广告，2：调用广点通广告，3：调用第三方广告
+	private int type = 1; // 1：我们自己广告，2：调用广点通广告，3：调用第三方广告   // 客户端点击的时候用到这个参数
 	private String provider_id = "1"; // 我们自己的广告
 	
 	@JSONField(serialize=false)  
