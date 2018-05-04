@@ -198,7 +198,7 @@ public class ApiDetailsManager {
 			if (platform.isIOS(platform.getDisplay())) {
 				entity = InnobHelp.getLineDetailsIos(ip, advParam.getUa(),
 						advParam.getUdid(), advParam.getIdfa(),
-						cateGory.getApiType(), cacheRecord, showType);
+						cateGory.getApiType(), cacheRecord, showType,advParam);
 			} else if (platform.isAndriod(platform.getDisplay())) {
 				String o1 = "";
 				if (advParam.getO1() != null) {
@@ -212,7 +212,7 @@ public class ApiDetailsManager {
 				entity = InnobHelp.getLineDetailsAndroid("", ip,
 						advParam.getImei(), o1, advParam.getUa(),
 						advParam.getUdid(), cateGory.getApiType(), cacheRecord,
-						showType);
+						showType,advParam);
 			}
 
 			//entity.setProvider_id(ProductType.INMOBI.getValue());

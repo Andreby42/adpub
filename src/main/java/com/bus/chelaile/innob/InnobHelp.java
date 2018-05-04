@@ -26,6 +26,7 @@ import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ads.entity.ApiLineEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.model.record.ApiRecord;
+import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.OSSUtil;
 import com.bus.chelaile.util.UrlUtil;
 import com.bus.chelaile.util.config.PropertiesUtils;
@@ -74,7 +75,7 @@ public class InnobHelp {
 	protected static final Logger logger = LoggerFactory.getLogger(InnobHelp.class);
 
 	public static ApiLineEntity getLineDetailsAndroid(String gpid, String ip, String iem, String o1, String ua,
-			String udid, int apiType, AdPubCacheRecord cacheRecord, String showType) throws Exception {
+			String udid, int apiType, AdPubCacheRecord cacheRecord, String showType, AdvParam advParam) throws Exception {
 
 		// logger.info("udid={},gpid={},ip={},iem={},o1={},ua={}",udid,gpid,ip,iem,o1,ua);
 
@@ -85,6 +86,8 @@ public class InnobHelp {
 		device.setO1(o1);
 		device.setUa(ua);
 		device.setIp(ip);
+		device.getGeo().setLat(advParam.getLat());
+        device.getGeo().setLon(advParam.getLng());
 		// device.getExt().setOrientation(Orientation.VERTICAL);
 
 		// device.getGeo().setCity("beijing");
@@ -164,7 +167,7 @@ public class InnobHelp {
 	}
 
 	public static ApiLineEntity getLineDetailsIos(String ip, String ua, String udid, String ifa, int apiType,
-			AdPubCacheRecord cacheRecord, String showType) throws Exception {
+			AdPubCacheRecord cacheRecord, String showType, AdvParam advParam) throws Exception {
 
 		// logger.info("udid={},ip={},ua={},ifa={}",udid,ip,ua,ifa);
 
@@ -172,6 +175,8 @@ public class InnobHelp {
 		device.setIfa(ifa);
 		device.setUa(ua);
 		device.setIp(ip);
+		device.getGeo().setLat(advParam.getLat());
+		device.getGeo().setLon(advParam.getLng());
 		// device.getExt().setOrientation(Orientation.VERTICAL);
 
 		Request request = null;
