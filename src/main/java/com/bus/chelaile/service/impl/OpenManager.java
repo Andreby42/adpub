@@ -145,6 +145,8 @@ public class OpenManager extends AbstractManager {
 
         if (fullInner.getProvider_id() == 3) {
             // 低版本亦不支持nimobi的第三方广告
+            cateGory.setApiType(4);
+            cateGory.setAdType(3);
             ApiLineEntity apiEntity =
                     apiDetailsManager.from(Platform.from(advParam.getS()), advParam, cacheRecord, cateGory, showType.getType());
             if (apiEntity == null) {
