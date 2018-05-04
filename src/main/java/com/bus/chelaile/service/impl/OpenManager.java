@@ -78,6 +78,7 @@ public class OpenManager extends AbstractManager {
                 AdFullInnerContent fullInner = (AdFullInnerContent) inner;
                 if (fullInner.getProvider_id() != 0) { // 非自采买广告，需要特殊处理
                     entity = setApiOpenAds(fullInner, advParam, cacheRecord, cateGory, showType);
+                    return entity;
                 }
 
             }
