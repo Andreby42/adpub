@@ -83,7 +83,14 @@ public class StationAdsManager extends AbstractManager {
                 if (stationInner.getProvider_id() == ProductType.INMOBI.getProvider_id()
                         && advParam.getS().equalsIgnoreCase("android")
                         && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505) {
-                    return createSDKOpenAds(stationInner.getProvider_id());
+                    res = createSDKOpenAds(stationInner.getProvider_id(), ad);
+                    AnalysisLog.info(
+                            "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
+                            res.getId(), showType.getType(), ad.getTitle(), advParam.getUserId(),
+                            advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getS(), advParam.getV(),
+                            advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
+                            res.getProvider_id());
+                    return res;
                 } else
                     return null;
             }
@@ -228,9 +235,9 @@ public class StationAdsManager extends AbstractManager {
     };
 
     // 2018-05-05 ，站点广告，支持原生gdt
-    private StationAdEntity createSDKOpenAds(int adType) {
+    private StationAdEntity createSDKOpenAds(int adType, AdContent ad) {
         StationAdEntity entity = new StationAdEntity();
-        entity.setId(adType * -1);
+        entity.setId(ad.getId());
         entity.setProvider_id(adType + "");
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
