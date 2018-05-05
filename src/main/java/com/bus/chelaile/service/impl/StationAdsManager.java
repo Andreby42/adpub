@@ -80,7 +80,7 @@ public class StationAdsManager extends AbstractManager {
             // 第三方特殊处理
             if (stationInner.getProvider_id() > 0) {
                 // 加上版本控制，and， 目前只支持广点通
-                if (stationInner.getProvider_id() == ProductType.INMOBI.getProvider_id()
+                if (stationInner.getProvider_id() == ProductType.GUANGDIANTONG.getProvider_id()
                         && advParam.getS().equalsIgnoreCase("android")
                         && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505) {
                     res = createSDKOpenAds(stationInner.getProvider_id(), ad);
