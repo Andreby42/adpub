@@ -21,6 +21,7 @@ import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.ads.AdButtonInfo;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
@@ -233,8 +234,14 @@ public class StationAdsManager extends AbstractManager {
         entity.setProvider_id(adType + "");
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
+        
         BannerInfo bannerInfo = new BannerInfo();
-        bannerInfo.setBannerType(6);  // 广点通专用样式，文字+标签（文案由客户端自定义）
+        bannerInfo.setBannerType(4);  // 广点通专用样式，文字+标签（文案由客户端自定义）
+        AdButtonInfo buttonInfo = new AdButtonInfo();
+        buttonInfo.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
+        bannerInfo.setButton(buttonInfo);
+        
+        entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
         entity.setBannerInfo(bannerInfo);
         return entity;
     }
