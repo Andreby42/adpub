@@ -84,14 +84,9 @@ public class StationAdsManager extends AbstractManager {
                         && advParam.getS().equalsIgnoreCase("android")
                         && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505) {
                     res = createSDKOpenAds(stationInner.getProvider_id(), ad);
-//                    AnalysisLog.info(
-//                            "[STATION_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
-//                            res.getId(), showType.getType(), ad.getTitle(), advParam.getUserId(),
-//                            advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getS(), advParam.getV(),
-//                            advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
-//                            res.getProvider_id());
                     return res;
                 } else
+                    logger.error("不合适的版本，或者不合适的第三方广告类型，udid={}", advParam.getUdid());
                     return null;
             }
 

@@ -77,7 +77,9 @@ public class OpenManager extends AbstractManager {
             if ((inner != null) && (inner instanceof AdFullInnerContent)) {
                 AdFullInnerContent fullInner = (AdFullInnerContent) inner;
                 if (fullInner.getProvider_id() != 0) { // 非自采买广告，需要特殊处理
-                    entity = setApiOpenAds(fullInner, advParam, cacheRecord, cateGory, showType, adMap.get(cateGory.getAdId()).getAds().getTitle());
+                    cateGory.setAdType(fullInner.getProvider_id());
+                    entity = setApiOpenAds(fullInner, advParam, cacheRecord, cateGory, showType,
+                            adMap.get(cateGory.getAdId()).getAds().getTitle());
                     return entity;
                 }
 
@@ -145,8 +147,7 @@ public class OpenManager extends AbstractManager {
 
         if (fullInner.getProvider_id() == 3) {
             // 低版本亦不支持nimobi的第三方广告
-            cateGory.setApiType(4);  // 手动设置cateGory，因为接下来要走以前的策略控制的模块
-            cateGory.setAdType(3);
+            cateGory.setApiType(4); // 手动设置cateGory，因为接下来要走以前的策略控制的模块
             ApiLineEntity apiEntity =
                     apiDetailsManager.from(Platform.from(advParam.getS()), advParam, cacheRecord, cateGory, showType.getType());
             if (apiEntity == null) {
@@ -165,13 +166,13 @@ public class OpenManager extends AbstractManager {
                 entity = createSDKOpenAds(fullInner.getProvider_id(), cateGory.getAdId());
                 AnalysisLog.info(
                         "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
-                        entity.getId(), showType.getType(), title, advParam.getUserId(),
-                        advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getS(), advParam.getV(),
-                        advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
+                        entity.getId(), showType.getType(), title, advParam.getUserId(), advParam.getAccountId(),
+                        advParam.getUdid(), advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getNw(),
+                        advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
                         entity.getProvider_id());
-                
+
             } else {
-                logger.info("低版本不予返回非自采买的双栏广告 ");
+                logger.info("低版本不予返回非自采买的双栏广告 , udid={}", advParam.getUdid());
                 return null;
             }
         }
@@ -197,6 +198,13 @@ public class OpenManager extends AbstractManager {
      */
     private OpenAdEntity getSelfAdEntity(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContentCacheEle adc,
             ShowType showType, QueryParam queryParam) {
+        AdFullInnerContent fullInner = (AdFullInnerContent) (adc.getAds().getAdInnerContent());
+        if (fullInner.getProvider_id() != 0) {
+            logger.error("老版本返回了第三方的广告，udid={},s={},v={},vc={}", advParam.getUdid(), advParam.getS(), advParam.getV(),
+                    advParam.getVc());
+            return null;
+        }
+
         OpenAdEntity entity = null;
         // 判断是否是老版本的广告接口
         if (!queryParam.isOldMany()) {
