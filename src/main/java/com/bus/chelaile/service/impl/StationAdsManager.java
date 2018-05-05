@@ -20,6 +20,7 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.koubei.CouponInfo;
 import com.bus.chelaile.koubei.KBUtil;
 import com.bus.chelaile.model.Platform;
+import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -28,6 +29,7 @@ import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdStationlInnerContent;
 import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.OpenAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
@@ -37,9 +39,8 @@ import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.util.New;
 
 public class StationAdsManager extends AbstractManager {
-    
+
     static Set<String> TBK_TITLE_KEY = New.hashSet();
-    
 
     @Override
     protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
@@ -47,13 +48,13 @@ public class StationAdsManager extends AbstractManager {
         List<BaseAdEntity> entities = New.arrayList();
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
-//            logger.info("********************id={}, priority={}", ad.getAds().getId(), ad.getAds().getPriority());
+            //            logger.info("********************id={}, priority={}", ad.getAds().getId(), ad.getAds().getPriority());
             StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
             if (entity != null) {
                 entities.add(entity);
             }
         }
-//        logger.info("适配站点广告数:{}", entities.size());
+        //        logger.info("适配站点广告数:{}", entities.size());
         StationAdEntity entity = null;
         if (entities.size() == 0) {
             return null;
@@ -72,13 +73,21 @@ public class StationAdsManager extends AbstractManager {
 
     private StationAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
         StationAdEntity res = new StationAdEntity();
-
-        res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
-        res.dealLink(advParam);
-
         AdInnerContent inner = ad.getInnerContent();
         if (inner instanceof AdStationlInnerContent) {
             AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
+
+            // 第三方特殊处理
+            if (stationInner.getProvider_id() > 0) {
+                // 加上版本控制，and， 目前只支持广点通
+                if (stationInner.getProvider_id() == ProductType.INMOBI.getProvider_id()
+                        && advParam.getS().equalsIgnoreCase("android")
+                        && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505) {
+                    return createSDKOpenAds(stationInner.getProvider_id());
+                } else
+                    return null;
+            }
+
             res.setTitle(ad.getTitle());
             res.setAdWeight(stationInner.getAdWeight());
             res.setBuyOut(stationInner.getBuyOut());
@@ -112,7 +121,7 @@ public class StationAdsManager extends AbstractManager {
             // 针对口碑券和淘宝客的修改
             // 口碑券，需要从ocs中获取当前站点的券
             if (stationInner.getBannerInfo().getBannerType() == 5) {
-             // 用clone，保持 静态缓存 不受修改的影响
+                // 用clone，保持 静态缓存 不受修改的影响
                 BannerInfo bann = (BannerInfo) stationInner.getBannerInfo().clone();
                 CouponInfo ocsCoupon = null;
                 String key = KBUtil.getKbCouponOcsKey(advParam.getCityId(), advParam.getStnName());
@@ -138,7 +147,7 @@ public class StationAdsManager extends AbstractManager {
                 res.setBannerInfo(bann);
             }
             // 针对指定的几个淘宝客广告，替换slogan, 不用忧虑修改了innerContent的内容，无妨
-            if(StaticAds.advTBKTitleKey.containsKey(res.getId())) {
+            if (StaticAds.advTBKTitleKey.containsKey(res.getId())) {
                 res.getBannerInfo().setSlogan(CacheUtil.getTBKTitle(res.getId()));
             }
         } else {
@@ -146,14 +155,17 @@ public class StationAdsManager extends AbstractManager {
                     + inner + ",udid=" + advParam.getUdid());
         }
 
+        res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
+        res.dealLink(advParam);
+
         return res;
     }
 
     // app低版本判断
     private boolean isLowPlatfomr(AdvParam advParam) {
         Platform platform = Platform.from(advParam.getS());
-        return ((platform.isAndriod(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_ANDROID_0118) || (platform
-                .isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0117));
+        return ((platform.isAndriod(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_ANDROID_0118)
+                || (platform.isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0117));
     }
 
     @Override
@@ -163,12 +175,11 @@ public class StationAdsManager extends AbstractManager {
     }
 
     public void writeSendLog(AdvParam advParam, StationAdEntity entity) {
-        AnalysisLog
-                .info("[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={}",
-                        entity.buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
-                        advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(),
-                        advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
-                        advParam.getH5User(), advParam.getH5Src());
+        AnalysisLog.info(
+                "[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={}",
+                entity.buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(),
+                advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(), advParam.getNw(), advParam.getIp(),
+                advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getH5User(), advParam.getH5Src());
     }
 
     // 按照权重计算，选择一个广告投放
@@ -177,8 +188,8 @@ public class StationAdsManager extends AbstractManager {
         if (stanAdsList != null && stanAdsList.size() > 0) {
             int totalWeight = 0;
             for (BaseAdEntity entity : stanAdsList) {
-//                logger.info("多个站点广告，选择一个： id={}, title={}, priority={}", entity.getId(), ((StationAdEntity) entity).getTitle(),
-//                        entity.getPriority());
+                //                logger.info("多个站点广告，选择一个： id={}, title={}, priority={}", entity.getId(), ((StationAdEntity) entity).getTitle(),
+                //                        entity.getPriority());
                 if (((StationAdEntity) entity).getBuyOut() == 1) {
                     // 买断的广告按照优先级来， stanAdsList 之前已经按照优先级排序过
                     logger.info("买断的广告, udid={}, advId={}", advParam.getUdid(), entity.getId());
@@ -215,6 +226,16 @@ public class StationAdsManager extends AbstractManager {
         }
 
     };
+
+    // 2018-05-05 ，站点广告，支持原生gdt
+    private StationAdEntity createSDKOpenAds(int adType) {
+        StationAdEntity entity = new StationAdEntity();
+        entity.setId(adType * -1);
+        entity.setProvider_id(adType + "");
+        entity.setOpenType(0); // 页面打开方式，0-内部
+        entity.setType(3); // 第三方广告
+        return entity;
+    }
 
     public static void main(String[] args) {
         // String url =

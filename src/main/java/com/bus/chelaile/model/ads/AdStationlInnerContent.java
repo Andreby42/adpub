@@ -19,6 +19,8 @@ public class AdStationlInnerContent extends AdInnerContent {
 	
 	private String wx_miniPro_id; 
     private String wx_miniPro_path; // 跳转小程序， 2018-04-09
+    
+    private int provider_id; // 广告提供商， 0：自采买广告；8：阅盟；9：Ecoook；10：科大讯飞【其他说明：3 inmobi】
 	
 	@Override
 	protected void parseJson(String jsonr) {
@@ -34,6 +36,7 @@ public class AdStationlInnerContent extends AdInnerContent {
 			this.buyOut = ad.getBuyOut();
 			this.wx_miniPro_id = ad.getWx_miniPro_id();
 			this.wx_miniPro_path = ad.getWx_miniPro_path();
+			this.provider_id = ad.getProvider_id();
 		}
 	}
 
@@ -126,5 +129,13 @@ public class AdStationlInnerContent extends AdInnerContent {
 
     public void setWx_miniPro_path(String wx_miniPro_path) {
         this.wx_miniPro_path = wx_miniPro_path;
+    }
+
+    public int getProvider_id() {
+        return provider_id;
+    }
+
+    public void setProvider_id(int provider_id) {
+        this.provider_id = provider_id;
     }
 }

@@ -46,7 +46,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
     // 2018-04-28更新， 只支持0 OR 1
     private int position = Constants.NULL_POSITION;
 
-    private int provider_id; // 广告提供商， 0 自采买， 1 广点通
+    private int provider_id; // 广告提供商， 0 自采买， 2 广点通
 
     @Override
     public void parseJson(String jsonr) {
