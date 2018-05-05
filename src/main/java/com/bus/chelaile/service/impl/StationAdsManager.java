@@ -1,6 +1,5 @@
 package com.bus.chelaile.service.impl;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -9,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.ClientProtocolException;
 
 import scala.util.Random;
 
@@ -29,7 +27,6 @@ import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdStationlInnerContent;
 import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
-import com.bus.chelaile.model.ads.entity.OpenAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
@@ -236,6 +233,9 @@ public class StationAdsManager extends AbstractManager {
         entity.setProvider_id(adType + "");
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
+        BannerInfo bannerInfo = new BannerInfo();
+        bannerInfo.setBannerType(6);  // 广点通专用样式，文字+标签（文案由客户端自定义）
+        entity.setBannerInfo(bannerInfo);
         return entity;
     }
 

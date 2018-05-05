@@ -3,9 +3,10 @@ package com.bus.chelaile.model.ads;
 public class BannerInfo implements Cloneable{
 
 	private int bannerType; //  banner的5种类型：0 商户简称+广告语； 1 商户简称+广告语+标签； 2 商户简称+广告语+标签(图片)；
-							//3 商户简称+广告语+按钮； 4 商户简称+广告语+按钮(图片)；5 广告语+标签（图片）+按钮（图片）
-							//6 的情况也修改为5
-	                        //5 为口碑券专用，6为淘宝客专用
+							//3 商户简称+广告语+按钮； 4 商户简称+广告语+按钮(图片)；5 广告语+标签（图片）+按钮（图片）；6 广告语+标签 
+							//innerContent为 6 的情况也修改为5
+	                        //5 为口碑券专用，6为普通的广告(口碑券以外）
+	                        //6 目前为第三方广告广点通专用
 	private String name;
 	private String color;
 	private String slogan;

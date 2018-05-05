@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
@@ -73,7 +74,7 @@ public class DoubleAndSingleManager extends AbstractManager {
             } else {
                 AdDoubleInnerContent adInner = (AdDoubleInnerContent) inner;
                 if (adInner.getProvider_id() != 0) { // 如果是第三方广告，加一些版本控制
-                    if (adInner.getProvider_id() != 2) {
+                    if (adInner.getProvider_id() != ProductType.GUANGDIANTONG.getProvider_id()) {
                         // 双栏目前只支持广点通
                         throw new IllegalArgumentException(
                                 "错误的双栏provider_id, advId=" + ad.getAds().getId() + ", provider_id=" + adInner.getProvider_id());
