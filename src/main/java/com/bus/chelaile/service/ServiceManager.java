@@ -274,13 +274,17 @@ public class ServiceManager {
 		QueryParam queryParam = new QueryParam();
 		
 		if(advParam.getType() == TypeNumber.ONE.getType()) {	//type=1 : route_plan_adv
-			BaseAdEntity routeEntity = doubleAndSingleManager.doService(advParam, ShowType.ROUTE_PLAN_ADV, false,
-					queryParam, true);
-			if(routeEntity == null) {
-				return null;
-			}
+//			BaseAdEntity routeEntity = doubleAndSingleManager.doService(advParam, ShowType.ROUTE_PLAN_ADV, false,
+//					queryParam, true);
+//			if(routeEntity == null) {
+//			    return null;
+//			}
+			List<BaseAdEntity> routeEntites = doubleAndSingleManager.doServiceList(advParam, ShowType.ROUTE_PLAN_ADV,
+                    queryParam);
 			List<BaseAdEntity> list = New.arrayList();
-			list.add(routeEntity);
+			if(routeEntites != null && routeEntites.size() > 0) {
+			    list.addAll(routeEntites);
+			}
 			return list;
 		}
 		
