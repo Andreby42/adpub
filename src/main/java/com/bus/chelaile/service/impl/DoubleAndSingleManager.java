@@ -11,7 +11,6 @@ import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdDoubleInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
-import com.bus.chelaile.model.ads.AdStationlInnerContent;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -136,21 +135,33 @@ public class DoubleAndSingleManager extends AbstractManager {
     @Override
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+
+        List<BaseAdEntity> entities = New.arrayList();
+
+        for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+            AdEntity entity = new AdEntity(showType.getValue());
+            AdContentCacheEle ad = null;
+            ad = entry.getValue();
+
+            AdInnerContent inner = ad.getAds().getInnerContent();
+            inner.fillAdEntity(entity, advParam, 0);
+
+            Map<String, String> paramMap = New.hashMap();
+            paramMap.put(Constants.PARAM_STATION_ORDER, String.valueOf(entity.getSindex()));
+            paramMap.put(Constants.PARAM_DISTANCE, String.valueOf(advParam.getDistance()));
+
+            entity.fillBaseInfo(ad.getAds(), advParam, paramMap);
+            entity.dealLink(advParam);
+
+            AnalysisLog.info(
+                    "[ROUTE_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={}",
+                    ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+                    advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(),
+                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance());
+
+            entities.add(entity);
+        }
+
+        return entities;
     }
-
-    //	@Override
-    //	public List<AdContentCacheEle> getAllAdsList(String udid, String accountId) {
-    //		return getCommonsAdsList(udid, accountId, type);
-    //	}
-
-    //	@Override
-    //	public void handleAds(Map<Integer, AdContentCacheEle> adMap,
-    //			List<AdContentCacheEle> adsList, ShowType showType,
-    //			AdvParam advParam, AdPubCacheRecord cacheRecord, boolean isNeedApid) {
-    //		setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid);
-    //
-    //	}
-
 }
