@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
@@ -623,12 +624,16 @@ public abstract class AbstractManager {
     private AdPubCacheRecord gainCacheRecord(AdvParam advParam, ShowType showType) {
         AdPubCacheRecord cacheRecord = null;
         // 放缓存的时候除了线路详情就是双栏
+        long t1 = System.currentTimeMillis();
         if (showType.getType().equals(ShowType.LINE_DETAIL.getType())) {
             cacheRecord = AdvCache.getAdPubRecordFromCache(advParam.getUdid(), ShowType.LINE_DETAIL.getType());
         } else {
             cacheRecord = AdvCache.getAdPubRecordFromCache(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
         }
-
+        long t2 = System.currentTimeMillis();
+        if(t2 - t1 > 50) {
+            TimeLong.info("get from ocs cost time: {}", t2 - t1);
+        }
         if (cacheRecord == null) {
             cacheRecord = new AdPubCacheRecord();
         }
