@@ -74,7 +74,6 @@ public class StationAdsManager extends AbstractManager {
         AdInnerContent inner = ad.getInnerContent();
         if (inner instanceof AdStationlInnerContent) {
             AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
-            logger.info("*************** stationInner={}", JSONObject.toJSONString(stationInner));
             // 第三方特殊处理
             if (stationInner.getProvider_id() > 0) {
                 // 加上版本控制，and， 目前只支持广点通
