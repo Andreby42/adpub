@@ -58,12 +58,13 @@ public class AdContent {
         	stationInner.setAndPaseJson(content);
         	innerContent = stationInner;
         }
-        else if (ShowType.DOUBLE_COLUMN.getType().equals(showType) || ShowType.FLOW_ADV.getType().equals(showType)) { // 双栏广告 || 信息流广告
+        else if (ShowType.DOUBLE_COLUMN.getType().equals(showType) || ShowType.FLOW_ADV.getType().equals(showType) 
+                || ShowType.ROUTE_PLAN_ADV.getType().equals(showType)) { // 双栏广告 || 信息流广告
             AdDoubleInnerContent dblInner = new AdDoubleInnerContent();
             dblInner.setAndPaseJson(content);
             innerContent = dblInner;
         }
-        else if (ShowType.SINGLE_COLUMN.getType().equals(showType) || ShowType.ROUTE_PLAN_ADV.getType().equals(showType)) { // 单栏广告 || 线路规划页广告
+        else if (ShowType.SINGLE_COLUMN.getType().equals(showType)) { // 单栏广告 || 线路规划页广告
             AdSingleInnerContent singleInner = new AdSingleInnerContent();
             singleInner.setAndPaseJson(content);
             innerContent = singleInner;
