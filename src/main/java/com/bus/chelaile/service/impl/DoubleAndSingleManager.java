@@ -110,22 +110,22 @@ public class DoubleAndSingleManager extends AbstractManager {
 
         if (showType == ShowType.SINGLE_COLUMN) {
             AnalysisLog.info(
-                    "[LINE_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={}",
+                    "[LINE_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={},provider_id={}",
                     ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
                     advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(),
-                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance());
+                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),entity.getProvider_id());
         } else if (showType == ShowType.DOUBLE_COLUMN) {
             AnalysisLog.info(
-                    "[STATION_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={}",
+                    "[STATION_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={},provider_id={}",
                     ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
                     advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(),
-                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance());
+                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),entity.getProvider_id());
         } else {
             AnalysisLog.info(
-                    "[ROUTE_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={}",
+                    "[ROUTE_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={},provider_id={}",
                     ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
                     advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(),
-                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance());
+                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),entity.getProvider_id());
         }
 
         return entity;

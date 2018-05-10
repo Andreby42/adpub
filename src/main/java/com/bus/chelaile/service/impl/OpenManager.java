@@ -60,10 +60,10 @@ public class OpenManager extends AbstractManager {
                 entity = getSelfAdEntity(advParam, cacheRecord, entry.getValue(), showType, queryParam);
                 if (isRecord) {
                     AnalysisLog.info(
-                            "[OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}",
+                            "[OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
                             entity.getId(), showType.getType(), entry.getValue().getAds().getTitle(), advParam.getUserId(),
                             advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getS(), advParam.getV(),
-                            advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat());
+                            advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), entity.getProvider_id());
                 }
 
                 return entity;

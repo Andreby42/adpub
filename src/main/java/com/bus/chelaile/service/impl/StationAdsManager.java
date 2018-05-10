@@ -175,10 +175,10 @@ public class StationAdsManager extends AbstractManager {
 
     public void writeSendLog(AdvParam advParam, StationAdEntity entity) {
         AnalysisLog.info(
-                "[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={}",
+                "[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={},provider_id={}",
                 entity.buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(),
                 advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(), advParam.getNw(), advParam.getIp(),
-                advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getH5User(), advParam.getH5Src());
+                advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getH5User(), advParam.getH5Src(), entity.getProvider_id());
     }
 
     // 按照权重计算，选择一个广告投放
@@ -233,6 +233,7 @@ public class StationAdsManager extends AbstractManager {
         entity.setProvider_id(adType + "");
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
+        entity.setTitle(ad.getTitle());
         
         BannerInfo bannerInfo = new BannerInfo();
         bannerInfo.setBannerType(4);  // 广点通专用样式，文字+标签（文案由客户端自定义）
