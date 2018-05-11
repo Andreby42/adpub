@@ -43,7 +43,8 @@ public class BusAdvAction extends AbstractController {
     private ServiceManager serviceManager;
 
     private static final Logger log = LoggerFactory.getLogger(BusAdvAction.class);
-
+    private static final  String TINGYUN_SWITCH = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "tingyunSwitch", "1");
+    
     @ResponseBody
     @RequestMapping(value = "adv!getLineDetailAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public String getLineDetailAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
@@ -194,6 +195,7 @@ public class BusAdvAction extends AbstractController {
 
     /*
      * swSwitch
+     * 
      */
     @ResponseBody
     @RequestMapping(value = "adv!getSwSwitch.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -201,13 +203,30 @@ public class BusAdvAction extends AbstractController {
         log.info("[entergetSwSwitch]");
         String swSwitch = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "swSwitch", "1");
         if (StringUtils.isBlank(swSwitch))
-            return serviceManager.getClientErrMap("", Constants.STATUS_NO_DATA);
+            return serviceManager.getClientErrMap("", Constants.STATUS_INTERNAL_ERROR);
         JSONObject sw = new JSONObject();
+        // 饭饭交代，不能够返回0，也不能够返回空data。 否则会crash!!!
         sw.put("switch", swSwitch);
 
         return serviceManager.getClienSucMap(sw, Constants.STATUS_REQUEST_SUCCESS);
     }
 
+    /*
+     * tingyunSwitch
+     * 
+     */
+    @ResponseBody
+    @RequestMapping(value = "adv!getTYSwitch.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    public String getTYSwitch(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        log.info("[entergetSwSwitch]");
+        if (StringUtils.isBlank(TINGYUN_SWITCH))
+            return serviceManager.getClientErrMap("", Constants.STATUS_INTERNAL_ERROR);
+        JSONObject ty = new JSONObject();
+        ty.put("switch", TINGYUN_SWITCH);
+
+        return serviceManager.getClienSucMap(ty, Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
     /*
      * uninterest
      */
