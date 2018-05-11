@@ -43,7 +43,7 @@ public class BusAdvAction extends AbstractController {
     private ServiceManager serviceManager;
 
     private static final Logger log = LoggerFactory.getLogger(BusAdvAction.class);
-    private static final  String TINGYUN_SWITCH = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "tingyunSwitch", "1");
+    private static final  int TINGYUN_SWITCH = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "tingyunSwitch", "1"));
     
     @ResponseBody
     @RequestMapping(value = "adv!getLineDetailAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -218,9 +218,7 @@ public class BusAdvAction extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "adv!getTYSwitch.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public String getTYSwitch(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-        log.info("[entergetSwSwitch]");
-        if (StringUtils.isBlank(TINGYUN_SWITCH))
-            return serviceManager.getClientErrMap("", Constants.STATUS_INTERNAL_ERROR);
+        log.info("[entergetTYSwitch]");
         JSONObject ty = new JSONObject();
         ty.put("switch", TINGYUN_SWITCH);
 
