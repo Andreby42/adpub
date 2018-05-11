@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.PropertiesName;
+import com.bus.chelaile.model.TypeNumber;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.GpsUtils;
@@ -39,6 +40,8 @@ public class AdDoubleInnerContent extends AdInnerContent {
     private String tagId; //话题标签id
     private String feedId; //话题详情页id
 
+    private String desc; //
+    
     /**
     * 站级别位置，双栏广告的显示位置：第n位， 0表示第一条线前面（首位），
     * 1表示第一条线后面，2表示第二条线后面，等，而-1表示最后一条线后面（末位）。
@@ -74,6 +77,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
             this.feedId = ad.feedId;
 
             this.provider_id = ad.provider_id;
+            this.desc = ad.desc;
         }
     }
 
@@ -112,6 +116,9 @@ public class AdDoubleInnerContent extends AdInnerContent {
         adEntity.setButtonTitle(nullToEmpty(this.buttonTitle));
         adEntity.setButtonColor(nullToEmpty(this.buttonColor));
         adEntity.setFeedId(this.getFeedId());
+        if(param.getType() == TypeNumber.ONE.getType()) { // type=1：线路规划页广告
+            adEntity.setDesc(this.desc);
+        }
         if (this.tag != null && this.tagId != null) {
             adEntity.setTag(new Tag(this.tag, this.getTagId()));
         }
@@ -309,5 +316,13 @@ public class AdDoubleInnerContent extends AdInnerContent {
 
     public void setProvider_id(int provider_id) {
         this.provider_id = provider_id;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }
