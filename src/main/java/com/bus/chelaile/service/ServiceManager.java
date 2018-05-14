@@ -371,16 +371,20 @@ public class ServiceManager {
 		}
 		
         // 客户端上传了合法的屏幕高度
+		long costTime1 = System.currentTimeMillis();
         if (advParam.getScreenHeight() > 0 && StringUtils.isNoneBlank(advParam.getUdid())
                 && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
             String screenHeightKey = AdvCache.getScreenHeightKey(advParam.getUdid());
             CacheUtil.setToRedis(screenHeightKey, Constants.SEVEN_DAY_TIME, String.valueOf(advParam.getScreenHeight()));
         }
-		
+        long costTime2 = System.currentTimeMillis();
+		logger.info("cost2={}", costTime2 - costTime1);
 		BaseAdEntity stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
-		
+		long costTime3 = System.currentTimeMillis();
+        logger.info("cost3={}", costTime3 - costTime2);
 		BaseAdEntity lineAds = lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
-
+		long costTime4 = System.currentTimeMillis();
+        logger.info("cost4={}", costTime4 - costTime3);
 		// 0208以前的版本，都只返回一条广告
 		// 如果站点和详情页同时存在，需要做一下优先级对比
 		if(onlyOneAdCheck(advParam)) {
@@ -420,6 +424,8 @@ public class ServiceManager {
 				}
 			}
 		}
+		long costTime5 = System.currentTimeMillis();
+        logger.info("cost5={}", costTime5 - costTime4);
 		return object;
 	}
 
