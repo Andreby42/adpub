@@ -34,8 +34,6 @@ public class InfoStreamDispatcher {
 
 	@Autowired
 	private ToutiaoHelp toutiaoHelp;
-	@Autowired
-	private LinkActiveHelp linkActiveHelp;
 
 	private static final String TOPIC_ID = "nginx_log";
 	private static final String GROUP_ID = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "group_id",
@@ -59,19 +57,18 @@ public class InfoStreamDispatcher {
 		if (Constants.ISTEST) {
 			maidian_log = Constants.TEST_MAIDIAN_LOG;
 		}
-		if (str.contains(Constants.AD_DOMAIN_NAME) && str.contains(Constants.TOUTIAO_CLICK_KEYWORD)) { // 头条点击
-			return Constants.ROW_TOUTIAO_CLICK;
-		} 
-		else if(str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
+		if(str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
 			return Constants.ROW_OPEN_ADV_EXHIBIT;
+		} else if(str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
+		    return Constants.ROW_WXAPP_ADV_CLICK_MAIDIAN;
 		}
 			
 //		else if (str.contains(Constants.LINEDETAIL)) {
 //			return Constants.ROW_LINEDETAIL;
 //		}
-		else if (str.contains(maidian_log) && str.contains(Constants.APP_INFO_LOG)) { 	// 用户安装了哪些app的埋点
-			return Constants.ROW_APP_INFO;
-		} 
+//		else if (str.contains(maidian_log) && str.contains(Constants.APP_INFO_LOG)) { 	// 用户安装了哪些app的埋点
+//			return Constants.ROW_APP_INFO;
+//		} 
 		else {
 			return Constants.ROW_SKIP;
 		}
@@ -95,6 +92,9 @@ public class InfoStreamDispatcher {
 		} else if (filterCode == Constants.ROW_OPEN_ADV_EXHIBIT) {
 			logger.info("<Info-Stream> 收到开屏广告展示日志：{}", line);
 			analysisOpenAdvExhibit(line);
+		} else if (filterCode == Constants.ROW_WXAPP_ADV_CLICK_MAIDIAN) {
+		    logger.info("<Info-Stream> 收到小程序的广告点击埋点日志：{}", line);
+		    InfoStreamHelp.analysisWXAppClick(line);
 		}
 		// else if (filterCode == Constants.ROW_APP_INFO) {
 		// linkActiveHelp.analysisMaidian(line);

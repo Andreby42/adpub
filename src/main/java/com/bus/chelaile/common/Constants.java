@@ -97,6 +97,7 @@ public class Constants {
 	public static final int ROW_APP_INFO = 7;
 	public static final int ROW_LINEDETAIL = 8;
 	public static final int ROW_OPEN_ADV_EXHIBIT = 9; // 开屏广告展示
+	public static final int ROW_WXAPP_ADV_CLICK_MAIDIAN = 10; // 广告点击
 
 	public static final String UC_ACTION_NAME = "adpub/adv!getUCArticles.action";
 	public static final String AD_DOMAIN_NAME = "ad.chelaile.net.cn ";	//第三方广告跳转链接，redirect只用于我们自己内部的活动跳转
@@ -109,6 +110,7 @@ public class Constants {
 	public static final String USER_ID_REG_EX = "&udid=(.*?)&";
 	public static final String ARTICLE_ID_REG_EX = "&aid=(.*?)&";
 	public static final String ADV_EXHIBIT = "ADV_EXHIBIT";
+	public static final String ADV_CLICK = "ADV_CLICK";
 	public static final String APP_INFO_LOG = "APP_INFO";
 	public static final String LINEDETAIL = "/bus/line!lineDetail.action";
 	public static final String FOR_DEVELOP_EXHIBIT = "FOR_DEVELOP_EXHIBIT";		//开屏广告展示失败的埋点。这个数据可能会影响到点击数统计，so需要滤掉
@@ -122,6 +124,7 @@ public class Constants {
     public static final String STATSACT_REVERSE = "reverse";
     
     public static final String CSHOW_LINEDETAIL = "linedetail";		// cshow参数值
+    public static final CharSequence WXAPP_SRC = "src:weixinapp_cx"; // 小程序 src
     
     // redis 分布式锁
     public static final int EXPIREMSECS = 1000;		// 1 S

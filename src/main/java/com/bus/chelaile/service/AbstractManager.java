@@ -278,8 +278,8 @@ public abstract class AbstractManager {
         }
         
         if (rule.getScreenHeight() > 0 && advParam.getScreenHeight() < rule.getScreenHeight()) {
-            logger.info("screenHeithg return false. rule={}, udid={}, height={}", rule.getRuleId(), advParam.getUdid(),
-                    advParam.getScreenHeight());
+            logger.info("screenHeithg return false. rule={}, s={}, udid={}, height={}", rule.getRuleId(), advParam.getS(),
+                    advParam.getUdid(), advParam.getScreenHeight());
             return false;
         }
 

@@ -81,6 +81,13 @@ public class InfoStreamHelp {
 		}
 
 	}
+	
+	
+	
+    public static void analysisWXAppClick(String line) {
+        // TODO Auto-generated method stub
+
+    }
 
 	/*
 	 * 将点击记录，存储到缓存中
@@ -131,114 +138,6 @@ public class InfoStreamHelp {
 		}
 	}
 
-	/*
-	 * 解析 文章点击埋点日志
-	 */
-//	public static analysisMaidian(String msg) {
-//
-//		try {
-//			String line = URLDecoder.decode(msg, "utf-8");
-//			Pattern pattern = Pattern.compile("<" + Constants.ARTICLE_CLICK + ">(.*)");
-//			Matcher matcher = pattern.matcher(line);
-//			Map<String, String> parameterMap = new HashMap<String, String>();
-//			if (matcher.find()) {
-//				String parameterS = matcher.group(1);
-//				parameterMap = arrayToMap(parameterS.split("\\|#"), ":");
-//			} else {
-//				logger.error("匹配日志出错：{}", line);
-//				return;
-//			}
-//			String udid = parameterMap.get("udid");
-//			String newsId = parameterMap.get("article_id");
-//			String newsType = parameterMap.get("article_type");
-//			// String subType = parameterMap.get("sub_type");
-//
-//			if (udid == null || newsId == null || newsType == null) {
-//				logger.error("udid,news_id,news_type 三者有字段为空: msg={}", msg);
-//				return;
-//			}
-//
-//			// 根据信息流点击，计算top点击
-//			if (udid != null && newsId != null) {
-//				if (!blacklist.containsKey(udid)) {
-//					blacklist.put(udid, new HashSet<String>());
-//				}
-//				blacklist.get(udid).add(newsId);
-//				// logger.info("<Info-Stream top-k>: Click log - {} clicked {}",
-//				// udid, newsId);
-//
-//				String contentStr = (String) CacheUtil.getNew("ARTICLE#" + newsId);
-//				// 只有在top文章被缓存的时候才算数
-//				if (contentStr != null) {
-//					UcContent uc = JSON.parseObject(contentStr, UcContent.class);
-//					AnalysisLog.info("<Info-Stream top-k>: click article info:udid={},({}) ({}) ({})", udid,
-//							uc.getId(), uc.getTitle(), uc.getUrl());
-//					// 记录用户点击
-//				}
-//
-//				// 统计文章的访问量，为之后找出top xx的文章做准备
-//				if (wholeDayVisits.containsKey(newsId)) {
-//					wholeDayVisits.put(newsId, wholeDayVisits.get(newsId) + 1);
-//				} else {
-//					wholeDayVisits.put(newsId, 1);
-//				}
-//
-//				if (currentHourVisits.containsKey(newsId)) {
-//					currentHourVisits.put(newsId, currentHourVisits.get(newsId) + 1);
-//				} else {
-//					currentHourVisits.put(newsId, 1);
-//				}
-//
-//			}
-//
-//			try {
-//				// 记录点击信息流文章的情况
-//				StreamFormData streamData = new StreamFormData(newsId, Integer.parseInt(newsType));
-//				handleClickToOcs(streamData, udid);
-//			} catch (Exception e) {
-//				logger.error("点击数据入ocs错误 ", e, e.getMessage());
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			logger.error("解析埋点日志出错", e, e.getMessage());
-//		}
-//
-//	}
-
-	/*
-	 * 点击结果入缓存
-	 */
-//	public static handleClickToOcs(StreamFormData streamData, String udid) {
-//		// 详情
-//		String keyInfo = AdvCache.getStreamClickInfoKey(udid);
-//		String valueInfo = (String) CacheUtil.getNew(keyInfo);
-//		StreamForm streamForm = new StreamForm(); // 存入ocs的结构
-//		try {
-//			if (null != valueInfo) {
-//				streamForm = JSON.parseObject(valueInfo, StreamForm.class);
-//			}
-//		} catch (Exception e) {
-//			CacheUtil.deleteNew(keyInfo);
-//			logger.error("用户 stream click 转换出错, udid={}, streamFormStr={}", udid, valueInfo);
-//			logger.error(e.getMessage(), e);
-//			return;
-//		}
-//
-//		// 如果记录不是当天的，清除掉
-//		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
-//		if (streamForm != null && !streamForm.getDay().equals(todayStr)) {
-//			streamForm.clearData();
-//			streamForm.setNumber(0);
-//		}
-//
-//		streamForm.setDay(todayStr); // 日期是当天
-//		streamForm.addData(streamData);
-//		streamForm.setNumber(streamForm.getNumber() + 1); // 数目加一,初始值是0
-//
-//		CacheUtil.setNew(keyInfo, curDayCacheExpireTime, JSON.toJSONString(streamForm));
-//
-//	}
 	
 	/*
 	 * 将日志参数临时转为map
