@@ -76,6 +76,8 @@ public class Rule {
 	
 	private long minIntervalTime; // 开屏广告最小投放时间间隔， 单位：min转成的毫秒
 	private int minIntervalPages;	// feed流广告最小投放间隔，单位：次。
+	
+	private int screenHeight; // 屏幕高度
 
 	protected static final Logger logger = LoggerFactory.getLogger(Rule.class);
 
@@ -1011,5 +1013,13 @@ public class Rule {
 
     public void setPclickCount(int pclickCount) {
         this.pclickCount = pclickCount;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    public void setScreenHeight(int screenHeight) {
+        this.screenHeight = screenHeight;
     }
 }

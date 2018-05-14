@@ -370,6 +370,13 @@ public class ServiceManager {
 			isNeedApid = true;
 		}
 		
+        // 客户端上传了合法的屏幕高度
+        if (advParam.getScreenHeight() > 0 && StringUtils.isNoneBlank(advParam.getUdid())
+                && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
+            String screenHeightKey = AdvCache.getScreenHeightKey(advParam.getUdid());
+            CacheUtil.setToRedis(screenHeightKey, Constants.SEVEN_DAY_TIME, String.valueOf(advParam.getScreenHeight()));
+        }
+		
 		BaseAdEntity stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
 		
 		BaseAdEntity lineAds = lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
@@ -445,6 +452,23 @@ public class ServiceManager {
 	 */
 	public List<FeedAdEntity> getFeedAds(AdvParam advParam) throws Exception {
 		QueryParam queryParam = new QueryParam();
+		
+		// 从缓存获取屏幕高度
+        if (StringUtils.isNoneBlank(advParam.getUdid())
+                && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
+            String screenHeightKey = AdvCache.getScreenHeightKey(advParam.getUdid());
+            String height = (String)CacheUtil.getFromRedis(screenHeightKey);
+            if(height != null) {
+                int screenHeight = -1;
+                try {
+                    screenHeight = Integer.parseInt(height);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                advParam.setScreenHeight(screenHeight);
+            }
+            
+        }
 		
 		return feedAdsManager.doFeedAdService(advParam, ShowType.FEED_ADV, false, queryParam, true);
 	}

@@ -196,6 +196,7 @@ public class RuleEngine {
             rule.setRightPushNum(getChildAsInt(rInfo, "rightPushNum")+"");
             rule.setBlackList(getChildAsText(rInfo, "blackList"));
             rule.setUdidPattern(getChildAsText(rInfo, "udidPattern"));
+            rule.setScreenHeight(getChildAsInt(rInfo, "screenHeight"));
             List<Position> positions = parseGpsList(rInfo);
             if (positions != null && positions.size() > 0) {
             	rule.setGpsList(positions);

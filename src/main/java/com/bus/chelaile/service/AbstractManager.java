@@ -276,6 +276,12 @@ public abstract class AbstractManager {
             //			logger.info("isUserTypeMatch return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
             return false;
         }
+        
+        if (rule.getScreenHeight() > 0 && advParam.getScreenHeight() < rule.getScreenHeight()) {
+            logger.info("screenHeithg return false. rule={}, udid={}, height={}", rule.getRuleId(), advParam.getUdid(),
+                    advParam.getScreenHeight());
+            return false;
+        }
 
         if (!rule.isLineStationMap(advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(), advParam.getUdid())) {
             logger.info("isLineStationMap return false,ruleId={},lineId={},stnName={},order={},udid={}", rule.getRuleId(),

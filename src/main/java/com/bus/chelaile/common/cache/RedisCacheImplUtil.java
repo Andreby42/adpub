@@ -11,15 +11,6 @@ import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
-
-
-
-
-
-
-
-
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
