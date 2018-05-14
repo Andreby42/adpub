@@ -78,13 +78,16 @@ public class StationAdsManager extends AbstractManager {
             if (stationInner.getProvider_id() > 0) {
                 // 加上版本控制，and， 目前只支持广点通
                 if (stationInner.getProvider_id() == ProductType.GUANGDIANTONG.getProvider_id()
-                        && advParam.getS().equalsIgnoreCase("android")
-                        && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505) {
+                        && ((advParam.getS().equalsIgnoreCase("android")
+                                && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505)
+                        || (advParam.getS().equalsIgnoreCase("ios")
+                                && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0514))
+                        ) {
                     res = createSDKOpenAds(stationInner.getProvider_id(), ad);
                     return res;
                 } else
                     logger.error("不合适的版本，或者不合适的第三方广告类型，udid={}", advParam.getUdid());
-                    return null;
+                return null;
             }
 
             res.setTitle(ad.getTitle());
