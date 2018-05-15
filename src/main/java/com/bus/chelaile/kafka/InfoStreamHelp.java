@@ -66,8 +66,7 @@ public class InfoStreamHelp {
 				return;
 			}
 			
-			// 存储点击次数到redis,同样只保存一天
-			
+			// 广告总点击次数
 			QueueObject queueobj = new QueueObject();
 			queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
 			Queue.set(queueobj);
@@ -92,7 +91,7 @@ public class InfoStreamHelp {
 	/*
 	 * 将点击记录，存储到缓存中
 	 */
-	private static void setClickToRecord(String advId, String udid) {
+	public static void setClickToRecord(String advId, String udid) {
 		AdPubCacheRecord cacheRecord = null;
 		// 放缓存的时候除了线路详情就是双栏
 		String showType = StaticAds.allAds.get(advId).getShowType();
@@ -175,4 +174,5 @@ public class InfoStreamHelp {
 		analysisClick(s);
 		
 	}
+
 }

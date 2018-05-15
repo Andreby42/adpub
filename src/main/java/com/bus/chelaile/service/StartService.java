@@ -19,7 +19,8 @@ import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
-import com.bus.chelaile.kafka.InfoSteamForAdvClick;
+import com.bus.chelaile.kafka.InfoStreamForAdvClick;
+import com.bus.chelaile.kafka.InfoStreamForMaidianLogs;
 import com.bus.chelaile.kafka.InfoStreamDispatcher;
 import com.bus.chelaile.linkActive.LinkActiveHelp;
 import com.bus.chelaile.model.PropertiesName;
@@ -45,11 +46,11 @@ public class StartService {
 	@Autowired
 	private ActivityService activityService;
 	@Autowired
-	private InfoStreamDispatcher infoStreamDispatcher;
+	private InfoStreamForMaidianLogs infoSteamForMaidianLogs;
 	@Autowired
-	private InfoSteamForAdvClick infoSteamForAdvClick;
-	@Autowired
-	private LinkActiveHelp linkActiveHelp;
+	private InfoStreamForAdvClick infoSteamForAdvClick;
+//	@Autowired
+//	private LinkActiveHelp linkActiveHelp;
 	@Autowired
 	private DynamicRegulation dynamicRegulation;
 
@@ -64,8 +65,9 @@ public class StartService {
 		StaticAds.init();
 		activityService.initActivitity (); // 信息流活动初始化
 		try{
-			infoStreamDispatcher.readKafka();
-			infoSteamForAdvClick.readKafka();
+//			infoStreamDispatcher.readKafka();
+			infoSteamForAdvClick.readKafka();     // 广告点击日志
+			infoSteamForMaidianLogs.readKafka();  // 埋点日志
 		} catch(Exception e) {
 			e.printStackTrace();
 			logger.error("启动kafka出错！ e={}", e.getMessage());

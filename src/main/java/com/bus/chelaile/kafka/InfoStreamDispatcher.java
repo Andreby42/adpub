@@ -14,7 +14,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.flow.ToutiaoHelp;
-import com.bus.chelaile.linkActive.LinkActiveHelp;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -30,6 +29,11 @@ import com.chelaile.logcenter2.sdk.kafka.consumer.ConsumerCallbackWorker;
 /**
  * Created by tingx on 2016/12/20.
  */
+/**
+ *  2018-05-15 不再用了
+ * @author Administrator
+ *
+ */
 public class InfoStreamDispatcher {
 
 	@Autowired
@@ -39,11 +43,11 @@ public class InfoStreamDispatcher {
 	private static final String GROUP_ID = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "group_id",
 			"info_flow_log");
 
-	public static final Object KAFKA_LOCK = new Object();
-	public volatile static boolean kafkaStarted = false;
-	public static final Logger logger = LoggerFactory.getLogger(InfoStreamDispatcher.class);
+	private static final Object KAFKA_LOCK = new Object();
+	private volatile static boolean kafkaStarted = false;
+	private static final Logger logger = LoggerFactory.getLogger(InfoStreamDispatcher.class);
 
-	public static ExecutorService logAnalysisExec = Executors.newFixedThreadPool(5); // 固定5个线程执行解析的任务。
+	private static ExecutorService logAnalysisExec = Executors.newFixedThreadPool(5); // 固定5个线程执行解析的任务。
 
 	public InfoStreamDispatcher() {
 	}
