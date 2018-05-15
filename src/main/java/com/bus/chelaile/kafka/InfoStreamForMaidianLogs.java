@@ -60,7 +60,7 @@ public class InfoStreamForMaidianLogs {
 		        	threadNumber ++;
 		        }
 					
-				logger.info("<Info-Stream top-k>: InfoStreamDispatcher 埋点日志 分发者客户端成功启动");
+				logger.info("<Info-Stream top-k>: InfoStreamDispatcher ************************** 埋点日志 分发者客户端成功启动");
 				
 				} catch (Exception e) {
 					logger.error("<Info-Stream top-k>: 启动Kafka客户端错误：" + e.getMessage(), e);

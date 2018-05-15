@@ -62,6 +62,7 @@ public class MaidianLogsHandle implements Runnable {
             maidian_log = Constants.TEST_MAIDIAN_LOG;
         }
         if (str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
+            logger.info("读到展示埋点日志： str={}", str);
             analysisOpenAdvExhibit(str);
         } else if (str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
             analysisWXAppClick(str);
