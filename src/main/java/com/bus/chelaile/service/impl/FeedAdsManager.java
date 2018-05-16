@@ -85,14 +85,16 @@ public class FeedAdsManager extends AbstractManager {
 							advParam.getLng(), advParam.getLat(),entity.getProvider_id());
 
 			cacheRecord.setNoFeedAdHistoryMap(ids);
+			
+			// 置顶位，只需要一个广告
+			if(advParam.getIsTop() == 1) {
+			    RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
+			    return entities;
+			}
 		}
+		
 		
 		RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
-		
-		// 置顶位，只需要一个广告
-		if(advParam.getIsTop() == 1) {
-		    return entities;
-		}
 		return entities;
 	}
 
