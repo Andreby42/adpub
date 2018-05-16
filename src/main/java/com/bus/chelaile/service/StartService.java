@@ -20,7 +20,6 @@ import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.kafka.InfoStreamForAdvClick;
-import com.bus.chelaile.kafka.InfoStreamForMaidianLogs;
 import com.bus.chelaile.kafka.InfoStreamDispatcher;
 import com.bus.chelaile.linkActive.LinkActiveHelp;
 import com.bus.chelaile.model.PropertiesName;
@@ -45,8 +44,6 @@ public class StartService {
 	private AppAdvContentMapper advContent;
 	@Autowired
 	private ActivityService activityService;
-	@Autowired
-	private InfoStreamForMaidianLogs infoSteamForMaidianLogs;
 	@Autowired
 	private InfoStreamForAdvClick infoSteamForAdvClick;
 //	@Autowired
