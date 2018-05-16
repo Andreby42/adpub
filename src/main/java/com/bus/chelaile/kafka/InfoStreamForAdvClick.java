@@ -43,20 +43,21 @@ public class InfoStreamForAdvClick {
 				return;
 			}
 			try {
-//				ConsumerConfig config = createConsumerConfig(GROUP_ID);
-//
-//				consumer = kafka.consumer.Consumer.createJavaConsumerConnector(config);
-//
-//				Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
-//				topicCountMap.put(TOPIC_ID, new Integer(1));
-//
-//				Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
-//		        List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(TOPIC_ID);
-//		        int threadNumber = 0;
-//		        for (KafkaStream<byte[], byte[]> stream : streams) {
-//		        	adClickLogExec.execute(new ConsumerHandle(stream, threadNumber));
-//		        	threadNumber ++;
-//		        }
+			    // 点击
+				ConsumerConfig config = createConsumerConfig(GROUP_ID);
+
+				consumer = kafka.consumer.Consumer.createJavaConsumerConnector(config);
+
+				Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
+				topicCountMap.put(TOPIC_ID, new Integer(1));
+
+				Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
+		        List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(TOPIC_ID);
+		        int threadNumber = 0;
+		        for (KafkaStream<byte[], byte[]> stream : streams) {
+		        	adClickLogExec.execute(new ConsumerHandle(stream, threadNumber));
+		        	threadNumber ++;
+		        }
 					
 		        
 		        // 埋点

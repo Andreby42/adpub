@@ -140,13 +140,9 @@ public class MaidianLogsHandle implements Runnable {
     }
 
     private Map<String, String> preHandleMaidianLog(String line) {
-        String[] segs = line.split(" \\|# ");
-        String content = segs[3].trim();
-        int endIdx = content.lastIndexOf(" ");
-        content = content.substring(0, endIdx);
         String encodedURL = null;
         try {
-            encodedURL = URLDecoder.decode(content, "UTF-8");
+            encodedURL = URLDecoder.decode(line, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
@@ -160,7 +156,7 @@ public class MaidianLogsHandle implements Runnable {
             index = encodedURL.indexOf("ADV_CLICK");
             params = paramsAnalysis(encodedURL.substring(index + 10));
         }
-        System.out.println(encodedURL.substring(index + 12));
+//        System.out.println(encodedURL.substring(index + 12));
 
         return params;
     }
@@ -180,5 +176,12 @@ public class MaidianLogsHandle implements Runnable {
             }
         }
         return params;
+    }
+    
+    public static void main(String[] args) {
+//        String s = "May 16 18:00:00 web1 nginx: 112.97.52.202 |# - |# 2018-05-16 18:00:00 |# 200 |# 0.000 |# 67 |# - |# Dalvik/2.1.0 (Linux; U; Android 7.1.2; Redmi 5 Plus MIUI/V9.5.4.0.NEGCNFA) |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_EXHIBIT>adv_id:14317 |# s:android |# last_src:app_xiaomi_store |# stats_referer:recommend |# push_open:1 |# stats_act:pull_refresh |# userId:unknown |# provider_id:1 |# geo_lt:4 |# geo_lat:22.783977 |# line_id:075288966572 |# sv:7.1.2 |# vc:103 |# v:3.50.2 |# secret:6cf5b4d8dfe44b9cbef6b85b71efa3c6 |# imei:868027038762880 |# udid:dda482b3-380f-4fec-bd5f-e25ae177e334 |# stn_name:"
+//                + " dafsadf |# cityId:016 |# ad_switch:7 |# adv_type:5 |# wifi_open:1 |# deviceType:Redmi 5 Plus |# mac:02:00:00:00:00:00 |# geo_type:gcj |# lchsrc:icon |# nw:MOBILE_LTE |# AndroidID:6b55ddbb67ad3962 |# api_type:0 |# stn_order:16 |# geo_lac:25.0 |# accountId:54842956 |# language:1 |# first_src:app_xiaomi_store |# geo_lng:114.46562 |# https";
+//        
+//        preHandleMaidianLog(s);
     }
 }

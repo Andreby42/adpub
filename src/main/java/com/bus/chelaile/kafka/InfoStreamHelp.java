@@ -57,6 +57,7 @@ public class InfoStreamHelp {
 				logger.info("广告为空 line={}", line);
 				return;
 			}
+			logger.info("点击日志解析结果： advId={}, udid={}", advId, udid);
 //			System.out.println(advId);
 //			System.out.println(udid);
 			if(StaticAds.allAds.get(advId) == null) {
