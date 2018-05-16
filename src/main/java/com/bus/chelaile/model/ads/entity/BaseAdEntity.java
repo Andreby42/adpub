@@ -268,7 +268,8 @@ public abstract class BaseAdEntity {
 				url = url.replace("__MAC__", mac);
 			}
 			if (ua != null) {
-				url = url.replace("__UA__", AdvUtil.encodeUrl(AdvUtil.encodeUrl(AdvUtil.encodeUrl(ua))));		 // UA需要做一下encode
+			    logger.info("准备替换的ua值={}", ua);
+				url = url.replace("__UA__", AdvUtil.encodeUrl(ua));		 // UA需要做一下encode
 			}
 			 url = url.replace("__TS__", System.currentTimeMillis() + "");
 			logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
@@ -380,6 +381,7 @@ public abstract class BaseAdEntity {
 		String ua1 = "Mozilla/5.0+(Linux;+Android+8.0.0;+MI+6+Build/OPR1.170623.027;+wv)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Version/4.0+Chrome/62.0.3202.84+Mobile+Safari/537.36";
 		System.out.println(AdvUtil.encodeUrl(ua1));
 		System.out.println(AdvUtil.encodeUrl(AdvUtil.encodeUrl(ua1)));
+		System.out.println(AdvUtil.encodeUrl(AdvUtil.encodeUrl(AdvUtil.encodeUrl(ua1))));
 	}
 
 	public int getPriority() {
