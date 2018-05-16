@@ -98,9 +98,7 @@ public class FeedAdsManager extends AbstractManager {
 
 	private FeedAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType, Date date) {
 		FeedAdEntity res = new FeedAdEntity();
-		
-		// 第三方广告处理
-		// 只有置顶位才返回这个
+	
 		AdFeedInnerContent feedInner1 = (AdFeedInnerContent) ad.getInnerContent();
 		if(feedInner1.getIsSetTop() != advParam.getIsTop()) {  // 是否置顶，不匹配
 		    return null;
@@ -109,6 +107,9 @@ public class FeedAdsManager extends AbstractManager {
 		    return null;
 		}
 		
+		
+		// 第三方广告处理
+		// 只有置顶位才返回这个
 		if(feedInner1.getProvider_id() > 0 && advParam.getIsTop() == 1) {
 		    res = createSDKAds(feedInner1, ad);
             return res;
@@ -260,6 +261,10 @@ public class FeedAdsManager extends AbstractManager {
         entity.setTitle(ad.getTitle());
         entity.setApi_type(inner.getApi_type());
         entity.setIsSetTop(1);
+        if(inner.getApi_type() == 1) {  // 原生广告设置样式
+            entity.setFeedAdType(2);
+            entity.setImgsType(1);
+        }
         
         return entity;
     }
