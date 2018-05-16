@@ -266,9 +266,12 @@ public class FeedAdsManager extends AbstractManager {
         entity.setTitle(ad.getTitle());
         entity.setApi_type(inner.getApi_type());
         entity.setIsSetTop(1);
-        if(inner.getApi_type() == 1) {  // 原生广告设置样式
+        if(inner.getApi_type() == 1) {  // gdt 原生广告设置样式
             entity.setFeedAdType(2);
-            entity.setImgsType(1);
+            entity.setImgsType(1);  // 单独小图
+        } else if(inner.getApi_type() == 2){ // gdt banner样式
+            entity.setFeedAdType(3);
+            entity.setImgsType(4); // 宽图窄图
         }
         
         return entity;
