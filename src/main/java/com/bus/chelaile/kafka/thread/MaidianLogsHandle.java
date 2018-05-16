@@ -63,9 +63,17 @@ public class MaidianLogsHandle implements Runnable {
         }
         if (str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
             logger.info("读到展示埋点日志： str={}", str);
-            analysisOpenAdvExhibit(str);
+            try {
+                analysisOpenAdvExhibit(str);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
-            analysisWXAppClick(str);
+            try {
+                analysisWXAppClick(str);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             return;
         }
@@ -128,6 +136,8 @@ public class MaidianLogsHandle implements Runnable {
                 cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.DOUBLE_COLUMN.getType());
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+            if(cacheRecord == null) {
                 cacheRecord = new AdPubCacheRecord();
             }
             logger.info("更新开屏广告前***， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
