@@ -67,7 +67,7 @@ public class StartService {
 		try{
 //			infoStreamDispatcher.readKafka();
 			infoSteamForAdvClick.readKafka();     // 广告点击日志
-			infoSteamForMaidianLogs.readKafka();  // 埋点日志
+//			infoSteamForMaidianLogs.readKafka();  // 埋点日志
 		} catch(Exception e) {
 			e.printStackTrace();
 			logger.error("启动kafka出错！ e={}", e.getMessage());
