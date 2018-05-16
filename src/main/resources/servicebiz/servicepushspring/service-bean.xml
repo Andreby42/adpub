@@ -100,8 +100,6 @@
 	<bean id="wangYiYunHelp" class="com.bus.chelaile.flow.WangYiYunHelp">
 	</bean>
 	<!-- kafka先关的处理类 infoStreamDispatcher -->
-	<bean id="infoStreamForMaidianLogs" class="com.bus.chelaile.kafka.InfoStreamForMaidianLogs">
-	</bean>
 	<bean id="infoStreamForAdvClick" class="com.bus.chelaile.kafka.InfoStreamForAdvClick">
 	</bean>
 	<!-- 信息流 服务实现 -->

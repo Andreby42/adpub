@@ -62,13 +62,14 @@ public class MaidianLogsHandle implements Runnable {
             maidian_log = Constants.TEST_MAIDIAN_LOG;
         }
         if (str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
-            logger.info("读到展示埋点日志： str={}", str);
+//            logger.info("读到展示埋点日志： str={}", str);
             try {
                 analysisOpenAdvExhibit(str);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
+            logger.info("读到点击埋点日志： str={}", str);
             try {
                 analysisWXAppClick(str);
             } catch (Exception e) {
@@ -97,6 +98,7 @@ public class MaidianLogsHandle implements Runnable {
                 logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
                 return;
             }
+            logger.info("点击埋点得到点击日志： udid={}, advId={}", udid, advId);
             
             // 存储广告点击次数到redis
             QueueObject queueobj = new QueueObject();
@@ -140,12 +142,12 @@ public class MaidianLogsHandle implements Runnable {
             if(cacheRecord == null) {
                 cacheRecord = new AdPubCacheRecord();
             }
-            logger.info("更新开屏广告前***， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
+//            logger.info("更新开屏广告前***， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
             cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId));
             cacheRecord.setOpenAdHistory(new AdCategory(Integer.parseInt(advId), 1, -1));
             cacheRecord.setAndUpdateOpenAdPubTime(Integer.parseInt(advId));
             RecordManager.recordAdd(udid, ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
-            logger.info("更新开屏广告后###， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
+//            logger.info("更新开屏广告后###， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
         }
     }
 
