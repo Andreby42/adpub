@@ -20,8 +20,6 @@ import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.kafka.InfoStreamForAdvClick;
-import com.bus.chelaile.kafka.InfoStreamDispatcher;
-import com.bus.chelaile.linkActive.LinkActiveHelp;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -54,87 +52,79 @@ public class StartService {
 	private static final String minuteTimesFile = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 			"minuteTimesFile", "/data/advConfig/commonMinuteTimesFile.csv");
 
-	public List<String> init() {
-		// 初始化缓存
-		CacheUtil.initClient();
-		// 启动线程
-		startThread();
-		StaticAds.init();
-		activityService.initActivitity (); // 信息流活动初始化
-		try{
-//			infoStreamDispatcher.readKafka();
-			infoSteamForAdvClick.readKafka();     // 广告点击日志
-//			infoSteamForMaidianLogs.readKafka();  // 埋点日志
-		} catch(Exception e) {
-			e.printStackTrace();
-			logger.error("启动kafka出错！ e={}", e.getMessage());
-		}
-		
-//		linkActiveHelp.initLinkedMePics();	// linkedMe 图片信息初始化
-		initMinuteTimes(StaticAds.minuteTimes);
-		// 获取当前所有的可以使用的ADS
-		List<AdContent> allAds = advContent.listValidAds();
-		logger.info("****AllAdsinfosize*****   {}", allAds.size());
-		// 保存已生效的广告id
-		List<String> advIds = New.arrayList();
-		// 1的话就取全部的,0就只读取线路详情,2除线路详情\站点广告外的其它内容
-		String isLineDetails = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "isLineDetails", "1");
+    public List<String> init() {
+        // 初始化缓存
+        CacheUtil.initClient();
+        // 启动线程
+        startThread();
+        StaticAds.init();
+        activityService.initActivitity(); // 信息流活动初始化
 
-		for (AdContent ad : allAds) {
-			// 详情页浮层
-			if (ad.getShowType() != null && ad.getShowType().equals(ShowType.LINE_DETAIL_PIC.getType())) {
-				continue;
-			}
+        //		linkActiveHelp.initLinkedMePics();	// linkedMe 图片信息初始化
+        initMinuteTimes(StaticAds.minuteTimes);
+        // 获取当前所有的可以使用的ADS
+        List<AdContent> allAds = advContent.listValidAds();
+        logger.info("****AllAdsinfosize*****   {}", allAds.size());
+        // 保存已生效的广告id
+        List<String> advIds = New.arrayList();
+        // 1的话就取全部的,0就只读取线路详情,2除线路详情\站点广告外的其它内容
+        String isLineDetails = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "isLineDetails", "1");
 
-			// ad.completePicUrl();
-			List<Rule> ruleList = new ArrayList<Rule>();
-			List<AdRule> adRuleList = advRule.list4AdvIdByTime(ad.getId(), new Date());  // 包含 endDate >= #{today,jdbcType=TIMESTAMP}
+        for (AdContent ad : allAds) {
+            // 详情页浮层
+            if (ad.getShowType() != null && ad.getShowType().equals(ShowType.LINE_DETAIL_PIC.getType())) {
+                continue;
+            }
 
-			for (AdRule adRule : adRuleList) {
-				// 开始时间在合理范围之内
-				if (!dateCompare(adRule.getStartDate(), adRule.getEndDate(), ad.getShowType())) {
-					continue;
-				}
+            // ad.completePicUrl();
+            List<Rule> ruleList = new ArrayList<Rule>();
+            List<AdRule> adRuleList = advRule.list4AdvIdByTime(ad.getId(), new Date()); // 包含 endDate >= #{today,jdbcType=TIMESTAMP}
 
-				Rule rule = RuleEngine.parseRule(adRule);
-				if (rule != null) {
-					if (rule.getUserIds() != null && rule.getUserIds().size() == 0) {
-						continue;
-					}
-					ruleList.add(rule);
-				}
-			}
+            for (AdRule adRule : adRuleList) {
+                // 开始时间在合理范围之内
+                if (!dateCompare(adRule.getStartDate(), adRule.getEndDate(), ad.getShowType())) {
+                    continue;
+                }
 
-			if (ruleList.size() == 0) {
-				continue;
-			}
-			// 把所有当前可能投放的广告放入这个集合中
-			StaticAds.addAds(ad);
+                Rule rule = RuleEngine.parseRule(adRule);
+                if (rule != null) {
+                    if (rule.getUserIds() != null && rule.getUserIds().size() == 0) {
+                        continue;
+                    }
+                    ruleList.add(rule);
+                }
+            }
 
-			// 详情页广告与其他广告分开
-			if (ad.getShowType() != null) {
-				// 只要线路详情
-				if (isLineDetails.equals("0") && ! (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
-						|| ad.getShowType().equals(ShowType.STATION_ADV.getType()) 
-						|| ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
-						|| ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
-					continue;
-				} else if (isLineDetails.equals("2") && (ad.getShowType().equals(ShowType.LINE_DETAIL.getType()) 
-						|| ad.getShowType().equals(ShowType.STATION_ADV.getType()) 
-						|| ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
-						|| ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
-					continue;
-				}
-			}
-			// 黑名单
-			initBlackListMap(ad, ruleList);
-			// 把广告分按照用户投放和不按照用户投放两种，分开初始化入map中
-			prepareAdv(ad, ruleList, false);
-			// initPic(ad);
-			advIds.add(ad.getId() + "");
-		}
-		
-		// 从配置文件读取tbk title存储到redis的key
+            if (ruleList.size() == 0) {
+                continue;
+            }
+            // 把所有当前可能投放的广告放入这个集合中
+            StaticAds.addAds(ad);
+
+            // 详情页广告与其他广告分开
+            if (ad.getShowType() != null) {
+                // 只要线路详情
+                if (isLineDetails.equals("0") && !(ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
+                        || ad.getShowType().equals(ShowType.STATION_ADV.getType())
+                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
+                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
+                    continue;
+                } else if (isLineDetails.equals("2") && (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
+                        || ad.getShowType().equals(ShowType.STATION_ADV.getType())
+                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
+                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
+                    continue;
+                }
+            }
+            // 黑名单
+            initBlackListMap(ad, ruleList);
+            // 把广告分按照用户投放和不按照用户投放两种，分开初始化入map中
+            prepareAdv(ad, ruleList, false);
+            // initPic(ad);
+            advIds.add(ad.getId() + "");
+        }
+
+        // 从配置文件读取tbk title存储到redis的key
         try {
             String tbkKeyStrs = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "tbk_ads_title_keys");
             if (StringUtils.isNotEmpty(tbkKeyStrs)) {
@@ -153,17 +143,25 @@ public class StartService {
             e.printStackTrace();
             logger.error("初始化淘宝客title出错");
         }
-		
-		
-		logger.info("所有按照用户投放的广告加载完毕，用户数={}", StaticAds.adsMap.size());
-		logger.info("所有按照用户投放的广告数目={}", StaticAds.allAdContentCache.size());
-		for (Entry<String, List<AdContentCacheEle>> entry : StaticAds.allAdsMap.entrySet()) {
-			logger.info("所有不按照用户投放的广告加载完毕，广告类型={}, 广告数={}", entry.getKey(), entry.getValue().size());
-		}
-		logger.info("所有存放到缓存的广告数={}", StaticAds.allAds.size());
 
-		return advIds;
-	}
+        logger.info("所有按照用户投放的广告加载完毕，用户数={}", StaticAds.adsMap.size());
+        logger.info("所有按照用户投放的广告数目={}", StaticAds.allAdContentCache.size());
+        for (Entry<String, List<AdContentCacheEle>> entry : StaticAds.allAdsMap.entrySet()) {
+            logger.info("所有不按照用户投放的广告加载完毕，广告类型={}, 广告数={}", entry.getKey(), entry.getValue().size());
+        }
+        logger.info("所有存放到缓存的广告数={}", StaticAds.allAds.size());
+
+        try {
+            //	          infoStreamDispatcher.readKafka();
+            infoSteamForAdvClick.readKafka(); // 广告点击日志
+            //	          infoSteamForMaidianLogs.readKafka();  // 埋点日志
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("启动kafka出错！ e={}", e.getMessage());
+        }
+
+        return advIds;
+    }
 
 	private void startThread() {
 
