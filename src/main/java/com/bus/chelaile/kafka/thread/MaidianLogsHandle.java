@@ -91,11 +91,11 @@ public class MaidianLogsHandle implements Runnable {
             String udid = params.get("userId");
             String advId = params.get("adv_id");
             if (udid == null || advId == null) {
-                logger.info("广告为空 line={}", line);
+                logger.info("小程序点击埋点解析， 广告为空 line={}", line);
                 return;
             }
             if (StaticAds.allAds.get(advId) == null) {
-                logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
+//                logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
                 return;
             }
             logger.info("点击埋点得到点击日志： udid={}, advId={}", udid, advId);
@@ -122,12 +122,12 @@ public class MaidianLogsHandle implements Runnable {
             String udid = params.get("udid");
             String advId = params.get("adv_id");
             if (udid == null || advId == null) {
-                logger.info("广告为空 line={}", line);
+                logger.info("广告展示埋点解析， 广告为空 line={}", line);
                 return;
             }
 
             if (StaticAds.allAds.get(advId) == null) {
-                logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
+//                logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
                 return;
             }
 
@@ -173,14 +173,14 @@ public class MaidianLogsHandle implements Runnable {
         return params;
     }
 
-    private static Map<String, String> paramsAnalysis(String url) {
+    private  Map<String, String> paramsAnalysis(String url) {
         Map<String, String> params = New.hashMap();
-        String entrys[] = url.split(" \\|# ");
+        String entrys[] = url.split("\\|#");
         for (String s : entrys) {
             String[] maps = s.split(":");
             try {
                 if (maps != null && maps.length >= 2)
-                    params.put(maps[0], URLDecoder.decode(maps[1], "UTF-8"));
+                    params.put(maps[0].trim(), URLDecoder.decode(maps[1].trim(), "UTF-8"));
             } catch (Exception e) {
                 logger.error("参数解析出错: map={}", maps.toString());
                 e.printStackTrace();
@@ -194,6 +194,9 @@ public class MaidianLogsHandle implements Runnable {
 //        String s = "May 16 18:00:00 web1 nginx: 112.97.52.202 |# - |# 2018-05-16 18:00:00 |# 200 |# 0.000 |# 67 |# - |# Dalvik/2.1.0 (Linux; U; Android 7.1.2; Redmi 5 Plus MIUI/V9.5.4.0.NEGCNFA) |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_EXHIBIT>adv_id:14317 |# s:android |# last_src:app_xiaomi_store |# stats_referer:recommend |# push_open:1 |# stats_act:pull_refresh |# userId:unknown |# provider_id:1 |# geo_lt:4 |# geo_lat:22.783977 |# line_id:075288966572 |# sv:7.1.2 |# vc:103 |# v:3.50.2 |# secret:6cf5b4d8dfe44b9cbef6b85b71efa3c6 |# imei:868027038762880 |# udid:dda482b3-380f-4fec-bd5f-e25ae177e334 |# stn_name:"
 //                + " dafsadf |# cityId:016 |# ad_switch:7 |# adv_type:5 |# wifi_open:1 |# deviceType:Redmi 5 Plus |# mac:02:00:00:00:00:00 |# geo_type:gcj |# lchsrc:icon |# nw:MOBILE_LTE |# AndroidID:6b55ddbb67ad3962 |# api_type:0 |# stn_order:16 |# geo_lac:25.0 |# accountId:54842956 |# language:1 |# first_src:app_xiaomi_store |# geo_lng:114.46562 |# https";
 //        
-//        preHandleMaidianLog(s);
+//        analysisOpenAdvExhibit(s);
+//        
+//        String s1 = "223.104.3.200 |# - |# 2018-05-16 19:09:53 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/24/page-frame.html |# Mozilla/5.0 (Linux; Android 8.0; MI 6 Build/OPR1.170623.027; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 MQQBrowser/6.2 TBS/044030 Mobile Safari/537.36 MicroMessenger/6.6.6.1300(0x26060637) NetType/4G Language/zh_CN MicroMessenger/6.6.6.1300(0x26060637) NetType/4G Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<STN_ADV_CLICK>adv_id:14268|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.1|#cityId:006|#userId:okBHq0Ed6jVNJpJ7uxIWijM3G4YU|#unionId:oSpTTju5G8AlotnUQ-52c5v2HWns |# https";
+//        analysisWXAppClick(s1);
     }
 }

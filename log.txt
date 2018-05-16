@@ -384,3 +384,4 @@
 [2018-04-28 16:25:18] [ERROR] - [Unsupport_ShowType] 无法识别的showType: null
 [2018-04-28 16:25:18] [ERROR] - [Unsupport_ShowType] 无法识别的showType: null
 [2018-04-28 16:25:18] [ERROR] - [Unsupport_ShowType] 无法识别的showType: null
+[2018-05-16 19:15:50] [ERROR] - 缓存中未发现广告,advId=14268, line=223.104.3.200 |# - |# 2018-05-16 19:09:53 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/24/page-frame.html |# Mozilla/5.0 (Linux; Android 8.0; MI 6 Build/OPR1.170623.027; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 MQQBrowser/6.2 TBS/044030 Mobile Safari/537.36 MicroMessenger/6.6.6.1300(0x26060637) NetType/4G Language/zh_CN MicroMessenger/6.6.6.1300(0x26060637) NetType/4G Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<STN_ADV_CLICK>adv_id:14268|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.1|#cityId:006|#userId:okBHq0Ed6jVNJpJ7uxIWijM3G4YU|#unionId:oSpTTju5G8AlotnUQ-52c5v2HWns |# https
