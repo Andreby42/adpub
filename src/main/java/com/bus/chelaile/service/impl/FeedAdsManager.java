@@ -199,6 +199,8 @@ public class FeedAdsManager extends AbstractManager {
 			cacheRecord = new AdPubCacheRecord();
 		}
 
+		Collections.shuffle(adsList);  // 打乱顺序，然后再进行优先级排序  2018-04-28
+		
 		// 需要排序
 		Collections.sort(adsList, FEEDAD_CONTENT_COMPARATOR);
 		Map<Integer, AdContentCacheEle> adMap = New.hashMap();
