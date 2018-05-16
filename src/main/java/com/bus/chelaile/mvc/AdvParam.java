@@ -78,6 +78,8 @@ public class AdvParam {
      private int lSize; // 首页推荐线路的条目数
      
      private String wxs; // 小程序来源，比如车来了主小程序OR其他马甲号小程序
+     
+     private int isTop; // 是否置顶位。 feed流广告专用
      /**
       * 存入的s都会被转换为小写。
       *
@@ -604,6 +606,16 @@ public class AdvParam {
 	public void setWxs(String wxs) {
 		this.wxs = wxs;
 	}
+
+
+    public int getIsTop() {
+        return isTop;
+    }
+
+
+    public void setIsTop(int isTop) {
+        this.isTop = isTop;
+    }
 	
 	
 }

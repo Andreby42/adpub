@@ -16,18 +16,15 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
-import com.bus.chelaile.model.ads.AdButtonInfo;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdFeedInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
-import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.Tag;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.FeedAdArticleInfo;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 import com.bus.chelaile.model.ads.entity.FeedAdInfo;
-import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.model.rule.Rule;
 import com.bus.chelaile.mvc.AdvParam;
@@ -51,7 +48,19 @@ public class FeedAdsManager extends AbstractManager {
 			FeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType, ad.getRule().getStartDate());
 
 			if (entity != null) {
-                // 记录投放
+		         // 低版本，不予返回 ‘文章样式的feed流广告’
+	            if(entity.getFeedAdType() == 2) {
+	                Platform platform = Platform.from(advParam.getS());
+	                if (platform.isAndriod(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_ANDROID_0208) {
+	                    continue;
+	                }
+	                if (platform.isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0208) {
+	                    continue;
+	                }
+	                
+	            }
+			    
+	            // 记录投放
                 entities.add(entity);
                 int adId = entity.getId();
                 ids.add(adId);
@@ -64,33 +73,26 @@ public class FeedAdsManager extends AbstractManager {
                     }
                 }
             } else {
-                logger.info("feedAd 广告创建失败~ , adId={}", ad.getAds().getId());
+                logger.info("feedAd 广告未创建~ , adId={}, isTop={}", ad.getAds().getId(), advParam.getIsTop());
                 continue;
             }
 			
-			// 低版本，不予返回 ‘文章样式的feed流广告’
-			if(entity.getFeedAdType() == 2) {
-				Platform platform = Platform.from(advParam.getS());
-				if (platform.isAndriod(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_ANDROID_0208) {
-					continue;
-				}
-				if (platform.isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0208) {
-					continue;
-				}
-				
-			}
-			
 			AnalysisLog
-					.info("[FEED_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}",
+					.info("[FEED_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
 							ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
 							advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(),
 							advParam.getStnName(), advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
-							advParam.getLng(), advParam.getLat());
+							advParam.getLng(), advParam.getLat(),entity.getProvider_id());
 
 			cacheRecord.setNoFeedAdHistoryMap(ids);
-
 		}
+		
 		RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
+		
+		// 置顶位，只需要一个广告
+		if(advParam.getIsTop() == 1) {
+		    return entities;
+		}
 		return entities;
 	}
 
@@ -98,8 +100,16 @@ public class FeedAdsManager extends AbstractManager {
 		FeedAdEntity res = new FeedAdEntity();
 		
 		// 第三方广告处理
+		// 只有置顶位才返回这个
 		AdFeedInnerContent feedInner1 = (AdFeedInnerContent) ad.getInnerContent();
-		if(feedInner1.getProvider_id() > 0) {
+		if(feedInner1.getIsSetTop() != advParam.getIsTop()) {  // 是否置顶，不匹配
+		    return null;
+		}
+		if(feedInner1.getIsSetTop() != 1 && feedInner1.getProvider_id() > 0) {  // 非置顶位，不允许投放第三方广告
+		    return null;
+		}
+		
+		if(feedInner1.getProvider_id() > 0 && advParam.getIsTop() == 1) {
 		    res = createSDKAds(feedInner1, ad);
             return res;
 		}
@@ -249,6 +259,7 @@ public class FeedAdsManager extends AbstractManager {
         entity.setType(3); // 第三方广告
         entity.setTitle(ad.getTitle());
         entity.setApi_type(inner.getApi_type());
+        entity.setIsSetTop(1);
         
         return entity;
     }

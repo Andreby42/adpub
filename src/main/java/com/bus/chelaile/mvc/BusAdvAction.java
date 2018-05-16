@@ -378,6 +378,7 @@ public class BusAdvAction extends AbstractController {
     public String getFeedAds(HttpServletRequest request) {
         
         AdvParam param = getActionParam(request);
+        param.setIsTop(getInt(request, "isTop"));
         
         return serviceManager.getAdsResponseStr(param, "getFeedAds");
     }
