@@ -378,7 +378,7 @@ public abstract class BaseAdEntity {
 		System.out.println(StringUtils.isEmpty(" "));
 		
 		
-		String ua1 = "Mozilla/5.0+(Linux;+Android+8.0.0;+MI+6+Build/OPR1.170623.027;+wv)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Version/4.0+Chrome/62.0.3202.84+Mobile+Safari/537.36";
+		String ua1 = "Mozilla/5.0 (Linux; Android 8.0.0; MI 6 Build/OPR1.170623.027; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/62.0.3202.84 Mobile Safari/537.36";
 		System.out.println(AdvUtil.encodeUrl(ua1));
 		System.out.println(AdvUtil.encodeUrl(AdvUtil.encodeUrl(ua1)));
 		System.out.println(AdvUtil.encodeUrl(AdvUtil.encodeUrl(AdvUtil.encodeUrl(ua1))));

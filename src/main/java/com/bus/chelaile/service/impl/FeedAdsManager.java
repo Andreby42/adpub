@@ -1,6 +1,5 @@
 package com.bus.chelaile.service.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.ClientProtocolException;
 
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
@@ -18,15 +16,18 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.ads.AdButtonInfo;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdFeedInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
+import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.Tag;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.FeedAdArticleInfo;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 import com.bus.chelaile.model.ads.entity.FeedAdInfo;
+import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.model.rule.Rule;
 import com.bus.chelaile.mvc.AdvParam;
@@ -34,7 +35,6 @@ import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.service.CommonService;
 import com.bus.chelaile.service.RecordManager;
 import com.bus.chelaile.strategy.AdCategory;
-import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
 public class FeedAdsManager extends AbstractManager {
@@ -50,6 +50,24 @@ public class FeedAdsManager extends AbstractManager {
 			AdContentCacheEle ad = entry.getValue();
 			FeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType, ad.getRule().getStartDate());
 
+			if (entity != null) {
+                // 记录投放
+                entities.add(entity);
+                int adId = entity.getId();
+                ids.add(adId);
+                cacheRecord.buildAdPubCacheRecord(adId);
+                if (adMap.get(adId).getRule().getUvLimit() > 0) {
+                    // 首次访问
+                    if (!cacheRecord.getUvMap().containsKey(adId)) {
+                        adMap.get(adId).getRule().setUvCount();
+                        cacheRecord.setAdToUvMap(adId);
+                    }
+                }
+            } else {
+                logger.info("feedAd 广告创建失败~ , adId={}", ad.getAds().getId());
+                continue;
+            }
+			
 			// 低版本，不予返回 ‘文章样式的feed流广告’
 			if(entity.getFeedAdType() == 2) {
 				Platform platform = Platform.from(advParam.getS());
@@ -69,22 +87,6 @@ public class FeedAdsManager extends AbstractManager {
 							advParam.getStnName(), advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
 							advParam.getLng(), advParam.getLat());
 
-			if (entity != null) {
-				// 记录投放
-				entities.add(entity);
-				int adId = entity.getId();
-				ids.add(adId);
-				cacheRecord.buildAdPubCacheRecord(adId);
-				if (adMap.get(adId).getRule().getUvLimit() > 0) {
-					// 首次访问
-					if (!cacheRecord.getUvMap().containsKey(adId)) {
-						adMap.get(adId).getRule().setUvCount();
-						cacheRecord.setAdToUvMap(adId);
-					}
-				}
-			} else {
-				logger.info("feedAd 广告创建失败~ , adId={}", ad.getAds().getId());
-			}
 			cacheRecord.setNoFeedAdHistoryMap(ids);
 
 		}
@@ -94,6 +96,13 @@ public class FeedAdsManager extends AbstractManager {
 
 	private FeedAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType, Date date) {
 		FeedAdEntity res = new FeedAdEntity();
+		
+		// 第三方广告处理
+		AdFeedInnerContent feedInner1 = (AdFeedInnerContent) ad.getInnerContent();
+		if(feedInner1.getProvider_id() > 0) {
+		    res = createSDKAds(feedInner1, ad);
+            return res;
+		}
 
 		res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
 
@@ -228,8 +237,20 @@ public class FeedAdsManager extends AbstractManager {
 	@Override
 	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
 			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	
+	// 2018-05-05 ，feed流广告，支持gdt：原生、banner
+    private FeedAdEntity createSDKAds(AdFeedInnerContent inner, AdContent ad) {
+        FeedAdEntity entity = new FeedAdEntity();
+        entity.setId(ad.getId());
+        entity.setProvider_id(inner.getProvider_id() + "");
+        entity.setType(3); // 第三方广告
+        entity.setTitle(ad.getTitle());
+        entity.setApi_type(inner.getApi_type());
+        
+        return entity;
+    }
+    
 }

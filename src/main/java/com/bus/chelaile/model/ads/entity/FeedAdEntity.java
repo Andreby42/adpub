@@ -1,5 +1,6 @@
 package com.bus.chelaile.model.ads.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.Tag;
 
@@ -15,6 +16,10 @@ public class FeedAdEntity extends BaseAdEntity {
 	private int feedAdType;    // feed流广告类型，0 话题样式， 1 透视样式， 2 文章样式， 3 图片样式信息流
 	private int isSetTop;	// 是否置顶
 	private int imgsType; // 图片样式  
+	
+	private int api_type; // 第三方广告商细分类型
+	@JSONField(serialize=false)
+    private String title;
 
 	// 构造方法
 	public FeedAdEntity() {
@@ -106,6 +111,22 @@ public class FeedAdEntity extends BaseAdEntity {
 
     public void setImgsType(int imgsType) {
         this.imgsType = imgsType;
+    }
+
+    public int getApi_type() {
+        return api_type;
+    }
+
+    public void setApi_type(int api_type) {
+        this.api_type = api_type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }

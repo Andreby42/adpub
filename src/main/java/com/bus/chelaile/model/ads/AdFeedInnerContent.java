@@ -35,6 +35,9 @@ public class AdFeedInnerContent extends AdInnerContent {
 	
 	private int imgsType;  // 图片样式：0：单图小图，1：三图小图，2：透视大图样式, 3:话题样式, 4 宽图窄图(置顶用)， 5 宽图大图
 	
+	private int provider_id; // 广告提供商， 0 自采买， 2 广点通
+	private int api_type; // 第三方广告类型，比如： 原生、banner等
+	
 	
 	@Override
 	protected void parseJson(String jsonr) {
@@ -67,6 +70,8 @@ public class AdFeedInnerContent extends AdInnerContent {
 				this.feedAdArticleTag = ad.feedAdArticleTag;
 				
 				this.imgsType = ad.imgsType;
+				this.provider_id = ad.provider_id;
+				this.api_type = ad.api_type;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -269,5 +274,25 @@ public class AdFeedInnerContent extends AdInnerContent {
 
     public void setImgsType(int imgsType) {
         this.imgsType = imgsType;
+    }
+
+
+    public int getProvider_id() {
+        return provider_id;
+    }
+
+
+    public void setProvider_id(int provider_id) {
+        this.provider_id = provider_id;
+    }
+
+
+    public int getApi_type() {
+        return api_type;
+    }
+
+
+    public void setApi_type(int api_type) {
+        this.api_type = api_type;
     }
 }
