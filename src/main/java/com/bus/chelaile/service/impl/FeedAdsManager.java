@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -200,11 +201,11 @@ public class FeedAdsManager extends AbstractManager {
 		}
 
 		Collections.shuffle(adsList);  // 打乱顺序，然后再进行优先级排序  2018-04-28
-		
 		// 需要排序
 		Collections.sort(adsList, FEEDAD_CONTENT_COMPARATOR);
-		Map<Integer, AdContentCacheEle> adMap = New.hashMap();
-		// 把所有符合规则的广告放到map中
+		LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
+		// 把所有符合规则的广告放到map中.
+		//改成LinkedHashMap保持有序
 		handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
 
 		if (adMap.size() == 0) {
