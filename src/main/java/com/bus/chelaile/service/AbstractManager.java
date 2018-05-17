@@ -28,7 +28,6 @@ import com.bus.chelaile.model.rule.UserClickRate;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
-import com.bus.chelaile.strategy.AdInfo;
 import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.util.New;
 
@@ -717,6 +716,13 @@ public abstract class AbstractManager {
             logger.info("reload is Running");
             return false;
         }
+        
+        // 青岛、南京、香港、西安 四城不投广告
+        if(StringUtils.isNotBlank(advParam.getCityId()) && (
+                advParam.getCityId().equals("009") || advParam.getCityId().equals("018")
+                || advParam.getCityId().equals("085") || advParam.getCityId().equals("076"))) {
+            return false;
+        }
 
         // 乘车页和活动页不去除广告
         if (!showType.getType().equals(ShowType.ACTIVE_DETAIL.getType())
@@ -747,12 +753,6 @@ public abstract class AbstractManager {
             }
         }
 
-        // // udid不为空
-        // if (StringUtils.isBlank(advParam.getUdid()) ||
-        // advParam.getUdid().equals("null")) {
-        // // logger.error("udid is NULL ,return null! ");
-        // return false;
-        // }
         return true;
     }
 
