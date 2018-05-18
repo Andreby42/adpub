@@ -83,7 +83,7 @@ public class StationAdsManager extends AbstractManager {
                         || (advParam.getS().equalsIgnoreCase("ios")
                                 && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0514))
                         ) {
-                    res = createSDKOpenAds(stationInner.getProvider_id(), ad);
+                    res = createSDKOpenAds(stationInner.getProvider_id(), ad, stationInner);
                     return res;
                 } else
                     logger.error("不合适的版本，或者不合适的第三方广告类型，udid={}", advParam.getUdid());
@@ -230,13 +230,15 @@ public class StationAdsManager extends AbstractManager {
     };
 
     // 2018-05-05 ，站点广告，支持原生gdt
-    private StationAdEntity createSDKOpenAds(int adType, AdContent ad) {
+    private StationAdEntity createSDKOpenAds(int adType, AdContent ad, AdStationlInnerContent inner) {
         StationAdEntity entity = new StationAdEntity();
         entity.setId(ad.getId());
         entity.setProvider_id(adType + "");
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
         entity.setTitle(ad.getTitle());
+        entity.setBuyOut(inner.getBuyOut());
+        entity.setAdWeight(inner.getAdWeight());
         
         BannerInfo bannerInfo = new BannerInfo();
         bannerInfo.setBannerType(4);  // 广点通专用样式，文字+标签（文案由客户端自定义）
