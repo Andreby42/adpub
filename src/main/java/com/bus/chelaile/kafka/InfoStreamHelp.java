@@ -117,7 +117,7 @@ public class InfoStreamHelp {
 	/*
 	 * 解析车辆详情页信息
 	 */
-	public static void analysisLineDetail(String line) {
+	private static void analysisLineDetail(String line) {
 		String udid = null;
 		int beginIndex = line.indexOf("udid=");
 		if(beginIndex == -1) {

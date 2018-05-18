@@ -3,6 +3,7 @@
  */
 /**
  * @author Administrator
+
  *
  */
 package com.bus.chelaile.kafka.thread;
@@ -40,6 +41,8 @@ public class MaidianLogsHandle implements Runnable {
         m_threadNumber = a_threadNumber;
         m_stream = a_stream;
     }
+    
+    public MaidianLogsHandle() {super();}
 
     public void run() {
         ConsumerIterator<byte[], byte[]> it = m_stream.iterator();
@@ -85,7 +88,7 @@ public class MaidianLogsHandle implements Runnable {
      * 并记录进缓存
      * @param str
      */
-    private void analysisWXAppClick(String line) {
+    private  void analysisWXAppClick(String line) {
         Map<String, String> params = preHandleMaidianLog(line);
         if(params != null) {
             String udid = params.get("userId");
@@ -198,5 +201,11 @@ public class MaidianLogsHandle implements Runnable {
 //        
 //        String s1 = "223.104.3.200 |# - |# 2018-05-16 19:09:53 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/24/page-frame.html |# Mozilla/5.0 (Linux; Android 8.0; MI 6 Build/OPR1.170623.027; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 MQQBrowser/6.2 TBS/044030 Mobile Safari/537.36 MicroMessenger/6.6.6.1300(0x26060637) NetType/4G Language/zh_CN MicroMessenger/6.6.6.1300(0x26060637) NetType/4G Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<STN_ADV_CLICK>adv_id:14268|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.1|#cityId:006|#userId:okBHq0Ed6jVNJpJ7uxIWijM3G4YU|#unionId:oSpTTju5G8AlotnUQ-52c5v2HWns |# https";
 //        analysisWXAppClick(s1);
+        
+        MaidianLogsHandle m = new MaidianLogsHandle();
+        
+        String s1 = "May 17 17:11:12 web10 nginx: 182.18.10.10 |# - |# 2018-05-17 17:11:12 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/24/page-frame.html |# Mozilla/5.0 (iPhone; CPU iPhone OS 11_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E216 MicroMessenger/6.6.6 NetType/WIFI Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_CLICK>adv_type:20|#adv_id:14357|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.1|#cityId:030|#userId:okBHq0CU34vruLG7GtBb4dPO8iiY|#unionId:oSpTTji27rGKHmdHrv5tmbIudl80 |# https";
+        m.analysisWXAppClick(s1);
+        
     }
 }

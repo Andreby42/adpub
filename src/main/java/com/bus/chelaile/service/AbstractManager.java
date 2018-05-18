@@ -720,7 +720,7 @@ public abstract class AbstractManager {
         // 青岛、南京、香港、西安 四城不投广告
         if(StringUtils.isNotBlank(advParam.getCityId()) && (
                 advParam.getCityId().equals("009") || advParam.getCityId().equals("018")
-                || advParam.getCityId().equals("085") || advParam.getCityId().equals("076"))) {
+                || advParam.getCityId().equals("085"))) {
             return false;
         }
 
