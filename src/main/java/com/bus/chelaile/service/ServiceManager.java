@@ -232,7 +232,10 @@ public class ServiceManager {
             return object;
         } else if (methodName.equals("getWXFullAds")) { // 小程序浮层广告
             entity = getWXFullAd(advParam);
-            object = (JSONObject) entity;
+            if(entity != null) {
+                object.put("ads", entity);
+            }
+            return object;
         } else if (methodName.equals("h5BannerAds")) { // h5 banner广告
             entity = getH5BannerAd(advParam);
             object.put("ads", entity);
