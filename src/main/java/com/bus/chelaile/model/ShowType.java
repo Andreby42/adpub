@@ -23,7 +23,8 @@ public enum ShowType {
     LINEDETAIL_REFRESH_ADV("17"),   //详情页刷新位广告
     H5_LINEBANNER_ADV("18"), // h5 详情页banner广告
     LINEDETAIL_REFRESH_OPEN_ADV("19"), // 详情页下拉刷新位，全屏广告
-    WECHATAPP_BANNER_ADV("20"); // 小程序 banner位广告
+    WECHATAPP_BANNER_ADV("20"), // 小程序 banner位广告
+    WECHAT_FULL_ADV("21"); // 小程序浮层广告
     
     private String type;
     private int val;

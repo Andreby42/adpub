@@ -8,8 +8,8 @@ public class WXAppBannerAdEntity extends BaseAdEntity {
 	private String wxMiniProId; // 小程序appId
 	private String wxMiniProPath;
 
-	public WXAppBannerAdEntity() {
-		super(ShowType.WECHATAPP_BANNER_ADV.getValue());
+	public WXAppBannerAdEntity(ShowType showType) {
+		super(showType.getValue());
 		this.pic = EMPTY_STR;
 	}
 

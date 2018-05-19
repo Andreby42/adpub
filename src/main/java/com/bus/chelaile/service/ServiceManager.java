@@ -48,6 +48,7 @@ import com.bus.chelaile.service.impl.RideManager;
 import com.bus.chelaile.service.impl.SelfManager;
 import com.bus.chelaile.service.impl.StationAdsManager;
 import com.bus.chelaile.service.impl.WXBannerManager;
+import com.bus.chelaile.service.impl.WXFullManager;
 import com.bus.chelaile.strategy.UserStrategyJudger;
 import com.bus.chelaile.thread.ReloadInvalidAccountIdTimer;
 import com.bus.chelaile.util.FlowUtil;
@@ -64,6 +65,8 @@ public class ServiceManager {
 	private SimpleAdManager simpleAdManager;
 	@Autowired
 	private WXBannerManager wXBannerManager;
+	@Autowired
+    private WXFullManager wXFullManager;
 	@Autowired
 	private FeedAdsManager feedAdsManager;
 	@Autowired
@@ -188,83 +191,85 @@ public class ServiceManager {
 	 * @return BaseAdEntity或者List<BaseAdEntity>
 	 * @throws Exception
 	 */
-	public Object getQueryValue(AdvParam advParam, String methodName) throws Exception {
-		// // 香港不投广告
-		VersionEntity tgv = VersionEntity.parseVersionStr(advParam.getV());
-		boolean isValidVersion = false;
-		if (methodName.equals("getLineDetails") || methodName.equals("getNewLineDetails")) {
-			isValidVersion = checkLineDetailsVersion(tgv, Platform.from(advParam.getS()));
-		} else {
-			isValidVersion = checkDoubleVersion(tgv, Platform.from(advParam.getS()));
-		}
-		// 版本检测失败
-		if (!isValidVersion) {
-			logger.info("isValidVersion return false,udid={},s={},v={}", advParam.getUdid(), advParam.getV(),
-					advParam.getS());
-			return null;
-		}
-		Object entity = null;
-		JSONObject object = new JSONObject();
-		if (methodName.equals("getLineDetails")) { // 线路详情
-	        long startTime = System.currentTimeMillis();
-			object = getLineDetails(advParam);
-			logger.info("getLineDetailAds cost time :{}", System.currentTimeMillis() - startTime);
-			if (object == null) {
-				return null;
-			}
-			return object;
-		} else if (methodName.equals("getNewOpen")) { // 新版本开屏、浮层、乘车页浮层
-			entity = getNewOpen(advParam);
-			object.put("ads", entity);
-		} else if (methodName.equals("precacheResource")) { // 预缓存广告资源图片
-			entity = precacheResource(advParam);
-			object = (JSONObject) entity;
-		} else if (methodName.equals("getDoubleAndSingleAds")) { // 单双栏
-			entity = getDoubleAndSingleAds(advParam);
-			object.put("ads", entity);
-		} else if(methodName.equals("getWXBannerAds")) {	// 小程序 banner广告
-			List<BaseAdEntity> entities = getWXBannerAd(advParam);
-			if(entities != null && entities.size() > 0) {
-				object.put("ads", entities);
-			}
-			return object;
-		}else if (methodName.equals("h5BannerAds")) { // h5 banner广告
-			entity = getH5BannerAd(advParam);
-			object.put("ads", entity);
-			return object;
-		} else if(methodName.equals("getFeedAds")) { // feed流广告
-		    entity = getFeedAds(advParam);
-		    object.put("ads", entity);
-		} else if (methodName.equals("getRide")) {
-			entity = getRide(advParam);
-			object = (JSONObject) entity; // 乘车页广告，新增音频广告内容
-		} else if (methodName.equals("getActive")) { // 活动页|聊天室 广告
-			entity = getActive(advParam);
-			switch (advParam.getType()) {
-			case 0:
-				object.put("activeAds", entity);
-				break;
-			case 2:
-				object.put("chatAds", entity);
-				break;
-			default:
-				return null;
-			}
-		} else if(methodName.equals("getAboardText")) { // 上车提醒文案
-			entity = getAboardText(advParam);
-			object = (JSONObject) entity;
-		} else if (methodName.equals("getOldOpen")) { // 旧版本开屏、浮层
-			entity = getOldOpen(advParam);
-			object.put("ads", entity);
-		} else if (methodName.equals("preLoadAds")) { // 旧版本开屏浮层预加载
-			entity = preLoadAds(advParam);
-			object = (JSONObject) entity;
-			// object.put("ads", entity);
-		} 
-		if (entity == null)
-			return null;
-		return object;
-	}
+    public Object getQueryValue(AdvParam advParam, String methodName) throws Exception {
+        // // 香港不投广告
+        VersionEntity tgv = VersionEntity.parseVersionStr(advParam.getV());
+        boolean isValidVersion = false;
+        if (methodName.equals("getLineDetails") || methodName.equals("getNewLineDetails")) {
+            isValidVersion = checkLineDetailsVersion(tgv, Platform.from(advParam.getS()));
+        } else {
+            isValidVersion = checkDoubleVersion(tgv, Platform.from(advParam.getS()));
+        }
+        // 版本检测失败
+        if (!isValidVersion) {
+            logger.info("isValidVersion return false,udid={},s={},v={}", advParam.getUdid(), advParam.getV(), advParam.getS());
+            return null;
+        }
+        Object entity = null;
+        JSONObject object = new JSONObject();
+        if (methodName.equals("getLineDetails")) { // 线路详情
+            long startTime = System.currentTimeMillis();
+            object = getLineDetails(advParam);
+            logger.info("getLineDetailAds cost time :{}", System.currentTimeMillis() - startTime);
+            if (object == null) {
+                return null;
+            }
+            return object;
+        } else if (methodName.equals("getNewOpen")) { // 新版本开屏、浮层、乘车页浮层
+            entity = getNewOpen(advParam);
+            object.put("ads", entity);
+        } else if (methodName.equals("precacheResource")) { // 预缓存广告资源图片
+            entity = precacheResource(advParam);
+            object = (JSONObject) entity;
+        } else if (methodName.equals("getDoubleAndSingleAds")) { // 单双栏
+            entity = getDoubleAndSingleAds(advParam);
+            object.put("ads", entity);
+        } else if (methodName.equals("getWXBannerAds")) { // 小程序 banner广告
+            List<BaseAdEntity> entities = getWXBannerAd(advParam);
+            if (entities != null && entities.size() > 0) {
+                object.put("ads", entities);
+            }
+            return object;
+        } else if (methodName.equals("getWXFullAds")) { // 小程序浮层广告
+            entity = getWXFullAd(advParam);
+            object = (JSONObject) entity;
+        } else if (methodName.equals("h5BannerAds")) { // h5 banner广告
+            entity = getH5BannerAd(advParam);
+            object.put("ads", entity);
+            return object;
+        } else if (methodName.equals("getFeedAds")) { // feed流广告
+            entity = getFeedAds(advParam);
+            object.put("ads", entity);
+        } else if (methodName.equals("getRide")) {
+            entity = getRide(advParam);
+            object = (JSONObject) entity; // 乘车页广告，新增音频广告内容
+        } else if (methodName.equals("getActive")) { // 活动页|聊天室 广告
+            entity = getActive(advParam);
+            switch (advParam.getType()) {
+                case 0:
+                    object.put("activeAds", entity);
+                    break;
+                case 2:
+                    object.put("chatAds", entity);
+                    break;
+                default:
+                    return null;
+            }
+        } else if (methodName.equals("getAboardText")) { // 上车提醒文案
+            entity = getAboardText(advParam);
+            object = (JSONObject) entity;
+        } else if (methodName.equals("getOldOpen")) { // 旧版本开屏、浮层
+            entity = getOldOpen(advParam);
+            object.put("ads", entity);
+        } else if (methodName.equals("preLoadAds")) { // 旧版本开屏浮层预加载
+            entity = preLoadAds(advParam);
+            object = (JSONObject) entity;
+            // object.put("ads", entity);
+        }
+        if (entity == null)
+            return null;
+        return object;
+    }
 
 
 	/*
@@ -559,6 +564,15 @@ public class ServiceManager {
 		List<BaseAdEntity> wxBannerAds = wXBannerManager.doServiceList(advParam, ShowType.WECHATAPP_BANNER_ADV, new QueryParam());
 		return wxBannerAds;
 	}
+	
+	/*
+     * 小程序 浮层 广告
+     * isNeedApi = true
+     */
+    private BaseAdEntity getWXFullAd(AdvParam advParam) {
+        BaseAdEntity wxFullAds = wXFullManager.doService(advParam, ShowType.WECHAT_FULL_ADV, false, new QueryParam(), false);
+        return wxFullAds;
+    }
 	
 
 	/*

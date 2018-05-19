@@ -29,7 +29,7 @@ public class WXBannerManager extends AbstractManager {
 	}
 
 	private WXAppBannerAdEntity from(AdContentCacheEle ad, AdvParam advParam) {
-		WXAppBannerAdEntity res = new WXAppBannerAdEntity();
+		WXAppBannerAdEntity res = new WXAppBannerAdEntity(ShowType.WECHATAPP_BANNER_ADV);
 		res.fillBaseInfo(ad.getAds(), advParam, new HashMap<String, String>());
 		res.dealLink(advParam);
 

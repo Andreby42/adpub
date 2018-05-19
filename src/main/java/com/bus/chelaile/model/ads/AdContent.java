@@ -48,7 +48,7 @@ public class AdContent {
         if (innerContent != null) {
             return innerContent;
         }
-        if(ShowType.WECHATAPP_BANNER_ADV.getType().equals(showType)) {
+        if(ShowType.WECHATAPP_BANNER_ADV.getType().equals(showType) || ShowType.WECHAT_FULL_ADV.getType().equals(showType)) {
         	AdWXBannerInnerContent wxBannerInner = new AdWXBannerInnerContent();
         	wxBannerInner.setAndPaseJson(content);
         	innerContent = wxBannerInner;

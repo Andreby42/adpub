@@ -172,6 +172,28 @@ public class BusAdvAction extends AbstractController {
             return serviceManager.getClienSucMapWithNoHead(object, Constants.STATUS_REQUEST_SUCCESS);
         }
     }
+    
+    
+    /*
+     * 小程序 banner 位广告
+     */
+    @ResponseBody
+    @RequestMapping(value = "adv!getWechatFullAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    public String getWechatFullAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws Exception {
+        AdvParam param = getActionParam(request);
+        param.setWxs(request.getParameter("wxs")); // 小程序来源
+        param.setSrc(request.getParameter("src"));
+        if (StringUtils.isEmpty(param.getH5Src()))
+            param.setH5Src(request.getParameter("src"));
+        Object object = serviceManager.getQueryValue(param, "getWXFullAds");
+        if (object == null) {
+            return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);
+        } else {
+            return serviceManager.getClienSucMapWithNoHead(object, Constants.STATUS_REQUEST_SUCCESS);
+        }
+    }
+    
 
     @ResponseBody
     @RequestMapping(value = "adv!getChat.action", produces = "Content-Type=text/plain;charset=UTF-8")
