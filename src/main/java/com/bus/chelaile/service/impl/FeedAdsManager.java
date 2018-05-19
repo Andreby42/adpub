@@ -113,6 +113,7 @@ public class FeedAdsManager extends AbstractManager {
 		
 		// 第三方广告处理
 		// 只有置顶位才返回这个
+		// 此处需要加上版本控制
 		if(feedInner1.getProvider_id() > 0 && advParam.getIsTop() == 1) {
 		    res = createSDKAds(feedInner1, ad);
             return res;

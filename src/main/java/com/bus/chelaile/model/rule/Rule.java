@@ -958,21 +958,23 @@ public class Rule {
 	}
 
 	public static void main(String[] args) {
-		String pattern = "4.*||1234123";
+		String pattern = "4.*||5.*";
 		String udid = "1234123";
 		String udid1 = "4lsadfadf";
-		String udid2 = "12444dfa";
+		String udid2 = "52444dfa";
 		System.out.println(udid.matches(pattern));
 		System.out.println(udid1.matches(pattern));
 		System.out.println(udid2.matches(pattern));
 
-		System.out.println(DateUtil.getMinuteStr());
+//		System.out.println(DateUtil.getMinuteStr());
+//		
+//		Map<Integer, String> test = New.hashMap();
+//		test.put(new Integer(1), "aaa");
+//		
+//		int a = 1;
+//		System.out.println(test.containsKey(a));
 		
-		Map<Integer, String> test = New.hashMap();
-		test.put(new Integer(1), "aaa");
 		
-		int a = 1;
-		System.out.println(test.containsKey(a));
 	}
 
 	public int getTotalClickPV() {
