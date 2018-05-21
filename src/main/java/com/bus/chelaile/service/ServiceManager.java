@@ -573,7 +573,7 @@ public class ServiceManager {
      * isNeedApi = true
      */
     private BaseAdEntity getWXFullAd(AdvParam advParam) {
-        BaseAdEntity wxFullAds = wXFullManager.doService(advParam, ShowType.WECHAT_FULL_ADV, false, new QueryParam(), false);
+        BaseAdEntity wxFullAds = wXFullManager.doService(advParam, ShowType.WECHAT_FULL_ADV, false, new QueryParam(), true);
         return wxFullAds;
     }
 	

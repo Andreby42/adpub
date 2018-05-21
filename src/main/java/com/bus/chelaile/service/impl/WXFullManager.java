@@ -34,6 +34,7 @@ public class WXFullManager extends AbstractManager {
                 if (StringUtils.isEmpty(advParam.getWxs())) {
                     continue;
                 }
+                logger.info("小程序浮层广告, id={}, servingPlace={}, servingPlaceList={}", ad.getAds().getId(), adWXFullInner.getServingPlace(), adWXFullInner.getServingPlaceList());
                 for (String s : adWXFullInner.getServingPlaceList()) {
                     if (s.equals(advParam.getWxs())) {
                         WXAppBannerAdEntity adEntity = from(ad, advParam);
