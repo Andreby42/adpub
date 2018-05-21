@@ -29,7 +29,7 @@ public class AdWXBannerInnerContent extends AdInnerContent {
 			
 			this.wx_miniPro_id = ad.getWx_miniPro_id();
 			this.wx_miniPro_path = ad.getWx_miniPro_path();
-			if(StringUtils.isNotEmpty(ad.getServingPlace()) && ad.getServingPlace().contains(",")) {
+			if(StringUtils.isNotEmpty(ad.getServingPlace())) {
 				this.servingPlaceList = New.arrayList();
 				for(String s : ad.getServingPlace().split(",")) {
 					this.servingPlaceList.add(s);
