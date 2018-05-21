@@ -30,11 +30,11 @@ public class WXFullManager extends AbstractManager {
             AdWXBannerInnerContent adWXFullInner = (AdWXBannerInnerContent) ad.getAds().getAdInnerContent();
 
             // 广告结构体有对来源的要求
+            logger.info("小程序浮层广告, id={}, servingPlace={}, servingPlaceList={}", ad.getAds().getId(), adWXFullInner.getServingPlace(), adWXFullInner.getServingPlaceList());
             if (adWXFullInner.getServingPlaceList() != null && adWXFullInner.getServingPlaceList().size() > 0) {
                 if (StringUtils.isEmpty(advParam.getWxs())) {
                     continue;
                 }
-                logger.info("小程序浮层广告, id={}, servingPlace={}, servingPlaceList={}", ad.getAds().getId(), adWXFullInner.getServingPlace(), adWXFullInner.getServingPlaceList());
                 for (String s : adWXFullInner.getServingPlaceList()) {
                     if (s.equals(advParam.getWxs())) {
                         WXAppBannerAdEntity adEntity = from(ad, advParam);
