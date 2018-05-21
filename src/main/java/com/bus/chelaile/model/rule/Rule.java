@@ -21,7 +21,6 @@ import com.bus.chelaile.thread.model.QueueObject;
 import com.bus.chelaile.util.AdvUtil;
 import com.bus.chelaile.util.DateUtil;
 import com.bus.chelaile.util.LocationKDTree;
-import com.bus.chelaile.util.New;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -78,6 +77,8 @@ public class Rule {
 	private int minIntervalPages;	// feed流广告最小投放间隔，单位：次。
 	
 	private int screenHeight; // 屏幕高度
+	
+	private int canPubMIUI; // 开屏是否给MIUI投放， 0 不投MIUI， 1 只投MIUI， 2 没有限制
 
 	protected static final Logger logger = LoggerFactory.getLogger(Rule.class);
 
@@ -728,6 +729,22 @@ public class Rule {
 		queueobj.setRedisIncrKey(todayStr + "_uvRuleId_" + ruleId);
 		Queue.set(queueobj);
 	}
+	
+	/*
+	 * 关于设备号的投放控制
+	 */
+    public boolean devicePub(String deviceType) {
+        boolean isMIUI = false;
+        if (StringUtils.isNoneBlank(deviceType) && deviceType.toLowerCase().contains("mi")) {
+            isMIUI = true;
+        }
+        if (this.getCanPubMIUI() == 0 && isMIUI) { // 不投miUI
+            return false;
+        } else if (this.getCanPubMIUI() == 1 && !isMIUI) { // 只投MIUI
+            return false;
+        }
+        return true;
+    }
 
 	public Date getStartDate() {
 		return startDate;
@@ -1023,5 +1040,13 @@ public class Rule {
 
     public void setScreenHeight(int screenHeight) {
         this.screenHeight = screenHeight;
+    }
+
+    public int getCanPubMIUI() {
+        return canPubMIUI;
+    }
+
+    public void setCanPubMIUI(int canPubMIUI) {
+        this.canPubMIUI = canPubMIUI;
     }
 }

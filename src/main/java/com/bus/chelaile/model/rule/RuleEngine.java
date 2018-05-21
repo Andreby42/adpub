@@ -197,6 +197,7 @@ public class RuleEngine {
             rule.setBlackList(getChildAsText(rInfo, "blackList"));
             rule.setUdidPattern(getChildAsText(rInfo, "udidPattern"));
             rule.setScreenHeight(getChildAsInt(rInfo, "screenHeight"));
+            rule.setCanPubMIUI(getChildAsInt(rInfo, "canPubMIUI")); // 开屏是否开启MIUI
             List<Position> positions = parseGpsList(rInfo);
             if (positions != null && positions.size() > 0) {
             	rule.setGpsList(positions);

@@ -48,7 +48,7 @@ public class WriteCacheThread implements Runnable {
 				}
 				if (obj.getRedisIncrKey() != null && !obj.getRedisIncrKey().equals("")) {
 					long time = System.currentTimeMillis();
-					CacheUtil.incrToCache(obj.getRedisIncrKey(), Constants.ONE_DAY_TIME);	// 保存一天
+					CacheUtil.incrToCache(obj.getRedisIncrKey(), Constants.SEVEN_DAY_TIME);	// 保存七天
 					time = System.currentTimeMillis() - time;
 					if (time > 30) {
 						TimeLong.info("redisTime=" + time);

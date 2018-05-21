@@ -266,6 +266,12 @@ public abstract class AbstractManager {
             //					advParam.getUdid());
             return false;
         }
+        // 开屏是否投给MIUI，投且只投
+        if (showType == ShowType.OPEN_SCREEN && ! rule.devicePub(advParam.getDeviceType())) {
+            logger.info("MIUI OPEN return false, deviceType={}, canPubMIUI={}", advParam.getDeviceType(), rule.getCanPubMIUI());
+            return false;
+        }
+        
         if (rule.hasNetStatus() && !rule.isNetStatusMatch(advParam.getNw())) {
             //			logger.info("hasNetStatus return false,ruleId={},nw={},udid={}", rule.getRuleId(), advParam.getNw(),
             //					advParam.getUdid());
