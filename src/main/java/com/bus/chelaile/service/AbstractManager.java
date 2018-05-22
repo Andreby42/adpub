@@ -267,8 +267,14 @@ public abstract class AbstractManager {
             return false;
         }
         // 开屏是否投给MIUI，投且只投
-        if (showType == ShowType.OPEN_SCREEN && ! rule.devicePub(advParam.getDeviceType())) {
-            logger.info("MIUI OPEN return false, deviceType={}, canPubMIUI={}", advParam.getDeviceType(), rule.getCanPubMIUI());
+        if (showType == ShowType.OPEN_SCREEN && ! rule.devicePub(advParam.getDeviceType(), advParam.getStartMode())) {
+            logger.info("MIUI OPEN return false, deviceType={}, canPubMIUI={}, startMode={}, udid={}", advParam.getDeviceType(), rule.getCanPubMIUI(),
+                    advParam.getStartMode(), advParam.getUdid());
+            return false;
+        }
+        // 冷热启动模式测试
+        if (showType == ShowType.OPEN_SCREEN && rule.getStartMode() != 0 && !rule.checkStartMode(advParam.getStartMode())) {
+            logger.info("startMode return false, startMode={}, udid={}", advParam.getStartMode(), advParam.getUdid());
             return false;
         }
         
@@ -357,6 +363,7 @@ public abstract class AbstractManager {
                 return false;
             }
         }
+        
 
         // 最小次数间隔，feed流广告用。 两次广告展示之间最少间隔几次调用
         if (rule.getMinIntervalPages() > 0 && ad.getShowType().equals(ShowType.FEED_ADV.getType())) {

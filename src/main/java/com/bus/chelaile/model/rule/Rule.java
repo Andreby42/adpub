@@ -79,6 +79,7 @@ public class Rule {
 	private int screenHeight; // 屏幕高度
 	
 	private int canPubMIUI; // 开屏是否给MIUI投放， 0 不投MIUI， 1 只投MIUI， 2 没有限制
+	private int startMode; // 冷热启动模式控制. 1 只投冷启动， 2 只投热启动。  0 没有限制
 
 	protected static final Logger logger = LoggerFactory.getLogger(Rule.class);
 
@@ -732,15 +733,17 @@ public class Rule {
 	
 	/*
 	 * 关于设备号的投放控制
+	 * startMode==0表示冷启动
+	 * isMIUIcold表示米UI的冷启动
 	 */
-    public boolean devicePub(String deviceType) {
-        boolean isMIUI = false;
-        if (StringUtils.isNoneBlank(deviceType) && deviceType.toLowerCase().contains("mi")) {
-            isMIUI = true;
+    public boolean devicePub(String deviceType, int startMode) {
+        boolean isMIUIcold = false;
+        if (StringUtils.isNoneBlank(deviceType) && deviceType.toLowerCase().contains("mi") && startMode == 0) {
+            isMIUIcold = true;
         }
-        if (this.getCanPubMIUI() == 0 && isMIUI) { // 不投miUI
+        if (this.getCanPubMIUI() == 0 && isMIUIcold) { // 不投miUI冷启动
             return false;
-        } else if (this.getCanPubMIUI() == 1 && !isMIUI) { // 只投MIUI
+        } else if (this.getCanPubMIUI() == 1 && !isMIUIcold) { // 只投MIUI冷启动
             return false;
         }
         return true;
@@ -1048,5 +1051,22 @@ public class Rule {
 
     public void setCanPubMIUI(int canPubMIUI) {
         this.canPubMIUI = canPubMIUI;
+    }
+
+    public boolean checkStartMode(int startMode) {
+        if (this.startMode == 1 && startMode == 1) { // 条件是只投冷启动，参数表示是热启动，故返回false
+            return false;
+        } else if (this.startMode == 2 && startMode == 0) { // 条件是指投热启动，参数表示是冷启动，故返回false
+            return false;
+        }
+        return true;
+    }
+
+    public int getStartMode() {
+        return startMode;
+    }
+
+    public void setStartMode(int startMode) {
+        this.startMode = startMode;
     }
 }
