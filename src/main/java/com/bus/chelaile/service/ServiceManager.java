@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,7 @@ import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 import com.bus.chelaile.model.ads.entity.LineAdEntity;
+import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.model.record.DisplayUserCache;
@@ -215,7 +217,10 @@ public class ServiceManager {
                 return null;
             }
             return object;
-        } else if (methodName.equals("getNewOpen")) { // 新版本开屏、浮层、乘车页浮层
+        } else if(methodName.equals("getLineFeedAds")){ //线路详情页下方的feed流广告。（原feed流顶部广告位）
+            entity = getLineFeedAds(advParam);
+            object = (JSONObject) entity;
+        }else if (methodName.equals("getNewOpen")) { // 新版本开屏、浮层、乘车页浮层
             entity = getNewOpen(advParam);
             object.put("ads", entity);
         } else if (methodName.equals("precacheResource")) { // 预缓存广告资源图片
@@ -596,6 +601,48 @@ public class ServiceManager {
 
 		return resultMap;
 	}
+	
+	/**
+     * 详情页下方feed位广告
+     * 
+     * @param advParam
+     * @return
+     *  TODO 
+     */
+    private Object getLineFeedAds(AdvParam advParam) {
+//        Set<String> pics = openManager.getAllAdsAdsAudiosPics(advParam, ShowType.OPEN_SCREEN);
+
+        JSONObject resultMap = new JSONObject();
+        
+        LineFeedAdEntity lineFeedAd1 = new LineFeedAdEntity();
+        lineFeedAd1.setProvider_id("2");
+        lineFeedAd1.setId(11111);
+        
+        LineFeedAdEntity lineFeedAd2 = new LineFeedAdEntity();
+        lineFeedAd2.setProvider_id("7");
+        lineFeedAd2.setId(11112);
+        
+        LineFeedAdEntity lineFeedAd3 = new LineFeedAdEntity();
+        lineFeedAd3.setProvider_id("5");
+        lineFeedAd3.setId(11113);
+
+        List<BaseAdEntity> entities = New.arrayList();
+        entities.add(lineFeedAd1);
+        entities.add(lineFeedAd2);
+        entities.add(lineFeedAd3);
+        
+        Collections.shuffle(entities);
+        
+        
+        
+        
+        resultMap.put("ads", entities);
+        resultMap.put("autoInterval", 15);
+        resultMap.put("mixInterval", 4);
+        return resultMap;
+
+    }
+    
 
 	/*
 	 * 旧版本预加载

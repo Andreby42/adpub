@@ -194,6 +194,21 @@ public class BusAdvAction extends AbstractController {
         }
     }
     
+    
+    /*
+     * 详情页下方广告（及之前的feed流顶部广告)
+     */
+    @ResponseBody
+    @RequestMapping(value = "adv!getLineFeedAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    public String getLineFeedAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws Exception {
+        
+        AdvParam param = getActionParam(request);
+//        param.setIsTop(getInt(request, "isTop"));
+        
+        return serviceManager.getAdsResponseStr(param, "getLineFeedAds");
+    }
+    
 
     @ResponseBody
     @RequestMapping(value = "adv!getChat.action", produces = "Content-Type=text/plain;charset=UTF-8")
