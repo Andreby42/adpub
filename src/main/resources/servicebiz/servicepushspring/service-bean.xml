@@ -31,7 +31,7 @@
 	</bean>
 	<!-- 小程序banner位广告 -->
 	<bean id="wXBannerManager" class="com.bus.chelaile.service.impl.WXBannerManager" parent="abstractService">
-	</bean>LineFeedAdsManager
+	</bean>
 	<!-- 线路详情页下方feed位广告 -->
 	<bean id="lineFeedAdsManager" class="com.bus.chelaile.service.impl.LineFeedAdsManager" parent="abstractService">
 	</bean>
