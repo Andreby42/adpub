@@ -80,6 +80,8 @@ public class AdvParam {
      private String wxs; // 小程序来源，比如车来了主小程序OR其他马甲号小程序
      
      private int isTop; // 是否置顶位。 feed流广告专用
+     
+     private String from; // 小程序专用，用于剔除来自‘城市服务’请求的广告
      /**
       * 存入的s都会被转换为小写。
       *
@@ -615,6 +617,16 @@ public class AdvParam {
 
     public void setIsTop(int isTop) {
         this.isTop = isTop;
+    }
+
+
+    public String getFrom() {
+        return from;
+    }
+
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 	
 	

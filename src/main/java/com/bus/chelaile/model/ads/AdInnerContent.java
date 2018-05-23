@@ -13,7 +13,7 @@ public abstract class AdInnerContent {
     private static final String DEFAULT_PIC_URL_PREFIX = "http://pic1.chelaile.net.cn/adv/%1$s";
     protected String jsonContent;
     
-    public void setAndPaseJson(String jsonr) {
+    public void setAndParseJson(String jsonr) {
         this.jsonContent = jsonr;
         parseJson(jsonr);
     }

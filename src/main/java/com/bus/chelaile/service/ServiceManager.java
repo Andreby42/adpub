@@ -616,11 +616,9 @@ public class ServiceManager {
         Collections.shuffle(entities);
         
         
-        
-        
         resultMap.put("ads", entities);
-        resultMap.put("autoInterval", 1500);
-        resultMap.put("mixInterval", 400);
+        resultMap.put("autoInterval", 15000);
+        resultMap.put("mixInterval", 4000);
         return resultMap;
 
     }

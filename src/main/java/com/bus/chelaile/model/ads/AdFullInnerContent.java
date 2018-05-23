@@ -63,7 +63,7 @@ public class AdFullInnerContent extends AdInnerContent {
 	
     public static void main(String[] args) {
         AdFullInnerContent adPush = new AdFullInnerContent();
-        adPush.setAndPaseJson("{\"pic\":\"http://cdn.www.chelaile.net.cn/img/subway/line10_pic.png\"}");
+        adPush.setAndParseJson("{\"pic\":\"http://cdn.www.chelaile.net.cn/img/subway/line10_pic.png\"}");
         System.out.println("pic: " + adPush.pic);
         System.out.println("JsonR: " + adPush.jsonContent);
     }

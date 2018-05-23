@@ -4,6 +4,11 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.bus.chelaile.model.ShowType;
 
 
+/**
+ * 详情页下方feed流广告，返回广告体
+ * @author Administrator
+ *
+ */
 public class LineFeedAdEntity extends BaseAdEntity {
 	
 	private String pic; // 图片URL

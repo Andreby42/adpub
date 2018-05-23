@@ -53,7 +53,7 @@ public class AdStationlInnerContent extends AdInnerContent {
 	public static void main(String[] args) {
 		AdStationlInnerContent adPush = new AdStationlInnerContent();
 		
-		adPush.setAndPaseJson("{\"pic\":\"https://image3.chelaile.net.cn/98949248b15141a9b5eb0759097b68eb\",\"bannerInfo\":{\"bannerType\":\"3\",\"name\":\"坚持打卡\",\"color\":\"174, 60, 60, 1\",\"slogan\":\"昨天喜欢你，今天喜欢你，明天看心情\",\"sloganColor\":\"29, 116, 113, 1\",\"tag\":{},\"button\":{\"buttonText\":\"测试\",\"buttonColor\":\"255, 255, 255, 1\",\"buttonBG\":\"84, 85, 25, 1\",\"buttonRim\":\"255, 0, 43, 1\",\"buttonPic\":\"\"}},\"adCard\":{\"open\":\"0\",\"cardType\":\"2\",\"logo\":\"\",\"topPic\":\"\",\"tagPic\":\"\",\"name\":\"\",\"address\":\"\",\"lng\":\"12.1\",\"lat\":\"\",\"phoneNum\":\"\",\"link\":\"\"}}");
+		adPush.setAndParseJson("{\"pic\":\"https://image3.chelaile.net.cn/98949248b15141a9b5eb0759097b68eb\",\"bannerInfo\":{\"bannerType\":\"3\",\"name\":\"坚持打卡\",\"color\":\"174, 60, 60, 1\",\"slogan\":\"昨天喜欢你，今天喜欢你，明天看心情\",\"sloganColor\":\"29, 116, 113, 1\",\"tag\":{},\"button\":{\"buttonText\":\"测试\",\"buttonColor\":\"255, 255, 255, 1\",\"buttonBG\":\"84, 85, 25, 1\",\"buttonRim\":\"255, 0, 43, 1\",\"buttonPic\":\"\"}},\"adCard\":{\"open\":\"0\",\"cardType\":\"2\",\"logo\":\"\",\"topPic\":\"\",\"tagPic\":\"\",\"name\":\"\",\"address\":\"\",\"lng\":\"12.1\",\"lat\":\"\",\"phoneNum\":\"\",\"link\":\"\"}}");
 		System.out.println("pic: " + adPush.pic);
 		System.out.println("adCard: name " + adPush.getAdCard().getName());
 		System.out.println("adCard: lng " + adPush.getAdCard().getLng());

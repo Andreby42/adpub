@@ -33,7 +33,7 @@ public class AdPushInnerContent extends AdInnerContent {
 
     public static void main(String[] args) {
         AdPushInnerContent adPush = new AdPushInnerContent();
-        adPush.setAndPaseJson("{\"head\":\"巧虎来了\",\"subhead\":\"亲，你有好久都没看我了哦\"}");
+        adPush.setAndParseJson("{\"head\":\"巧虎来了\",\"subhead\":\"亲，你有好久都没看我了哦\"}");
         System.out.println("Head: " + adPush.head);
         System.out.println("SubHead: " + adPush.subhead);
         System.out.println("JsonR: " + adPush.jsonContent);

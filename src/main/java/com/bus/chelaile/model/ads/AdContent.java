@@ -50,28 +50,28 @@ public class AdContent {
         }
         if(ShowType.WECHATAPP_BANNER_ADV.getType().equals(showType) || ShowType.WECHAT_FULL_ADV.getType().equals(showType)) {
         	AdWXBannerInnerContent wxBannerInner = new AdWXBannerInnerContent();
-        	wxBannerInner.setAndPaseJson(content);
+        	wxBannerInner.setAndParseJson(content);
         	innerContent = wxBannerInner;
         }
         else if(ShowType.STATION_ADV.getType().equals(showType)) {		// 站点广告
         	AdStationlInnerContent stationInner = new AdStationlInnerContent();
-        	stationInner.setAndPaseJson(content);
+        	stationInner.setAndParseJson(content);
         	innerContent = stationInner;
         }
         else if (ShowType.DOUBLE_COLUMN.getType().equals(showType) || ShowType.FLOW_ADV.getType().equals(showType) 
                 || ShowType.ROUTE_PLAN_ADV.getType().equals(showType)) { // 双栏广告 || 信息流广告
             AdDoubleInnerContent dblInner = new AdDoubleInnerContent();
-            dblInner.setAndPaseJson(content);
+            dblInner.setAndParseJson(content);
             innerContent = dblInner;
         }
         else if (ShowType.SINGLE_COLUMN.getType().equals(showType)) { // 单栏广告 || 线路规划页广告
             AdSingleInnerContent singleInner = new AdSingleInnerContent();
-            singleInner.setAndPaseJson(content);
+            singleInner.setAndParseJson(content);
             innerContent = singleInner;
         }
         else if(ShowType.FEED_ADV.getType().equals(showType)) {  // feed流广告
         	AdFeedInnerContent feedInner = new AdFeedInnerContent();
-        	feedInner.setAndPaseJson(content);
+        	feedInner.setAndParseJson(content);
         	innerContent = feedInner;
         	if(feedInner != null && feedInner.getLikeNum() > 0) {
         		String key = "feedAdvLike#" + id;
@@ -82,34 +82,38 @@ public class AdContent {
         else if (ShowType.FULL_SCREEN.getType().equals(showType) || ShowType.FULL_SCREEN_RIDE.getType().equals(showType)
         		|| ShowType.FULL_SCREEN_MOBIKE.getType().equals(showType)) { // 浮屏广告--> 包括首页、乘车页、共享单车页
             AdFullInnerContent fullInner = new AdFullInnerContent();
-            fullInner.setAndPaseJson(content);
+            fullInner.setAndParseJson(content);
             innerContent = fullInner;
         }
         else if (ShowType.PUSH_NOTICE.getType().equals(showType)) {
             AdPushInnerContent pushInner = new AdPushInnerContent();
-            pushInner.setAndPaseJson(content);
+            pushInner.setAndParseJson(content);
             innerContent = pushInner;
         } 
         else if (ShowType.OPEN_SCREEN.getType().equals(showType)) {
             AdFullInnerContent fullInner = new AdFullInnerContent();
-            fullInner.setAndPaseJson(content);
+            fullInner.setAndParseJson(content);
             innerContent = fullInner;
         }
         else if (ShowType.LINE_DETAIL.getType().equals(showType)
         		||"07".equals(showType)||"08".equals(showType)
         		|| "12".equals(showType)) {		// 详情页广告，借用这个结构的还包括--->详情页刷新位广告，活动页广告，乘车页广告，下车提醒音频广告
             AdLineDetailInnerContent lineDetailInner = new AdLineDetailInnerContent();
-            lineDetailInner.setAndPaseJson(content);
+            lineDetailInner.setAndParseJson(content);
             innerContent = lineDetailInner;
         }
         else if (ShowType.LINEDETAIL_REFRESH_ADV.getType().equals(showType) || ShowType.H5_LINEBANNER_ADV.getType().equals(showType)) {
         	AdLineRefreshInnerContent lineReInner = new AdLineRefreshInnerContent(); // 刷新位广告， 至简结构广告（仅图片和h5跳转）
-        	lineReInner.setAndPaseJson(content);
+        	lineReInner.setAndParseJson(content);
         	innerContent = lineReInner;
         } else if(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType().equals(showType)) {
         	AdLineRefreshOpenInnerContent lineReOpenInner = new AdLineRefreshOpenInnerContent();
-        	lineReOpenInner.setAndPaseJson(content);
+        	lineReOpenInner.setAndParseJson(content);
         	innerContent = lineReOpenInner;
+        } else if(ShowType.LINE_FEED_ADV.getType().equals(showType)) {
+            AdLineFeedInnerContent adLineFeedInnerContent = new AdLineFeedInnerContent();
+            adLineFeedInnerContent.setAndParseJson(content);
+            innerContent = adLineFeedInnerContent;
         }
         else {
             logger.error("[Unsupport_ShowType] 无法识别的showType: {}", showType);

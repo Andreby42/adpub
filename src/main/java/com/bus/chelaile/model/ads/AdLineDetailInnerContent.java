@@ -77,7 +77,7 @@ public class AdLineDetailInnerContent extends AdInnerContent {
 
 	public static void main(String[] args) {
 		AdLineDetailInnerContent adPush = new AdLineDetailInnerContent();
-		adPush.setAndPaseJson("{\"pic\":\"http://cdn.www.chelaile.net.cn/img/subway/line10_pic.png\",\"silentTime\":30, \"c\":1}");
+		adPush.setAndParseJson("{\"pic\":\"http://cdn.www.chelaile.net.cn/img/subway/line10_pic.png\",\"silentTime\":30, \"c\":1}");
 		System.out.println("pic: " + adPush.pic);
 		System.out.println("silentTime: " + adPush.silentTime);
 		System.out.println("JsonR: " + adPush.jsonContent);
