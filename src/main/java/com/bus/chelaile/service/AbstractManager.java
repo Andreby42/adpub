@@ -765,6 +765,7 @@ public abstract class AbstractManager {
             }
         }
         
+        logger.info("************ s={}, from={}", advParam.getS(), advParam.getFrom());
         // 城市服务不返回广告
         if(platform.isH5(platform.getDisplay())) {
             if(StringUtils.isNoneBlank(advParam.getFrom()) && advParam.getFrom().equals("wxcityservice")) {
