@@ -1,40 +1,23 @@
 package com.bus.chelaile.service.impl;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-
 import scala.util.Random;
 
-import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AnalysisLog;
-import com.bus.chelaile.common.CacheUtil;
-import com.bus.chelaile.common.Constants;
-import com.bus.chelaile.koubei.CouponInfo;
-import com.bus.chelaile.koubei.KBUtil;
-import com.bus.chelaile.model.Platform;
-import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
-import com.bus.chelaile.model.ads.AdButtonInfo;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
-import com.bus.chelaile.model.ads.AdStationlInnerContent;
-import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
-import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.util.New;
 
