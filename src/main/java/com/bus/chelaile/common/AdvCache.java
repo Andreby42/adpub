@@ -16,7 +16,7 @@ public class AdvCache {
 	//private static final int AD_RECORD_EXPIRE_TIME = 10 * 24 * 60 * 60;
 	private static final int LONGEST_CACHE_TIME = 11 * 24 * 60 * 60 - 1;
 //	private static final int ACITVE_CACHE_TIME = 30 * 24 * 60 * 60;
-	private static final String SCREENHEIGHT_KEY = "SCREENHEIGHT_";
+	private static final String CSHOW_KEY = "CSHOW_";
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(AdvCache.class);
@@ -367,8 +367,8 @@ public class AdvCache {
 	}
 	
 	// 屏幕高度
-	public static String getScreenHeightKey(String udid) {
-	    return SCREENHEIGHT_KEY + udid;
+	public static String getCshowHeightKey(String udid) {
+	    return CSHOW_KEY + udid;
 	}
 	
 }

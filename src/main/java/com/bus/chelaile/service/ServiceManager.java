@@ -462,7 +462,7 @@ public class ServiceManager {
         // 从缓存获cshow
         if (StringUtils.isNoneBlank(advParam.getUdid())
                 && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
-            String cshowKey = AdvCache.getScreenHeightKey(advParam.getUdid());
+            String cshowKey = AdvCache.getCshowHeightKey(advParam.getUdid());
             // TODO 。换成appredis
             //String cshow = (String)CacheUtil.getFromAppRedis(cshowKey);
             String cshow = (String) CacheUtil.getFromRedis(cshowKey);
