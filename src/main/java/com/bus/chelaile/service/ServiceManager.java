@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.apache.http.ParseException;
@@ -619,6 +620,8 @@ public class ServiceManager {
         resultMap.put("ads", entities);
         resultMap.put("autoInterval", 15000);
         resultMap.put("mixInterval", 4000);
+        Random r = new Random();
+        resultMap.put("unfoldFeed", r.nextInt(1));
         return resultMap;
 
     }
