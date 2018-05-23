@@ -62,7 +62,7 @@ public class LineFeedAdsManager extends AbstractManager {
     // 记录发送的第一条广告的log
     private void setSendLog(BaseAdEntity baseAdEntity, String udid) {
         String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(udid);
-        CacheUtil.setToRedis(sendLineFeedLogKey, Constants.SEDN_LINEFEED_EXTIME, baseAdEntity.getId());
+        CacheUtil.setToRedis(sendLineFeedLogKey, Constants.SEDN_LINEFEED_EXTIME, String.valueOf(baseAdEntity.getId()));
     }
 
     private LineFeedAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
