@@ -18,7 +18,6 @@ import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
-import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
@@ -115,7 +114,7 @@ public class LineFeedAdsManager extends AbstractManager {
         if (lineFeedAds != null && lineFeedAds.size() > 0) {
             int totalWeight = 0;
             for (BaseAdEntity entity : lineFeedAds) {
-                totalWeight += ((StationAdEntity) entity).getAdWeight();
+                totalWeight += ((LineFeedAdEntity) entity).getAdWeight();
             }
             
             if (totalWeight > 0) {
@@ -123,7 +122,7 @@ public class LineFeedAdsManager extends AbstractManager {
                 int indexWeight = 0;
                 for (int index = 0; index < lineFeedAds.size(); index++) {
                     BaseAdEntity entity = lineFeedAds.get(index);
-                    if ((indexWeight += ((StationAdEntity) entity).getAdWeight()) > randomOut) {
+                    if ((indexWeight += ((LineFeedAdEntity) entity).getAdWeight()) > randomOut) {
                         Collections.swap(lineFeedAds, 0, index);
                     }
                 }
