@@ -621,7 +621,7 @@ public class ServiceManager {
         resultMap.put("autoInterval", 15000);
         resultMap.put("mixInterval", 4000);
         Random r = new Random();
-        resultMap.put("unfoldFeed", r.nextInt(1));
+        resultMap.put("unfoldFeed", r.nextInt(2));
         return resultMap;
 
     }
