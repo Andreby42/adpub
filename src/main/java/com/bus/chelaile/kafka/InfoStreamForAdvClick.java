@@ -80,11 +80,6 @@ public class InfoStreamForAdvClick {
                     }
                 }
 		        
-		        
-		        
-		        
-		        
-		        
 		        kafkaStarted = true;
 				logger.info("<Info-Stream top-k>: InfoStreamDispatcher 广告点击日志 分发者客户端成功启动");
 				} catch (Exception e) {

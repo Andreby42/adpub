@@ -17,6 +17,7 @@ public class AdvCache {
 	private static final int LONGEST_CACHE_TIME = 11 * 24 * 60 * 60 - 1;
 //	private static final int ACITVE_CACHE_TIME = 30 * 24 * 60 * 60;
 	private static final String CSHOW_KEY = "CSHOW_";
+	private static final String SEND_LINE_FEED = "SEND_LINEFEED_LOG";
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(AdvCache.class);
@@ -366,9 +367,14 @@ public class AdvCache {
 		return new StringBuilder("WANGYI#").append(articleId).toString();
 	}
 	
-	// 屏幕高度
+	// cshow。 从app的redis中获取到
 	public static String getCshowHeightKey(String udid) {
 	    return CSHOW_KEY + udid;
 	}
+
+	//  详情页下方feed位投放记录
+    public static String getSendLineFeedLogKey(String udid) {
+        return SEND_LINE_FEED + udid;
+    }
 	
 }

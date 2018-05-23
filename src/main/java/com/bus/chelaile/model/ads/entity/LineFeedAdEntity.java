@@ -17,6 +17,10 @@ public class LineFeedAdEntity extends BaseAdEntity {
 	private int adWeight;    // 轮播权重
 	@JSONField(serialize=false)
     private String title;
+	@JSONField(serialize=false)
+	private long autoInterval;
+	@JSONField(serialize=false)
+	private long mixInterval;
 	
 	// 构造方法
 	public LineFeedAdEntity() {
@@ -64,4 +68,32 @@ public class LineFeedAdEntity extends BaseAdEntity {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+    /**
+     * @return the autoInterval
+     */
+    public long getAutoInterval() {
+        return autoInterval;
+    }
+
+    /**
+     * @param autoInterval the autoInterval to set
+     */
+    public void setAutoInterval(long autoInterval) {
+        this.autoInterval = autoInterval;
+    }
+
+    /**
+     * @return the mixInterval
+     */
+    public long getMixInterval() {
+        return mixInterval;
+    }
+
+    /**
+     * @param mixInterval the mixInterval to set
+     */
+    public void setMixInterval(long mixInterval) {
+        this.mixInterval = mixInterval;
+    }
 }

@@ -206,7 +206,7 @@ public class FeedAdsManager extends AbstractManager {
 		Collections.sort(adsList, FEEDAD_CONTENT_COMPARATOR);
 		LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
 		// 把所有符合规则的广告放到map中.
-		//改成LinkedHashMap保持有序
+		// 改成LinkedHashMap保持有序
 		handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
 
 		if (adMap.size() == 0) {

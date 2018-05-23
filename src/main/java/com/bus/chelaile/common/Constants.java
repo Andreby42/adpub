@@ -21,6 +21,8 @@ public class Constants {
     public static final int LONGEST_CACHE_TIME = 30 * 24 * 60 * 60 - 1; 
     public static final int ONE_DAY_TIME = 1 * 24 * 60 * 60; //一天，单位 S
     public static final int SEVEN_DAY_TIME = 7 * 24 * 60 * 60; //七天，单位 S
+    public static final int SEDN_LINEFEED_EXTIME = Integer.parseInt(PropertiesUtils.getValue(
+            PropertiesName.PUBLIC.getValue(), "sendLineFeedLogEx", "600"));   // 保存详情页feed位广告投放记录。 10 min，单位S
     
     public static final int ONE_DAY_NEW_USER_PERIOD = 1 * 24 * 60 * 60 * 1000;  //一天，单位毫秒，默认新用户的时期。
     public static final int DEFAULT_NEW_USER_PERIOD = 7 * 24 * 60 * 60 * 1000;  //七天，单位毫秒，默认新用户的时期。

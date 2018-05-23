@@ -12,8 +12,8 @@ import com.bus.chelaile.mvc.AdvParam;
  */
 public class AdLineFeedInnerContent extends AdInnerContent {
     private int adWeight; // 权重
-    private int autoInterval; // 自动刷新时间
-    private int mixInterval; // 最小展示时间
+    private long autoInterval; // 自动刷新时间
+    private long mixInterval; // 最小展示时间
     private int provider_id; // 广告提供商
 
     @Override
@@ -23,8 +23,8 @@ public class AdLineFeedInnerContent extends AdInnerContent {
         if (ad != null) {
             this.adWeight = ad.adWeight;
             this.autoInterval = ad.autoInterval;
-            this.mixInterval = ad.mixInterval;
-            this.provider_id = ad.provider_id;
+            this.mixInterval = ad.mixInterval * 1000;
+            this.provider_id = ad.provider_id * 1000;
         }
     }
 
@@ -51,19 +51,19 @@ public class AdLineFeedInnerContent extends AdInnerContent {
         }
     }
 
-    public int getAutoInterval() {
+    public long getAutoInterval() {
         return autoInterval;
     }
 
-    public void setAutoInterval(int autoInterval) {
+    public void setAutoInterval(long autoInterval) {
         this.autoInterval = autoInterval;
     }
 
-    public int getMixInterval() {
+    public long getMixInterval() {
         return mixInterval;
     }
 
-    public void setMixInterval(int mixInterval) {
+    public void setMixInterval(long mixInterval) {
         this.mixInterval = mixInterval;
     }
 

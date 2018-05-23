@@ -3,6 +3,7 @@ package com.bus.chelaile.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,8 +104,10 @@ public abstract class AbstractManager {
             return null;
 
         AdPubCacheRecord cacheRecord = gainCacheRecord(advParam, showType);
-        // 需要排序 Collections.sort(adsList, AD_CONTENT_COMPARATOR);
-        Map<Integer, AdContentCacheEle> adMap = New.hashMap();
+        // 需要排序 
+        Collections.shuffle(adsList);
+        Collections.sort(adsList, AD_CONTENT_COMPARATOR);
+        LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
         // 把所有符合规则的广告放到map中
         handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
 
@@ -121,11 +124,6 @@ public abstract class AbstractManager {
         logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
         List<BaseAdEntity> entities = null;
         entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
-        // 得到的entiy列表，按照优先级排序
-        // 如果是站点广告并且存在买断的，那么需要把非买断的去掉
-        if (entities != null && entities.size() > 0) {
-            Collections.sort(entities, ENTITY_COMPARATOR);
-        }
         return entities;
     }
 

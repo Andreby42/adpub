@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.http.ParseException;
+import org.apache.ibatis.executor.loader.ResultLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,7 @@ import com.bus.chelaile.service.impl.ActiveManager;
 import com.bus.chelaile.service.impl.DoubleAndSingleManager;
 import com.bus.chelaile.service.impl.FeedAdsManager;
 import com.bus.chelaile.service.impl.LineDetailsManager;
+import com.bus.chelaile.service.impl.LineFeedAdsManager;
 import com.bus.chelaile.service.impl.SimpleAdManager;
 import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.RideManager;
@@ -74,7 +76,8 @@ public class ServiceManager {
 	private FeedAdsManager feedAdsManager;
 	@Autowired
 	private OpenManager openManager;
-
+	@Autowired
+	private LineFeedAdsManager lineFeedAdsManager;
 	@Autowired
 	private DoubleAndSingleManager doubleAndSingleManager;
 
@@ -593,29 +596,38 @@ public class ServiceManager {
      *  TODO 
      */
     private Object getLineFeedAds(AdvParam advParam) {
-//        Set<String> pics = openManager.getAllAdsAdsAudiosPics(advParam, ShowType.OPEN_SCREEN);
-
+//      Set<String> pics = openManager.getAllAdsAdsAudiosPics(advParam, ShowType.OPEN_SCREEN);
         JSONObject resultMap = new JSONObject();
-        
-        LineFeedAdEntity lineFeedAd1 = new LineFeedAdEntity();
-        lineFeedAd1.setProvider_id("2");
-        lineFeedAd1.setId(11111);
-        
-        LineFeedAdEntity lineFeedAd2 = new LineFeedAdEntity();
-        lineFeedAd2.setProvider_id("7");
-        lineFeedAd2.setId(11112);
-        
-        LineFeedAdEntity lineFeedAd3 = new LineFeedAdEntity();
-        lineFeedAd3.setProvider_id("5");
-        lineFeedAd3.setId(11113);
 
-        List<BaseAdEntity> entities = New.arrayList();
-        entities.add(lineFeedAd1);
-        entities.add(lineFeedAd2);
-        entities.add(lineFeedAd3);
+        List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
+
+        if(entities == null || entities.size() == 0) {
+            return resultMap;
+        } else {
+            resultMap.put("ads", entities);
+            resultMap.put("autoInterval", ((LineFeedAdEntity)entities.get(0)).getAutoInterval());
+            resultMap.put("mixInterval", ((LineFeedAdEntity)entities.get(0)).getMixInterval());
+        }
+     
         
-        Collections.shuffle(entities);
-        
+//        LineFeedAdEntity lineFeedAd1 = new LineFeedAdEntity();
+//        lineFeedAd1.setProvider_id("2");
+//        lineFeedAd1.setId(11111);
+//        
+//        LineFeedAdEntity lineFeedAd2 = new LineFeedAdEntity();
+//        lineFeedAd2.setProvider_id("7");
+//        lineFeedAd2.setId(11112);
+//        
+//        LineFeedAdEntity lineFeedAd3 = new LineFeedAdEntity();
+//        lineFeedAd3.setProvider_id("5");
+//        lineFeedAd3.setId(11113);
+//
+//        List<BaseAdEntity> entities = New.arrayList();
+//        entities.add(lineFeedAd1);
+//        entities.add(lineFeedAd2);
+//        entities.add(lineFeedAd3);
+//        
+//        Collections.shuffle(entities);
         
         resultMap.put("ads", entities);
         resultMap.put("autoInterval", 15000);

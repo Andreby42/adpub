@@ -1,11 +1,15 @@
 package com.bus.chelaile.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import scala.util.Random;
 
+import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
+import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -48,10 +52,18 @@ public class LineFeedAdsManager extends AbstractManager {
         // 如果半小时内，那么根据上次返回到的位置，轮训下一个
         calAdWeightAndOrder(advParam, entities);
         
-        if (entities != null && entities.size() > 0)
+        if (entities != null && entities.size() > 0) {
             writeSendLog(advParam, entities);
+            setSendLog(entities.get(0), advParam.getUdid());
+        }
 
         return entities;
+    }
+
+    // 记录发送的第一条广告的log
+    private void setSendLog(BaseAdEntity baseAdEntity, String udid) {
+        String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(udid);
+        CacheUtil.setToRedis(sendLineFeedLogKey, Constants.SEDN_LINEFEED_EXTIME, baseAdEntity.getId());
     }
 
     private LineFeedAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
@@ -61,7 +73,7 @@ public class LineFeedAdsManager extends AbstractManager {
             AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) inner;
             // 第三方特殊处理
             if (lineFeedInner.getProvider_id() > 0) {
-                res = createSDKOpenAds(lineFeedInner.getProvider_id(), ad, lineFeedInner);
+                res = createSDKOpenAds(ad, lineFeedInner);
             }
         }
         return res;
@@ -80,48 +92,56 @@ public class LineFeedAdsManager extends AbstractManager {
     }
 
     // 按照权重计算，选择一个广告投放
-    private BaseAdEntity calAdWeightAndOrder(AdvParam advParam, List<BaseAdEntity> stanAdsList) {
-        // 获取所有符合规则的站点广告
-        if (stanAdsList != null && stanAdsList.size() > 0) {
-            int totalWeight = 0;
-            for (BaseAdEntity entity : stanAdsList) {
-                //                logger.info("多个站点广告，选择一个： id={}, title={}, priority={}", entity.getId(), ((StationAdEntity) entity).getTitle(),
-                //                        entity.getPriority());
-                if (((StationAdEntity) entity).getBuyOut() == 1) {
-                    // 买断的广告按照优先级来， stanAdsList 之前已经按照优先级排序过
-                    logger.info("买断的广告, udid={}, advId={}", advParam.getUdid(), entity.getId());
-                    return entity;
+    private void calAdWeightAndOrder(AdvParam advParam, List<BaseAdEntity> lineFeedAds) {
+        // 获取上次投放的第一个广告，这次需要轮训到下一个
+        String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(advParam.getUdid());
+        String lastSendIdStr = (String) CacheUtil.getFromRedis(sendLineFeedLogKey);
+        if (lastSendIdStr != null) {
+            try {
+                logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(), lastSendIdStr);
+                int sendId = Integer.parseInt(lastSendIdStr);
+                int size = lineFeedAds.size();
+                if (lineFeedAds.get(0).getId() == sendId) {
+                    Collections.swap(lineFeedAds, 0, size - 1);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        // 如果获取不到，那么根据权重设置第一次展示
+        // 获取所有符合规则的广告
+        if (lineFeedAds != null && lineFeedAds.size() > 0) {
+            int totalWeight = 0;
+            for (BaseAdEntity entity : lineFeedAds) {
                 totalWeight += ((StationAdEntity) entity).getAdWeight();
             }
+            
             if (totalWeight > 0) {
                 int randomOut = new Random().nextInt(totalWeight); // 取随机值
                 int indexWeight = 0;
-                for (BaseAdEntity entity : stanAdsList) {
+                for (int index = 0; index < lineFeedAds.size(); index++) {
+                    BaseAdEntity entity = lineFeedAds.get(index);
                     if ((indexWeight += ((StationAdEntity) entity).getAdWeight()) > randomOut) {
-                        return entity;
+                        Collections.swap(lineFeedAds, 0, index);
                     }
                 }
-            } else {
-                return stanAdsList.get(0); // 所有站点广告都没有权重，那么直接返回第一个（优先级最高那个）
             }
-        } else {
-            return null;
         }
-        logger.error("权重计算出现错误，没有广告站点返回了 , udid={}, stanAdsList.size={}", advParam.getUdid(), stanAdsList.size());
-        return null;
     }
 
-
     // 2018-05-05 ，详情页下方feed位广告
-    private LineFeedAdEntity createSDKOpenAds(int adType, AdContent ad, AdLineFeedInnerContent inner) {
+    private LineFeedAdEntity createSDKOpenAds(AdContent ad, AdLineFeedInnerContent inner) {
         LineFeedAdEntity entity = new LineFeedAdEntity();
         entity.setId(ad.getId());
-        entity.setProvider_id(adType + "");
+        entity.setProvider_id(inner.getProvider_id() + "");
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
         entity.setTitle(ad.getTitle());
         entity.setAdWeight(inner.getAdWeight());
+        entity.setAutoInterval(inner.getAutoInterval());
+        entity.setMixInterval(inner.getMixInterval());
         return entity;
     }
 
