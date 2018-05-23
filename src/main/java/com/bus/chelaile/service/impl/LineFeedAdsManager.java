@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import scala.util.Random;
 
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
@@ -100,9 +101,11 @@ public class LineFeedAdsManager extends AbstractManager {
                 logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(), lastSendIdStr);
                 int sendId = Integer.parseInt(lastSendIdStr);
                 int size = lineFeedAds.size();
+                logger.info("list={}, sendId={}, size={}", JSONObject.toJSONString(lineFeedAds), sendId, size);
                 if (lineFeedAds.get(0).getId() == sendId) {
                     Collections.swap(lineFeedAds, 0, size - 1);
                 }
+                logger.info("list={}, sendId={}, size={}", JSONObject.toJSONString(lineFeedAds), sendId, size);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -145,5 +148,10 @@ public class LineFeedAdsManager extends AbstractManager {
     }
 
     public static void main(String[] args) {
+        List<Integer> ints = New.arrayList();
+        ints.add(1);
+        ints.add(2);
+        Collections.swap(ints, 0, 1);
+        System.out.println(ints);
     }
 }

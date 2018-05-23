@@ -22,9 +22,9 @@ public class AdLineFeedInnerContent extends AdInnerContent {
         ad = JSON.parseObject(jsonr, AdLineFeedInnerContent.class);
         if (ad != null) {
             this.adWeight = ad.adWeight;
-            this.autoInterval = ad.autoInterval;
+            this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
-            this.provider_id = ad.provider_id * 1000;
+            this.provider_id = ad.provider_id;
         }
     }
 
