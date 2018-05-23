@@ -630,9 +630,10 @@ public abstract class AbstractManager {
         }
         logger.info(
                 "[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
-                        + "cityId={}, v={}, vc={}, li={}, sn={}",
+                        + "cityId={}, v={}, vc={}, li={}, sn={}, startMode={}, H5Src={}, wxs={}",
                 advParam.getUdid(), showType, isNeedApid, advParam.getType(), adIdStr, advParam.getAccountId(), advParam.getS(),
-                advParam.getCityId(), advParam.getV(), advParam.getVc(), advParam.getLineId(), advParam.getStnName());
+                advParam.getCityId(), advParam.getV(), advParam.getVc(), advParam.getLineId(), advParam.getStnName(),advParam.getStartMode(),
+                advParam.getH5Src(), advParam.getWxs());
         return adsList;
     }
 
@@ -708,8 +709,8 @@ public abstract class AbstractManager {
         // 取得所有手动投放广告
         List<AdContentCacheEle> adsList = CommonService.getAllAdsList(advParam.getUdid(), advParam.getAccountId(), showType);
         if (adsList == null || adsList.size() == 0) {
-            logger.info("[getallavailableAds ISNULL]:udid={}, adtype={}, isNeedApi={}, type={}, ac={}, s={}", advParam.getUdid(),
-                    showType, isNeedApid, advParam.getType(), advParam.getAccountId(), advParam.getS());
+//            logger.info("[getallavailableAds ISNULL]:udid={}, adtype={}, isNeedApi={}, type={}, ac={}, s={}", advParam.getUdid(),
+//                    showType, isNeedApid, advParam.getType(), advParam.getAccountId(), advParam.getS());
         } else {
             // 合并广告
             adsList = mergeAllAds(advParam, showType, adsList, isNeedApid);

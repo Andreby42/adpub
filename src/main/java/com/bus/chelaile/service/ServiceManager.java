@@ -382,13 +382,6 @@ public class ServiceManager {
 				&& advParam.getScreenHeight() > 0 && advParam.getScreenHeight() >= 960) {
 			isNeedApid = true;
 		}
-		
-        // 客户端上传了合法的屏幕高度
-        if (advParam.getScreenHeight() > 0 && StringUtils.isNoneBlank(advParam.getUdid())
-                && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
-            String screenHeightKey = AdvCache.getScreenHeightKey(advParam.getUdid());
-            CacheUtil.setToRedis(screenHeightKey, Constants.SEVEN_DAY_TIME, String.valueOf(advParam.getScreenHeight()));
-        }
         
 		BaseAdEntity stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
 		
@@ -463,28 +456,27 @@ public class ServiceManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<FeedAdEntity> getFeedAds(AdvParam advParam) throws Exception {
-		QueryParam queryParam = new QueryParam();
-		
-		// 从缓存获取屏幕高度
+    public List<FeedAdEntity> getFeedAds(AdvParam advParam) throws Exception {
+        QueryParam queryParam = new QueryParam();
+
+        // 从缓存获cshow
         if (StringUtils.isNoneBlank(advParam.getUdid())
                 && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
-            String screenHeightKey = AdvCache.getScreenHeightKey(advParam.getUdid());
-            String height = (String)CacheUtil.getFromRedis(screenHeightKey);
-            if(height != null) {
-                int screenHeight = -1;
-                try {
-                    screenHeight = Integer.parseInt(height);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            String cshowKey = AdvCache.getScreenHeightKey(advParam.getUdid());
+            // TODO 。换成appredis
+            //String cshow = (String)CacheUtil.getFromAppRedis(cshowKey);
+            String cshow = (String) CacheUtil.getFromRedis(cshowKey);
+            if (cshow != null) {
+                if (!cshow.equals("linedetail")) {
+                    logger.info("cshow not return ads, udid={}, cshow={}", advParam.getUdid(), cshow);
+                    return null;
                 }
-                advParam.setScreenHeight(screenHeight);
             }
-            
+
         }
-		
-		return feedAdsManager.doFeedAdService(advParam, ShowType.FEED_ADV, false, queryParam, true);
-	}
+
+        return feedAdsManager.doFeedAdService(advParam, ShowType.FEED_ADV, false, queryParam, true);
+    }
 	
 
 //	// 1107后的新版支持站点广告
@@ -521,16 +513,6 @@ public class ServiceManager {
 
 		// 0 开屏, 1 首页浮层 , 2 乘车页浮层
 		if (advParam.getType() == 0) {
-		    // TODO for test ，改变udid，让对应城市投放对应的第三方SDK
-		    if(advParam.getCityId().equals("080"))  //台北
-		        advParam.setUdid("1" + advParam.getUdid());
-		    else if(advParam.getCityId().equals("105"))  // 宝泉岭
-                advParam.setUdid("4" + advParam.getUdid());
-		    else if(advParam.getCityId().equals("079"))  // 精河县
-                advParam.setUdid("8" + advParam.getUdid());
-		    else if(advParam.getCityId().equals("062"))  // 淮安
-                advParam.setUdid("c" + advParam.getUdid());
-		    
 			return openManager.doService(advParam, ShowType.OPEN_SCREEN, isNeedApi, queryParam, true);
 		} else if (advParam.getType() == 1) {
 			return baseAdEntity;
@@ -637,8 +619,8 @@ public class ServiceManager {
         
         
         resultMap.put("ads", entities);
-        resultMap.put("autoInterval", 15);
-        resultMap.put("mixInterval", 4);
+        resultMap.put("autoInterval", 1500);
+        resultMap.put("mixInterval", 400);
         return resultMap;
 
     }

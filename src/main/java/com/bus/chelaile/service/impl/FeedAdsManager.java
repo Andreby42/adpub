@@ -220,8 +220,6 @@ public class FeedAdsManager extends AbstractManager {
 		}
 
 		// 没有第三方广告,处理自采买广告
-		logger.info("过滤条件后，得到feedAd数目为：{}", adMap.size());
-		
 //		BaseAdEntity entity = dealEntity(null, advParam, cacheRecord, adMap, showType, queryParam, true);
 		
 		return getEntities(null, advParam, cacheRecord, adMap, showType, queryParam, true);
