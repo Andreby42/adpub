@@ -146,20 +146,19 @@ public class OpenManager extends AbstractManager {
         OpenAdEntity entity = null;
 
         if (fullInner.getProvider_id() == 3) {
-            // 低版本亦不支持nimobi的第三方广告
-            cateGory.setApiType(4); // 手动设置cateGory，因为接下来要走以前的策略控制的模块
-            ApiLineEntity apiEntity =
-                    apiDetailsManager.from(Platform.from(advParam.getS()), advParam, cacheRecord, cateGory, showType.getType());
-            if (apiEntity == null) {
-                return null;
+            if ((advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0524)) {
+                entity = createSDKOpenAds(fullInner.getProvider_id(), cateGory.getAdId());
+                AnalysisLog.info(
+                        "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
+                        entity.getId(), showType.getType(), title, advParam.getUserId(), advParam.getAccountId(),
+                        advParam.getUdid(), advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getNw(),
+                        advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
+                        entity.getProvider_id());
+                return entity;
+            } else {
+                logger.info("低版本返回了inmobi开屏广告 , udid={} s={}, v={}", advParam.getUdid(), advParam.getS(), advParam.getV());
+                return entity;
             }
-            entity = setApiOpenAdEntity(apiEntity, showType.getValue());
-            AnalysisLog.info(
-                    "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}],des={},link={} , userId={}, accountId={}, udid={}, cityId={}, s={}, v={},provider_id={},pic={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}",
-                    entity.getId(), showType.getType(), apiEntity.getApiTitle(), apiEntity.getApiDes(), apiEntity.getLink(),
-                    advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getS(),
-                    advParam.getV(), entity.getProvider_id(), entity.getPic(), advParam.getNw(), advParam.getIp(),
-                    advParam.getDeviceType(), advParam.getLng(), advParam.getLat());
         } else {
             if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
                     || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420)) {
@@ -172,12 +171,12 @@ public class OpenManager extends AbstractManager {
                         entity.getProvider_id());
 
             } else {
-                logger.info("低版本不予返回非自采买的双栏广告 , udid={}", advParam.getUdid());
+                logger.info("低版本不予返回非自采买的开屏广告 , udid={} s={}, v={}", advParam.getUdid(), advParam.getS(), advParam.getV());
                 return null;
             }
-        }
 
-        return entity;
+            return entity;
+        }
     }
 
     private OpenAdEntity createSDKOpenAds(int adType, int id) {
@@ -374,17 +373,9 @@ public class OpenManager extends AbstractManager {
     /**
      * 按照广告生效时间排序
      */
-    private Comparator<BaseAdEntity> AD_START_TIME_COMPARATOR = new Comparator<BaseAdEntity>() {
-        @Override
-        public int compare(BaseAdEntity o1, BaseAdEntity o2) {
-            if (o1 == null)
-                return -1;
-            if (o2 == null)
-                return 1;
+    private Comparator<BaseAdEntity> AD_START_TIME_COMPARATOR=new Comparator<BaseAdEntity>(){@Override public int compare(BaseAdEntity o1,BaseAdEntity o2){if(o1==null)return-1;if(o2==null)return 1;
 
-            return (int) (((OpenOldAdEntity) o1).getSt() - ((OpenOldAdEntity) o2).getSt());
-        }
-    };
+    return(int)(((OpenOldAdEntity)o1).getSt()-((OpenOldAdEntity)o2).getSt());}};
 
     @Override
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,

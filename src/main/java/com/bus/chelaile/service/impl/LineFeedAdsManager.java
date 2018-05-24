@@ -152,7 +152,7 @@ public class LineFeedAdsManager extends AbstractManager {
         entity.setAdWeight(inner.getAdWeight());
         entity.setAutoInterval(inner.getAutoInterval());
         entity.setMixInterval(inner.getMixInterval());
-        entity.setApitype(1);
+        entity.setApiType(1);
         return entity;
     }
 

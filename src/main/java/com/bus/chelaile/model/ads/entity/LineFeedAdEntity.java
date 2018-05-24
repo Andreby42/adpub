@@ -22,7 +22,7 @@ public class LineFeedAdEntity extends BaseAdEntity {
 	@JSONField(serialize=false)
 	private long mixInterval;
 	
-	private int apitype; // 原生or banner or 开屏等等
+	private int apiType; // 原生or banner or 开屏等等
 	
 	// 构造方法
 	public LineFeedAdEntity() {
@@ -100,16 +100,16 @@ public class LineFeedAdEntity extends BaseAdEntity {
     }
 
     /**
-     * @return the apitype
+     * @return the apiType
      */
-    public int getApitype() {
-        return apitype;
+    public int getApiType() {
+        return apiType;
     }
 
     /**
-     * @param apitype the apitype to set
+     * @param apiType the apiType to set
      */
-    public void setApitype(int apitype) {
-        this.apitype = apitype;
+    public void setApiType(int apiType) {
+        this.apiType = apiType;
     }
 }
