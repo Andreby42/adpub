@@ -601,9 +601,6 @@ public class ServiceManager {
 
         List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
 
-        // TODO 排序有问题，手动打乱
-        Collections.shuffle(entities);
-        
         if(entities == null || entities.size() == 0) {
             return resultMap;
         } else {
