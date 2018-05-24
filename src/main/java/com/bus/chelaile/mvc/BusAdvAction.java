@@ -165,6 +165,7 @@ public class BusAdvAction extends AbstractController {
         param.setSrc(request.getParameter("src"));
         if (StringUtils.isEmpty(param.getH5Src()))
             param.setH5Src(request.getParameter("src"));
+        param.setUdid(request.getParameter("h5Id"));     // 接口没定义好，客户端上传的是h5Id
         Object object = serviceManager.getQueryValue(param, "getWXBannerAds");
         if (object == null) {
             return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);
@@ -175,7 +176,7 @@ public class BusAdvAction extends AbstractController {
     
     
     /*
-     * 小程序 banner 位广告
+     * 小程序 浮层 位广告
      */
     @ResponseBody
     @RequestMapping(value = "adv!getWechatFullAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
@@ -186,6 +187,7 @@ public class BusAdvAction extends AbstractController {
         param.setSrc(request.getParameter("src"));
         if (StringUtils.isEmpty(param.getH5Src()))
             param.setH5Src(request.getParameter("src"));
+        param.setUdid(request.getParameter("h5Id"));     // 接口没定义好，客户端上传的是h5Id
         Object object = serviceManager.getQueryValue(param, "getWXFullAds");
         if (object == null) {
             return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);

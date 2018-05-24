@@ -8,13 +8,10 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import org.apache.http.ParseException;
-import org.apache.ibatis.executor.loader.ResultLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -466,12 +463,10 @@ public class ServiceManager {
         // 从缓存获cshow
         if (StringUtils.isNoneBlank(advParam.getUdid())
                 && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
-            String cshowKey = AdvCache.getCshowHeightKey(advParam.getUdid());
-            // TODO 。换成appredis
-            //String cshow = (String)CacheUtil.getFromAppRedis(cshowKey);
-            String cshow = (String) CacheUtil.getFromRedis(cshowKey);
+            String cshowKey = AdvCache.getCshowKey(advParam.getUdid());
+            String cshow = (String) CacheUtil.getFromBUSRedis(cshowKey);
             if (cshow != null) {
-                if (!cshow.equals("linedetail")) {
+                if (!cshow.equals(Constants.CSHOW_LINEDETAIL)) {
                     logger.info("cshow not return ads, udid={}, cshow={}", advParam.getUdid(), cshow);
                     return null;
                 }
@@ -593,10 +588,8 @@ public class ServiceManager {
      * 
      * @param advParam
      * @return
-     *  TODO 
      */
     private Object getLineFeedAds(AdvParam advParam) {
-//      Set<String> pics = openManager.getAllAdsAdsAudiosPics(advParam, ShowType.OPEN_SCREEN);
         JSONObject resultMap = new JSONObject();
 
         List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
@@ -608,31 +601,8 @@ public class ServiceManager {
             resultMap.put("autoInterval", ((LineFeedAdEntity)entities.get(0)).getAutoInterval());
             resultMap.put("mixInterval", ((LineFeedAdEntity)entities.get(0)).getMixInterval());
         }
-     
         
-//        LineFeedAdEntity lineFeedAd1 = new LineFeedAdEntity();
-//        lineFeedAd1.setProvider_id("2");
-//        lineFeedAd1.setId(11111);
-//        
-//        LineFeedAdEntity lineFeedAd2 = new LineFeedAdEntity();
-//        lineFeedAd2.setProvider_id("7");
-//        lineFeedAd2.setId(11112);
-//        
-//        LineFeedAdEntity lineFeedAd3 = new LineFeedAdEntity();
-//        lineFeedAd3.setProvider_id("5");
-//        lineFeedAd3.setId(11113);
-//
-//        List<BaseAdEntity> entities = New.arrayList();
-//        entities.add(lineFeedAd1);
-//        entities.add(lineFeedAd2);
-//        entities.add(lineFeedAd3);
-//        
-//        Collections.shuffle(entities);
-        
-//        resultMap.put("ads", entities);
-//        resultMap.put("autoInterval", 15000);
-//        resultMap.put("mixInterval", 4000);
-        Random r = new Random();
+        // TODO 后续补充是否展开的逻辑
         resultMap.put("unfoldFeed", 1);
         return resultMap;
 
@@ -675,12 +645,6 @@ public class ServiceManager {
 	 * @return
 	 */
 	private Object precacheResource(AdvParam advParam) {
-
-		logger.info(
-				"[ENTERprecacheResource]:s={}, accountId={}, udid={}, cityId={}, v={}, lineId={}, stnName={}, vc={}",
-				advParam.getS(), advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getV(),
-				advParam.getLineId(), advParam.getStnName(), advParam.getVc());
-
 		Set<String> pics = openManager.getAllAdsAdsAudiosPics(advParam, ShowType.OPEN_SCREEN);
 		Set<String> picsFull = openManager.getAllAdsAdsAudiosPics(advParam, ShowType.FULL_SCREEN);
 		Set<String> audios = openManager.getAllAdsAdsAudiosPics(advParam, ShowType.RIDE_AUDIO);

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
+import com.bus.chelaile.common.cache.RedisBUSCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTBKCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTokenCacheImplUtil;
@@ -37,6 +38,8 @@ public class CacheUtil {
 	private static ICache redisToken;
 	// 存储tbk title的redis
     private static ICache redisTBK;
+    // 存储bus后台设置的cshow值的redis
+    private static ICache redisBUS;
 	//  用来获取用户头像的redis
 //	private static ICache redisWow;
 	//	保存用户访问量等信息
@@ -129,6 +132,7 @@ public class CacheUtil {
        redisClient = new RedisCacheImplUtil();
        redisToken = new RedisTokenCacheImplUtil();
        redisTBK = new RedisTBKCacheImplUtil();
+       redisBUS = new RedisBUSCacheImplUtil();
        isInitSuccess = true;
     }
     
@@ -270,6 +274,11 @@ public class CacheUtil {
             }
         }
         return defauleTBKTitle;
+    }
+    
+    // 从BUS redis中获取数据
+    public static Object getFromBUSRedis(String key){
+        return redisBUS.get(key);
     }
     
  

@@ -27,15 +27,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class OCSCacheUtil implements ICache{
-//    final static String host = "9c0e27d0f09544c9.m.cnhzaliqshpub001.ocs.aliyuncs.com";//控制台上的“内网地址”
-//    final static String port ="11211"; //默认端口 11211，不用改
-//    final static String username = "9c0e27d0f09544c9";//控制台上的“访问账号”
-//    final static String password = "Yuanguang2014";//邮件中提供的“密码”
-//    private static final String PROP_OCS_HOST = "ocs.host";
-//    private static final String PROP_OCS_PORT = "ocs.port";
-//    private static final String PROP_OCS_USERNAME = "ocs.username";
-//    private static final String PROP_OCS_PASSWORD = "ocs.password";
-
     private MemcachedClient client = null;
 
     private static final int DEFAULT_EXPIRE = 60 * 60;

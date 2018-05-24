@@ -101,7 +101,7 @@ public class LineFeedAdsManager extends AbstractManager {
         String lastSendIdStr = (String) CacheUtil.getFromRedis(sendLineFeedLogKey);
         if (lastSendIdStr != null) {
             try {
-                logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(), lastSendIdStr);
+//                logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(), lastSendIdStr);
                 int sendId = Integer.parseInt(lastSendIdStr);
                 int size = lineFeedAds.size();
                 
@@ -118,7 +118,7 @@ public class LineFeedAdsManager extends AbstractManager {
 
         // 如果获取不到，那么根据权重设置第一次展示
         // 获取所有符合规则的广告
-        logger.info("投放记录超时： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
+//        logger.info("投放记录超时： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
         if (lineFeedAds != null && lineFeedAds.size() > 0) {
             int totalWeight = 0;
             for (BaseAdEntity entity : lineFeedAds) {
@@ -133,7 +133,7 @@ public class LineFeedAdsManager extends AbstractManager {
                     BaseAdEntity entity = lineFeedAds.get(index);
                     if ((indexWeight += ((LineFeedAdEntity) entity).getAdWeight()) > randomOut) {
                         Collections.swap(lineFeedAds, 0, index);
-                        logger.info("投放记录超时，调整后**** ： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
+//                        logger.info("投放记录超时，调整后**** ： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
                         return;
                     }
                 }
@@ -152,6 +152,7 @@ public class LineFeedAdsManager extends AbstractManager {
         entity.setAdWeight(inner.getAdWeight());
         entity.setAutoInterval(inner.getAutoInterval());
         entity.setMixInterval(inner.getMixInterval());
+        entity.setApitype(1);
         return entity;
     }
 
