@@ -132,7 +132,7 @@ public class CacheUtil {
        redisClient = new RedisCacheImplUtil();
        redisToken = new RedisTokenCacheImplUtil();
        redisTBK = new RedisTBKCacheImplUtil();
-       redisBUS = new RedisBUSCacheImplUtil();
+//       redisBUS = new RedisBUSCacheImplUtil();
        isInitSuccess = true;
     }
     
