@@ -104,10 +104,12 @@ public class LineFeedAdsManager extends AbstractManager {
                 logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(), lastSendIdStr);
                 int sendId = Integer.parseInt(lastSendIdStr);
                 int size = lineFeedAds.size();
+                
+                // 有之前投放的记录，确保当前列表第一个变化后，直接return即可
                 if (lineFeedAds.get(0).getId() == sendId) {
-                    Collections.swap(lineFeedAds, 0, size - 1);  // 替换后直接return，无需走后面的按权重调序
-                    return;
+                    Collections.swap(lineFeedAds, 0, size - 1);
                 }
+                return;
             } catch (Exception e) {
                 e.printStackTrace();
             }
