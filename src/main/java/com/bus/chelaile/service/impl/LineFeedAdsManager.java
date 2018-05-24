@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.jsoup.nodes.Entities;
+
 import scala.util.Random;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
@@ -101,11 +104,10 @@ public class LineFeedAdsManager extends AbstractManager {
                 logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(), lastSendIdStr);
                 int sendId = Integer.parseInt(lastSendIdStr);
                 int size = lineFeedAds.size();
-                logger.info("list={}, sendId={}, size={}", JSONObject.toJSONString(lineFeedAds), sendId, size);
                 if (lineFeedAds.get(0).getId() == sendId) {
-                    Collections.swap(lineFeedAds, 0, size - 1);
+                    Collections.swap(lineFeedAds, 0, size - 1);  // 替换后直接return，无需走后面的按权重调序
+                    return;
                 }
-                logger.info("list={}, sendId={}, size={}", JSONObject.toJSONString(lineFeedAds), sendId, size);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -114,6 +116,7 @@ public class LineFeedAdsManager extends AbstractManager {
 
         // 如果获取不到，那么根据权重设置第一次展示
         // 获取所有符合规则的广告
+        logger.info("投放记录超时： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
         if (lineFeedAds != null && lineFeedAds.size() > 0) {
             int totalWeight = 0;
             for (BaseAdEntity entity : lineFeedAds) {
@@ -122,11 +125,14 @@ public class LineFeedAdsManager extends AbstractManager {
             
             if (totalWeight > 0) {
                 int randomOut = new Random().nextInt(totalWeight); // 取随机值
+                logger.info("randomOut={}, udid={}", randomOut, advParam.getUdid());
                 int indexWeight = 0;
                 for (int index = 0; index < lineFeedAds.size(); index++) {
                     BaseAdEntity entity = lineFeedAds.get(index);
                     if ((indexWeight += ((LineFeedAdEntity) entity).getAdWeight()) > randomOut) {
                         Collections.swap(lineFeedAds, 0, index);
+                        logger.info("投放记录超时，调整后**** ： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
+                        return;
                     }
                 }
             }
