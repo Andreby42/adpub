@@ -132,7 +132,7 @@ public class Constants {
     public static final int EXPIREMSECS = 1000;		// 1 S
     public static String LOCKKEY = "lockKey";
     
-    public static final String SETTING_PATTERN_KEY = "AD_SETTING_";
+    public static final String SETTING_PATTERN_KEY = "AD_SETTING_*";
     public static final String SCREENHEIGHT_KEY = "AD_SETTING_linefeed_screenHeight";  // 详情页下方feed位是否打开，存储分界线value的对应key
     
     
