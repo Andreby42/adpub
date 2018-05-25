@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
 import com.bus.chelaile.common.cache.RedisBUSCacheImplUtil;
@@ -26,8 +25,6 @@ import com.bus.chelaile.common.cache.RedisTokenCacheImplUtil;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.util.config.PropertiesUtils;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 public class CacheUtil {
     //	访问得到token缓存
@@ -132,7 +129,7 @@ public class CacheUtil {
        redisClient = new RedisCacheImplUtil();
        redisToken = new RedisTokenCacheImplUtil();
        redisTBK = new RedisTBKCacheImplUtil();
-//       redisBUS = new RedisBUSCacheImplUtil();
+       redisBUS = new RedisBUSCacheImplUtil();
        isInitSuccess = true;
     }
     
