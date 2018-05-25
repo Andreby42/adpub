@@ -9,10 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.util.New;
+import com.bus.chelaile.util.config.PropertiesUtils;
 
 /**
  * 保存静态的广告数据
@@ -45,6 +47,7 @@ public class StaticAds {
 	public static Map<Integer, String> advTBKTitleKey = New.hashMap();
 	
 	public static Map<String, String> SETTINGSMAP = New.hashMap();
+	private static String settingKeys = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "setting_keys", "AD_SETTING_linefeed_screenHeight;");
 	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;
@@ -140,10 +143,8 @@ public class StaticAds {
 	}
 
     private static void readSettings() {
-        String keyPatter = Constants.SETTING_PATTERN_KEY;
-        Set<String> keys = CacheUtil.allKeys(keyPatter);
-        if (keys != null && keys.size() > 0) {
-            for (String key : keys) {
+        if (settingKeys != null) {
+            for (String key : settingKeys.split(";")) {
                 if (CacheUtil.getFromRedis(key) != null)
                     SETTINGSMAP.put(key, (String) CacheUtil.getFromRedis(key));
             }
