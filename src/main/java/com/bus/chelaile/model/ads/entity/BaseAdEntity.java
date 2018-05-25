@@ -228,7 +228,7 @@ public abstract class BaseAdEntity {
 
 	private String creatMonitorUrl(String link, AdvParam advParam) {
 		String url = link;
-		logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
+//		logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
 		try {
 			String platform = advParam.getS();
 			String udid = advParam.getUdid();
@@ -268,11 +268,10 @@ public abstract class BaseAdEntity {
 				url = url.replace("__MAC__", mac);
 			}
 			if (ua != null) {
-			    logger.info("准备替换的ua值={}", ua);
 				url = url.replace("__UA__", AdvUtil.encodeUrl(ua));		 // UA需要做一下encode
 			}
 			 url = url.replace("__TS__", System.currentTimeMillis() + "");
-			logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
+//			logger.info("替换前：udid={}, link={}", advParam.getUdid(), url);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("广告监控出错! udid={}, url={}", advParam.getUdid(), link);
