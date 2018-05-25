@@ -121,7 +121,7 @@ public abstract class AbstractManager {
             }
             return null;
         }
-        logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
+//        logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
         List<BaseAdEntity> entities = null;
         entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
         return entities;
