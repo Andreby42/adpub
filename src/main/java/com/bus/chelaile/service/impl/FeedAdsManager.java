@@ -74,7 +74,7 @@ public class FeedAdsManager extends AbstractManager {
                     }
                 }
             } else {
-                logger.info("feedAd 广告未创建~ , adId={}, isTop={}", ad.getAds().getId(), advParam.getIsTop());
+                logger.info("feedAd 广告未创建~ , adId={}, isTop={}, udid={}", ad.getAds().getId(), advParam.getIsTop(), advParam.getUdid());
                 continue;
             }
 			
