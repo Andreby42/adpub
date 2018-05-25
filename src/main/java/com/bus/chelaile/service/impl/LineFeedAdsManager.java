@@ -81,14 +81,14 @@ public class LineFeedAdsManager extends AbstractManager {
 
 
     public void writeSendLog(AdvParam advParam, List<BaseAdEntity> entities) {
-        for (BaseAdEntity entity : entities) {
-            AnalysisLog.info(
-                    "[ADV_SEND]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={},provider_id={}",
-                    ((LineFeedAdEntity)entity).buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
-                    advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(),
-                    advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
-                    advParam.getH5User(), advParam.getH5Src(), entity.getProvider_id());
-        }
+        BaseAdEntity entity = entities.get(0);
+        AnalysisLog.info(
+                "[ADV_SEND]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={},provider_id={}",
+                ((LineFeedAdEntity) entity).buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+                advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(),
+                advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
+                advParam.getH5User(), advParam.getH5Src(), entity.getProvider_id());
+
     }
 
     // 按照权重计算，选择一个广告投放
