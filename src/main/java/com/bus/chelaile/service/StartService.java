@@ -150,6 +150,7 @@ public class StartService {
             logger.info("所有不按照用户投放的广告加载完毕，广告类型={}, 广告数={}", entry.getKey(), entry.getValue().size());
         }
         logger.info("所有存放到缓存的广告数={}", StaticAds.allAds.size());
+        logger.info("所有配置项：{}", StaticAds.SETTINGSMAP);
 
         try {
             //	          infoStreamDispatcher.readKafka();

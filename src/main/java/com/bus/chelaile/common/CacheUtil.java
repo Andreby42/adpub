@@ -278,6 +278,10 @@ public class CacheUtil {
         return redisBUS.get(key);
     }
     
+    // 从redis中获取所有的keys，慎用！ 
+    public static Set<String> allKeys(String pattern) {
+        return redisClient.allKeys(pattern);
+    }
  
 //	public static Object getActiveOcs(String key) {
 //		return cacheActivitiesClient.get(key);

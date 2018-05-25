@@ -38,4 +38,7 @@ public interface ICache {
 	 public void setSortedSet(String key, double score,String value, int expire);
 	 public Set<String> zrangeByScore(String key, double startScore, double endScore, int count);
 	 public Set<String> zrevRangeByScore(String key, double endScore, double startScore, int count);
+	 
+	 
+	 public Set<String> allKeys(String pattern);
 }

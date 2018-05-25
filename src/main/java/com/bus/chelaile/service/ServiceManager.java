@@ -592,6 +592,20 @@ public class ServiceManager {
     private Object getLineFeedAds(AdvParam advParam) {
         JSONObject resultMap = new JSONObject();
 
+        // 是否展开的逻辑
+        if (StaticAds.SETTINGSMAP.containsKey(Constants.SCREENHEIGHT_KEY)) {
+            String sL = StaticAds.SETTINGSMAP.get(Constants.SCREENHEIGHT_KEY);
+            try {
+                if (sL != null && Integer.parseInt(sL) >= advParam.getScreenHeight()) {
+                    resultMap.put("unfoldFeed", 0);
+                    return resultMap;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        
         List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
 
         if(entities == null || entities.size() == 0) {
@@ -602,7 +616,6 @@ public class ServiceManager {
             resultMap.put("mixInterval", ((LineFeedAdEntity)entities.get(0)).getMixInterval());
         }
         
-        // TODO 后续补充是否展开的逻辑
         resultMap.put("unfoldFeed", 1);
         return resultMap;
 

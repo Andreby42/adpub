@@ -2,10 +2,13 @@ package com.bus.chelaile.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
@@ -40,6 +43,8 @@ public class StaticAds {
 	public static Map<String, Map<String, Integer>> minuteNumber = New.hashMap();
 	// key=advId, value=tbkTitle存储到redis中的key
 	public static Map<Integer, String> advTBKTitleKey = New.hashMap();
+	
+	public static Map<String, String> SETTINGSMAP = New.hashMap();
 	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;
@@ -129,9 +134,23 @@ public class StaticAds {
 		minuteTimes.clear();
 		minuteNumber.clear();
 		advTBKTitleKey.clear();
+		
+		SETTINGSMAP.clear();
+		readSettings();
 	}
 
-	public static boolean isBlack(int advId, String udid) {
+    private static void readSettings() {
+        String keyPatter = Constants.SETTING_PATTERN_KEY;
+        Set<String> keys = CacheUtil.allKeys(keyPatter);
+        if (keys != null && keys.size() > 0) {
+            for (String key : keys) {
+                if (CacheUtil.getFromRedis(key) != null)
+                    SETTINGSMAP.put(key, (String) CacheUtil.getFromRedis(key));
+            }
+        }
+    }
+
+    public static boolean isBlack(int advId, String udid) {
 		if (udid == null) {
 			return false;
 		}

@@ -136,7 +136,7 @@ public class WriteCacheThread implements Runnable {
 		Iterator<Map.Entry<String, Map<Integer, Integer>>> it = noFeedHistory.entrySet().iterator();
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(new Date());
-		calendar.add(Calendar.DATE, -2);// 把日期往后增加七天.整数往后推,负数往前移动
+		calendar.add(Calendar.DATE, -2);// 把日期往后增加两天.整数往后推,负数往前移动
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String dateStr = sdf.format(calendar.getTime()); // 这个时间就是日期往前推2天的结果
 		

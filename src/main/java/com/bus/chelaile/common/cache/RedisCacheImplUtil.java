@@ -238,7 +238,7 @@ public class RedisCacheImplUtil implements ICache{
 		}
 	}
 	
-	public  Set allKeys(String patternstr)
+	public Set allKeys(String patternstr)
 	{
 		JedisPool pool = null;
 		Jedis conn = null;
@@ -838,4 +838,26 @@ public class RedisCacheImplUtil implements ICache{
         }
         return result;
     }
+	
+	public static void main(String[] args) {
+	    JedisPoolConfig config = new JedisPoolConfig();
+        String host = "127.0.0.1";
+        int port = 6379;
+        config.setMaxTotal(600);
+        //config.setMaxActive(400);
+        config.setMaxIdle(200);
+        config.setMinIdle(20);
+        pool = new JedisPool(config, host, port);
+        
+        Jedis conn = pool.getResource();
+        String ret = conn.get("k");
+        System.out.println(ret);
+        
+        Set result = conn.keys("kkk*");
+        System.out.println(result);
+        
+        Map<String, String> setting = New.hashMap();
+        setting.put("1", "2");
+        System.out.println(setting);
+	}
 }

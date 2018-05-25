@@ -224,7 +224,11 @@ public class OCSCacheUtil implements ICache{
 
     @Override
     public Map<String, String> getHsetAll(String key) {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Set<String> allKeys(String pattern) {
         return null;
     }
 }
