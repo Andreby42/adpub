@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
-import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
@@ -447,8 +446,7 @@ public abstract class AbstractManager {
         }
 
         // 最小时间间隔，热启动 开屏广告用
-        if (advParam.getStartMode() == 1 && ad.getShowType().equals(ShowType.OPEN_SCREEN.getType())
-                && rule.getMinIntervalTime() > 0) {
+        if (advParam.getStartMode() == 1 && rule.getMinIntervalTime() > 0) {
             if (cacheRecord != null && !cacheRecord.hasPassIntervalTime(ad.getId(), rule.getMinIntervalTime())) {
                 logger.info("cannot pub OpenAd, because of minInterval time not past, ruleId={}, udid={}", rule.getRuleId(),
                         advParam.getUdid());
@@ -540,17 +538,17 @@ public abstract class AbstractManager {
         }
     };
 
-    private static final Comparator<BaseAdEntity> ENTITY_COMPARATOR = new Comparator<BaseAdEntity>() {
-        @Override
-        public int compare(BaseAdEntity o1, BaseAdEntity o2) {
-            if (o1 == null)
-                return -1;
-            if (o2 == null)
-                return 1;
-            return o2.getPriority() - o1.getPriority();
-        }
-
-    };
+//    private static final Comparator<BaseAdEntity> ENTITY_COMPARATOR = new Comparator<BaseAdEntity>() {
+//        @Override
+//        public int compare(BaseAdEntity o1, BaseAdEntity o2) {
+//            if (o1 == null)
+//                return -1;
+//            if (o2 == null)
+//                return 1;
+//            return o2.getPriority() - o1.getPriority();
+//        }
+//
+//    };
 
     /**
      * 记录 AdPubCacheRecord
@@ -822,7 +820,7 @@ public abstract class AbstractManager {
             }
         }
 
-        // TODO android 内核4.4一下的，不返回广告 20180118
+        // android 内核4.4一下的，不返回广告 20180118
         // 这个方法不够严谨，当android更新到版本10的时候，会出错
         Platform platform = Platform.from(advParam.getS());
         if (StringUtils.isNoneBlank(advParam.getUdid()) && advParam.getUdid().contains("e02bda79-1349-4a6b-a474-cb3677ee69c6")) {
@@ -860,30 +858,30 @@ public abstract class AbstractManager {
         return true;
     }
 
-    /**
-     * 获取优先级最高的那一批详情页广告
-     * @param availableAds
-     * @return
-     */
-    private static List<AdContentCacheEle> filterAvailableAdsByPriority(List<AdContentCacheEle> availableAds) {
-        if (availableAds == null || availableAds.size() == 0) {
-            return null;
-        }
-        ArrayList<AdContentCacheEle> highestPriorityAdsList = new ArrayList<>();
-        int highestPriority = 0;
-        for (AdContentCacheEle adInfo : availableAds) {
-            int currentPriority = adInfo.getAds().getPriority();
-            if (currentPriority < highestPriority) {
-                continue;
-            }
-            if (currentPriority > highestPriority) {
-                highestPriority = currentPriority;
-                highestPriorityAdsList.clear();
-            }
-            highestPriorityAdsList.add(adInfo);
-        }
-        return highestPriorityAdsList;
-    }
+//    /**
+//     * 获取优先级最高的那一批详情页广告
+//     * @param availableAds
+//     * @return
+//     */
+//    private static List<AdContentCacheEle> filterAvailableAdsByPriority(List<AdContentCacheEle> availableAds) {
+//        if (availableAds == null || availableAds.size() == 0) {
+//            return null;
+//        }
+//        ArrayList<AdContentCacheEle> highestPriorityAdsList = new ArrayList<>();
+//        int highestPriority = 0;
+//        for (AdContentCacheEle adInfo : availableAds) {
+//            int currentPriority = adInfo.getAds().getPriority();
+//            if (currentPriority < highestPriority) {
+//                continue;
+//            }
+//            if (currentPriority > highestPriority) {
+//                highestPriority = currentPriority;
+//                highestPriorityAdsList.clear();
+//            }
+//            highestPriorityAdsList.add(adInfo);
+//        }
+//        return highestPriorityAdsList;
+//    }
 
     public static void main(String[] args) {
         List<AdContentCacheEle> adsList = new ArrayList<>();
