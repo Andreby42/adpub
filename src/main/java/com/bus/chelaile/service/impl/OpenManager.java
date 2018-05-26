@@ -22,6 +22,7 @@ import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdFullInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
+import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
 import com.bus.chelaile.model.ads.AdSchedule;
 import com.bus.chelaile.model.ads.entity.ApiLineEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
@@ -114,22 +115,22 @@ public class OpenManager extends AbstractManager {
                     advParam.getDeviceType(), advParam.getLng(), advParam.getLat());
 
         }
-//        // 四种客户端 sdk, 新版本才支持
-//        else if (cateGory.getAdType() == 2 || cateGory.getAdType() == 8 || cateGory.getAdType() == 9
-//                || cateGory.getAdType() == 10) {
-//            if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
-//                    || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420)) {
-//                entity = createSDKOpenAds(fullInner, cateGory.getAdType() * (-1));
-//                AnalysisLog.info(
-//                        "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},provider_id={},nw={},ip={},deviceType={}",
-//                        entity.getId(), showType.getType(), "", advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
-//                        advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getProvider_id(), advParam.getNw(),
-//                        advParam.getIp(), advParam.getDeviceType());
-//            } else {
-//            }
-//        } else {
-//            throw new IllegalArgumentException("开屏的类型错误showType:" + showType + ",cateGory.getAdType()=" + cateGory.getAdType());
-//        }
+        //        // 四种客户端 sdk, 新版本才支持
+        //        else if (cateGory.getAdType() == 2 || cateGory.getAdType() == 8 || cateGory.getAdType() == 9
+        //                || cateGory.getAdType() == 10) {
+        //            if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
+        //                    || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420)) {
+        //                entity = createSDKOpenAds(fullInner, cateGory.getAdType() * (-1));
+        //                AnalysisLog.info(
+        //                        "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},provider_id={},nw={},ip={},deviceType={}",
+        //                        entity.getId(), showType.getType(), "", advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+        //                        advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getProvider_id(), advParam.getNw(),
+        //                        advParam.getIp(), advParam.getDeviceType());
+        //            } else {
+        //            }
+        //        } else {
+        //            throw new IllegalArgumentException("开屏的类型错误showType:" + showType + ",cateGory.getAdType()=" + cateGory.getAdType());
+        //        }
 
         // 2017.12.28， 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
         //		cacheRecord.setOpenAdHistory(cateGory);
@@ -139,8 +140,8 @@ public class OpenManager extends AbstractManager {
     /*
      * 统一处理第三方广告
      */
-    private OpenAdEntity setApiOpenAds(AdFullInnerContent fullInner, AdvParam advParam, AdPubCacheRecord cacheRecord,
-            int advId, ShowType showType, String title) throws Exception {
+    private OpenAdEntity setApiOpenAds(AdFullInnerContent fullInner, AdvParam advParam, AdPubCacheRecord cacheRecord, int advId,
+            ShowType showType, String title) throws Exception {
         if (showType != ShowType.OPEN_SCREEN) {
             return null;
         }
@@ -190,10 +191,10 @@ public class OpenManager extends AbstractManager {
         entity.setIsSkip(0); // 是否展示跳过按钮，0-展示
         entity.setIsFullShow(0); // 是否全屏展示，0-否
         entity.setType(3); // 第三方广告
-        
+
         entity.setAdWeight(inner.getAdWeight());
         entity.setTimeout(inner.getTimeout());
-        
+
         return entity;
     }
 
@@ -215,7 +216,6 @@ public class OpenManager extends AbstractManager {
                 e.printStackTrace();
             }
         }
-        
 
         // 判断是否是老版本的广告接口
         if (!queryParam.isOldMany()) {
@@ -356,7 +356,6 @@ public class OpenManager extends AbstractManager {
         return picsAndAudios;
     }
 
-    
     private void fillPicsAndAudios(Set<String> picsAndAudios, AdInnerContent innerContent, String s, ShowType showType,
             AdContentCacheEle ad, String udid) {
 
@@ -393,13 +392,13 @@ public class OpenManager extends AbstractManager {
     @Override
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
-        
+
         List<BaseAdEntity> entities = New.arrayList();
         List<Integer> ids = New.arrayList();
         boolean hasOwnAd = false;
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
-            
+
             // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
             AdFullInnerContent inner = (AdFullInnerContent) ad.getAds().getAdInnerContent();
             logger.info("***** {}", JSONObject.toJSONString(inner));
@@ -409,7 +408,7 @@ public class OpenManager extends AbstractManager {
                     entities.add(entity);
                     int adId = ad.getAds().getId();
                     ids.add(adId);
-                    
+
                     hasOwnAd = true;
                     break;
                 }
@@ -419,7 +418,15 @@ public class OpenManager extends AbstractManager {
         if (!hasOwnAd) {
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
-                OpenAdEntity entity = getSelfAdEntity(advParam, cacheRecord, ad, showType, queryParam);
+                AdFullInnerContent inner = (AdFullInnerContent) ad.getAds().getAdInnerContent();
+                OpenAdEntity entity = null;
+                // 第三方特殊处理
+                if (inner.getProvider_id() > 1) {
+                    entity = createSDKOpenAds(inner, ad.getAds().getId());
+                } else {
+                    entity = getSelfAdEntity(advParam, cacheRecord, ad, showType, queryParam);
+                }
+
                 if (entity != null) {
                     entities.add(entity);
                 }
