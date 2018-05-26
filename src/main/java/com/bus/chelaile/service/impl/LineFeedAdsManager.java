@@ -35,8 +35,6 @@ public class LineFeedAdsManager extends AbstractManager {
         boolean hasOwnAd = false;
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
-            int adId = ad.getAds().getId();
-            ids.add(adId);
             
             // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
             AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) ad.getAds().getAdInnerContent();
@@ -44,6 +42,9 @@ public class LineFeedAdsManager extends AbstractManager {
                 LineFeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
                 if (entity != null) {
                     entities.add(entity);
+                    int adId = ad.getAds().getId();
+                    ids.add(adId);
+                    
                     hasOwnAd = true;
                 }
             }
@@ -65,6 +66,7 @@ public class LineFeedAdsManager extends AbstractManager {
         }
         // 记录投放的第一条广告， 记录发送日志
         if (entities != null && entities.size() > 0) {
+            cacheRecord.setNoFeedAdHistoryMap(ids);
             recordSend(advParam, cacheRecord, adMap, showType, entities);
         }
 
