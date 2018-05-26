@@ -409,7 +409,7 @@ public class ServiceManager {
 	    
         JSONObject resultMap = new JSONObject();
         
-        List<BaseAdEntity> entities = stationAdsManager.doServiceList(advParam, ShowType.OPEN_SCREEN, new QueryParam());
+        List<BaseAdEntity> entities = stationAdsManager.doServiceList(advParam, ShowType.STATION_ADV, new QueryParam());
         
         if(entities == null || entities.size() == 0) {
             return resultMap;
