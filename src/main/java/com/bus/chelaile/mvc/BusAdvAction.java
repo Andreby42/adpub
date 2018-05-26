@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Date;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -194,21 +193,6 @@ public class BusAdvAction extends AbstractController {
         } else {
             return serviceManager.getClienSucMapWithNoHead(object, Constants.STATUS_REQUEST_SUCCESS);
         }
-    }
-    
-    
-    /*
-     * 详情页下方广告（及之前的feed流顶部广告)
-     */
-    @ResponseBody
-    @RequestMapping(value = "adv!getLineFeedAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
-    public String getLineFeedAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
-            throws Exception {
-        
-        AdvParam param = getActionParam(request);
-//        param.setIsTop(getInt(request, "isTop"));
-        
-        return serviceManager.getAdsResponseStr(param, "getLineFeedAds");
     }
     
 

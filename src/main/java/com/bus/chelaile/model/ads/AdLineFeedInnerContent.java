@@ -10,7 +10,7 @@ import com.bus.chelaile.mvc.AdvParam;
  * @author linzi
  * 
  */
-public class AdLineFeedInnerContent extends AdInnerContent {
+public class AdLineFeedInnerContent extends AdFeedInnerContent {
     private int adWeight; // 权重
     private long autoInterval; // 自动刷新时间
     private long mixInterval; // 最小展示时间

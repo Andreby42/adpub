@@ -9,7 +9,7 @@ import com.bus.chelaile.model.ShowType;
  * @author Administrator
  *
  */
-public class LineFeedAdEntity extends BaseAdEntity {
+public class LineFeedAdEntity extends FeedAdEntity {
 	
 	private String pic; // 图片URL
 	
@@ -26,7 +26,7 @@ public class LineFeedAdEntity extends BaseAdEntity {
 	
 	// 构造方法
 	public LineFeedAdEntity() {
-        super(ShowType.LINE_FEED_ADV.getValue());
+	    this.showType = ShowType.LINE_FEED_ADV.getValue();
         this.pic = EMPTY_STR;
 	}
 	

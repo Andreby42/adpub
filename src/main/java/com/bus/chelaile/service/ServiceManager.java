@@ -30,7 +30,9 @@ import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.TypeNumber;
 import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
+import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.FeedAdArticleInfo;
 import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 import com.bus.chelaile.model.ads.entity.LineAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
@@ -287,12 +289,7 @@ public class ServiceManager {
 	private List<BaseAdEntity> getDoubleAndSingleAds(AdvParam advParam) throws Exception {
 		QueryParam queryParam = new QueryParam();
 		
-		if(advParam.getType() == TypeNumber.ONE.getType()) {	//type=1 : route_plan_adv
-//			BaseAdEntity routeEntity = doubleAndSingleManager.doService(advParam, ShowType.ROUTE_PLAN_ADV, false,
-//					queryParam, true);
-//			if(routeEntity == null) {
-//			    return null;
-//			}
+		if(advParam.getType() == TypeNumber.ONE.getType()) {
 			List<BaseAdEntity> routeEntites = doubleAndSingleManager.doServiceList(advParam, ShowType.ROUTE_PLAN_ADV,
                     queryParam);
 			List<BaseAdEntity> list = New.arrayList();
@@ -301,12 +298,7 @@ public class ServiceManager {
 			}
 			return list;
 		}
-		
 		List<Station> stList = advParam.getStationList();
-//		if (null == stList || stList.size() == 0) {
-//			logger.info("单双栏广告获取失败，stList为空，udid={}", advParam.getUdid());
-//			return null;
-//		}
 		Station lastUnfoldStation = new Station("noUnfold", 0, false);
 		Station firstUnfoldStation = new Station("noUnfold", -1, false);
 		boolean isFirstUnfoldStation = false;
@@ -324,21 +316,13 @@ public class ServiceManager {
 				queryParam, true);
 		queryParam.setStation(firstUnfoldStation);
 		BaseAdEntity singleEntity = null; 
-//		     这个参数控制版本，  
-//		    Constants.PLATFORM_LOG_ANDROID_0326;
-		if (advParam.getlSize() == -1) { 
+		if (advParam.getlSize() == -1) {
 			singleEntity = doubleAndSingleManager.doService(advParam, ShowType.SINGLE_COLUMN, false, queryParam, true);
 		}
 
 		if (doubleEntity == null && singleEntity == null) {
 			return null;
 		}
-
-		// if(advParam.getGridLines() == 2) {
-		// logger.info("doubleAndSingle ads return null, udid={}, cityId={}, gridLines={}",
-		// advParam.getUdid(), advParam.getCityId(), advParam.getGridLines());
-		// return null;
-		// }
 
 		List<BaseAdEntity> list = New.arrayList();
 
@@ -363,6 +347,57 @@ public class ServiceManager {
 		return list;
 
 	}
+	
+	// 新版首页广告（原单双栏位置）
+	public Object getColumntAds(AdvParam advParam) {
+//	    List<BaseAdEntity> doubleEntities = doubleAndSingleManager.doServiceList(advParam, ShowType.DOUBLE_COLUMN, new QueryParam());
+	    
+	    
+	    // TODO 手动设置返回内容给客户端使用
+	    JSONObject resultMap = new JSONObject();
+	    
+	    List<BaseAdEntity> doubleEntities = New.arrayList();
+	    AdEntity ad = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
+        ad.setBarColor("255,255,255,1");
+        ad.setBrandIcon("https://pic1.chelaile.net.cn/adv/brandIcon305320170413.png");
+        ad.setBrandName("车来了");
+        ad.setButtonIcon("https://pic1.chelaile.net.cn/adv/buttonIcon305320170413.png");
+        ad.setButtonType(1);
+        ad.setHead("小车需要你");
+        ad.setLink("https://ad.chelaile.net.cn/?link=https%3A%2F%2Fsojump.com%2Fm%2F13332385.aspx&adtype=00&distance=-1&advId=3053&udid=57f41bf99791d7b3668595bc23eed2b0cae99a2d&storder=1");
+        ad.setSubhead("你的意见将直达公路院哦~");
+        ad.setId(3053);
+	    
+	    AdEntity ad0 = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
+	    ad0.setProvider_id("2");
+	    ad0.setId(11111);
+	    
+	    AdEntity ad1 = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
+        ad1.setProvider_id("5");
+        ad1.setId(11112);
+        
+        AdEntity ad2 = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
+        ad2.setProvider_id("7");
+        ad2.setId(11113);
+        
+        AdEntity ad3 = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
+        ad3.setProvider_id("10");
+        ad3.setId(11114);
+	    
+        doubleEntities.add(ad);
+        doubleEntities.add(ad0);
+        doubleEntities.add(ad1);
+        doubleEntities.add(ad2);
+        doubleEntities.add(ad3);
+        
+        resultMap.put("ads", doubleEntities);
+        resultMap.put("autoInterval", 8000);
+        resultMap.put("mixInterval", 4000);
+        
+        return resultMap;
+	}
+	
+	
 
 	/**
 	 * 详情页
@@ -591,20 +626,18 @@ public class ServiceManager {
      */
     private Object getLineFeedAds(AdvParam advParam) {
         JSONObject resultMap = new JSONObject();
-
-        // 是否展开的逻辑
+        // 是否展开
         if (StaticAds.SETTINGSMAP.containsKey(Constants.SCREENHEIGHT_KEY)) {
             String sL = StaticAds.SETTINGSMAP.get(Constants.SCREENHEIGHT_KEY);
             try {
                 if (sL != null && Integer.parseInt(sL) >= advParam.getScreenHeight()) {
-                    resultMap.put("unfoldFeed", 0);
+                    resultMap.put("unfoldFeed", 0); // 0 小屏手机不展开
                     return resultMap;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        
         
         List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
 
@@ -615,13 +648,31 @@ public class ServiceManager {
             resultMap.put("autoInterval", ((LineFeedAdEntity)entities.get(0)).getAutoInterval());
             resultMap.put("mixInterval", ((LineFeedAdEntity)entities.get(0)).getMixInterval());
         }
-        
         resultMap.put("unfoldFeed", 1);
-        return resultMap;
+        
+        
+        // 手动增加一条自采买广告，供测试用   TODO 
+        LineFeedAdEntity ad = new LineFeedAdEntity();
+        ad.setPic("https://image3.chelaile.net.cn/8160d592675042daa5cd182383d4c799#686,200");
+        ad.setImgsType(1);
+        ad.setProvider_id("1");
+        entities.add(0, ad);
 
+        
+        LineFeedAdEntity ad1 = new LineFeedAdEntity();
+        ad1.setPic("https://image3.chelaile.net.cn/2d78d8bf077148e998f2821a67ad6f68#225,150");
+        ad1.setImgsType(0);
+        ad1.setProvider_id("1");
+        List<String> imgs = New.arrayList();
+        imgs.add("https://image3.chelaile.net.cn/2d78d8bf077148e998f2821a67ad6f68#225,150");
+        FeedAdArticleInfo articleInfo = new FeedAdArticleInfo("限时9.9包邮，淘宝天猫内部券大放送，速领！", 100, "广告",imgs , "卷皮九块邮");
+        ad1.setArticleInfo(articleInfo);
+        entities.add(0, ad1);
+        
+        
+        return resultMap;
     }
     
-
 	/*
 	 * 旧版本预加载
 	 */
@@ -986,19 +1037,20 @@ public class ServiceManager {
 	
 	
 	public static void main(String[] args) throws ParseException, UnsupportedEncodingException, IOException {
-//		List<NameValuePair> pairs = New.arrayList();
-//		pairs.add(new BasicNameValuePair("title", "手动post测试0"));
-//		pairs.add(new BasicNameValuePair("showType", "04"));
-//		pairs.add(new BasicNameValuePair("openType", "0"));
-//		
-//		String POSTURL = "http://127.0.0.1:8088/outman/adv/save";
-////		String POSTURL = "http://121.40.95.166:7000/outman/adv/save";
-//		String a =  HttpUtils.post(POSTURL, pairs, "utf-8");		
-//		System.out.println("a=" + a);
-		
-		//System.out.println(getClientErrMap("", Constants.STATUS_NO_DATA));
-		
-//	    System.out.println(getClienSucMapWithNoHead(new JSONObject(), "00"));
+//	    String adStr = "{\"barColor\":\"255,255,255,1\",\"brandIcon\":\"https://pic1.chelaile.net.cn/adv/brandIcon305320170413.png\",\"brandName\":\"车来了\",\"buttonColor\":\"\",\"buttonIcon\":\"https://pic1.chelaile.net.cn/adv/buttonIcon305320170413.png\",\"buttonTitle\":\"\",\"buttonType\":1,\"clickMonitorLink\":\"\",\"distance\":-1,\"head\":\"小车需要你\",\"id\":3053,\"lindex\":0,\"link\":\"https://ad.chelaile.net.cn/?link=https%3A%2F%2Fsojump.com%2Fm%2F13332385.aspx&adtype=00&distance=-1&advId=3053&udid=57f41bf99791d7b3668595bc23eed2b0cae99a2d&storder=1\",\"monitorType\":0,\"openType\":0,\"promoteTitle\":\"调查问卷\",\"provider_id\":\"1\",\"showType\":0,\"sindex\":1,\"subhead\":\"你的意见将直达公路院哦~\",\"targetType\":0,\"type\":1,\"unfoldMonitorLink\":\"\"}";
+//        AdEntity ad = JSON.parseObject(adStr, AdEntity.class);
+	    AdEntity ad = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
+	    ad.setBarColor("255,255,255,1");
+	    ad.setBrandIcon("https://pic1.chelaile.net.cn/adv/brandIcon305320170413.png");
+	    ad.setBrandName("车来了");
+	    ad.setButtonIcon("https://pic1.chelaile.net.cn/adv/buttonIcon305320170413.png");
+	    ad.setButtonType(1);
+	    ad.setHead("小车需要你");
+	    ad.setLink("https://ad.chelaile.net.cn/?link=https%3A%2F%2Fsojump.com%2Fm%2F13332385.aspx&adtype=00&distance=-1&advId=3053&udid=57f41bf99791d7b3668595bc23eed2b0cae99a2d&storder=1");
+	    ad.setSubhead("你的意见将直达公路院哦~");
+	    ad.setId(3053);
+	    System.out.println(JSONObject.toJSONString(ad));
+        System.out.println(ad.getBarColor() + "," + ad.getButtonTitle());
 		System.exit(0);
 		
 	}
