@@ -402,6 +402,7 @@ public class OpenManager extends AbstractManager {
             
             // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
             AdFullInnerContent inner = (AdFullInnerContent) ad.getAds().getAdInnerContent();
+            logger.info("***** {}", JSONObject.toJSONString(inner));
             if (inner.getProvider_id() <= 1 && inner.getBackup() == 0) { // 非自采买的provider_id都大于1
                 OpenAdEntity entity = getSelfAdEntity(advParam, cacheRecord, ad, showType, queryParam);
                 if (entity != null) {
