@@ -14,13 +14,17 @@ public class AdStationlInnerContent extends AdInnerContent {
 	private String pic; // 广告图片的URL
 	private AdCard adCard;
 	private BannerInfo bannerInfo;
-	private int adWeight;    // 轮播权重
 	private int buyOut;		// 买断， 0 没有买断； 1 买断。 2018-03-29
 	
 	private String wx_miniPro_id; 
     private String wx_miniPro_path; // 跳转小程序， 2018-04-09
     
     private int provider_id; // 广告提供商， 0：自采买广告；8：阅盟；9：Ecoook；10：科大讯飞【其他说明：3 inmobi】
+    
+    private long autoInterval; // 自动刷新时间
+    private int adWeight;    // 轮播权重
+    private long mixInterval; // 最小展示时间
+    private int backup; // 是否是备选方案
 	
 	@Override
 	protected void parseJson(String jsonr) {
@@ -37,6 +41,9 @@ public class AdStationlInnerContent extends AdInnerContent {
 			this.wx_miniPro_id = ad.getWx_miniPro_id();
 			this.wx_miniPro_path = ad.getWx_miniPro_path();
 			this.provider_id = ad.getProvider_id();
+			this.autoInterval = ad.autoInterval * 1000;
+            this.mixInterval = ad.mixInterval * 1000;
+            this.backup = ad.backup;
 		}
 	}
 
@@ -137,5 +144,47 @@ public class AdStationlInnerContent extends AdInnerContent {
 
     public void setProvider_id(int provider_id) {
         this.provider_id = provider_id;
+    }
+
+    /**
+     * @return the autoInterval
+     */
+    public long getAutoInterval() {
+        return autoInterval;
+    }
+
+    /**
+     * @param autoInterval the autoInterval to set
+     */
+    public void setAutoInterval(long autoInterval) {
+        this.autoInterval = autoInterval;
+    }
+
+    /**
+     * @return the mixInterval
+     */
+    public long getMixInterval() {
+        return mixInterval;
+    }
+
+    /**
+     * @param mixInterval the mixInterval to set
+     */
+    public void setMixInterval(long mixInterval) {
+        this.mixInterval = mixInterval;
+    }
+
+    /**
+     * @return the backup
+     */
+    public int getBackup() {
+        return backup;
+    }
+
+    /**
+     * @param backup the backup to set
+     */
+    public void setBackup(int backup) {
+        this.backup = backup;
     }
 }

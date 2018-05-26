@@ -2,14 +2,11 @@ package com.bus.chelaile.service.impl;
 
 import java.util.HashMap;
 
-import com.bus.chelaile.common.AnalysisLog;
-import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdFullInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.Tag;
-import com.bus.chelaile.model.ads.entity.ApiLineEntity;
 import com.bus.chelaile.model.ads.entity.OpenAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenOldAdEntity;
 import com.bus.chelaile.mvc.AdvParam;
@@ -80,6 +77,7 @@ public class SelfOpenManager {
 	            res.setDuration(fullInner.getDuration());
 	            res.setIsFullShow(ad.getIs_fullScreen());
 	            res.setFeedId(fullInner.getFeedId());
+	            res.setTimeout(fullInner.getTimeout());
 	            if(fullInner.getTag() != null && fullInner.getTagId() != null) {
 	                res.setTag(new Tag(fullInner.getTag(), fullInner.getTagId()));
 	            }

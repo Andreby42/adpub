@@ -12,10 +12,12 @@ import com.bus.chelaile.mvc.AdvParam;
  */
 public class AdLineFeedInnerContent extends AdInnerContent {
     private String pic; // 广告图片的URL
+    
     private int adWeight; // 权重
     private long autoInterval; // 自动刷新时间
     private long mixInterval; // 最小展示时间
     private int backup; // 是否是备选方案
+    
     private int provider_id; // 广告提供商， 0 自采买， 2 广点通
     private String slogan;
     private String feedAdTitle;

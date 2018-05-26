@@ -39,7 +39,6 @@ public class LineFeedAdsManager extends AbstractManager {
             
             // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
             AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) ad.getAds().getAdInnerContent();
-            logger.info("************** " + JSONObject.toJSONString(lineFeedInner));
             if (lineFeedInner.getProvider_id() <= 1 && lineFeedInner.getBackup() == 0) { // 非自采买的provider_id都大于1
                 LineFeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
                 if (entity != null) {
@@ -111,6 +110,7 @@ public class LineFeedAdsManager extends AbstractManager {
                 res.setImgsType(lineFeedInner.getImgsType());
                 res.setSubhead(lineFeedInner.getSlogan());
                 res.setHead(lineFeedInner.getFeedAdTitle());
+                res.setPic(lineFeedInner.getPic());
             }
         }
         return res;
@@ -124,6 +124,7 @@ public class LineFeedAdsManager extends AbstractManager {
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
         entity.setTitle(ad.getTitle());
+        
         entity.setAdWeight(inner.getAdWeight());
         entity.setAutoInterval(inner.getAutoInterval());
         entity.setMixInterval(inner.getMixInterval());

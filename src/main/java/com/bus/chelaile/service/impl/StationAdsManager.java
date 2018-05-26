@@ -79,14 +79,19 @@ public class StationAdsManager extends AbstractManager {
                 // 加上版本控制，and， 目前只支持广点通
                 if (stationInner.getProvider_id() == ProductType.GUANGDIANTONG.getProvider_id()
                         && ((advParam.getS().equalsIgnoreCase("android")
-                                && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505)
-                        || (advParam.getS().equalsIgnoreCase("ios")
-                                && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0514))
-                        ) {
-                    res = createSDKOpenAds(stationInner.getProvider_id(), ad, stationInner);
+                                && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528)
+                                || (advParam.getS().equalsIgnoreCase("ios")
+                                        && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528))) {
+                    res = createSDKOpenAds(stationInner, ad);
                     return res;
-                } else
+                } else if ((advParam.getS().equalsIgnoreCase("android")
+                        && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505)
+                        || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0514)) {
+                    res = createSDKOpenAds(stationInner, ad);
+                    return res;
+                } else {
                     logger.error("不合适的版本，或者不合适的第三方广告类型，udid={}", advParam.getUdid());
+                }
                 return null;
             }
 
@@ -170,18 +175,13 @@ public class StationAdsManager extends AbstractManager {
                 || (platform.isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0117));
     }
 
-    @Override
-    protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
-            Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
-        return null;
-    }
-
     public void writeSendLog(AdvParam advParam, StationAdEntity entity) {
         AnalysisLog.info(
                 "[STATION_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={},provider_id={}",
                 entity.buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(),
                 advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(), advParam.getNw(), advParam.getIp(),
-                advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getH5User(), advParam.getH5Src(), entity.getProvider_id());
+                advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getH5User(), advParam.getH5Src(),
+                entity.getProvider_id());
     }
 
     // 按照权重计算，选择一个广告投放
@@ -230,22 +230,22 @@ public class StationAdsManager extends AbstractManager {
     };
 
     // 2018-05-05 ，站点广告，支持原生gdt
-    private StationAdEntity createSDKOpenAds(int adType, AdContent ad, AdStationlInnerContent inner) {
+    private StationAdEntity createSDKOpenAds(AdStationlInnerContent inner, AdContent ad) {
         StationAdEntity entity = new StationAdEntity();
         entity.setId(ad.getId());
-        entity.setProvider_id(adType + "");
+        entity.setProvider_id(inner.getProvider_id() + "");
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
         entity.setTitle(ad.getTitle());
         entity.setBuyOut(inner.getBuyOut());
         entity.setAdWeight(inner.getAdWeight());
-        
+
         BannerInfo bannerInfo = new BannerInfo();
-        bannerInfo.setBannerType(4);  // 广点通专用样式，文字+标签（文案由客户端自定义）
+        bannerInfo.setBannerType(4); // 广点通专用样式，文字+标签（文案由客户端自定义）
         AdButtonInfo buttonInfo = new AdButtonInfo();
         buttonInfo.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
         bannerInfo.setButton(buttonInfo);
-        
+
         entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
         entity.setBannerInfo(bannerInfo);
         return entity;
@@ -273,5 +273,55 @@ public class StationAdsManager extends AbstractManager {
         for (StationAdEntity stn : enties) {
             System.out.println(stn.getPriority());
         }
+    }
+
+    @Override
+    protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+            Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
+
+        List<BaseAdEntity> entities = New.arrayList();
+        List<Integer> ids = New.arrayList();
+        boolean hasOwnAd = false;
+        for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+            AdContentCacheEle ad = entry.getValue();
+
+            // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
+            // 站点广告因为之前涉及到轮播和埋点的方案，所以这里有待商量 
+            // TODO 
+            AdStationlInnerContent inner = (AdStationlInnerContent) ad.getAds().getAdInnerContent();
+            if (inner.getProvider_id() <= 1 && inner.getBackup() == 0) { // 非自采买的provider_id都大于1
+                StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
+                if (entity != null) {
+                    entities.add(entity);
+                    int adId = ad.getAds().getId();
+                    ids.add(adId);
+
+                    hasOwnAd = true;
+                }
+            }
+        }
+        // 如果没有自采买，那么返回一个列表
+        if (!hasOwnAd) {
+            for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+                AdContentCacheEle ad = entry.getValue();
+                StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
+                if (entity != null) {
+                    entities.add(entity);
+                }
+            }
+            // 重新排序
+            // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个
+            // 如果超过半小时，那么按照权重排序
+            if (!checkSendLog(advParam, entities, showType.getType()))
+                rankAds(advParam, entities);
+        }
+        // 记录投放的第一条广告， 记录发送日志
+        if (entities != null && entities.size() > 0) {
+            cacheRecord.setNoFeedAdHistoryMap(ids);
+            recordSend(advParam, cacheRecord, adMap, showType, entities);
+        }
+
+        return entities;
+
     }
 }

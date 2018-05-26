@@ -8,11 +8,14 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdDoubleInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
+import com.bus.chelaile.model.ads.AdStationlInnerContent;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
@@ -27,20 +30,6 @@ import com.bus.chelaile.util.New;
  * 
  */
 public class DoubleAndSingleManager extends AbstractManager {
-
-    //	// 0 双栏 1 单栏
-    //	private ShowType type;
-    //	//	这个值要好好测试一下
-    //	private Station station;
-    //
-    //	public DoubleAndSingleManager(int type,Station station) {
-    //		if (0 == type) {
-    //			this.type = ShowType.DOUBLE_COLUMN;
-    //		} else if (1 == type) {
-    //			this.type = ShowType.SINGLE_COLUMN;
-    //		}
-    //		this.station = station;
-    //	}
 
     @Override
     public BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
@@ -113,19 +102,22 @@ public class DoubleAndSingleManager extends AbstractManager {
                     "[LINE_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={},provider_id={}",
                     ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
                     advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(),
-                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),entity.getProvider_id());
+                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),
+                    entity.getProvider_id());
         } else if (showType == ShowType.DOUBLE_COLUMN) {
             AnalysisLog.info(
                     "[STATION_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={},provider_id={}",
                     ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
                     advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(),
-                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),entity.getProvider_id());
+                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),
+                    entity.getProvider_id());
         } else {
             AnalysisLog.info(
                     "[ROUTE_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={},provider_id={}",
                     ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
                     advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(),
-                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),entity.getProvider_id());
+                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance(),
+                    entity.getProvider_id());
         }
 
         return entity;
@@ -137,31 +129,77 @@ public class DoubleAndSingleManager extends AbstractManager {
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
 
         List<BaseAdEntity> entities = New.arrayList();
+        if (showType == ShowType.DOUBLE_COLUMN) {
+            List<Integer> ids = New.arrayList();
+            boolean hasOwnAd = false;
+            for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+                AdContentCacheEle ad = entry.getValue();
 
-        for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
-            AdEntity entity = new AdEntity(showType.getValue());
-            AdContentCacheEle ad = null;
-            ad = entry.getValue();
+                // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
+                AdDoubleInnerContent inner = (AdDoubleInnerContent) ad.getAds().getAdInnerContent();
+                if (inner.getProvider_id() <= 1 && inner.getBackup() == 0) { // 非自采买的provider_id都大于1
+                    AdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
+                    if (entity != null) {
+                        entities.add(entity);
+                        int adId = ad.getAds().getId();
+                        ids.add(adId);
 
-            AdInnerContent inner = ad.getAds().getInnerContent();
-            inner.fillAdEntity(entity, advParam, 0);
+                        hasOwnAd = true;
+                    }
+                }
+            }
+            // 如果没有自采买，那么返回一个列表
+            if (!hasOwnAd) {
+                for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+                    AdContentCacheEle ad = entry.getValue();
+                    AdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
+                    if (entity != null) {
+                        entities.add(entity);
+                    }
+                }
+                // 重新排序
+                // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个
+                // 如果超过半小时，那么按照权重排序
+                if (!checkSendLog(advParam, entities, showType.getType()))
+                    rankAds(advParam, entities);
+            }
+            // 记录投放的第一条广告， 记录发送日志
+            if (entities != null && entities.size() > 0) {
+                cacheRecord.setNoFeedAdHistoryMap(ids);
+                recordSend(advParam, cacheRecord, adMap, showType, entities);
+            }
+        }
 
-            Map<String, String> paramMap = New.hashMap();
-            paramMap.put(Constants.PARAM_STATION_ORDER, String.valueOf(entity.getSindex()));
-            paramMap.put(Constants.PARAM_DISTANCE, String.valueOf(advParam.getDistance()));
+        if (showType == ShowType.ROUTE_PLAN_ADV) {
+            for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+                AdContent ad = entry.getValue().getAds();
+                AdEntity entity = from(advParam, cacheRecord, ad, showType);
+                entities.add(entity);
+                AnalysisLog.info(
+                        "[ADV_SEND]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={}",
+                        ad.getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(),
+                        advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(), advParam.getIp(),
+                        advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance());
 
-            entity.fillBaseInfo(ad.getAds(), advParam, paramMap);
-            entity.dealLink(advParam);
-
-            AnalysisLog.info(
-                    "[ROUTE_LEVEL_ADS]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, storder={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},distance={}",
-                    ad.getAds().getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
-                    advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getSindex(), advParam.getNw(),
-                    advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getDistance());
-
-            entities.add(entity);
+            }
         }
 
         return entities;
+    }
+
+    private AdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
+        AdEntity entity = new AdEntity(showType.getValue());
+        AdInnerContent inner = ad.getInnerContent();
+
+        inner.fillAdEntity(entity, advParam, 0);
+
+        Map<String, String> paramMap = New.hashMap();
+        paramMap.put(Constants.PARAM_STATION_ORDER, String.valueOf(entity.getSindex()));
+        paramMap.put(Constants.PARAM_DISTANCE, String.valueOf(advParam.getDistance()));
+
+        entity.fillBaseInfo(ad, advParam, paramMap);
+        entity.dealLink(advParam);
+
+        return entity;
     }
 }

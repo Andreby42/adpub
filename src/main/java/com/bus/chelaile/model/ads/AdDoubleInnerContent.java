@@ -50,6 +50,11 @@ public class AdDoubleInnerContent extends AdInnerContent {
     private int position = Constants.NULL_POSITION;
 
     private int provider_id; // 广告提供商， 0 自采买， 2 广点通
+    private long autoInterval; // 自动刷新时间
+    private long mixInterval; // 最小展示时间
+    private int adWeight; //权重
+    private int backup; // 是否是备选方案
+    
 
     @Override
     public void parseJson(String jsonr) {
@@ -78,6 +83,10 @@ public class AdDoubleInnerContent extends AdInnerContent {
 
             this.provider_id = ad.provider_id;
             this.desc = ad.desc;
+            
+            this.autoInterval = ad.autoInterval;
+            this.mixInterval = ad.mixInterval;
+            this.backup = ad.backup;
         }
     }
 
@@ -116,6 +125,11 @@ public class AdDoubleInnerContent extends AdInnerContent {
         adEntity.setButtonTitle(nullToEmpty(this.buttonTitle));
         adEntity.setButtonColor(nullToEmpty(this.buttonColor));
         adEntity.setFeedId(this.getFeedId());
+        
+        adEntity.setMixInterval(this.getMixInterval());
+        adEntity.setAdWeight(this.adWeight);
+        adEntity.setAutoInterval(this.autoInterval);
+        
         if(param.getType() == TypeNumber.ONE.getType()) { // type=1：线路规划页广告
             adEntity.setDesc(this.desc);
         }
@@ -324,5 +338,61 @@ public class AdDoubleInnerContent extends AdInnerContent {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    /**
+     * @return the autoInterval
+     */
+    public long getAutoInterval() {
+        return autoInterval;
+    }
+
+    /**
+     * @param autoInterval the autoInterval to set
+     */
+    public void setAutoInterval(long autoInterval) {
+        this.autoInterval = autoInterval;
+    }
+
+    /**
+     * @return the mixInterval
+     */
+    public long getMixInterval() {
+        return mixInterval;
+    }
+
+    /**
+     * @param mixInterval the mixInterval to set
+     */
+    public void setMixInterval(long mixInterval) {
+        this.mixInterval = mixInterval;
+    }
+
+    /**
+     * @return the backup
+     */
+    public int getBackup() {
+        return backup;
+    }
+
+    /**
+     * @param backup the backup to set
+     */
+    public void setBackup(int backup) {
+        this.backup = backup;
+    }
+
+    /**
+     * @return the adWeight
+     */
+    public int getAdWeight() {
+        return adWeight;
+    }
+
+    /**
+     * @param adWeight the adWeight to set
+     */
+    public void setAdWeight(int adWeight) {
+        this.adWeight = adWeight;
     }
 }

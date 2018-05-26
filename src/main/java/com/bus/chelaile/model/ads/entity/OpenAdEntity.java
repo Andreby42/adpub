@@ -1,5 +1,6 @@
 package com.bus.chelaile.model.ads.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.Tag;
@@ -32,6 +33,12 @@ public class OpenAdEntity  extends BaseAdEntity{
 	private String placementId = "";
 	private Tag tag;
     private String feedId;
+    
+    @JSONField(serialize = false)
+    private long timeout; // 超时时间
+    @JSONField(serialize = false)
+    private int adWeight; // 轮播权重
+    
 
  //   private int monitorType;
   //  private int type;
@@ -192,6 +199,34 @@ public class OpenAdEntity  extends BaseAdEntity{
 	public void setIsFullShow(int isFullShow) {
 		this.isFullShow = isFullShow;
 	}
+
+    /**
+     * @return the timeout
+     */
+    public long getTimeout() {
+        return timeout;
+    }
+
+    /**
+     * @param timeout the timeout to set
+     */
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
+    }
+
+    /**
+     * @return the adWeight
+     */
+    public int getAdWeight() {
+        return adWeight;
+    }
+
+    /**
+     * @param adWeight the adWeight to set
+     */
+    public void setAdWeight(int adWeight) {
+        this.adWeight = adWeight;
+    }
 
 	
 }

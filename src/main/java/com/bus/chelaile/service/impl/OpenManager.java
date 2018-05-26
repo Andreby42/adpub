@@ -33,6 +33,7 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.service.CommonService;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.util.New;
 
 /**
  * 新版本开屏和浮层
@@ -79,7 +80,7 @@ public class OpenManager extends AbstractManager {
                 AdFullInnerContent fullInner = (AdFullInnerContent) inner;
                 if (fullInner.getProvider_id() != 0) { // 非自采买广告，需要特殊处理
                     cateGory.setAdType(fullInner.getProvider_id());
-                    entity = setApiOpenAds(fullInner, advParam, cacheRecord, cateGory, showType,
+                    entity = setApiOpenAds(fullInner, advParam, cacheRecord, cateGory.getAdId(), showType,
                             adMap.get(cateGory.getAdId()).getAds().getTitle());
                     return entity;
                 }
@@ -113,23 +114,22 @@ public class OpenManager extends AbstractManager {
                     advParam.getDeviceType(), advParam.getLng(), advParam.getLat());
 
         }
-        // 四种客户端 sdk, 新版本才支持
-        else if (cateGory.getAdType() == 2 || cateGory.getAdType() == 8 || cateGory.getAdType() == 9
-                || cateGory.getAdType() == 10) {
-            if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
-                    || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420)) {
-                entity = createSDKOpenAds(cateGory.getAdType(), cateGory.getAdType() * (-1));
-                AnalysisLog.info(
-                        "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},provider_id={},nw={},ip={},deviceType={}",
-                        entity.getId(), showType.getType(), "", advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
-                        advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getProvider_id(), advParam.getNw(),
-                        advParam.getIp(), advParam.getDeviceType());
-            } else {
-                // TODO 
-            }
-        } else {
-            throw new IllegalArgumentException("开屏的类型错误showType:" + showType + ",cateGory.getAdType()=" + cateGory.getAdType());
-        }
+//        // 四种客户端 sdk, 新版本才支持
+//        else if (cateGory.getAdType() == 2 || cateGory.getAdType() == 8 || cateGory.getAdType() == 9
+//                || cateGory.getAdType() == 10) {
+//            if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
+//                    || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420)) {
+//                entity = createSDKOpenAds(fullInner, cateGory.getAdType() * (-1));
+//                AnalysisLog.info(
+//                        "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},provider_id={},nw={},ip={},deviceType={}",
+//                        entity.getId(), showType.getType(), "", advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+//                        advParam.getCityId(), advParam.getS(), advParam.getV(), entity.getProvider_id(), advParam.getNw(),
+//                        advParam.getIp(), advParam.getDeviceType());
+//            } else {
+//            }
+//        } else {
+//            throw new IllegalArgumentException("开屏的类型错误showType:" + showType + ",cateGory.getAdType()=" + cateGory.getAdType());
+//        }
 
         // 2017.12.28， 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
         //		cacheRecord.setOpenAdHistory(cateGory);
@@ -140,15 +140,15 @@ public class OpenManager extends AbstractManager {
      * 统一处理第三方广告
      */
     private OpenAdEntity setApiOpenAds(AdFullInnerContent fullInner, AdvParam advParam, AdPubCacheRecord cacheRecord,
-            AdCategory cateGory, ShowType showType, String title) throws Exception {
+            int advId, ShowType showType, String title) throws Exception {
         if (showType != ShowType.OPEN_SCREEN) {
             return null;
         }
         OpenAdEntity entity = null;
 
         if (fullInner.getProvider_id() == 3) {
-            if ((advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0524)) {
-                entity = createSDKOpenAds(fullInner.getProvider_id(), cateGory.getAdId());
+            if ((advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528)) {
+                entity = createSDKOpenAds(fullInner, advId);
                 AnalysisLog.info(
                         "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
                         entity.getId(), showType.getType(), title, advParam.getUserId(), advParam.getAccountId(),
@@ -163,7 +163,7 @@ public class OpenManager extends AbstractManager {
         } else {
             if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
                     || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420)) {
-                entity = createSDKOpenAds(fullInner.getProvider_id(), cateGory.getAdId());
+                entity = createSDKOpenAds(fullInner, advId);
                 AnalysisLog.info(
                         "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
                         entity.getId(), showType.getType(), title, advParam.getUserId(), advParam.getAccountId(),
@@ -180,16 +180,20 @@ public class OpenManager extends AbstractManager {
         }
     }
 
-    private OpenAdEntity createSDKOpenAds(int adType, int id) {
+    private OpenAdEntity createSDKOpenAds(AdFullInnerContent inner, int id) {
         OpenAdEntity entity = new OpenAdEntity(ShowType.OPEN_SCREEN.getValue());
         entity.setId(id);
-        entity.setProvider_id(adType + "");
+        entity.setProvider_id(inner.getProvider_id() + "");
         entity.setDuration(4); // 广告持续时间，单位-S
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setIsDisplay(0); // 是否展示秒数，0-展示
         entity.setIsSkip(0); // 是否展示跳过按钮，0-展示
         entity.setIsFullShow(0); // 是否全屏展示，0-否
         entity.setType(3); // 第三方广告
+        
+        entity.setAdWeight(inner.getAdWeight());
+        entity.setTimeout(inner.getTimeout());
+        
         return entity;
     }
 
@@ -198,14 +202,21 @@ public class OpenManager extends AbstractManager {
      */
     private OpenAdEntity getSelfAdEntity(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContentCacheEle adc,
             ShowType showType, QueryParam queryParam) {
+        OpenAdEntity entity = null;
         AdFullInnerContent fullInner = (AdFullInnerContent) (adc.getAds().getAdInnerContent());
         if (fullInner.getProvider_id() != 0) {
-            logger.error("老版本返回了第三方的广告，udid={},s={},v={},vc={}", advParam.getUdid(), advParam.getS(), advParam.getV(),
-                    advParam.getVc());
-            return null;
+            // TODO 2018-05-26  注释掉 
+            //            logger.error("老版本返回了第三方的广告，udid={},s={},v={},vc={}", advParam.getUdid(), advParam.getS(), advParam.getV(),
+            //                    advParam.getVc());
+            //            return null;
+            try {
+                entity = setApiOpenAds(fullInner, advParam, cacheRecord, adc.getAds().getId(), showType, adc.getAds().getTitle());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        
 
-        OpenAdEntity entity = null;
         // 判断是否是老版本的广告接口
         if (!queryParam.isOldMany()) {
             entity = selfOpen.from(adc.getAds(), advParam.getS(), advParam, showType.getType());
@@ -382,14 +393,47 @@ public class OpenManager extends AbstractManager {
     @Override
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        
+        List<BaseAdEntity> entities = New.arrayList();
+        List<Integer> ids = New.arrayList();
+        boolean hasOwnAd = false;
+        for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+            AdContentCacheEle ad = entry.getValue();
+            
+            // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
+            AdFullInnerContent inner = (AdFullInnerContent) ad.getAds().getAdInnerContent();
+            if (inner.getProvider_id() <= 1 && inner.getBackup() == 0) { // 非自采买的provider_id都大于1
+                OpenAdEntity entity = getSelfAdEntity(advParam, cacheRecord, ad, showType, queryParam);
+                if (entity != null) {
+                    entities.add(entity);
+                    int adId = ad.getAds().getId();
+                    ids.add(adId);
+                    
+                    hasOwnAd = true;
+                }
+            }
+        }
+        // 如果没有自采买，那么返回一个列表
+        if (!hasOwnAd) {
+            for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+                AdContentCacheEle ad = entry.getValue();
+                OpenAdEntity entity = getSelfAdEntity(advParam, cacheRecord, ad, showType, queryParam);
+                if (entity != null) {
+                    entities.add(entity);
+                }
+            }
+            // 重新排序
+            // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个
+            // 如果超过半小时，那么按照权重排序
+            if (!checkSendLog(advParam, entities, showType.getType()))
+                rankAds(advParam, entities);
+        }
+        // 记录投放的第一条广告， 记录发送日志
+        if (entities != null && entities.size() > 0) {
+            cacheRecord.setNoFeedAdHistoryMap(ids);
+            recordSend(advParam, cacheRecord, adMap, showType, entities);
+        }
+
+        return entities;
     }
-
-//    @Override
-//    public void rankAds(AdvParam advParam, List<BaseAdEntity> entities) {
-//        // TODO Auto-generated method stub
-//
-//    }
-
 }

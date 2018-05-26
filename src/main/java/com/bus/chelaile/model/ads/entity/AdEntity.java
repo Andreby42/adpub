@@ -1,5 +1,6 @@
 package com.bus.chelaile.model.ads.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.Tag;
 
@@ -43,6 +44,13 @@ public class AdEntity extends BaseAdEntity{
 
  //   private int monitorType;
   //  private int type;
+    
+    @JSONField(serialize = false)
+    private int adWeight; // 轮播权重
+    @JSONField(serialize = false)
+    private long autoInterval;
+    @JSONField(serialize = false)
+    private long mixInterval;
 
 	public Tag getTag() {
 		return tag;
@@ -252,6 +260,48 @@ public class AdEntity extends BaseAdEntity{
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
+
+    /**
+     * @return the adWeight
+     */
+    public int getAdWeight() {
+        return adWeight;
+    }
+
+    /**
+     * @param adWeight the adWeight to set
+     */
+    public void setAdWeight(int adWeight) {
+        this.adWeight = adWeight;
+    }
+
+    /**
+     * @return the autoInterval
+     */
+    public long getAutoInterval() {
+        return autoInterval;
+    }
+
+    /**
+     * @param autoInterval the autoInterval to set
+     */
+    public void setAutoInterval(long autoInterval) {
+        this.autoInterval = autoInterval;
+    }
+
+    /**
+     * @return the mixInterval
+     */
+    public long getMixInterval() {
+        return mixInterval;
+    }
+
+    /**
+     * @param mixInterval the mixInterval to set
+     */
+    public void setMixInterval(long mixInterval) {
+        this.mixInterval = mixInterval;
+    }
     
     
     
