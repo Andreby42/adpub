@@ -10,13 +10,18 @@ import com.bus.chelaile.mvc.AdvParam;
  * @author linzi
  * 
  */
-public class AdLineFeedInnerContent extends AdFeedInnerContent {
+public class AdLineFeedInnerContent extends AdInnerContent {
+    private String pic; // 广告图片的URL
     private int adWeight; // 权重
     private long autoInterval; // 自动刷新时间
     private long mixInterval; // 最小展示时间
     private int backup; // 是否是备选方案
-//    private String head;
+    private int provider_id; // 广告提供商， 0 自采买， 2 广点通
+    private String slogan;
+    private String feedAdTitle;
+    private int imgsType; // 图片样式：0：单图小图， 1 宽图大图
 
+    
     @Override
     protected void parseJson(String jsonr) {
         AdLineFeedInnerContent ad = null;
@@ -26,6 +31,11 @@ public class AdLineFeedInnerContent extends AdFeedInnerContent {
             this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
+            this.setProvider_id(ad.getProvider_id());
+            this.setSlogan(ad.getSlogan());
+            this.setFeedAdTitle(ad.getFeedAdTitle());
+            this.setImgsType(ad.getImgsType());
+            this.pic = ad.pic;
         }
     }
 
@@ -92,6 +102,76 @@ public class AdLineFeedInnerContent extends AdFeedInnerContent {
      */
     public void setBackup(int backup) {
         this.backup = backup;
+    }
+
+    /**
+     * @return the pic
+     */
+    public String getPic() {
+        return pic;
+    }
+
+    /**
+     * @param pic the pic to set
+     */
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    /**
+     * @return the imgsType
+     */
+    public int getImgsType() {
+        return imgsType;
+    }
+
+    /**
+     * @param imgsType the imgsType to set
+     */
+    public void setImgsType(int imgsType) {
+        this.imgsType = imgsType;
+    }
+
+    /**
+     * @return the feedAdTitle
+     */
+    public String getFeedAdTitle() {
+        return feedAdTitle;
+    }
+
+    /**
+     * @param feedAdTitle the feedAdTitle to set
+     */
+    public void setFeedAdTitle(String feedAdTitle) {
+        this.feedAdTitle = feedAdTitle;
+    }
+
+    /**
+     * @return the slogan
+     */
+    public String getSlogan() {
+        return slogan;
+    }
+
+    /**
+     * @param slogan the slogan to set
+     */
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
+    }
+
+    /**
+     * @return the provider_id
+     */
+    public int getProvider_id() {
+        return provider_id;
+    }
+
+    /**
+     * @param provider_id the provider_id to set
+     */
+    public void setProvider_id(int provider_id) {
+        this.provider_id = provider_id;
     }
 
 }
