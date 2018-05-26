@@ -24,6 +24,9 @@ public class LineFeedAdEntity extends FeedAdEntity {
 	
 	private int apiType; // 原生or banner or 开屏等等
 	
+	private String subhead; //  上面的文字
+	private String head; // 单图文章样式中，下面的文字
+	
 	// 构造方法
 	public LineFeedAdEntity() {
 	    this.showType = ShowType.LINE_FEED_ADV.getValue();
@@ -111,5 +114,33 @@ public class LineFeedAdEntity extends FeedAdEntity {
      */
     public void setApiType(int apiType) {
         this.apiType = apiType;
+    }
+
+    /**
+     * @return the subhead
+     */
+    public String getSubhead() {
+        return subhead;
+    }
+
+    /**
+     * @param subhead the subhead to set
+     */
+    public void setSubhead(String subhead) {
+        this.subhead = subhead;
+    }
+
+    /**
+     * @return the head
+     */
+    public String getHead() {
+        return head;
+    }
+
+    /**
+     * @param head the head to set
+     */
+    public void setHead(String head) {
+        this.head = head;
     }
 }

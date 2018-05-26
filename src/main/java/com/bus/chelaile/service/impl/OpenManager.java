@@ -32,7 +32,7 @@ import com.bus.chelaile.model.rule.Rule;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.service.CommonService;
-import com.bus.chelaile.service.RankAdsManager;
+import com.bus.chelaile.service.RankAndFilterManager;
 import com.bus.chelaile.strategy.AdCategory;
 
 /**
@@ -41,7 +41,7 @@ import com.bus.chelaile.strategy.AdCategory;
  * @author zzz
  * 
  */
-public class OpenManager extends AbstractManager implements RankAdsManager {
+public class OpenManager extends AbstractManager implements RankAndFilterManager {
 
     @Autowired
     private SelfOpenManager selfOpen;

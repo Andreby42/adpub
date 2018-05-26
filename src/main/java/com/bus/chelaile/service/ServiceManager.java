@@ -36,7 +36,6 @@ import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.FeedAdArticleInfo;
-import com.bus.chelaile.model.ads.entity.FeedAdEntity;
 import com.bus.chelaile.model.ads.entity.LineAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenAdEntity;
@@ -797,12 +796,10 @@ public class ServiceManager {
         ad1.setPic("https://image3.chelaile.net.cn/2d78d8bf077148e998f2821a67ad6f68#225,150");
         ad1.setImgsType(0);
         ad1.setProvider_id("1");
-        List<String> imgs = New.arrayList();
-        imgs.add("https://image3.chelaile.net.cn/2d78d8bf077148e998f2821a67ad6f68#225,150");
-        FeedAdArticleInfo articleInfo = new FeedAdArticleInfo("限时9.9包邮，淘宝天猫内部券大放送，速领！", 100, "广告",imgs , "卷皮九块邮");
-        ad1.setArticleInfo(articleInfo);
-        entities.add(0, ad1);
+        ad1.setSubhead("限时9.9包邮，淘宝天猫内部券大放送，速领！");
+        ad1.setHead("卷皮九块邮");
         
+        entities.add(0, ad1);
         
         return resultMap;
     }

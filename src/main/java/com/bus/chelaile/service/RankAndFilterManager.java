@@ -32,7 +32,7 @@ import com.bus.chelaile.strategy.AdDispatcher;
 import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.util.New;
 
-public interface  RankAdsManager {
+public interface  RankAndFilterManager {
 
     
     void rankAds(List<BaseAdEntity> entities);
