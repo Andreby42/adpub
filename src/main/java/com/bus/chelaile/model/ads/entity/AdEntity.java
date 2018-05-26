@@ -46,8 +46,6 @@ public class AdEntity extends BaseAdEntity{
   //  private int type;
     
     @JSONField(serialize = false)
-    private int adWeight; // 轮播权重
-    @JSONField(serialize = false)
     private long autoInterval;
     @JSONField(serialize = false)
     private long mixInterval;
@@ -261,19 +259,6 @@ public class AdEntity extends BaseAdEntity{
 		this.desc = desc;
 	}
 
-    /**
-     * @return the adWeight
-     */
-    public int getAdWeight() {
-        return adWeight;
-    }
-
-    /**
-     * @param adWeight the adWeight to set
-     */
-    public void setAdWeight(int adWeight) {
-        this.adWeight = adWeight;
-    }
 
     /**
      * @return the autoInterval

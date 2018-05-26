@@ -152,24 +152,24 @@ public abstract class AbstractManager {
     }
 
     // 按照权重计算，选择一个广告投放
-    protected void rankAds(AdvParam advParam, List<BaseAdEntity> lineFeedAds) {
+    protected void rankAds(AdvParam advParam, List<BaseAdEntity> entities) {
         // 根据权重设置第一次展示
         // 获取所有符合规则的广告
         //        logger.info("投放记录超时： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
-        if (lineFeedAds != null && lineFeedAds.size() > 0) {
+        if (entities != null && entities.size() > 0) {
             int totalWeight = 0;
-            for (BaseAdEntity entity : lineFeedAds) {
-                totalWeight += ((LineFeedAdEntity) entity).getAdWeight();
+            for (BaseAdEntity entity : entities) {
+                totalWeight += entity.getAdWeight();
             }
 
             if (totalWeight > 0) {
                 int randomOut = new Random().nextInt(totalWeight); // 取随机值
 //                logger.info("randomOut={}, udid={}", randomOut, advParam.getUdid());
                 int indexWeight = 0;
-                for (int index = 0; index < lineFeedAds.size(); index++) {
-                    BaseAdEntity entity = lineFeedAds.get(index);
-                    if ((indexWeight += ((LineFeedAdEntity) entity).getAdWeight()) > randomOut) {
-                        Collections.swap(lineFeedAds, 0, index);
+                for (int index = 0; index < entities.size(); index++) {
+                    BaseAdEntity entity = entities.get(index);
+                    if ((indexWeight += entity.getAdWeight()) > randomOut) {
+                        Collections.swap(entities, 0, index);
                        //logger.info("投放记录超时，调整后**** ： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
                         return;
                     }

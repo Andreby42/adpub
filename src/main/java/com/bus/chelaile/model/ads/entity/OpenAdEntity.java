@@ -36,8 +36,6 @@ public class OpenAdEntity  extends BaseAdEntity{
     
     @JSONField(serialize = false)
     private long timeout; // 超时时间
-    @JSONField(serialize = false)
-    private int adWeight; // 轮播权重
     
 
  //   private int monitorType;
@@ -214,19 +212,4 @@ public class OpenAdEntity  extends BaseAdEntity{
         this.timeout = timeout;
     }
 
-    /**
-     * @return the adWeight
-     */
-    public int getAdWeight() {
-        return adWeight;
-    }
-
-    /**
-     * @param adWeight the adWeight to set
-     */
-    public void setAdWeight(int adWeight) {
-        this.adWeight = adWeight;
-    }
-
-	
 }

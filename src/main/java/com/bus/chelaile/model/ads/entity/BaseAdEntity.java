@@ -41,6 +41,8 @@ public abstract class BaseAdEntity {
 	
 	@JSONField(serialize=false)  
 	private int priority;
+	@JSONField(serialize=false)  
+    private int adWeight;    // 轮播权重
 
 	public BaseAdEntity(int showType) {
 		this.showType = showType;
@@ -390,4 +392,18 @@ public abstract class BaseAdEntity {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
+
+    /**
+     * @return the adWeight
+     */
+    public int getAdWeight() {
+        return adWeight;
+    }
+
+    /**
+     * @param adWeight the adWeight to set
+     */
+    public void setAdWeight(int adWeight) {
+        this.adWeight = adWeight;
+    }
 }

@@ -13,8 +13,8 @@ public class StationAdEntity extends BaseAdEntity {
     private String wxMiniProId; // 小程序appId
     private String wxMiniProPath;
 
-    @JSONField(serialize = false)
-    private int adWeight; // 轮播权重
+//    @JSONField(serialize = false)
+//    private int adWeight; // 轮播权重
     @JSONField(serialize = false)
     private int buyOut;// 买断， 0 没有买断； 1 买断。返回的entites里面如果存在这样的广告，那么他将获得最高优先级   2018-03-29
     @JSONField(serialize = false)
@@ -67,13 +67,13 @@ public class StationAdEntity extends BaseAdEntity {
         this.adCard = adCard;
     }
 
-    public int getAdWeight() {
-        return adWeight;
-    }
-
-    public void setAdWeight(int adWeight) {
-        this.adWeight = adWeight;
-    }
+//    public int getAdWeight() {
+//        return adWeight;
+//    }
+//
+//    public void setAdWeight(int adWeight) {
+//        this.adWeight = adWeight;
+//    }
 
     public int getBuyOut() {
         return buyOut;

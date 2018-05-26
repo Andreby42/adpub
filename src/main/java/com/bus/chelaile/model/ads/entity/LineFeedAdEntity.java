@@ -14,8 +14,6 @@ public class LineFeedAdEntity extends FeedAdEntity {
 	private String pic; // 图片URL
 	
 	@JSONField(serialize=false)
-	private int adWeight;    // 轮播权重
-	@JSONField(serialize=false)
     private String title;
 	@JSONField(serialize=false)
 	private long autoInterval;
@@ -54,15 +52,6 @@ public class LineFeedAdEntity extends FeedAdEntity {
 
 	public void setPic(String pic) {
 		this.pic = pic;
-	}
-
-	
-	public int getAdWeight() {
-		return adWeight;
-	}
-
-	public void setAdWeight(int adWeight) {
-		this.adWeight = adWeight;
 	}
 
 
