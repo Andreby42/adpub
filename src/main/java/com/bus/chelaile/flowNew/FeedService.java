@@ -108,18 +108,18 @@ public class FeedService {
 		List<FeedContent> flowsFeed = New.arrayList();
 
 		// 广告
-		List<FeedAdEntity> adList = null;
-		try {
-			adList = serviceManager.getFeedAds(param);
-			if(adList != null)
-				logger.info("获取到feedads广告数目：{}", adList.size());
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("获取feeds广告出错, {}", e, e.getMessage());
-		}
-		if (adList != null && adList.size() > 0) {
-			adAdToFeeds(param, feedAds, adList);
-		}
+//		List<FeedAdEntity> adList = null;
+//		try {
+//			adList = serviceManager.getFeedAds(param);
+//			if(adList != null)
+//				logger.info("获取到feedads广告数目：{}", adList.size());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("获取feeds广告出错, {}", e, e.getMessage());
+//		}
+//		if (adList != null && adList.size() > 0) {
+//			adAdToFeeds(param, feedAds, adList);
+//		}
 
 		// 文章
 		List<FlowContent> flowsApi = null;

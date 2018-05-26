@@ -32,6 +32,7 @@ import com.bus.chelaile.model.rule.Rule;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.service.CommonService;
+import com.bus.chelaile.service.RankAdsManager;
 import com.bus.chelaile.strategy.AdCategory;
 
 /**
@@ -40,7 +41,7 @@ import com.bus.chelaile.strategy.AdCategory;
  * @author zzz
  * 
  */
-public class OpenManager extends AbstractManager {
+public class OpenManager extends AbstractManager implements RankAdsManager {
 
     @Autowired
     private SelfOpenManager selfOpen;
@@ -63,7 +64,8 @@ public class OpenManager extends AbstractManager {
                             "[OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
                             entity.getId(), showType.getType(), entry.getValue().getAds().getTitle(), advParam.getUserId(),
                             advParam.getAccountId(), advParam.getUdid(), advParam.getCityId(), advParam.getS(), advParam.getV(),
-                            advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), entity.getProvider_id());
+                            advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
+                            entity.getProvider_id());
                 }
 
                 return entity;
@@ -344,14 +346,7 @@ public class OpenManager extends AbstractManager {
         return picsAndAudios;
     }
 
-    /**
-     * 填充图片集合
-     * 
-     * @param pics
-     *            图片集合
-     * @param innerContent
-     *            广告内容
-     */
+    
     private void fillPicsAndAudios(Set<String> picsAndAudios, AdInnerContent innerContent, String s, ShowType showType,
             AdContentCacheEle ad, String udid) {
 
@@ -373,15 +368,29 @@ public class OpenManager extends AbstractManager {
     /**
      * 按照广告生效时间排序
      */
-    private Comparator<BaseAdEntity> AD_START_TIME_COMPARATOR=new Comparator<BaseAdEntity>(){@Override public int compare(BaseAdEntity o1,BaseAdEntity o2){if(o1==null)return-1;if(o2==null)return 1;
+    private Comparator<BaseAdEntity> AD_START_TIME_COMPARATOR = new Comparator<BaseAdEntity>() {
+        @Override
+        public int compare(BaseAdEntity o1, BaseAdEntity o2) {
+            if (o1 == null)
+                return -1;
+            if (o2 == null)
+                return 1;
 
-    return(int)(((OpenOldAdEntity)o1).getSt()-((OpenOldAdEntity)o2).getSt());}};
+            return (int) (((OpenOldAdEntity) o1).getSt() - ((OpenOldAdEntity) o2).getSt());
+        }
+    };
 
     @Override
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void rankAds(List<BaseAdEntity> entities) {
+        // TODO Auto-generated method stub
+
     }
 
 }

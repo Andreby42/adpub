@@ -113,17 +113,10 @@ public abstract class AbstractManager {
 
         if (adMap.size() == 0) {
             // 此处，经过规则判断不返回广告，如果是feedAd，需要记录'不投放'的次数
-            if (showType == ShowType.FEED_ADV) {
-                List<Integer> ids = New.arrayList();
-                ids.add(-1);
-                cacheRecord.setNoFeedAdHistoryMap(ids);
-                AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
-            }
             return null;
         }
 //        logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
-        List<BaseAdEntity> entities = null;
-        entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
+        List<BaseAdEntity> entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
         return entities;
     }
 
@@ -585,15 +578,6 @@ public abstract class AbstractManager {
         if (isNeedApid) {
             setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid, queryParam);
         } else {
-            // 只返回一条广告
-            // 04-28，增加逻辑： 去掉优先级低的广告，然后打乱排序
-//            List<AdContentCacheEle> filterAvailabelAds = adsList;
-//            if (adMap.size() > 1) {
-//                List<AdContentCacheEle> availableAds = new ArrayList<>(adMap.values());
-//                filterAvailabelAds = filterAvailableAdsByPriority(availableAds);
-//                
-//                Collections.shuffle(filterAvailabelAds);
-//            }
             setAds(adMap, adsList, showType, advParam, cacheRecord, 1, isNeedApid, queryParam);
         }
     }
@@ -638,7 +622,7 @@ public abstract class AbstractManager {
     /*
      * 获取用户投放缓存记录
      */
-    private AdPubCacheRecord gainCacheRecord(AdvParam advParam, ShowType showType) {
+    protected AdPubCacheRecord gainCacheRecord(AdvParam advParam, ShowType showType) {
         AdPubCacheRecord cacheRecord = null;
         // 放缓存的时候除了线路详情就是双栏
         long t1 = System.currentTimeMillis();

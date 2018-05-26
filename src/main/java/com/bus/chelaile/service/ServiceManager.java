@@ -42,6 +42,7 @@ import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.client.ClientDto;
+import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.model.record.DisplayUserCache;
 import com.bus.chelaile.model.rule.version.VersionEntity;
 import com.bus.chelaile.mvc.AdvParam;
@@ -349,7 +350,6 @@ public class ServiceManager {
 		}
 
 		return list;
-
 	}
 	
 	
@@ -358,6 +358,10 @@ public class ServiceManager {
 	 * 新版开屏广告，返回一个list
 	 */
 	public Object getCoopenAds(AdvParam advParam) {
+	    
+	    List<BaseAdEntity> coopenAds = openManager.doServiceList(advParam, ShowType.OPEN_SCREEN, new QueryParam());
+	    openManager.rankAds(coopenAds);
+	    
 	    
 	    // TODO 手动设置返回内容给客户端使用
         JSONObject resultMap = new JSONObject();
@@ -422,21 +426,31 @@ public class ServiceManager {
         ad.setPic("https://image3.chelaile.net.cn/720fb9951c804f0a8a65a4c7e5c02347#48,48");
         ad.setId(14321);
         
+        BannerInfo bannerInfo3 = new BannerInfo();
+        bannerInfo3.setBannerType(4);  // 广点通专用样式，文字+标签（文案由客户端自定义）
+        AdButtonInfo buttonInfo3 = new AdButtonInfo();
+        buttonInfo3.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
+        bannerInfo3.setButton(buttonInfo3);
+        
         StationAdEntity ad0 = new StationAdEntity();
         ad0.setProvider_id("2");
         ad0.setId(11111);
+        ad0.setBannerInfo(bannerInfo3);
         
         StationAdEntity ad1 = new StationAdEntity();
         ad1.setProvider_id("5");
         ad1.setId(11112);
+        ad1.setBannerInfo(bannerInfo3);
         
         StationAdEntity ad2 = new StationAdEntity();
         ad2.setProvider_id("7");
         ad2.setId(11113);
+        ad2.setBannerInfo(bannerInfo3);
         
         StationAdEntity ad3 = new StationAdEntity();
         ad3.setProvider_id("10");
         ad3.setId(11114);
+        ad3.setBannerInfo(bannerInfo3);
         
         doubleEntities.add(ad);
         doubleEntities.add(ad0);
@@ -592,14 +606,10 @@ public class ServiceManager {
 		return true;
 	}
 
-	/**
+	/*
 	 * feed流广告
-	 * 
-	 * @param advParam
-	 * @return
-	 * @throws Exception
 	 */
-    public List<FeedAdEntity> getFeedAds(AdvParam advParam) throws Exception {
+    public List<BaseAdEntity> getFeedAds(AdvParam advParam) throws Exception {
         QueryParam queryParam = new QueryParam();
 
         // 从缓存获cshow
@@ -615,8 +625,17 @@ public class ServiceManager {
             }
 
         }
+        List<BaseAdEntity> entities = feedAdsManager.doServiceList(advParam, ShowType.FEED_ADV, queryParam);
+        // 如果返回为空，那么需要记录 ‘未投放记录’ ,id 记录为 -1
+        if (entities == null || entities.size() == 0) {
+            List<Integer> ids = New.arrayList();
+            ids.add(-1);
+            AdPubCacheRecord cacheRecord = feedAdsManager.gainCacheRecord(advParam, ShowType.FEED_ADV);
+            cacheRecord.setNoFeedAdHistoryMap(ids);
+            AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
+        }
 
-        return feedAdsManager.doFeedAdService(advParam, ShowType.FEED_ADV, false, queryParam, true);
+        return entities;
     }
 	
 
