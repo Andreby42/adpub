@@ -79,20 +79,20 @@ public class StationAdsManager extends AbstractManager {
                 // 加上版本控制，and， 目前只支持广点通
                 if (stationInner.getProvider_id() == ProductType.GUANGDIANTONG.getProvider_id()
                         && ((advParam.getS().equalsIgnoreCase("android")
-                                && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528)
+                                && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505)
                                 || (advParam.getS().equalsIgnoreCase("ios")
-                                        && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528))) {
+                                        && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0514))) {
                     res = createSDKOpenAds(stationInner, ad);
                     return res;
                 } else if ((advParam.getS().equalsIgnoreCase("android")
-                        && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0505)
-                        || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0514)) {
+                        && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528)
+                        || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528)) {
                     res = createSDKOpenAds(stationInner, ad);
                     return res;
                 } else {
                     logger.error("不合适的版本，或者不合适的第三方广告类型，udid={}", advParam.getUdid());
+                    return null;
                 }
-                return null;
             }
 
             res.setTitle(ad.getTitle());
