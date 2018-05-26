@@ -447,6 +447,7 @@ public class ServiceManager {
         resultMap.put("ads", doubleEntities);
         resultMap.put("autoInterval", 8000);
         resultMap.put("mixInterval", 4000);
+        resultMap.put("unfold", 1);
         
         return resultMap;
 	}
