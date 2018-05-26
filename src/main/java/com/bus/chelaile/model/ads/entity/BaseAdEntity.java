@@ -204,7 +204,7 @@ public abstract class BaseAdEntity {
 
 		}
 		//站点广告，加上站点的经纬度
-		if(ShowType.STATION_ADV.getType().equals(ad.getShowType())) {
+		if(ShowType.STATION_ADV.getType().equals(ad.getShowType()) && StringUtils.isNoneBlank(advParam.getStnName())) {
 			param.put(Constants.PARAM_STATION_LNG, advParam.getStnLng());
 			param.put(Constants.PARAM_STATION_LAT, advParam.getStnLat());
 			param.put(Constants.PARAM_STATION_NAME_H5, URLEncoder.encode(advParam.getStnName()));
