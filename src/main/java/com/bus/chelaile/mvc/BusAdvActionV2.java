@@ -63,7 +63,7 @@ public class BusAdvActionV2 extends AbstractController {
     public String getCoopenAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
 
-        Object result = serviceManager.getColumntAds(advParam);
+        Object result = serviceManager.getCoopenAds(advParam);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
     }
 
@@ -75,7 +75,7 @@ public class BusAdvActionV2 extends AbstractController {
     public String getStationAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
 
-        Object result = serviceManager.getColumntAds(advParam);
+        Object result = serviceManager.getStationAds(advParam);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
     }
 }
