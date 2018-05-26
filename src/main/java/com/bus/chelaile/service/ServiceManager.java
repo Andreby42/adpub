@@ -773,7 +773,6 @@ public class ServiceManager {
         List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
 
         
-        
         if(entities == null || entities.size() == 0) {
             return resultMap;
         } else {

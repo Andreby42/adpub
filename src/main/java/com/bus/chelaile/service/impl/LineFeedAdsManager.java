@@ -36,7 +36,7 @@ public class LineFeedAdsManager extends AbstractManager {
             AdContentCacheEle ad = entry.getValue();
             AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) ad.getAds().getAdInnerContent();
             // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
-            if (ad.getAds().getPriority() == 1 && lineFeedInner.getBackup() == 0) {
+            if (lineFeedInner.getProvider_id() == 1 && lineFeedInner.getBackup() == 0) {
                 LineFeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
                 if (entity != null) {
                     entities.add(entity);
