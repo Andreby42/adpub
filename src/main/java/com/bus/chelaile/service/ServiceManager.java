@@ -426,30 +426,29 @@ public class ServiceManager {
         ad.setPic("https://image3.chelaile.net.cn/720fb9951c804f0a8a65a4c7e5c02347#48,48");
         ad.setId(14321);
         
-        BannerInfo bannerInfo3 = new BannerInfo();
-        bannerInfo3.setBannerType(4);  // 广点通专用样式，文字+标签（文案由客户端自定义）
-        AdButtonInfo buttonInfo3 = new AdButtonInfo();
-        buttonInfo3.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
-        bannerInfo3.setButton(buttonInfo3);
         
         StationAdEntity ad0 = new StationAdEntity();
         ad0.setProvider_id("2");
         ad0.setId(11111);
-        ad0.setBannerInfo(bannerInfo3);
+        BannerInfo bannerInfo0 = createApiBanner();
+        ad0.setBannerInfo(bannerInfo0);
         
         StationAdEntity ad1 = new StationAdEntity();
         ad1.setProvider_id("5");
         ad1.setId(11112);
-        ad1.setBannerInfo(bannerInfo3);
+        BannerInfo bannerInfo1 = createApiBanner();
+        ad1.setBannerInfo(bannerInfo1);
         
         StationAdEntity ad2 = new StationAdEntity();
         ad2.setProvider_id("7");
         ad2.setId(11113);
-        ad2.setBannerInfo(bannerInfo3);
+        BannerInfo bannerInfo2 = createApiBanner();
+        ad2.setBannerInfo(bannerInfo2);
         
         StationAdEntity ad3 = new StationAdEntity();
         ad3.setProvider_id("10");
         ad3.setId(11114);
+        BannerInfo bannerInfo3 = createApiBanner();
         ad3.setBannerInfo(bannerInfo3);
         
         doubleEntities.add(ad);
@@ -465,6 +464,15 @@ public class ServiceManager {
         
         return resultMap;
 	}
+
+    private BannerInfo createApiBanner() {
+        BannerInfo bannerInfo3 = new BannerInfo();
+        bannerInfo3.setBannerType(4);  // 广点通专用样式，文字+标签（文案由客户端自定义）
+        AdButtonInfo buttonInfo3 = new AdButtonInfo();
+        buttonInfo3.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
+        bannerInfo3.setButton(buttonInfo3);
+        return bannerInfo3;
+    }
 	
 	
 	
