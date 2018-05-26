@@ -297,6 +297,7 @@ public class StationAdsManager extends AbstractManager {
                     ids.add(adId);
 
                     hasOwnAd = true;
+                    break;
                 }
             }
         }

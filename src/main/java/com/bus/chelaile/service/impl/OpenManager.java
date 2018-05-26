@@ -410,6 +410,7 @@ public class OpenManager extends AbstractManager {
                     ids.add(adId);
                     
                     hasOwnAd = true;
+                    break;
                 }
             }
         }
