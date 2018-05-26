@@ -31,11 +31,15 @@ public class LineFeedAdsManager extends AbstractManager {
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
         List<BaseAdEntity> entities = New.arrayList();
+        List<Integer> ids = New.arrayList();
         boolean hasOwnAd = false;
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
-            AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) ad.getAds().getAdInnerContent();
+            int adId = ad.getAds().getId();
+            ids.add(adId);
+            
             // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
+            AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) ad.getAds().getAdInnerContent();
             if (lineFeedInner.getProvider_id() == 1 && lineFeedInner.getBackup() == 0) {
                 LineFeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
                 if (entity != null) {
