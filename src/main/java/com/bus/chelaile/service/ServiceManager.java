@@ -35,7 +35,6 @@ import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
-import com.bus.chelaile.model.ads.entity.FeedAdArticleInfo;
 import com.bus.chelaile.model.ads.entity.LineAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenAdEntity;
@@ -359,7 +358,6 @@ public class ServiceManager {
 	public Object getCoopenAds(AdvParam advParam) {
 	    
 	    List<BaseAdEntity> coopenAds = openManager.doServiceList(advParam, ShowType.OPEN_SCREEN, new QueryParam());
-	    openManager.rankAds(coopenAds);
 	    
 	    
 	    // TODO 手动设置返回内容给客户端使用
@@ -774,6 +772,8 @@ public class ServiceManager {
         
         List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
 
+        
+        
         if(entities == null || entities.size() == 0) {
             return resultMap;
         } else {
@@ -784,24 +784,27 @@ public class ServiceManager {
         resultMap.put("unfoldFeed", 1);
         
         
+        
+        
         // 手动增加一条自采买广告，供测试用   TODO 
-        LineFeedAdEntity ad = new LineFeedAdEntity();
-        ad.setPic("https://image3.chelaile.net.cn/8160d592675042daa5cd182383d4c799#686,200");
-        ad.setImgsType(1);
-        ad.setProvider_id("1");
-        entities.add(0, ad);
-
-        
-        LineFeedAdEntity ad1 = new LineFeedAdEntity();
-        ad1.setPic("https://image3.chelaile.net.cn/2d78d8bf077148e998f2821a67ad6f68#225,150");
-        ad1.setImgsType(0);
-        ad1.setProvider_id("1");
-        ad1.setSubhead("限时9.9包邮，淘宝天猫内部券大放送，速领！");
-        ad1.setHead("卷皮九块邮");
-        
-        entities.add(0, ad1);
+//        LineFeedAdEntity ad = new LineFeedAdEntity();
+//        ad.setPic("https://image3.chelaile.net.cn/8160d592675042daa5cd182383d4c799#686,200");
+//        ad.setImgsType(1);
+//        ad.setProvider_id("1");
+//        entities.add(0, ad);
+//
+//        
+//        LineFeedAdEntity ad1 = new LineFeedAdEntity();
+//        ad1.setPic("https://image3.chelaile.net.cn/2d78d8bf077148e998f2821a67ad6f68#225,150");
+//        ad1.setImgsType(0);
+//        ad1.setProvider_id("1");
+//        ad1.setSubhead("限时9.9包邮，淘宝天猫内部券大放送，速领！");
+//        ad1.setHead("卷皮九块邮");
+//        
+//        entities.add(0, ad1);
         
         return resultMap;
+        
     }
     
 	/*

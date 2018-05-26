@@ -17,7 +17,7 @@ public class AdvCache {
 	private static final int LONGEST_CACHE_TIME = 11 * 24 * 60 * 60 - 1;
 //	private static final int ACITVE_CACHE_TIME = 30 * 24 * 60 * 60;
 	private static final String CSHOW_KEY = "bus#cshow#";
-	private static final String SEND_LINE_FEED = "SEND_LINEFEED_LOG";
+	private static final String SEND_LINE_FEED = "SEND_LINEFEED_LOG_";
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(AdvCache.class);
@@ -373,8 +373,8 @@ public class AdvCache {
 	}
 
 	//  详情页下方feed位投放记录
-    public static String getSendLineFeedLogKey(String udid) {
-        return SEND_LINE_FEED + udid;
+    public static String getSendLineFeedLogKey(String udid, String showType) {
+        return SEND_LINE_FEED + showType + "_" + udid;
     }
 	
 }

@@ -92,10 +92,6 @@ public class FeedAdsManager extends AbstractManager {
         return res;
     }
 
-    public static void main(String[] args) {
-        String url = "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
-    }
-
     @Override
     protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord) throws Exception {
@@ -122,7 +118,6 @@ public class FeedAdsManager extends AbstractManager {
                     if (platform.isIOS(platform.getDisplay()) && advParam.getVc() < Constants.PLATFORM_LOG_IOS_0208) {
                         continue;
                     }
-
                 }
                 entities.add(entity);
                 int adId = entity.getId();
@@ -170,6 +165,11 @@ public class FeedAdsManager extends AbstractManager {
             entity.setImgsType(4); // 宽图窄图
         }
         return entity;
+    }
+    
+    
+    public static void main(String[] args) {
+//        String url = "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
     }
 
 }

@@ -15,6 +15,8 @@ public class AdLineFeedInnerContent extends AdFeedInnerContent {
     private long autoInterval; // 自动刷新时间
     private long mixInterval; // 最小展示时间
     private int provider_id; // 广告提供商
+    private int backup; // 是否是备选方案
+//    private String head;
 
     @Override
     protected void parseJson(String jsonr) {
@@ -25,6 +27,7 @@ public class AdLineFeedInnerContent extends AdFeedInnerContent {
             this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
             this.provider_id = ad.provider_id;
+            this.backup = ad.backup;
         }
     }
 
@@ -84,6 +87,20 @@ public class AdLineFeedInnerContent extends AdFeedInnerContent {
 
     public void setProvider_id(int provider_id) {
         this.provider_id = provider_id;
+    }
+
+    /**
+     * @return the backup
+     */
+    public int getBackup() {
+        return backup;
+    }
+
+    /**
+     * @param backup the backup to set
+     */
+    public void setBackup(int backup) {
+        this.backup = backup;
     }
 
 }

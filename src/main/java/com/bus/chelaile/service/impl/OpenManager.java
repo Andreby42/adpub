@@ -32,7 +32,6 @@ import com.bus.chelaile.model.rule.Rule;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.service.CommonService;
-import com.bus.chelaile.service.RankAndFilterManager;
 import com.bus.chelaile.strategy.AdCategory;
 
 /**
@@ -41,7 +40,7 @@ import com.bus.chelaile.strategy.AdCategory;
  * @author zzz
  * 
  */
-public class OpenManager extends AbstractManager implements RankAndFilterManager {
+public class OpenManager extends AbstractManager {
 
     @Autowired
     private SelfOpenManager selfOpen;
@@ -387,10 +386,10 @@ public class OpenManager extends AbstractManager implements RankAndFilterManager
         return null;
     }
 
-    @Override
-    public void rankAds(List<BaseAdEntity> entities) {
-        // TODO Auto-generated method stub
-
-    }
+//    @Override
+//    public void rankAds(AdvParam advParam, List<BaseAdEntity> entities) {
+//        // TODO Auto-generated method stub
+//
+//    }
 
 }

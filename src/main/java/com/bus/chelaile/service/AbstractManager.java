@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
+import com.bus.chelaile.common.AnalysisLog;
+import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.model.Platform;
@@ -23,6 +25,7 @@ import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdLineDetailInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.model.rule.Rule;
 import com.bus.chelaile.model.rule.UserClickRate;
@@ -31,6 +34,8 @@ import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
 import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.util.New;
+
+import scala.util.Random;
 
 public abstract class AbstractManager {
     @Autowired
@@ -64,7 +69,7 @@ public abstract class AbstractManager {
         // 小程序 banner广告不走策略
         if (!isNeedApid) {
             // 按照优先级
-            Collections.shuffle(adsList);  // 打乱顺序，然后再进行优先级排序  2018-04-28
+            Collections.shuffle(adsList); // 打乱顺序，然后再进行优先级排序  2018-04-28
             Collections.sort(adsList, AD_CONTENT_COMPARATOR);
 
             adMap = New.hashMap();
@@ -104,7 +109,7 @@ public abstract class AbstractManager {
             return null;
 
         AdPubCacheRecord cacheRecord = gainCacheRecord(advParam, showType);
-        // 需要排序 
+        // 需要排序  先打乱次序 ，再按照优先级排序
         Collections.shuffle(adsList);
         Collections.sort(adsList, AD_CONTENT_COMPARATOR);
         LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
@@ -115,9 +120,105 @@ public abstract class AbstractManager {
             // 此处，经过规则判断不返回广告，如果是feedAd，需要记录'不投放'的次数
             return null;
         }
-//        logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
+        //        logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
         List<BaseAdEntity> entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
         return entities;
+    }
+
+    /**
+    * 获取上次投放的第一个广告，这次需要轮训到下一个 . 查看上一次的投放记录 . 用户实现‘每次必选改变广告’的需求
+    * @param advParam
+    * @param lineFeedAds
+    * @return boolean
+    */
+    protected boolean checkSendLog(AdvParam advParam, List<BaseAdEntity> lineFeedAds, String showType) {
+        String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(advParam.getUdid(), showType);
+        String lastSendIdStr = (String) CacheUtil.getFromRedis(sendLineFeedLogKey);
+        if (lastSendIdStr != null) {
+            try {
+                // logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(), lastSendIdStr);
+                int sendId = Integer.parseInt(lastSendIdStr);
+                int size = lineFeedAds.size();
+
+                // 有之前投放的记录，确保当前列表第一个变化后，直接return即可
+                if (lineFeedAds.get(0).getId() == sendId) {
+                    Collections.swap(lineFeedAds, 0, size - 1);
+                }
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    // 按照权重计算，选择一个广告投放
+    protected void rankAds(AdvParam advParam, List<BaseAdEntity> lineFeedAds) {
+        // 根据权重设置第一次展示
+        // 获取所有符合规则的广告
+        //        logger.info("投放记录超时： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
+        if (lineFeedAds != null && lineFeedAds.size() > 0) {
+            int totalWeight = 0;
+            for (BaseAdEntity entity : lineFeedAds) {
+                totalWeight += ((LineFeedAdEntity) entity).getAdWeight();
+            }
+
+            if (totalWeight > 0) {
+                int randomOut = new Random().nextInt(totalWeight); // 取随机值
+//                logger.info("randomOut={}, udid={}", randomOut, advParam.getUdid());
+                int indexWeight = 0;
+                for (int index = 0; index < lineFeedAds.size(); index++) {
+                    BaseAdEntity entity = lineFeedAds.get(index);
+                    if ((indexWeight += ((LineFeedAdEntity) entity).getAdWeight()) > randomOut) {
+                        Collections.swap(lineFeedAds, 0, index);
+                       //logger.info("投放记录超时，调整后**** ： udid={}, list={}", advParam.getUdid(), JSONObject.toJSONString(lineFeedAds));
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    // 记录发送的第一条广告的log
+    protected void setSendLog(BaseAdEntity baseAdEntity, String udid, String showType) {
+        String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(udid, showType);
+        CacheUtil.setToRedis(sendLineFeedLogKey, Constants.SEDN_LINEFEED_EXTIME, String.valueOf(baseAdEntity.getId()));
+    }
+    
+    // 记录广告发送记录， 默认只取第一条
+    protected void writeSendLog(AdvParam advParam, BaseAdEntity entity) {
+        AnalysisLog.info(
+                "[ADV_SEND]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={},provider_id={}",
+                ((LineFeedAdEntity) entity).buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+                advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(),
+                advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
+                advParam.getH5User(), advParam.getH5Src(), entity.getProvider_id());
+
+    }
+    
+    // 记录发送日志，包括： 把第一条记录写入redis，把第一条写发送log
+    // 只记录第三方广告的发送log到redis
+    protected void recordSend(AdvParam advParam, AdPubCacheRecord cacheRecord, Map<Integer, AdContentCacheEle> adMap,
+            ShowType showType, List<BaseAdEntity> entities) {
+        if (entities != null) {
+            BaseAdEntity entity = entities.get(0);
+            writeSendLog(advParam, entity);
+            if (!entity.getProvider_id().equals("1")) {
+                setSendLog(entity, advParam.getUdid(), showType.getType());
+            }
+
+            // 记录缓存
+            int adId = entity.getId();
+            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+                cacheRecord.buildAdPubCacheRecord(adId);
+            if (adMap.get(adId).getRule().getUvLimit() > 0) {
+                // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误 // TODO
+                if (!cacheRecord.getUvMap().containsKey(adId)) {
+                    adMap.get(adId).getRule().setUvCount();
+                    cacheRecord.setAdToUvMap(adId);
+                }
+            }
+        }
     }
 
     /**
@@ -227,8 +328,8 @@ public abstract class AbstractManager {
             return false;
         }
         if (rule.hasPlatforms() && !rule.isPlatformMatch(advParam.getS(), advParam.getH5Src())) {
-//            logger.info("isPlatformMatch return false,ruleId={},s={},src={},udid={},userId={}", rule.getRuleId(), advParam.getS(),
-//                    advParam.getH5Src(), advParam.getUdid(), advParam.getUserId());
+            //            logger.info("isPlatformMatch return false,ruleId={},s={},src={},udid={},userId={}", rule.getRuleId(), advParam.getS(),
+            //                    advParam.getH5Src(), advParam.getUdid(), advParam.getUserId());
             return false;
         }
         // 开屏和浮层的老接口preloadAds需要返回两天的数据
@@ -258,9 +359,9 @@ public abstract class AbstractManager {
             return false;
         }
         // 开屏是否投给MIUI，投且只投
-        if (showType == ShowType.OPEN_SCREEN && ! rule.devicePub(advParam.getDeviceType(), advParam.getStartMode())) {
-            logger.info("MIUI OPEN return false, deviceType={}, canPubMIUI={}, startMode={}, udid={}", advParam.getDeviceType(), rule.getCanPubMIUI(),
-                    advParam.getStartMode(), advParam.getUdid());
+        if (showType == ShowType.OPEN_SCREEN && !rule.devicePub(advParam.getDeviceType(), advParam.getStartMode())) {
+            logger.info("MIUI OPEN return false, deviceType={}, canPubMIUI={}, startMode={}, udid={}", advParam.getDeviceType(),
+                    rule.getCanPubMIUI(), advParam.getStartMode(), advParam.getUdid());
             return false;
         }
         // 冷热启动模式测试
@@ -268,7 +369,7 @@ public abstract class AbstractManager {
             logger.info("startMode return false, startMode={}, udid={}", advParam.getStartMode(), advParam.getUdid());
             return false;
         }
-        
+
         if (rule.hasNetStatus() && !rule.isNetStatusMatch(advParam.getNw())) {
             //			logger.info("hasNetStatus return false,ruleId={},nw={},udid={}", rule.getRuleId(), advParam.getNw(),
             //					advParam.getUdid());
@@ -278,7 +379,7 @@ public abstract class AbstractManager {
             //			logger.info("isUserTypeMatch return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
             return false;
         }
-        
+
         if (rule.getScreenHeight() > 0 && advParam.getScreenHeight() < rule.getScreenHeight()) {
             logger.info("screenHeithg return false. rule={}, s={}, udid={}, height={}", rule.getRuleId(), advParam.getS(),
                     advParam.getUdid(), advParam.getScreenHeight());
@@ -354,7 +455,6 @@ public abstract class AbstractManager {
                 return false;
             }
         }
-        
 
         // 最小次数间隔，feed流广告用。 两次广告展示之间最少间隔几次调用
         if (rule.getMinIntervalPages() > 0 && ad.getShowType().equals(ShowType.FEED_ADV.getType())) {
@@ -518,8 +618,8 @@ public abstract class AbstractManager {
 
     }
 
-    protected List<BaseAdEntity> getEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
-            Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) {
+    private List<BaseAdEntity> getEntities(AdvParam advParam, AdPubCacheRecord cacheRecord, Map<Integer, AdContentCacheEle> adMap,
+            ShowType showType, QueryParam queryParam) {
         List<BaseAdEntity> entities = null;
         try {
             entities = dealEntities(advParam, cacheRecord, adMap, showType, queryParam);
@@ -527,21 +627,7 @@ public abstract class AbstractManager {
             logger.error(e.getMessage(), e);
             return entities;
         }
-        // 记录缓存
-        if (entities != null) {
-            for (BaseAdEntity entity : entities) {
-                int adId = entity.getId();
-                if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
-                    cacheRecord.buildAdPubCacheRecord(adId);
-                if (adMap.get(adId).getRule().getUvLimit() > 0) {
-                    // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误 // TODO
-                    if (!cacheRecord.getUvMap().containsKey(adId)) {
-                        adMap.get(adId).getRule().setUvCount();
-                        cacheRecord.setAdToUvMap(adId);
-                    }
-                }
-            }
-        }
+        
         if (showType == ShowType.LINE_DETAIL) {
             RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
         } else {
@@ -573,7 +659,7 @@ public abstract class AbstractManager {
     protected abstract List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception;
 
-    protected void handleAds(Map<Integer, AdContentCacheEle> adMap, List<AdContentCacheEle> adsList, ShowType showType,
+    private void handleAds(Map<Integer, AdContentCacheEle> adMap, List<AdContentCacheEle> adsList, ShowType showType,
             AdvParam advParam, AdPubCacheRecord cacheRecord, boolean isNeedApid, QueryParam queryParam) {
         if (isNeedApid) {
             setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid, queryParam);
@@ -600,7 +686,8 @@ public abstract class AbstractManager {
         return CalculatePerMinCount.getCTRRate(advId + "#" + ruleId);
     }
 
-    private List<AdContentCacheEle> mergeAllAds(AdvParam advParam, ShowType showType, List<AdContentCacheEle> adsList, boolean isNeedApid) {
+    private List<AdContentCacheEle> mergeAllAds(AdvParam advParam, ShowType showType, List<AdContentCacheEle> adsList,
+            boolean isNeedApid) {
         adsList = CommonService.mergeAllAds(adsList); // 需要按照adid和ruleid做合并
         String adIdStr = "";
         for (AdContentCacheEle ad : adsList) {
@@ -614,8 +701,8 @@ public abstract class AbstractManager {
                 "[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
                         + "cityId={}, v={}, vc={}, li={}, sn={}, startMode={}, H5Src={}, wxs={}",
                 advParam.getUdid(), showType, isNeedApid, advParam.getType(), adIdStr, advParam.getAccountId(), advParam.getS(),
-                advParam.getCityId(), advParam.getV(), advParam.getVc(), advParam.getLineId(), advParam.getStnName(),advParam.getStartMode(),
-                advParam.getH5Src(), advParam.getWxs());
+                advParam.getCityId(), advParam.getV(), advParam.getVc(), advParam.getLineId(), advParam.getStnName(),
+                advParam.getStartMode(), advParam.getH5Src(), advParam.getWxs());
         return adsList;
     }
 
@@ -632,7 +719,7 @@ public abstract class AbstractManager {
             cacheRecord = AdvCache.getAdPubRecordFromCache(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
         }
         long t2 = System.currentTimeMillis();
-        if(t2 - t1 > 50) {
+        if (t2 - t1 > 50) {
             TimeLong.info("get from ocs cost time: {}", t2 - t1);
         }
         if (cacheRecord == null) {
@@ -691,8 +778,8 @@ public abstract class AbstractManager {
         // 取得所有手动投放广告
         List<AdContentCacheEle> adsList = CommonService.getAllAdsList(advParam.getUdid(), advParam.getAccountId(), showType);
         if (adsList == null || adsList.size() == 0) {
-//            logger.info("[getallavailableAds ISNULL]:udid={}, adtype={}, isNeedApi={}, type={}, ac={}, s={}", advParam.getUdid(),
-//                    showType, isNeedApid, advParam.getType(), advParam.getAccountId(), advParam.getS());
+            //            logger.info("[getallavailableAds ISNULL]:udid={}, adtype={}, isNeedApi={}, type={}, ac={}, s={}", advParam.getUdid(),
+            //                    showType, isNeedApid, advParam.getType(), advParam.getAccountId(), advParam.getS());
         } else {
             // 合并广告
             adsList = mergeAllAds(advParam, showType, adsList, isNeedApid);
@@ -712,9 +799,9 @@ public abstract class AbstractManager {
             logger.info("reload is Running");
             return false;
         }
-        
+
         // 青岛、南京、香港、西安 四城不投广告
-        if(StringUtils.isNotBlank(advParam.getCityId()) && (advParam.getCityId().equals("085"))) {
+        if (StringUtils.isNotBlank(advParam.getCityId()) && (advParam.getCityId().equals("085"))) {
             return false;
         }
 
@@ -747,8 +834,8 @@ public abstract class AbstractManager {
             }
         }
         // 城市服务不返回广告
-        if(platform.isH5(platform.getDisplay())) {
-            if(StringUtils.isNoneBlank(advParam.getFrom()) && advParam.getFrom().equals("wxcityservice")) {
+        if (platform.isH5(platform.getDisplay())) {
+            if (StringUtils.isNoneBlank(advParam.getFrom()) && advParam.getFrom().equals("wxcityservice")) {
                 return false;
             }
         }
@@ -772,14 +859,13 @@ public abstract class AbstractManager {
         }
         return true;
     }
-    
+
     /**
      * 获取优先级最高的那一批详情页广告
      * @param availableAds
      * @return
      */
-    private static List<AdContentCacheEle> filterAvailableAdsByPriority(
-            List<AdContentCacheEle> availableAds) {
+    private static List<AdContentCacheEle> filterAvailableAdsByPriority(List<AdContentCacheEle> availableAds) {
         if (availableAds == null || availableAds.size() == 0) {
             return null;
         }
@@ -800,36 +886,38 @@ public abstract class AbstractManager {
     }
 
     public static void main(String[] args) {
-        List<AdContentCacheEle> adsList  = new ArrayList<>();
+        List<AdContentCacheEle> adsList = new ArrayList<>();
         AdContentCacheEle a1 = new AdContentCacheEle();
         AdContent add1 = new AdContent();
         add1.setId(1);
         a1.setAds(add1);
         a1.getAds().setPriority(1);
-        
+
         AdContentCacheEle a2 = new AdContentCacheEle();
         AdContent add2 = new AdContent();
         add2.setId(2);
         a2.setAds(add2);
         a2.getAds().setPriority(2);
-        
+
         AdContentCacheEle a3 = new AdContentCacheEle();
         AdContent add3 = new AdContent();
         add3.setId(3);
         a3.setAds(add3);
         a3.getAds().setPriority(2);
-        adsList.add(a1);adsList.add(a2);adsList.add(a3);
-        
+        adsList.add(a1);
+        adsList.add(a2);
+        adsList.add(a3);
+
         logger.info("1***adsList={}", JSONObject.toJSONString(adsList));
         System.out.println(JSONObject.toJSONString(adsList));
-        
-        Collections.shuffle(adsList);  // 打乱顺序
+
+        Collections.shuffle(adsList); // 打乱顺序
         System.out.println(JSONObject.toJSONString(adsList));
         logger.info("2***adsList={}", JSONObject.toJSONString(adsList));
-        
+
         Collections.sort(adsList, AD_CONTENT_COMPARATOR);
         System.out.println(JSONObject.toJSONString(adsList));
         logger.info("3***adsList={}", JSONObject.toJSONString(adsList));
     }
-    
+
 }
