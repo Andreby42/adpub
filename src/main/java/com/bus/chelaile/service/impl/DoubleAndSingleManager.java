@@ -12,8 +12,10 @@ import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdDoubleInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
+import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
@@ -189,6 +191,12 @@ public class DoubleAndSingleManager extends AbstractManager {
     private AdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
         AdEntity entity = new AdEntity(showType.getValue());
         AdInnerContent inner = ad.getInnerContent();
+        
+         AdDoubleInnerContent doubleInner = (AdDoubleInnerContent)inner;
+         if(doubleInner.getProvider_id() > 1) {
+             entity = createSDKAds(ad, doubleInner);
+             return entity;
+         }
 
         inner.fillAdEntity(entity, advParam, 0);
 
@@ -199,6 +207,22 @@ public class DoubleAndSingleManager extends AbstractManager {
         entity.fillBaseInfo(ad, advParam, paramMap);
         entity.dealLink(advParam);
 
+        return entity;
+    }
+    
+    // 2018-05-05 ，详情页下方feed位广告
+    private AdEntity createSDKAds(AdContent ad, AdDoubleInnerContent inner) {
+        AdEntity entity = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
+        entity.setId(ad.getId());
+        entity.setProvider_id(inner.getProvider_id() + "");
+        entity.setOpenType(0); // 页面打开方式，0-内部
+        entity.setType(3); // 第三方广告
+//        entity.setTitle(ad.getTitle());
+        
+        entity.setAdWeight(inner.getAdWeight());
+        entity.setAutoInterval(inner.getAutoInterval());
+        entity.setMixInterval(inner.getMixInterval());
+//        entity.setApiType(1);
         return entity;
     }
 }

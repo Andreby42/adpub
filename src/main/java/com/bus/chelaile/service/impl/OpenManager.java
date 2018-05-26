@@ -22,7 +22,6 @@ import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdFullInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
-import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
 import com.bus.chelaile.model.ads.AdSchedule;
 import com.bus.chelaile.model.ads.entity.ApiLineEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
@@ -35,7 +34,7 @@ import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.service.CommonService;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.util.New;
-
+ 
 /**
  * 新版本开屏和浮层
  * 
@@ -162,8 +161,8 @@ public class OpenManager extends AbstractManager {
                 return entity;
             }
         } else {
-            if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
-                    || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420)) {
+            if ((fullInner.getProvider_id() == 2 || fullInner.getProvider_id() == 10) && ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
+                    || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFORM_LOG_IOS_0420))) {
                 entity = createSDKOpenAds(fullInner, advId);
                 AnalysisLog.info(
                         "[NEW_OPEN_SCREEN_ADS]: adKey=ADV[id={}#showType={}#title={}], userId={}, accountId={}, udid={}, cityId={}, s={}, v={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},provider_id={}",
