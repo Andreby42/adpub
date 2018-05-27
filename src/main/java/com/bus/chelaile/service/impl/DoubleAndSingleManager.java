@@ -62,18 +62,19 @@ public class DoubleAndSingleManager extends AbstractManager {
             } else {
                 AdDoubleInnerContent adInner = (AdDoubleInnerContent) inner;
                 if (adInner.getProvider_id() != 0) { // 如果是第三方广告，加一些版本控制
-                    if (adInner.getProvider_id() != ProductType.GUANGDIANTONG.getProvider_id()) {
-                        // 双栏目前只支持广点通
-                        throw new IllegalArgumentException(
-                                "错误的双栏provider_id, advId=" + ad.getAds().getId() + ", provider_id=" + adInner.getProvider_id());
-                    }
-                    if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
-                            || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0502)) {
-                        entity.setProvider_id(adInner.getProvider_id() + ""); // 新增第三方广告
-                    } else {
-                        logger.info("低版本不予返回非自采买的双栏广告 ");
-                        return null;
-                    }
+                    return null;
+//                    if (adInner.getProvider_id() != ProductType.GUANGDIANTONG.getProvider_id()) {
+//                        // 双栏目前只支持广点通
+//                        throw new IllegalArgumentException(
+//                                "错误的双栏provider_id, advId=" + ad.getAds().getId() + ", provider_id=" + adInner.getProvider_id());
+//                    }
+//                    if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0420)
+//                            || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0502)) {
+//                        entity.setProvider_id(adInner.getProvider_id() + ""); // 新增第三方广告
+//                    } else {
+//                        logger.info("低版本不予返回非自采买的双栏广告 ");
+//                        return null;
+//                    }
                 }
 
                 inner.fillAdEntity(entity, advParam, queryParam.getStation().getIndex());
