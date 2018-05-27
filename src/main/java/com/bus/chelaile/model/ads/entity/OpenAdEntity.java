@@ -13,9 +13,6 @@ public class OpenAdEntity  extends BaseAdEntity{
 		super(showType);
 	}
 
-	
-
-
 	//private int id; // 广告的唯一ID
 	//private int showType; // 广告类型： 0 双栏，1 单栏，2 首页 ，3 推送
 

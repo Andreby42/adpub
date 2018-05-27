@@ -106,7 +106,7 @@ public class LineFeedAdsManager extends AbstractManager {
     //    }
 
     private LineFeedAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
-        LineFeedAdEntity res = new LineFeedAdEntity();
+        LineFeedAdEntity res = new LineFeedAdEntity(ShowType.LINE_FEED_ADV.getValue());
         AdInnerContent inner = ad.getInnerContent();
         if (inner instanceof AdLineFeedInnerContent) {
             AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) inner;
@@ -127,7 +127,7 @@ public class LineFeedAdsManager extends AbstractManager {
 
     // 2018-05-05 ，详情页下方feed位广告
     private LineFeedAdEntity createSDKOpenAds(AdContent ad, AdLineFeedInnerContent inner) {
-        LineFeedAdEntity entity = new LineFeedAdEntity();
+        LineFeedAdEntity entity = new LineFeedAdEntity(ShowType.LINE_FEED_ADV.getValue());
         entity.setId(ad.getId());
         entity.setProvider_id(inner.getProvider_id() + "");
         entity.setOpenType(0); // 页面打开方式，0-内部

@@ -9,9 +9,13 @@ import com.bus.chelaile.model.ShowType;
  * @author Administrator
  *
  */
-public class LineFeedAdEntity extends FeedAdEntity {
+public class LineFeedAdEntity extends BaseAdEntity {
 	
-	private String pic; // 图片URL
+	public LineFeedAdEntity(int showType) {
+        super(showType);
+    }
+
+    private String pic; // 图片URL
 	
 	@JSONField(serialize=false)
     private String title;
@@ -24,12 +28,13 @@ public class LineFeedAdEntity extends FeedAdEntity {
 	
 	private String subhead; //  上面的文字
 	private String head; // 单图文章样式中，下面的文字
+	private int imgsType; // 图片样式  0小图， 1 大图
 	
 	// 构造方法
-	public LineFeedAdEntity() {
-	    this.showType = ShowType.LINE_FEED_ADV.getValue();
-        this.pic = EMPTY_STR;
-	}
+//	public LineFeedAdEntity() {
+//	    this.showType = ShowType.LINE_FEED_ADV.getValue();
+//        this.pic = EMPTY_STR;
+//	}
 	
 	@Override
 	protected ShowType gainShowTypeEnum() {
@@ -131,5 +136,19 @@ public class LineFeedAdEntity extends FeedAdEntity {
      */
     public void setHead(String head) {
         this.head = head;
+    }
+
+    /**
+     * @return the imgsType
+     */
+    public int getImgsType() {
+        return imgsType;
+    }
+
+    /**
+     * @param imgsType the imgsType to set
+     */
+    public void setImgsType(int imgsType) {
+        this.imgsType = imgsType;
     }
 }

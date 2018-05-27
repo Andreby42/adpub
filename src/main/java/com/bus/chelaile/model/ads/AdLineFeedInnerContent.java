@@ -18,6 +18,7 @@ public class AdLineFeedInnerContent extends AdInnerContent {
     private long mixInterval; // 最小展示时间
     private int backup; // 是否是备选方案
     
+    
     private int apiType;
     private int provider_id; // 广告提供商， 0 自采买， 2 广点通
     private String slogan;
