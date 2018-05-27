@@ -24,8 +24,6 @@ public class LineFeedAdEntity extends BaseAdEntity {
 	@JSONField(serialize=false)
 	private long mixInterval;
 	
-	private int apiType; // 原生or banner or 开屏等等
-	
 	private String subhead; //  上面的文字
 	private String head; // 单图文章样式中，下面的文字
 	private int imgsType; // 图片样式  0小图， 1 大图
@@ -96,19 +94,6 @@ public class LineFeedAdEntity extends BaseAdEntity {
         this.mixInterval = mixInterval;
     }
 
-    /**
-     * @return the apiType
-     */
-    public int getApiType() {
-        return apiType;
-    }
-
-    /**
-     * @param apiType the apiType to set
-     */
-    public void setApiType(int apiType) {
-        this.apiType = apiType;
-    }
 
     /**
      * @return the subhead
