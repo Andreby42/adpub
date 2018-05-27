@@ -137,7 +137,7 @@ public class FeedAdsManager extends AbstractManager {
                     entity.getProvider_id());
 
             // 记录每个适合规则的广告未投放的记录，用于‘出现间隔’的控制
-            cacheRecord.setNoFeedAdHistoryMap(ids);
+            cacheRecord.setNoAdHistoryMap(ids, showType.getType());
 
             // 置顶位，只需要一个广告
             if (advParam.getIsTop() == 1) {

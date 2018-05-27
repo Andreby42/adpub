@@ -210,7 +210,7 @@ public abstract class AbstractManager {
             // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
             // 2018-05-27 修改此处，去掉这个限制了    // TODO  【因为实际研发中，发送依旧是等于展示的】
 //            if (showType != ShowType.OPEN_SCREEN)
-                cacheRecord.buildAdPubCacheRecord(adId);
+            cacheRecord.buildAdPubCacheRecord(adId);
             if (adMap.get(adId).getRule().getUvLimit() > 0) {
                 // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误
                 if (!cacheRecord.getUvMap().containsKey(adId)) {
@@ -460,7 +460,7 @@ public abstract class AbstractManager {
         if (rule.getMinIntervalPages() > 0
 //                && ad.getShowType().equals(ShowType.FEED_ADV.getType())
                 ) {
-            if (cacheRecord != null && !cacheRecord.canPubFeedAd(ad, rule)) {
+            if (cacheRecord != null && !cacheRecord.canPubFeedAd(ad, rule, showType.getType())) {
                 logger.info("cannot pub feedAdv because of pages minInterval, ruleId={}, udid={}", rule.getRuleId(),
                         advParam.getUdid());
                 return false;

@@ -129,11 +129,11 @@ public class WriteCacheThread implements Runnable {
 	 * @param cache
 	 */
 	private void dealNoFeedAdHistoryMap(AdPubCacheRecord cache) {
-		Map<String, Map<Integer, Integer>> noFeedHistory = cache.getTodayNoFeedAdHistoryMap();
-		if(noFeedHistory == null) {
+		Map<String, Map<String, Map<Integer, Integer>>> noFeedHistory = cache.getTodayNoAdHistoryMap();
+		if(noFeedHistory == null || noFeedHistory.size() == 0) {
 			return;
 		}
-		Iterator<Map.Entry<String, Map<Integer, Integer>>> it = noFeedHistory.entrySet().iterator();
+		Iterator<Map.Entry<String, Map<String,  Map<Integer, Integer>>>> it = noFeedHistory.entrySet().iterator();
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(new Date());
 		calendar.add(Calendar.DATE, -2);// 把日期往后增加两天.整数往后推,负数往前移动
@@ -141,7 +141,7 @@ public class WriteCacheThread implements Runnable {
 		String dateStr = sdf.format(calendar.getTime()); // 这个时间就是日期往前推2天的结果
 		
 		while(it.hasNext()) {
-			Map.Entry<String, Map<Integer, Integer>> entry = it.next();
+			Map.Entry<String,  Map<String, Map<Integer, Integer>>> entry = it.next();
 			String dayStr = entry.getKey();
 			// 存储日期在2天之内
 			if (dateStr.compareTo(dayStr) <= 0) {
@@ -422,11 +422,11 @@ public class WriteCacheThread implements Runnable {
 		AdPubCacheRecord cache = new AdPubCacheRecord();
 		String str = "{\"cacheRecordMap\":{13694:{\"clickCount\":0,\"dayCountMap\":{\"2018-03-08\":1}},13695:{\"clickCount\":0,\"dayCountMap\":{\"2018-03-08\":1}},13693:{\"clickCount\":0,\"dayCountMap\":{\"2018-03-08\":1}},13524:{\"clickCount\":11,\"dayCountMap\":{\"2018-03-13\":33,\"2018-03-06\":1}},13646:{\"clickCount\":0,\"dayCountMap\":{\"2018-03-06\":8}},13690:{\"clickCount\":1,\"dayCountMap\":{\"2018-03-08\":8}},13309:{\"clickCount\":9,\"dayCountMap\":{\"2018-03-06\":7}},13612:{\"clickCount\":2,\"dayCountMap\":{\"2018-03-06\":8}},13685:{\"clickCount\":0,\"dayCountMap\":{\"2018-03-08\":4}},13708:{\"clickCount\":0,\"dayCountMap\":{\"2018-03-08\":13}},13709:{\"clickCount\":0,\"dayCountMap\":{\"2018-03-08\":33}},13605:{\"clickCount\":4,\"dayCountMap\":{\"2018-03-10\":10,\"2018-03-07\":1,\"2018-03-06\":9}},13681:{\"clickCount\":0,\"dayCountMap\":{\"2018-03-08\":6}}},\"cacheTime\":0,\"displayAdv\":true,\"firstClickMap\":{},\"todayHistoryMap\":{},\"todayNoFeedAdHistoryMap\":{\"2018-03-10\":{13633:0,-1:1,13634:2}},\"todayOpenAdPubTime\":{\"2018-03-12\":{13351:1516867110264,12910:1516864931860},\"2018-03-11\":{13337:1516799445802}},\"todayOpenHistoryMap\":{\"2018-03-13\":{{\"adId\":-1,\"adType\":-1,\"apiType\":-1}:5}},\"uninterestedMap\":{\"13542\":{\"time\":1518321298152},\"13408\":{\"time\":1517455644927},\"13452\":{\"time\":1517620896205},\"13276\":{\"time\":1516360176513},\"11153\":{\"time\":1520926191568},\"13354\":{\"time\":1517026189082},\"13482\":{\"time\":1517643542296},\"13420\":{\"time\":1517553826517},\"13268\":{\"time\":1516377353189},\"13480\":{\"time\":1517649164753}},\"uvMap\":{}}";
 		cache = JSONObject.parseObject(str, AdPubCacheRecord.class);
-		Map<String, Map<Integer, Integer>> noFeedHistory = cache.getTodayNoFeedAdHistoryMap();
+		Map<String, Map<String, Map<Integer, Integer>>> noFeedHistory = cache.getTodayNoAdHistoryMap();
 		if(noFeedHistory == null) {
 			return;
 		}
-		Iterator<Map.Entry<String, Map<Integer, Integer>>> it = noFeedHistory.entrySet().iterator();
+		Iterator<Map.Entry<String,Map<String, Map<Integer, Integer>>>> it = noFeedHistory.entrySet().iterator();
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(new Date());
 		calendar.add(Calendar.DATE, -2);// 把日期往后增加七天.整数往后推,负数往前移动
@@ -434,7 +434,7 @@ public class WriteCacheThread implements Runnable {
 		String dateStr = sdf.format(calendar.getTime()); // 这个时间就是日期往前推2天的结果
 		
 		while(it.hasNext()) {
-			Map.Entry<String, Map<Integer, Integer>> entry = it.next();
+			Map.Entry<String, Map<String, Map<Integer, Integer>>> entry = it.next();
 			String dayStr = entry.getKey();
 			// 存储日期在2天之内
 			if (dateStr.compareTo(dayStr) <= 0) {

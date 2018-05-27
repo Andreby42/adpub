@@ -64,7 +64,9 @@ public class AdPubCacheRecord {
 			.hashMap();
 	// 新增 feed流广告的历史记录也放入其中。不同的记录的是不投放广告的情况，投放之后置零
 	// 格式类似：{"2018-03-01":{13633:0,-1:1,13634:2}}
-	private Map<String, Map<Integer, Integer>> todayNoFeedAdHistoryMap = New.hashMap();
+//	private Map<String, Map<String, Map<Integer, Integer>>> todayNoFeedAdHistoryMap = New.hashMap();
+	
+	private Map<String, Map<String, Map<Integer, Integer>>> todayNoAdHistoryMap = New.hashMap();
 	
 	// 取消广告
 	private invalidAdv invalidInfo;
@@ -129,28 +131,38 @@ public class AdPubCacheRecord {
 	}
 
 	// feed流广告投放记录。 投放后计数置零。不投放，计数+1
-	public void setNoFeedAdHistoryMap(List<Integer> adIds) {
+	public void setNoAdHistoryMap(List<Integer> adIds, String showType) {
 		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
-		if (todayNoFeedAdHistoryMap.containsKey(todayStr)) {
-			Map<Integer, Integer> temp = todayNoFeedAdHistoryMap.get(todayStr);
+		if (todayNoAdHistoryMap.containsKey(todayStr)) {
+			Map<String, Map<Integer, Integer>> tempShowType = todayNoAdHistoryMap.get(todayStr);
+            if (tempShowType.containsKey(showType)) {
+                Map<Integer, Integer> temp = tempShowType.get(showType);
+                // 对应的广告置零
+                for (Integer i : adIds) {
+                    temp.put(i, 0);
+                }
+                // 如果有其他广告，+1	
+                for(Entry<Integer, Integer> entry : temp.entrySet()) {
+                    if(! adIds.contains(entry.getKey())) {
+                        entry.setValue(entry.getValue() + 1);
+                    }
+                }
+            } else {
+                Map<Integer, Integer> temp = New.hashMap();
+                for (Integer i : adIds) {
+                    temp.put(i, 0);
+                }
+                tempShowType.put(showType, temp);
+            }
 			
-			// 对应的广告置零
-			for(Integer i : adIds) {
-				temp.put(i, 0);
-			}
-			
-			// 如果有其他广告，+1	
-			for(Entry<Integer, Integer> entry : temp.entrySet()) {
-				if(! adIds.contains(entry.getKey())) {
-					entry.setValue(entry.getValue() + 1);
-				}
-			}
 		} else {
+		    Map<String, Map<Integer, Integer>> tempShowType = New.hashMap();
 			Map<Integer, Integer> temp = New.hashMap();
 			for(Integer i : adIds) {
 				temp.put(i, 0);
 			}
-			todayNoFeedAdHistoryMap.put(todayStr, temp);
+			tempShowType.put(showType, temp);
+			todayNoAdHistoryMap.put(todayStr, tempShowType);
 		}
 	}
 	
@@ -183,9 +195,9 @@ public class AdPubCacheRecord {
 	}
 	
 	
-	public Map<Integer, Integer> todayNoFeedAdHistoryList() {
+	public Map<String, Map<Integer, Integer>> todayNoAdHistoryList() {
 		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
-		return todayNoFeedAdHistoryMap.get(todayStr);
+		return todayNoAdHistoryMap.get(todayStr);
 	}
 	
 	public Map<Integer, Long> todayOpenAdPubTimeList() {
@@ -197,11 +209,12 @@ public class AdPubCacheRecord {
 	// feedAd的最小投放间隔
 	// todayNoFeedAdHistoryMap中计数了feedAd投放次数。每次投放置零，不投放+1。达到阈值可以再次投放
 	// 找不到广告记录，可以投放
-	public boolean canPubFeedAd(AdContent ad, Rule rule) {
+	public boolean canPubFeedAd(AdContent ad, Rule rule, String showType) {
 		int adId = ad.getId();
 		// 说明今天投放过该广告了
-		if (todayNoFeedAdHistoryList() != null && todayNoFeedAdHistoryList().containsKey(adId)) {
-			if (todayNoFeedAdHistoryList().get(adId) < rule.getMinIntervalPages()) {
+		if (todayNoAdHistoryList() != null && todayNoAdHistoryList().containsKey(showType) 
+		        && todayNoAdHistoryList().get(showType).containsKey(adId)) {
+			if (todayNoAdHistoryList().get(showType).get(adId) < rule.getMinIntervalPages()) {
 				return false;
 			}
 		}
@@ -737,8 +750,8 @@ public class AdPubCacheRecord {
 		this.uvMap = uvMap;
 	}
 
-	public Map<String, Map<Integer, Integer>> getTodayNoFeedAdHistoryMap() {
-		return todayNoFeedAdHistoryMap;
+	public Map<String, Map<String, Map<Integer, Integer>>> getTodayNoAdHistoryMap() {
+		return todayNoAdHistoryMap;
 	}
 	
 	public Map<String, ApiRecord> getApiRecordMap() {

@@ -665,7 +665,7 @@ public class ServiceManager {
             List<Integer> ids = New.arrayList();
             ids.add(-1);
             AdPubCacheRecord cacheRecord = feedAdsManager.gainCacheRecord(advParam, ShowType.FEED_ADV);
-            cacheRecord.setNoFeedAdHistoryMap(ids);
+            cacheRecord.setNoAdHistoryMap(ids, ShowType.FEED_ADV.getType());
             AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
         }
 
