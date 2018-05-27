@@ -222,6 +222,7 @@ public class DoubleAndSingleManager extends AbstractManager {
         entity.setAdWeight(inner.getAdWeight());
         entity.setAutoInterval(inner.getAutoInterval());
         entity.setMixInterval(inner.getMixInterval());
+        entity.setSindex(inner.getPosition());
 //        entity.setApiType(1);
         return entity;
     }
