@@ -84,8 +84,8 @@ public class AdDoubleInnerContent extends AdInnerContent {
             this.provider_id = ad.provider_id;
             this.desc = ad.desc;
             
-            this.autoInterval = ad.autoInterval;
-            this.mixInterval = ad.mixInterval;
+            this.autoInterval = ad.autoInterval * 1000;
+            this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
         }
     }
