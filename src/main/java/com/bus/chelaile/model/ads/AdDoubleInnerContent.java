@@ -49,6 +49,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
     // 2018-04-28更新， 只支持0 OR 1
     private int position = Constants.NULL_POSITION;
 
+    private int apiType;
     private int provider_id; // 广告提供商， 0 自采买， 2 广点通
     private long autoInterval; // 自动刷新时间
     private long mixInterval; // 最小展示时间
@@ -82,6 +83,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
             this.feedId = ad.feedId;
 
             this.provider_id = ad.provider_id;
+            this.apiType = ad.apiType;
             this.desc = ad.desc;
             
             this.autoInterval = ad.autoInterval * 1000;
@@ -394,5 +396,19 @@ public class AdDoubleInnerContent extends AdInnerContent {
      */
     public void setAdWeight(int adWeight) {
         this.adWeight = adWeight;
+    }
+
+    /**
+     * @return the apiType
+     */
+    public int getApiType() {
+        return apiType;
+    }
+
+    /**
+     * @param apiType the apiType to set
+     */
+    public void setApiType(int apiType) {
+        this.apiType = apiType;
     }
 }

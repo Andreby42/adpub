@@ -18,6 +18,7 @@ public class AdLineFeedInnerContent extends AdInnerContent {
     private long mixInterval; // 最小展示时间
     private int backup; // 是否是备选方案
     
+    private int apiType;
     private int provider_id; // 广告提供商， 0 自采买， 2 广点通
     private String slogan;
     private String feedAdTitle;
@@ -33,6 +34,7 @@ public class AdLineFeedInnerContent extends AdInnerContent {
             this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
+            this.apiType = ad.apiType;
             this.setProvider_id(ad.getProvider_id());
             this.setSlogan(ad.getSlogan());
             this.setFeedAdTitle(ad.getFeedAdTitle());
@@ -174,6 +176,20 @@ public class AdLineFeedInnerContent extends AdInnerContent {
      */
     public void setProvider_id(int provider_id) {
         this.provider_id = provider_id;
+    }
+
+    /**
+     * @return the apiType
+     */
+    public int getApiType() {
+        return apiType;
+    }
+
+    /**
+     * @param apiType the apiType to set
+     */
+    public void setApiType(int apiType) {
+        this.apiType = apiType;
     }
 
 }

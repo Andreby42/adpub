@@ -1,22 +1,18 @@
 package com.bus.chelaile.service.impl;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.Constants;
-import com.bus.chelaile.model.ProductType;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdDoubleInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
-import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
-import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;

@@ -24,7 +24,6 @@ import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdLineDetailInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
-import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.model.rule.Rule;
 import com.bus.chelaile.model.rule.UserClickRate;
@@ -208,10 +207,12 @@ public abstract class AbstractManager {
 
             // 记录缓存
             int adId = entity.getId();
-            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+            // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+            // 2018-05-27 修改此处，去掉这个限制了    // TODO  【因为实际研发中，发送依旧是等于展示的】
+//            if (showType != ShowType.OPEN_SCREEN)
                 cacheRecord.buildAdPubCacheRecord(adId);
             if (adMap.get(adId).getRule().getUvLimit() > 0) {
-                // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误 // TODO
+                // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误
                 if (!cacheRecord.getUvMap().containsKey(adId)) {
                     adMap.get(adId).getRule().setUvCount();
                     cacheRecord.setAdToUvMap(adId);
@@ -455,7 +456,10 @@ public abstract class AbstractManager {
         }
 
         // 最小次数间隔，feed流广告用。 两次广告展示之间最少间隔几次调用
-        if (rule.getMinIntervalPages() > 0 && ad.getShowType().equals(ShowType.FEED_ADV.getType())) {
+        // 2018-05-27 适用： 开屏、首页栏、站点位置、详情页底部
+        if (rule.getMinIntervalPages() > 0
+//                && ad.getShowType().equals(ShowType.FEED_ADV.getType())
+                ) {
             if (cacheRecord != null && !cacheRecord.canPubFeedAd(ad, rule)) {
                 logger.info("cannot pub feedAdv because of pages minInterval, ruleId={}, udid={}", rule.getRuleId(),
                         advParam.getUdid());
@@ -592,11 +596,12 @@ public abstract class AbstractManager {
             isAutoRefresh = true;
         }
         if (isSelfAd && !(isAutoRefresh && hasSendSelfAd)) { // 记录自采买广告的次数
-            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
-                                                      // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+            // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+            // 2018-05-27 修改此处，去掉这个限制了    // TODO  【因为实际研发中，发送依旧是等于展示的】
+            //if (showType != ShowType.OPEN_SCREEN)
                 cacheRecord.buildAdPubCacheRecord(adId);
             if (adMap.get(adId).getRule().getUvLimit() > 0) {
-                // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误 // TODO
+                // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误
                 if (!cacheRecord.getUvMap().containsKey(adId)) {
                     adMap.get(adId).getRule().setUvCount();
                     cacheRecord.setAdToUvMap(adId);

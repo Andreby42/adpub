@@ -61,9 +61,11 @@ public class InfoStreamDispatcher {
 		if (Constants.ISTEST) {
 			maidian_log = Constants.TEST_MAIDIAN_LOG;
 		}
-		if(str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
-			return Constants.ROW_OPEN_ADV_EXHIBIT;
-		} else if(str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
+//		if(str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
+//			return Constants.ROW_OPEN_ADV_EXHIBIT;
+//		}
+//		else 
+		    if(str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
 		    return Constants.ROW_WXAPP_ADV_CLICK_MAIDIAN;
 		}
 			

@@ -37,6 +37,7 @@ public abstract class BaseAdEntity {
 	protected String clickMonitorLink = "";
 	protected int monitorType;
 	private int type = 1; // 1：我们自己广告，2：调用广点通广告，3：调用第三方广告   // 客户端点击的时候用到这个参数
+	private int apiType = 1; // 1 原生，目前只有1 
 	private String provider_id = "1"; // 我们自己的广告
 	
 	@JSONField(serialize=false)  
@@ -405,5 +406,19 @@ public abstract class BaseAdEntity {
      */
     public void setAdWeight(int adWeight) {
         this.adWeight = adWeight;
+    }
+
+    /**
+     * @return the apiType
+     */
+    public int getApiType() {
+        return apiType;
+    }
+
+    /**
+     * @param apiType the apiType to set
+     */
+    public void setApiType(int apiType) {
+        this.apiType = apiType;
     }
 }

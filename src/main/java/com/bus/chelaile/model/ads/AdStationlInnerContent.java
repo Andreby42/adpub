@@ -19,6 +19,7 @@ public class AdStationlInnerContent extends AdInnerContent {
 	private String wx_miniPro_id; 
     private String wx_miniPro_path; // 跳转小程序， 2018-04-09
     
+    private int apiType;
     private int provider_id; // 广告提供商， 0：自采买广告；8：阅盟；9：Ecoook；10：科大讯飞【其他说明：3 inmobi】
     
     private long autoInterval; // 自动刷新时间
@@ -40,6 +41,7 @@ public class AdStationlInnerContent extends AdInnerContent {
 			this.buyOut = ad.getBuyOut();
 			this.wx_miniPro_id = ad.getWx_miniPro_id();
 			this.wx_miniPro_path = ad.getWx_miniPro_path();
+			this.apiType = ad.apiType;
 			this.provider_id = ad.getProvider_id();
 			this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
@@ -186,5 +188,19 @@ public class AdStationlInnerContent extends AdInnerContent {
      */
     public void setBackup(int backup) {
         this.backup = backup;
+    }
+
+    /**
+     * @return the apiType
+     */
+    public int getApiType() {
+        return apiType;
+    }
+
+    /**
+     * @param apiType the apiType to set
+     */
+    public void setApiType(int apiType) {
+        this.apiType = apiType;
     }
 }
