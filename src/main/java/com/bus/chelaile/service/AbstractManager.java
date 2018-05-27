@@ -195,7 +195,7 @@ public abstract class AbstractManager {
 
     }
     
-    // 记录发送日志，包括： 把第一条记录写入redis，把第一条写发送log
+    // 记录发送日志，包括： 把第一条记录【第三方的】写入redis，把第一条写发送log
     // 只记录第三方广告的发送log到redis
     protected void recordSend(AdvParam advParam, AdPubCacheRecord cacheRecord, Map<Integer, AdContentCacheEle> adMap,
             ShowType showType, List<BaseAdEntity> entities) {

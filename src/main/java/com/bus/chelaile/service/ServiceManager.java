@@ -416,8 +416,8 @@ public class ServiceManager {
             if (((StationAdEntity) entities.get(0)).getAutoInterval() == 0
                     || ((StationAdEntity) entities.get(0)).getMixInterval() == 0) {
                 resultMap.put("ads", entities);
-                resultMap.put("autoInterval", 8000);
-                resultMap.put("mixInterval", 4000);
+                resultMap.put("autoInterval", 15000);
+                resultMap.put("mixInterval", 5000);
             } else {
                 resultMap.put("autoInterval", ((StationAdEntity) entities.get(0)).getAutoInterval());
                 resultMap.put("mixInterval", ((StationAdEntity) entities.get(0)).getMixInterval());
@@ -503,8 +503,8 @@ public class ServiceManager {
         } else {
             if (((AdEntity) entities.get(0)).getAutoInterval() == 0 || ((AdEntity) entities.get(0)).getMixInterval() == 0) {
                 resultMap.put("ads", entities);
-                resultMap.put("autoInterval", 8000);
-                resultMap.put("mixInterval", 4000);
+                resultMap.put("autoInterval", 15000);
+                resultMap.put("mixInterval", 5000);
             } else {
                 resultMap.put("ads", entities);
                 resultMap.put("autoInterval", ((AdEntity) entities.get(0)).getAutoInterval());
@@ -805,8 +805,8 @@ public class ServiceManager {
             if (((LineFeedAdEntity) entities.get(0)).getAutoInterval() == 0
                     || ((LineFeedAdEntity) entities.get(0)).getMixInterval() == 0) {
                 resultMap.put("ads", entities);
-                resultMap.put("autoInterval", 8000);
-                resultMap.put("mixInterval", 4000);
+                resultMap.put("autoInterval", 15000);
+                resultMap.put("mixInterval", 5000);
             } else {
                 resultMap.put("ads", entities);
                 resultMap.put("autoInterval", ((LineFeedAdEntity) entities.get(0)).getAutoInterval());

@@ -52,8 +52,13 @@ public class LineFeedAdsManager extends AbstractManager {
         }
         // 如果没有自采买，那么返回一个列表
         if (!hasOwnAd) {
+            AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
+                if(((AdLineFeedInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
+                    backupad = ad;
+                    continue;
+                }
                 LineFeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
                 if (entity != null) {
                     entities.add(entity);
@@ -64,6 +69,10 @@ public class LineFeedAdsManager extends AbstractManager {
             // 如果超过半小时，那么按照权重排序
             if (!checkSendLog(advParam, entities, showType.getType()))
                 rankAds(advParam, entities);
+            if(backupad != null) {
+                LineFeedAdEntity entity = from(advParam, cacheRecord, backupad.getAds(), showType);
+                entities.add(entity);
+            }
         }
         // 记录投放的第一条广告， 记录发送日志
         if (entities != null && entities.size() > 0) {

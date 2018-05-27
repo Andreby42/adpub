@@ -415,6 +415,7 @@ public class OpenManager extends AbstractManager {
         }
         // 如果没有自采买，那么返回一个列表
         if (!hasOwnAd) {
+            AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
                 AdFullInnerContent inner = (AdFullInnerContent) ad.getAds().getAdInnerContent();
@@ -423,6 +424,10 @@ public class OpenManager extends AbstractManager {
                 if (inner.getProvider_id() > 1) {
                     entity = createSDKOpenAds(inner, ad.getAds().getId());
                 } else {
+                    if(inner.getBackup() == 1) {    // 兜底的广告单独摘出来
+                        backupad = ad;
+                        continue;
+                    }
                     entity = getSelfAdEntity(advParam, cacheRecord, ad, showType, queryParam);
                 }
 
@@ -431,10 +436,15 @@ public class OpenManager extends AbstractManager {
                 }
             }
             // 重新排序
-            // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个
+            // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个【方法是将这个广告排到最后一位】
             // 如果超过半小时，那么按照权重排序
-            if (!checkSendLog(advParam, entities, showType.getType()))
+            if (!checkSendLog(advParam, entities, showType.getType())) {
                 rankAds(advParam, entities);
+            }
+            if(backupad != null) {
+                OpenAdEntity entity = getSelfAdEntity(advParam, cacheRecord, backupad, showType, queryParam);
+                entities.add(entity);
+            }
         }
         // 记录投放的第一条广告， 记录发送日志
         if (entities != null && entities.size() > 0) {

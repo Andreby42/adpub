@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -62,6 +63,7 @@ public class BusAdvActionV2 extends AbstractController {
     @RequestMapping(value = "adv!getCoopenAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public String getCoopenAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
+        advParam.setStartMode(getInt(request, "startMode"));
 
         Object result = serviceManager.getCoopenAds(advParam);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
@@ -74,6 +76,8 @@ public class BusAdvActionV2 extends AbstractController {
     @RequestMapping(value = "adv!getStationAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public String getStationAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
+        if(StringUtils.isBlank(advParam.getStnName()))
+            advParam.setStnName(request.getParameter("stationName"));
 
         Object result = serviceManager.getStationAds(advParam);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
