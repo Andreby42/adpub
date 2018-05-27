@@ -239,6 +239,9 @@ public class StationAdsManager extends AbstractManager {
         entity.setTitle(ad.getTitle());
         entity.setBuyOut(inner.getBuyOut());
         entity.setAdWeight(inner.getAdWeight());
+        
+        entity.setAutoInterval(inner.getAutoInterval());
+        entity.setMixInterval(inner.getMixInterval());
 
         BannerInfo bannerInfo = new BannerInfo();
         bannerInfo.setBannerType(4); // 广点通专用样式，文字+标签（文案由客户端自定义）
