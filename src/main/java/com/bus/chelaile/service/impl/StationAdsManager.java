@@ -321,7 +321,7 @@ public class StationAdsManager extends AbstractManager {
             // 重新排序
             // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个
             // 如果超过半小时，那么按照权重排序
-//            if (!checkSendLog(advParam, entities, showType.getType()))
+            if (!checkSendLog(advParam, entities, showType.getType()))    
                 rankAds(advParam, entities);
             if(backupad != null) {
                 StationAdEntity entity = from(advParam, cacheRecord, backupad.getAds(), showType);

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.kafka.InfoStreamHelp;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -64,15 +65,16 @@ public class MaidianLogsHandle implements Runnable {
         if (Constants.ISTEST) {
             maidian_log = Constants.TEST_MAIDIAN_LOG;
         }
-        if (str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
+        /*if (str.contains(maidian_log) && str.contains(Constants.ADV_EXHIBIT) && str.contains(Constants.OPEN_ADV_KEYWORD)) {
 //            logger.info("读到展示埋点日志： str={}", str);
             try {
                 analysisOpenAdvExhibit(str);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
-            logger.info("读到点击埋点日志： str={}", str);
+        } else*/ 
+        if (str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
+            TimeLong.info("读到点击埋点日志： str={}", str);
             try {
                 analysisWXAppClick(str);
             } catch (Exception e) {
