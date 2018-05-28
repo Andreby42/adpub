@@ -739,7 +739,7 @@ public class Rule {
     public boolean devicePub(String deviceType, int startMode) {
         boolean isMIUIcold = false;
         if (StringUtils.isNoneBlank(deviceType)
-                && (deviceType.toLowerCase().contains("mi") || deviceType.toLowerCase().contains("HM ")) && startMode == 0) {
+                && (deviceType.toLowerCase().contains("mi") || deviceType.contains("HM ")) && startMode == 0) {
             isMIUIcold = true;
         }
         if (this.getCanPubMIUI() == 0 && isMIUIcold) { // 不投miUI冷启动
