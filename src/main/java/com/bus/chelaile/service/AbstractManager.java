@@ -127,21 +127,24 @@ public abstract class AbstractManager {
     /**
     * 获取上次投放的第一个广告，这次需要轮训到下一个 . 查看上一次的投放记录 . 用户实现‘每次必选改变广告’的需求
     * @param advParam
-    * @param lineFeedAds
+    * @param entities
     * @return boolean
     */
-    protected boolean checkSendLog(AdvParam advParam, List<BaseAdEntity> lineFeedAds, String showType) {
+    protected boolean checkSendLog(AdvParam advParam, List<BaseAdEntity> entities, String showType) {
+        if(entities == null || entities.size() == 0) {
+            return true;
+        }
         String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(advParam.getUdid(), showType);
         String lastSendIdStr = (String) CacheUtil.getFromRedis(sendLineFeedLogKey);
         if (lastSendIdStr != null) {
             try {
                 // logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(), lastSendIdStr);
                 int sendId = Integer.parseInt(lastSendIdStr);
-                int size = lineFeedAds.size();
+                int size = entities.size();
 
                 // 有之前投放的记录，确保当前列表第一个变化后，直接return即可
-                if (lineFeedAds.get(0).getId() == sendId) {
-                    Collections.swap(lineFeedAds, 0, size - 1);
+                if (entities.get(0).getId() == sendId) {
+                    Collections.swap(entities, 0, size - 1);
                 }
                 return true;
             } catch (Exception e) {
