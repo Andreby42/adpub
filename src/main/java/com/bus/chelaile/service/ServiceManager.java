@@ -357,7 +357,7 @@ public class ServiceManager {
         } else {
             if (((OpenAdEntity) entities.get(0)).getTimeout() == 0) {
                 resultMap.put("ads", entities);
-                resultMap.put("timeout", 1500);
+                resultMap.put("timeout", 2000);
             } else {
                 resultMap.put("ads", entities);
                 resultMap.put("timeout", ((OpenAdEntity) entities.get(0)).getTimeout());
