@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
+import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
@@ -184,13 +185,13 @@ public abstract class AbstractManager {
     }
     
     // 记录广告发送记录， 默认只取第一条
-    protected void writeSendLog(AdvParam advParam, BaseAdEntity entity) {
-//        AnalysisLog.info(
-//                "[ADV_SEND]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={},provider_id={}",
-//                ((LineFeedAdEntity) entity).buildIdentity(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
-//                advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(),
-//                advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
-//                advParam.getH5User(), advParam.getH5Src(), entity.getProvider_id());
+    protected void writeSendLog(AdvParam advParam, AdContent ad, BaseAdEntity entity) {
+        AnalysisLog.info(
+                "[ADV_SEND]: adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},h5User={},h5Src={},provider_id={}",
+                ad.getLogKey(), advParam.getUserId(), advParam.getAccountId(), advParam.getUdid(),
+                advParam.getCityId(), advParam.getS(), advParam.getV(), advParam.getLineId(), advParam.getStnName(),
+                advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(), advParam.getLat(),
+                advParam.getH5User(), advParam.getH5Src(), entity.getProvider_id());
 
     }
     
@@ -200,7 +201,7 @@ public abstract class AbstractManager {
             ShowType showType, List<BaseAdEntity> entities) {
         if (entities != null) {
             BaseAdEntity entity = entities.get(0);
-            writeSendLog(advParam, entity);
+            writeSendLog(advParam, adMap.get(entity.getId()).getAds(), entity);
             if (!entity.getProvider_id().equals("1")) {
                 setSendLog(entity, advParam.getUdid(), showType.getType());
             }
