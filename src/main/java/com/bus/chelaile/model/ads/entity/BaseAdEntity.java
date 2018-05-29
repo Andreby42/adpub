@@ -255,7 +255,8 @@ public abstract class BaseAdEntity {
 			}
 			if (os.equals("0")) { // android
 				if (imei != null)
-					url = url.replace("__IMEI__", DigestUtils.md5Hex(imei));
+//					url = url.replace("__IMEI__", DigestUtils.md5Hex(imei));
+				url = url.replace("__IMEI__", imei);
 				if (AndroidID != null)
 					url = url.replace("__AndroidID__", DigestUtils.md5Hex(AndroidID));
 			} else {
