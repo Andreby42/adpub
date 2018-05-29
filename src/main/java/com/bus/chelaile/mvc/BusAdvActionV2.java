@@ -51,6 +51,7 @@ public class BusAdvActionV2 extends AbstractController {
     public String geColumntAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 
         AdvParam advParam = getActionParam(request);
+        advParam.setType(getInt(request, "type"));
 
         Object result = serviceManager.getColumntAds(advParam);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);

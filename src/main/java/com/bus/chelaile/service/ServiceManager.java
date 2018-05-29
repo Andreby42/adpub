@@ -575,8 +575,12 @@ public class ServiceManager {
             isNeedApid = true;
         }
 
-        BaseAdEntity stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
-
+        BaseAdEntity stnAds = null;
+        // 2018-05-30后，新版不再调用站点广告
+        if (!((advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528)
+                || (advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528))) {
+            stnAds = stationAdsManager.doService(advParam, ShowType.STATION_ADV, false, queryParam, true);
+        }
         BaseAdEntity lineAds = lineDetailsManager.doService(advParam, ShowType.LINE_DETAIL, isNeedApid, queryParam, true);
 
         // 0208以前的版本，都只返回一条广告
