@@ -89,6 +89,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
             this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
+            this.adWeight = ad.adWeight;
         }
     }
 
