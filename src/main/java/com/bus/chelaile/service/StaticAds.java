@@ -7,6 +7,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
@@ -232,8 +233,9 @@ public class StaticAds {
         if (cacheRecord == null) {
             cacheRecord = new AdPubCacheRecord();
         }
-        
+        logger.info("点击记录， udid={}, showType={}, advId={}, record={}", udid, showType, advId, JSONObject.toJSONString(cacheRecord));
         cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId), true);
+        logger.info("点击记录， udid={}, showType={}, advId={}, record={}", udid, showType, advId, JSONObject.toJSONString(cacheRecord));
         
         if (showType.equals(ShowType.LINE_DETAIL.getType())) {
             RecordManager.recordAdd(udid, showType, cacheRecord);
