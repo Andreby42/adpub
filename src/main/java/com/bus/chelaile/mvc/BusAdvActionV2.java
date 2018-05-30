@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.service.ServiceManager;
+import com.bus.chelaile.service.StaticAds;
 
 /**
  * 广告相关接口
@@ -83,4 +85,24 @@ public class BusAdvActionV2 extends AbstractController {
         Object result = serviceManager.getStationAds(advParam);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
     }
+    
+    /*
+     * 点击上报街接口
+     */
+    @ResponseBody
+    @RequestMapping(value = "adv!ca.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    public String ca(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        AdvParam advParam = getActionParam(request);
+        
+        if(StringUtils.isEmpty(advParam.getUdid())) {
+            advParam.setUdid(request.getParameter("h5Id"));
+        }
+        
+        String advId = request.getParameter("advId");
+        // 存储用户点击广告到ocs中
+        StaticAds.setClickToRecord(advId, advParam.getUdid());
+
+        return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
 }

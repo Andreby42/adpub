@@ -28,7 +28,7 @@ public class InfoStreamForAdvClick {
 
 	private static final Object KAFKA_CLICK_LOCK = new Object();
 	private volatile static boolean kafkaStarted = false;
-	private static final Logger logger = LoggerFactory.getLogger(InfoStreamDispatcher.class);
+	private static final Logger logger = LoggerFactory.getLogger(InfoStreamForAdvClick.class);
 
 	private static ExecutorService adClickLogExec = Executors.newFixedThreadPool(5); // 固定5个线程执行解析的任务。
 

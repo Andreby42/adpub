@@ -84,11 +84,6 @@ public class InfoStreamHelp {
 	}
 	
 	
-	
-    public static void analysisWXAppClick(String line) {
-        // TODO Auto-generated method stub
-
-    }
 
 	/*
 	 * 将点击记录，存储到缓存中
@@ -96,6 +91,10 @@ public class InfoStreamHelp {
 	public static void setClickToRecord(String advId, String udid) {
 		AdPubCacheRecord cacheRecord = null;
 		// 放缓存的时候除了线路详情就是双栏
+//		if(! StaticAds.allAds.containsKey(advId)) {
+//		    logger.error("出现缓存中不存在advId点击上报事件， udid={}, advId={}", udid, advId);
+//		    return;
+//		}
 		String showType = StaticAds.allAds.get(advId).getShowType();
 		if (showType.equals(ShowType.LINE_DETAIL.getType())) {
 			cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.LINE_DETAIL.getType());

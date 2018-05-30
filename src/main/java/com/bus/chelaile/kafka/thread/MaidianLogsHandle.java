@@ -76,7 +76,7 @@ public class MaidianLogsHandle implements Runnable {
         if (str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
             TimeLong.info("读到点击埋点日志： str={}", str);
             try {
-                analysisWXAppClick(str);
+                analysisMaidianClick(str);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -90,7 +90,7 @@ public class MaidianLogsHandle implements Runnable {
      * 并记录进缓存
      * @param str
      */
-    private  void analysisWXAppClick(String line) {
+    private  void analysisMaidianClick(String line) {
         Map<String, String> params = preHandleMaidianLog(line);
         if(params != null) {
             String udid = params.get("userId");
@@ -207,7 +207,8 @@ public class MaidianLogsHandle implements Runnable {
         MaidianLogsHandle m = new MaidianLogsHandle();
         
         String s1 = "May 17 17:11:12 web10 nginx: 182.18.10.10 |# - |# 2018-05-17 17:11:12 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/24/page-frame.html |# Mozilla/5.0 (iPhone; CPU iPhone OS 11_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E216 MicroMessenger/6.6.6 NetType/WIFI Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_CLICK>adv_type:20|#adv_id:14357|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.1|#cityId:030|#userId:okBHq0CU34vruLG7GtBb4dPO8iiY|#unionId:oSpTTji27rGKHmdHrv5tmbIudl80 |# https";
-        m.analysisWXAppClick(s1);
+        String s2 = "May 30 16:39:46 web6 nginx: 182.18.10.10 |# - |# 2018-05-30 16:39:46 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/29/page-frame.html |# Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_6 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Mobile/15D100 MicroMessenger/6.6.6 NetType/4G Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_CLICK>adv_type:20|#adv_id:14469|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.5|#cityId:019|#userId:okBHq0JAfotnmGzT9bxWClKeEi_0|#unionId:oSpTTjk6bWHAmTrgvC0bvLxx1XVY |# https";
+        m.analysisMaidianClick(s2);
         
     }
 }

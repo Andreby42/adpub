@@ -7,12 +7,14 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
+import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
@@ -209,6 +211,36 @@ public class StaticAds {
 			return 0;
 		}
 	}
+	
+	
+	   /*
+     * 将点击记录，存储到缓存中
+     */
+    public static void setClickToRecord(String advId, String udid) {
+        AdPubCacheRecord cacheRecord = null;
+        // 放缓存的时候除了线路详情就是双栏
+        if(! allAds.containsKey(advId)) {
+            logger.error("出现缓存中不存在advId点击上报事件， udid={}, advId={}", udid, advId);
+            return;
+        }
+        String showType = allAds.get(advId).getShowType();
+        if (showType.equals(ShowType.LINE_DETAIL.getType())) {
+            cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.LINE_DETAIL.getType());
+        } else {
+            cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.DOUBLE_COLUMN.getType());
+        }
+        if (cacheRecord == null) {
+            cacheRecord = new AdPubCacheRecord();
+        }
+        
+        cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId), true);
+        
+        if (showType.equals(ShowType.LINE_DETAIL.getType())) {
+            RecordManager.recordAdd(udid, showType, cacheRecord);
+        } else {
+            RecordManager.recordAdd(udid, ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
+        }
+    }
 
 	public static void main(String[] args) {
 
