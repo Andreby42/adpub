@@ -5,7 +5,7 @@ import com.bus.chelaile.model.ShowType;
 
 
 /**
- * 详情页下方feed流广告，返回广告体
+ * 详情页下方feed流广告，返回广告体【底部广告】
  * @author Administrator
  *
  */
