@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>adpub</groupId>
@@ -210,9 +211,7 @@
 			<groupId>com.belerweb</groupId>
 			<artifactId>pinyin4j</artifactId>
 			<version>2.5.0</version>
-			<!-- <scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pinyin4j-2.5.0.jar</systemPath>
-			-->
+			<!-- <scope>system</scope> <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pinyin4j-2.5.0.jar</systemPath> -->
 		</dependency>
 
 		<!-- com.aliyun.oss -->
@@ -221,7 +220,7 @@
 			<artifactId>aliyun-sdk-oss</artifactId>
 			<version>2.0.5</version>
 		</dependency>
-		
+
 		<!-- koubei -->
 		<dependency>
 			<groupId>com.ali</groupId>
@@ -230,11 +229,8 @@
 		</dependency>
 
 		<dependency>
-<!-- 			<groupId>com.alipay.tbk</groupId>
-			<artifactId>tbk</artifactId>
-			<version>20180115</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1516002625303-20180115.jar</systemPath> -->
+			<!-- <groupId>com.alipay.tbk</groupId> <artifactId>tbk</artifactId> <version>20180115</version> 
+				<scope>system</scope> <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1516002625303-20180115.jar</systemPath> -->
 			<groupId>com.ali</groupId>
 			<artifactId>alipaydev</artifactId>
 			<version>2018030801dev</version>
@@ -247,7 +243,7 @@
 			<artifactId>ons-api</artifactId>
 			<version>1.1.8</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.aliyun.openservices</groupId>
 			<artifactId>ons-client</artifactId>
@@ -391,11 +387,14 @@
 			<version>1.10.2</version>
 		</dependency>
 
-	<dependency>
+		<dependency>
 			<groupId>com.taobao</groupId>
 			<artifactId>alimama</artifactId>
 			<version>20180110</version>
 		</dependency>
+
+
+
 	</dependencies>
 
 

@@ -82,6 +82,18 @@ public class AdvParam {
      private int isTop; // 是否置顶位。 feed流广告专用
      
      private String from; // 小程序专用，用于剔除来自‘城市服务’请求的广告
+     
+     private String dpi; // 屏幕密度
+     
+     private String idfv;
+     
+     private String vendor; //设备厂商
+     
+     private int screenWidth;	//屏幕宽度
+     
+     private String gpsAccuracy; //经纬度精度
+     
+     private String wifissid; //wifi 的 ssid 和 mac;
      /**
       * 存入的s都会被转换为小写。
       *
@@ -628,6 +640,72 @@ public class AdvParam {
     public void setFrom(String from) {
         this.from = from;
     }
+
+
+	public String getDpi() {
+		return dpi;
+	}
+
+
+	public void setDpi(String dpi) {
+		this.dpi = dpi;
+	}
+
+
+	public String getIdfv() {
+		return idfv;
+	}
+
+
+	public void setIdfv(String idfv) {
+		this.idfv = idfv;
+	}
+
+
+	public String getVendor() {
+		return vendor;
+	}
+
+
+	public void setVendor(String vendor) {
+		this.vendor = vendor;
+	}
+
+
+	public int getScreenWidth() {
+		return screenWidth;
+	}
+
+
+	public void setScreenWidth(int screenWidth) {
+		this.screenWidth = screenWidth;
+	}
+
+
+	public String getGpsAccuracy() {
+		if( gpsAccuracy == null ) {
+			return "";
+		}
+		return gpsAccuracy;
+	}
+
+
+	public void setGpsAccuracy(String gpsAccuracy) {
+		this.gpsAccuracy = gpsAccuracy;
+	}
+
+
+	public String getWifissid() {
+		return wifissid;
+	}
+
+
+	public void setWifissid(String wifissid) {
+		this.wifissid = wifissid;
+	}
+
+
+	
 	
 	
 }
