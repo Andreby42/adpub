@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,13 +123,15 @@ public class BusAdvActionV2 extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "adv!handleClick.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public String handleClick(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-        AdvParam advParam = getActionParam(request);
+//        AdvParam advParam = getActionParam(request);
+//        
+//        if(StringUtils.isEmpty(advParam.getUdid())) {
+//            advParam.setUdid(request.getParameter("h5Id"));
+//        }
+        String j = IOUtils.toString(request.getInputStream());
         
-        if(StringUtils.isEmpty(advParam.getUdid())) {
-            advParam.setUdid(request.getParameter("h5Id"));
-        }
         
-        log.info("***** 收到埋点日志, uri={}, url={}", request.getRequestURI(), request.getRequestURL());
+        log.info("***** 收到埋点日志, postBody={}", j);
 
         return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
