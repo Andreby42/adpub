@@ -131,8 +131,10 @@ public class BusAdvActionV2 extends AbstractController {
 //            advParam.setUdid(request.getParameter("h5Id"));
 //        }
         String str = IOUtils.toString(request.getInputStream());
-        TimeLong.info("读到点击埋点日志： str={}", str);
-        MaidianLogsHandle.analysisMaidianClick(str);
+        if(! str.contains("PARSE_SERVER_FAIL")) {
+            TimeLong.info("读到点击埋点日志： str={}", str);
+            MaidianLogsHandle.analysisMaidianClick(str);
+        }
         
         return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
