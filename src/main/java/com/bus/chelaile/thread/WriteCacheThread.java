@@ -255,12 +255,12 @@ public class WriteCacheThread implements Runnable {
 			if (record == null) {
 				continue;
 			}
+			if (record.getDayCountMap().size() == 0 && record.getDayClickMap().size() == 0) {
+			    it.remove();
+			    continue;
+			}
 
 			Iterator<Map.Entry<String, Integer>> entryDayCountIt = record.getDayCountMap().entrySet().iterator();
-			if (record.getDayCountMap().size() == 0) { // 现在已经不记录clickCount了，如果dayCountMap大小为0，直接清理
-				it.remove();
-				continue;
-			}
 
 			while (entryDayCountIt.hasNext()) { // 解析dayCountMap，7天前的清理
 				Map.Entry<String, Integer> entryDayCount = entryDayCountIt.next();

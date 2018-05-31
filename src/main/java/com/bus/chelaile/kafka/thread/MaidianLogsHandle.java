@@ -15,16 +15,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.kafka.InfoStreamHelp;
-import com.bus.chelaile.model.ShowType;
-import com.bus.chelaile.model.record.AdPubCacheRecord;
-import com.bus.chelaile.service.RecordManager;
 import com.bus.chelaile.service.StaticAds;
-import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.thread.Queue;
 import com.bus.chelaile.thread.model.QueueObject;
 import com.bus.chelaile.util.New;
@@ -59,7 +54,7 @@ public class MaidianLogsHandle implements Runnable {
     }
 
     // return 9: 开屏广告展示
-    // return 10: 小程序点击
+    // return 10: 点击埋点
     private void filterContent(String str) {
         String maidian_log = Constants.MAIDIAN_LOG;
         if (Constants.ISTEST) {
@@ -73,7 +68,9 @@ public class MaidianLogsHandle implements Runnable {
                 e.printStackTrace();
             }
         } else*/ 
-        if (str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) && str.contains(Constants.WXAPP_SRC)) {
+        if (str.contains(maidian_log) && str.contains(Constants.ADV_CLICK) 
+//                && str.contains(Constants.WXAPP_SRC)
+                ) {
             TimeLong.info("读到点击埋点日志： str={}", str);
             try {
                 analysisMaidianClick(str);
@@ -94,6 +91,9 @@ public class MaidianLogsHandle implements Runnable {
         Map<String, String> params = preHandleMaidianLog(line);
         if(params != null) {
             String udid = params.get("userId");
+            if(params.containsKey("udid")) {
+                udid = params.get("udid");
+            }
             String advId = params.get("adv_id");
             if (udid == null || advId == null) {
                 logger.info("小程序点击埋点解析， 广告为空 line={}", line);
@@ -116,45 +116,45 @@ public class MaidianLogsHandle implements Runnable {
         }
     }
 
-    /**
-     * 解析开屏广告展示埋点日志
-     * 并且记录进缓存
-     * @param line
-     */
-    private void analysisOpenAdvExhibit(String line) {
-        Map<String, String> params = preHandleMaidianLog(line);
-        if (params != null) {
-            String udid = params.get("udid");
-            String advId = params.get("adv_id");
-            if (udid == null || advId == null) {
-                logger.info("广告展示埋点解析， 广告为空 line={}", line);
-                return;
-            }
-
-            if (StaticAds.allAds.get(advId) == null) {
-//                logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
-                return;
-            }
-
-            // 记录缓存， 开屏广告‘展示’|‘发送’ + 1
-            logger.info("更新开屏 udid={}, advId={}", udid, advId);
-            AdPubCacheRecord cacheRecord = null;
-            try {
-                cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.DOUBLE_COLUMN.getType());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if(cacheRecord == null) {
-                cacheRecord = new AdPubCacheRecord();
-            }
-//            logger.info("更新开屏广告前***， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
-            cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId));
-            cacheRecord.setOpenAdHistory(new AdCategory(Integer.parseInt(advId), 1, -1));
-            cacheRecord.setAndUpdateOpenAdPubTime(Integer.parseInt(advId));
-            RecordManager.recordAdd(udid, ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
-//            logger.info("更新开屏广告后###， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
-        }
-    }
+//    /**
+//     * 解析开屏广告展示埋点日志
+//     * 并且记录进缓存
+//     * @param line
+//     */
+//    private void analysisOpenAdvExhibit(String line) {
+//        Map<String, String> params = preHandleMaidianLog(line);
+//        if (params != null) {
+//            String udid = params.get("udid");
+//            String advId = params.get("adv_id");
+//            if (udid == null || advId == null) {
+//                logger.info("广告展示埋点解析， 广告为空 line={}", line);
+//                return;
+//            }
+//
+//            if (StaticAds.allAds.get(advId) == null) {
+////                logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
+//                return;
+//            }
+//
+//            // 记录缓存， 开屏广告‘展示’|‘发送’ + 1
+//            logger.info("更新开屏 udid={}, advId={}", udid, advId);
+//            AdPubCacheRecord cacheRecord = null;
+//            try {
+//                cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.DOUBLE_COLUMN.getType());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            if(cacheRecord == null) {
+//                cacheRecord = new AdPubCacheRecord();
+//            }
+////            logger.info("更新开屏广告前***， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
+//            cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId));
+//            cacheRecord.setOpenAdHistory(new AdCategory(Integer.parseInt(advId), 1, -1));
+//            cacheRecord.setAndUpdateOpenAdPubTime(Integer.parseInt(advId));
+//            RecordManager.recordAdd(udid, ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
+////            logger.info("更新开屏广告后###， cacheRecord={}", JSONObject.toJSONString(cacheRecord));
+//        }
+//    }
 
     private Map<String, String> preHandleMaidianLog(String line) {
         String encodedURL = null;
@@ -206,9 +206,13 @@ public class MaidianLogsHandle implements Runnable {
         
         MaidianLogsHandle m = new MaidianLogsHandle();
         
-        String s1 = "May 17 17:11:12 web10 nginx: 182.18.10.10 |# - |# 2018-05-17 17:11:12 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/24/page-frame.html |# Mozilla/5.0 (iPhone; CPU iPhone OS 11_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E216 MicroMessenger/6.6.6 NetType/WIFI Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_CLICK>adv_type:20|#adv_id:14357|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.1|#cityId:030|#userId:okBHq0CU34vruLG7GtBb4dPO8iiY|#unionId:oSpTTji27rGKHmdHrv5tmbIudl80 |# https";
+        String s1 = "May 30 18:00:20 web6 nginx: 113.116.90.150 |# - |# 2018-05-30 18:00:20 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/29/page-frame.html |# Mozilla/5.0 (Linux; Android 5.1; HUAWEI TAG-AL00 Build/HUAWEITAG-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.143 Crosswalk/24.53.595.0 XWEB/151 MMWEBSDK/19 Mobile Safari/537.36 MicroMessenger/6.6.6.1300(0x26060637) NetType/WIFI Language/zh_CN MicroMessenger/6.6.6.1300(0x26060637) NetType/WIFI Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<STN_ADV_CLICK>adv_id:14471|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.5|#cityId:014|#userId:okBHq0O8nRDian42cckCDhZljQOE|#unionId:oSpTTjs6fImNq8QE9u7kNickYzTI |# https";
         String s2 = "May 30 16:39:46 web6 nginx: 182.18.10.10 |# - |# 2018-05-30 16:39:46 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/29/page-frame.html |# Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_6 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Mobile/15D100 MicroMessenger/6.6.6 NetType/4G Language/zh_CN |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_CLICK>adv_type:20|#adv_id:14469|#s:h5|#wxs:wx_app|#src:weixinapp_cx|#sign:1|#v:3.2.5|#cityId:019|#userId:okBHq0JAfotnmGzT9bxWClKeEi_0|#unionId:oSpTTjk6bWHAmTrgvC0bvLxx1XVY |# https";
-        m.analysisMaidianClick(s2);
+        String s3 = "May 30 18:00:05 web3 nginx: 112.96.109.148 |# - |# 2018-05-30 18:00:05 |# 200 |# 0.000 |# 67 |# https://servicewechat.com/wx71d589ea01ce3321/29/page-frame.html |# Mozilla/5.0 (Linux;May 30 18:00:14 web3 nginx: 183.22.29.186 |# - |# 2018-05-30 18:00:14 |# 200 |# 0.000 |# 67 |# - |# lite/5.49.0 (iPhone; iOS 11.3.1; Scale/2.00) |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_CLICK>userId: |# geo_type:wgs |# language:1 |# geo_lat:22.977655 |# geo_lng:113.894144 |# sv:11.3.1 |# deviceType:iPhone9,1 |# s:IOS |# lchsrc:icon |# v:5.49.0 |# udid:9ee5bcfbd59ba2361a18c30ea1a3503550188bfd |# sign:lSzvpo8Wfr83GPB40Bwj w== |# nw:WiFi |# mac: |# wifi_open:1 |# geo_lac:65.000000 |# cityId:008 |# push_open:0 |# vc:10540 |# idfa:05F50086-DE77-46E7-A3E3-6635F4EB147C |# adv_type:16 |# adv_id:14350 |# adv_image: |# provider_id:2 |# adv_title: |# adv_desc: |# gd_type:0 |# https";
+        String s4 = "May 30 18:00:04 web10 nginx: 120.197.196.105 |# - |# 2018-05-30 18:00:04 |# 200 |# 0.000 |# 67 |# - |# Dalvik/2.1.0 (Linux; U; Android 7.0; FRD-AL10 Build/HUAWEIFRD-AL10) |#- |# logs.chelaile.net.cn |# - |# - |# /realtimelog?<ADV_CLICK>adv_title: |# s:android |# last_src:app_huawei_store |# adv_id:14458 |# push_open:0 |# userId:unknown |# provider_id:2 |# adv_image: |# sv:7.0 |# vc:105 |# v:3.52.0 |# secret:2f94a12124d34d79a71725e1a5d94605 |# imei:864131039035819 |# udid:0218c707-91b0-472c-8835-1dd2e953dd01 |# cityId:019 |# adv_type:1 |# wifi_open:1 |# deviceType:FRD-AL10 |# mac:02:00:00:00:00:00 |# lchsrc:icon |# nw:MOBILE_LTE |# adv_desc: |# AndroidID:587409f48abd45fe |# api_type:1 |# accountId:29565498 |# language:1 |# first_src:app_huawei_store |# https";
+        m.analysisMaidianClick(s1);
+        m.analysisMaidianClick(s3);
+        m.analysisMaidianClick(s4);
         
     }
 }
