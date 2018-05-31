@@ -68,6 +68,7 @@ public class WXBannerManager extends AbstractManager {
 											advParam.getLineId(), advParam.getStnName(), advParam.getShareId(),
 											advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
 											advParam.getLng(), advParam.getLat(), advParam.getSrc(), advParam.getWxs());
+							cacheRecord.buildAdPubCacheRecord(adEntity.getId());
 							entities.add(adEntity);
 						}
 					}
@@ -83,6 +84,7 @@ public class WXBannerManager extends AbstractManager {
 									advParam.getLineId(), advParam.getStnName(), advParam.getShareId(),
 									advParam.getNw(), advParam.getIp(), advParam.getDeviceType(), advParam.getLng(),
 									advParam.getLat(), advParam.getSrc(), advParam.getWxs());
+					cacheRecord.buildAdPubCacheRecord(adEntity.getId());
 					entities.add(adEntity);
 				}
 			}

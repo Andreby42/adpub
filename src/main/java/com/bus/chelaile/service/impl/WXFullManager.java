@@ -110,6 +110,7 @@ public class WXFullManager extends AbstractManager {
                                     advParam.getDeviceType(), advParam.getLng(), advParam.getLat(), advParam.getSrc(),
                                     advParam.getWxs());
                             entities.add(adEntity);
+                            cacheRecord.buildAdPubCacheRecord(adEntity.getId());
                         }
                     }
                 }
@@ -124,6 +125,7 @@ public class WXFullManager extends AbstractManager {
                             advParam.getShareId(), advParam.getNw(), advParam.getIp(), advParam.getDeviceType(),
                             advParam.getLng(), advParam.getLat(), advParam.getSrc(), advParam.getWxs());
                     entities.add(adEntity);
+                    cacheRecord.buildAdPubCacheRecord(adEntity.getId());
                 }
             }
         }
