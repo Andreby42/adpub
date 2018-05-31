@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.common.TimeLong;
+import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
 import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.thread.Queue;
@@ -128,11 +130,10 @@ public class BusAdvActionV2 extends AbstractController {
 //        if(StringUtils.isEmpty(advParam.getUdid())) {
 //            advParam.setUdid(request.getParameter("h5Id"));
 //        }
-        String j = IOUtils.toString(request.getInputStream());
+        String str = IOUtils.toString(request.getInputStream());
+        TimeLong.info("读到点击埋点日志： str={}", str);
+        MaidianLogsHandle.analysisMaidianClick(str);
         
-        
-        log.info("***** 收到埋点日志, postBody={}", j);
-
         return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
 }
