@@ -128,7 +128,7 @@ public class BusAdvActionV2 extends AbstractController {
             advParam.setUdid(request.getParameter("h5Id"));
         }
         
-        log.info("***** 收到埋点日志, uri={}", request.getRequestURI());
+        log.info("***** 收到埋点日志, uri={}, url={}", request.getRequestURI(), request.getRequestURL());
 
         return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
