@@ -1,5 +1,6 @@
 package com.bus.chelaile.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -148,7 +149,6 @@ public class DoubleAndSingleManager extends AbstractManager {
                 }
             }
             // 如果没有自采买，那么返回一个列表
-            
             if (!hasOwnAd) {
                 AdContentCacheEle backupad = null;
                 for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
@@ -168,6 +168,9 @@ public class DoubleAndSingleManager extends AbstractManager {
                 // 如果超过半小时，那么按照权重排序
                 if (!checkSendLog(advParam, entities, showType.getType()))
                     rankAds(advParam, entities);
+                // 如果有点击记录，那么将该条广告放在最后一位  TODO 
+                setClickAtLast(cacheRecord, entities);
+                
                 if(backupad != null) {
                     AdEntity entity = from(advParam, cacheRecord, backupad.getAds(), showType);
                     entities.add(entity);
@@ -196,6 +199,7 @@ public class DoubleAndSingleManager extends AbstractManager {
 
         return entities;
     }
+
 
     private AdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
         AdEntity entity = new AdEntity(showType.getValue());
@@ -232,6 +236,7 @@ public class DoubleAndSingleManager extends AbstractManager {
         entity.setAutoInterval(inner.getAutoInterval());
         entity.setMixInterval(inner.getMixInterval());
         entity.setSindex(inner.getPosition());
+        entity.setClickDown(inner.getClickDown());
 //        entity.setApiType(1);
         return entity;
     }

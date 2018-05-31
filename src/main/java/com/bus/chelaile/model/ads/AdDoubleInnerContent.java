@@ -55,6 +55,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
     private long mixInterval; // 最小展示时间
     private int adWeight; //权重
     private int backup; // 是否是备选方案
+    private int clickDown; // 点击后排序到最后
     
 
     @Override
@@ -90,6 +91,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
             this.adWeight = ad.adWeight;
+            this.clickDown = ad.clickDown;
         }
     }
 
@@ -411,5 +413,19 @@ public class AdDoubleInnerContent extends AdInnerContent {
      */
     public void setApiType(int apiType) {
         this.apiType = apiType;
+    }
+    
+    /**
+     * @return the clickDown
+     */
+    public int getClickDown() {
+        return clickDown;
+    }
+
+    /**
+     * @param clickDown the clickDown to set
+     */
+    public void setClickDown(int clickDown) {
+        this.clickDown = clickDown;
     }
 }

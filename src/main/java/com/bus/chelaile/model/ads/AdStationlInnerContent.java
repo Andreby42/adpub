@@ -26,6 +26,7 @@ public class AdStationlInnerContent extends AdInnerContent {
     private int adWeight;    // 轮播权重
     private long mixInterval; // 最小展示时间
     private int backup; // 是否是备选方案
+    private int clickDown; // 点击后排序到最后
 	
 	@Override
 	protected void parseJson(String jsonr) {
@@ -46,6 +47,7 @@ public class AdStationlInnerContent extends AdInnerContent {
 			this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
+            this.clickDown = ad.clickDown;
 		}
 	}
 
@@ -202,5 +204,19 @@ public class AdStationlInnerContent extends AdInnerContent {
      */
     public void setApiType(int apiType) {
         this.apiType = apiType;
+    }
+
+    /**
+     * @return the clickDown
+     */
+    public int getClickDown() {
+        return clickDown;
+    }
+
+    /**
+     * @param clickDown the clickDown to set
+     */
+    public void setClickDown(int clickDown) {
+        this.clickDown = clickDown;
     }
 }

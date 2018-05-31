@@ -239,6 +239,7 @@ public class StationAdsManager extends AbstractManager {
         entity.setTitle(ad.getTitle());
         entity.setBuyOut(inner.getBuyOut());
         entity.setAdWeight(inner.getAdWeight());
+        entity.setClickDown(inner.getClickDown());
         
         entity.setAutoInterval(inner.getAutoInterval());
         entity.setMixInterval(inner.getMixInterval());
@@ -251,6 +252,7 @@ public class StationAdsManager extends AbstractManager {
 
         entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
         entity.setBannerInfo(bannerInfo);
+        
         return entity;
     }
 
@@ -323,6 +325,7 @@ public class StationAdsManager extends AbstractManager {
             // 如果超过半小时，那么按照权重排序
             if (!checkSendLog(advParam, entities, showType.getType()))    
                 rankAds(advParam, entities);
+            setClickAtLast(cacheRecord, entities);
             if(backupad != null) {
                 StationAdEntity entity = from(advParam, cacheRecord, backupad.getAds(), showType);
                 entities.add(entity);

@@ -146,6 +146,7 @@ public abstract class AbstractManager {
                 if (entities.get(0).getId() == sendId) {
                     Collections.swap(entities, 0, size - 1);
                 }
+                
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -177,6 +178,17 @@ public abstract class AbstractManager {
                         return;
                     }
                 }
+            }
+        }
+    }
+    
+    protected void setClickAtLast(AdPubCacheRecord cacheRecord, List<BaseAdEntity> entities) {
+        for(int index = 0; index < entities.size(); index++) {
+            BaseAdEntity entity = entities.get(index);
+            if(cacheRecord.hasClickedToday(entity.getId()) && (entity.getClickDown() == 1)) {
+                //点击过， 并且属于‘点击后排最后’的属性，那么直接挪到最后
+                //这里，可能会冲掉之前的‘轮播’或者权重设置。不过考虑到点击用户占极少数，所以可以接受
+                Collections.swap(entities, index, entities.size() - 1);
             }
         }
     }

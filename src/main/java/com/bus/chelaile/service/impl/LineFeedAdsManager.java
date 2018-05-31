@@ -69,6 +69,7 @@ public class LineFeedAdsManager extends AbstractManager {
             // 如果超过半小时，那么按照权重排序
             if (!checkSendLog(advParam, entities, showType.getType()))
                 rankAds(advParam, entities);
+            setClickAtLast(cacheRecord, entities);
             if(backupad != null) {
                 LineFeedAdEntity entity = from(advParam, cacheRecord, backupad.getAds(), showType);
                 entities.add(entity);
@@ -138,6 +139,7 @@ public class LineFeedAdsManager extends AbstractManager {
         entity.setAutoInterval(inner.getAutoInterval());
         entity.setMixInterval(inner.getMixInterval());
         entity.setApiType(1);
+        entity.setClickDown(inner.getClickDown());
         return entity;
     }
 

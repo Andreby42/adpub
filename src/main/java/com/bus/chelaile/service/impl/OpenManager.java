@@ -193,6 +193,7 @@ public class OpenManager extends AbstractManager {
 
         entity.setAdWeight(inner.getAdWeight());
         entity.setTimeout(inner.getTimeout());
+        entity.setClickDown(inner.getClickDown());
 
         return entity;
     }
@@ -440,6 +441,7 @@ public class OpenManager extends AbstractManager {
             if (!checkSendLog(advParam, entities, showType.getType())) {
                 rankAds(advParam, entities);
             }
+            setClickAtLast(cacheRecord, entities);
             if(backupad != null) {
                 OpenAdEntity entity = getSelfAdEntity(advParam, cacheRecord, backupad, showType, queryParam);
                 entities.add(entity);
