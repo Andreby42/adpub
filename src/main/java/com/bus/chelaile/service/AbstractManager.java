@@ -398,6 +398,11 @@ public abstract class AbstractManager {
             //			logger.info("isUserTypeMatch return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
             return false;
         }
+        
+        if(rule.getProjectClick() > 0 && rule.projectClickOut(advParam.getUdid(), ad.getProjectId())) {
+            logger.info("projectClick return false, udid={}, ruleId={}", advParam.getUdid(), rule.getRuleId());
+            return false;
+        }
 
         if (rule.getScreenHeight() > 0 && advParam.getScreenHeight() < rule.getScreenHeight()) {
             logger.info("screenHeithg return false. rule={}, s={}, udid={}, height={}", rule.getRuleId(), advParam.getS(),

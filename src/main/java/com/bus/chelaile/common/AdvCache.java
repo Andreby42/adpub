@@ -18,6 +18,7 @@ public class AdvCache {
 //	private static final int ACITVE_CACHE_TIME = 30 * 24 * 60 * 60;
 	private static final String CSHOW_KEY = "bus#cshow#";
 	private static final String SEND_LINE_FEED = "SEND_LINEFEED_LOG_";
+	private static final String PROJECT_CLICK_KEY = "PROJECT_CLICK_KEY_";
 
 	protected static final Logger logger = LoggerFactory
 			.getLogger(AdvCache.class);
@@ -375,6 +376,11 @@ public class AdvCache {
 	//  详情页下方feed位投放记录
     public static String getSendLineFeedLogKey(String udid, String showType) {
         return SEND_LINE_FEED + showType + "_" + udid;
+    }
+
+    // 记录用户点击某个项目的 key
+    public static String getProjectClickKey(String udid, String projectId) {
+        return PROJECT_CLICK_KEY + projectId + "_" + udid;
     }
 	
 }

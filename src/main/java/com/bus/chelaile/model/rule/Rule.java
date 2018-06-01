@@ -28,8 +28,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.bus.chelaile.thread.Queue;
 
 public class Rule {
-	private String ruleId;
 	private Date startDate;
+	private String ruleId;
 	private Date endDate;
 	// private List<String> cities;
 	private Map<String, String> cities;
@@ -79,6 +79,7 @@ public class Rule {
 	
 	private int canPubMIUI; // 开屏是否给MIUI投放， 0 不投MIUI， 1 只投MIUI， 2 没有限制
 	private int startMode; // 冷热启动模式控制. 1 只投冷启动， 2 只投热启动。  0 没有限制
+	private int projectClick; // 项目点击次数
 
 	protected static final Logger logger = LoggerFactory.getLogger(Rule.class);
 
@@ -1071,5 +1072,35 @@ public class Rule {
 
     public void setStartMode(int startMode) {
         this.startMode = startMode;
+    }
+
+    /**
+     * @return the projectClick
+     */
+    public int getProjectClick() {
+        return projectClick;
+    }
+
+    /**
+     * @param projectClick the projectClick to set
+     */
+    public void setProjectClick(int projectClick) {
+        this.projectClick = projectClick;
+    }
+
+    // 判断项目点击次数是否达到了
+    public boolean projectClickOut(String udid, String projectId) {
+        if(StringUtils.isEmpty(projectId)) {
+            return false;
+        }
+        
+        String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
+        String value = (String) CacheUtil.getFromRedis(projectClickKey);
+        if (value != null) {
+            if (Integer.parseInt(value) >= projectClick) {
+                return true;
+            }
+        }
+        return false;
     }
 }

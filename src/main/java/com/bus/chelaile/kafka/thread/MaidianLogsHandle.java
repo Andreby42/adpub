@@ -12,10 +12,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.AdvCache;
+import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.kafka.InfoStreamHelp;
 import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.thread.Queue;
@@ -104,6 +107,13 @@ public class MaidianLogsHandle {
 
             // 存储用户点击广告到ocs中
             InfoStreamHelp.setClickToRecord(advId, udid);
+            
+            // 存储项目点击
+            String projectId = StaticAds.allAds.get(advId).getProjectId();
+            if(StringUtils.isNotBlank(projectId)) {
+                String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
+                CacheUtil.incrToCache(projectClickKey, Constants.LONGEST_CACHE_TIME);    // 存储30天
+            }
 
         }
     }

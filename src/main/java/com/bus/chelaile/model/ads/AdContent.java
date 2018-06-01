@@ -31,6 +31,7 @@ public class AdContent {
     private int priority;	//优先级
     private int is_fullScreen;		// 是否全屏展示 isFullShow
     private int link_extra =1; //广告链接额外加参数是否保留 0不保留  1保留
+    private String projectId; 
 
     @JsonIgnore
     private AdInnerContent innerContent;
@@ -373,6 +374,22 @@ public class AdContent {
 	public void setIs_fullScreen(int is_fullScreen) {
 		this.is_fullScreen = is_fullScreen;
 	}
+
+
+    /**
+     * @return the projectId
+     */
+    public String getProjectId() {
+        return projectId;
+    }
+
+
+    /**
+     * @param projectId the projectId to set
+     */
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
     
     
     
