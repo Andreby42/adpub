@@ -631,8 +631,8 @@ public abstract class AbstractManager {
         if (showType == ShowType.LINE_DETAIL) {
             RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
         } else {
-            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
-                                                      // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+//            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
+//                                                      // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
                 RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
         }
 
@@ -653,7 +653,9 @@ public abstract class AbstractManager {
         if (showType == ShowType.LINE_DETAIL) {
             RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
         } else {
-            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+         // 2017.12.28开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+           // 2018.06.01 开屏重新开始记录发送
+//            if (showType != ShowType.OPEN_SCREEN) 
                 RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
         }
         return entities;

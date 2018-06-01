@@ -113,7 +113,7 @@ public class Rule {
 			int countMinute = StaticAds.getMinuteNumbers(advId + "#" + ruleId, minuteStr, udid);
 			logger.info("adv send times per minute info : advId={}, udid={}, ruleId:{}, countMinute:{}, countReal:{}", advId, udid, ruleId, countMinute, count);
 			double pvRate = CalculatePerMinCount.getPVRate(advId + "#" + ruleId);
-			logger.info("advId={}, totalPVRate={}, countMinute after rate ={}", advId, pvRate, countMinute * pvRate);
+			logger.info("advId={}, totalPVRate={}, udid={}, countMinute after rate ={}", advId, pvRate, udid, countMinute * pvRate);
 			
 			if (countMinute == 0 || countMinute * pvRate <= count) {
 				// 新增规则，如果该用户之前投过了，那么不受分钟投放限制，接着投放
