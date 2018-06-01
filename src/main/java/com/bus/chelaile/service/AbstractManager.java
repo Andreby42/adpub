@@ -225,7 +225,7 @@ public abstract class AbstractManager {
             int adId = entity.getId();
             // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
             // 2018-05-27 修改此处，去掉这个限制了    // TODO  【因为实际研发中，发送依旧是等于展示的】
-//            if (showType != ShowType.OPEN_SCREEN)
+            // if (showType != ShowType.OPEN_SCREEN)
             cacheRecord.buildAdPubCacheRecord(adId);
             if (adMap.get(adId).getRule().getUvLimit() > 0) {
                 // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误
@@ -234,6 +234,9 @@ public abstract class AbstractManager {
                     cacheRecord.setAdToUvMap(adId);
                 }
             }
+
+            // 每个时间段的发送次数
+            adTimeCounts(cacheRecord, advParam.getUdid(), adMap.get(adId));
         }
     }
 
@@ -667,7 +670,7 @@ public abstract class AbstractManager {
             // 记录firstClickMap到缓存，和每分钟点击数到redis
             adc.getRule().adTimeCounts(adc.getAds().getId(), adc.getRule().getRuleId(), cacheRecord, udid, true);
             // 记录总投放pv到缓存
-            //			logger.info("记录投放pv次数 advId={}, ruleId={}", adc.getAds().getId(), adc.getRule().getRuleId());
+            logger.info("记录投放pv次数 advId={}, ruleId={}", adc.getAds().getId(), adc.getRule().getRuleId());
             DynamicRegulation.IncValueSedPV(adc.getAds().getId(), adc.getRule().getRuleId());
         }
     }

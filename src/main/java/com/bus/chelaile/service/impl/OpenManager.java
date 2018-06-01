@@ -436,11 +436,11 @@ public class OpenManager extends AbstractManager {
                 }
             }
             // 重新排序
-            // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个【方法是将这个广告排到最后一位】
+            // 开屏广告，不做轮播处理
             // 如果超过半小时，那么按照权重排序
-            if (!checkSendLog(advParam, entities, showType.getType())) {
+//            if (!checkSendLog(advParam, entities, showType.getType())) {
                 rankAds(advParam, entities);
-            }
+//            }
             setClickAtLast(cacheRecord, entities);
             if(backupad != null) {
                 OpenAdEntity entity = getSelfAdEntity(advParam, cacheRecord, backupad, showType, queryParam);
