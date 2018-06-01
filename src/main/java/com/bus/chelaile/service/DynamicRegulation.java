@@ -11,17 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bus.chelaile.common.Constants;
-import com.bus.chelaile.flow.WuliToutiaoHelp;
 import com.bus.chelaile.koubei.CouponService;
-import com.bus.chelaile.thread.CalculatePerMinCount;
-import com.bus.chelaile.thread.DownArticles;
 import com.bus.chelaile.thread.KoubeiThread;
 import com.bus.chelaile.thread.UpdateSendPV;
 import com.bus.chelaile.koubei.KBUpdateCouponStatusThread;
 
 public class DynamicRegulation {
-	@Autowired
-	private WuliToutiaoHelp wuliToutiaoHelp;
 	@Autowired
 	private CouponService couponService;
 	
@@ -38,31 +33,31 @@ public class DynamicRegulation {
 		if (!hasStartThread) {
 			ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
-			// 启动发送pv到redis
-			Runnable runnable = new UpdateSendPV();
-			// 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
-			service.scheduleWithFixedDelay(runnable, 10, 3, TimeUnit.SECONDS);
-			logger.info("启动发送pv到redis线程");
+//			// 启动发送pv到redis
+//			Runnable runnable = new UpdateSendPV();
+//			// 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
+//			service.scheduleWithFixedDelay(runnable, 10, 3, TimeUnit.SECONDS);
+//			logger.info("启动发送pv到redis线程");
+//			
+//			// 启动计算pv投放比例因子
+//			Runnable calculateThread = new CalculatePerMinCount();
+//			service.scheduleWithFixedDelay(calculateThread, 3, 20, TimeUnit.MINUTES);
+//			logger.info("启动计算pv投放比例因子");
 			
-			// 启动计算pv投放比例因子
-			Runnable calculateThread = new CalculatePerMinCount();
-			service.scheduleWithFixedDelay(calculateThread, 3, 20, TimeUnit.MINUTES);
-			logger.info("启动计算pv投放比例因子");
-			
-			if (Constants.IS_FLOW) {
-				// 启动缓存文章内容
-				Runnable qMThread = new DownArticles(wuliToutiaoHelp);
-				int interval = 600;
-				if (Constants.ISTEST) {
-					interval = 6000;
-				}
-				service.scheduleWithFixedDelay(qMThread, 30, interval, TimeUnit.SECONDS);
-				
-//				// 启动缓存话题list
-//				Runnable feedCacheThread = new FeedCacheThread();
-//				service.scheduleWithFixedDelay(feedCacheThread, 30, 10, TimeUnit.SECONDS);
-				
-			}
+//			if (Constants.IS_FLOW) {
+//				// 启动缓存文章内容
+//				Runnable qMThread = new DownArticles(wuliToutiaoHelp);
+//				int interval = 600;
+//				if (Constants.ISTEST) {
+//					interval = 6000;
+//				}
+//				service.scheduleWithFixedDelay(qMThread, 30, interval, TimeUnit.SECONDS);
+//				
+////				// 启动缓存话题list
+////				Runnable feedCacheThread = new FeedCacheThread();
+////				service.scheduleWithFixedDelay(feedCacheThread, 30, 10, TimeUnit.SECONDS);
+//				
+//			}
 			// 缓存口碑券
 			if(Constants.IS_CACHE_KOUBEI) {
 				Runnable koubeiThread = new KoubeiThread(couponService);

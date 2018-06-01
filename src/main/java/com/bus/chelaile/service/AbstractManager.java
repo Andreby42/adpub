@@ -672,8 +672,8 @@ public abstract class AbstractManager {
             // 记录firstClickMap到缓存，和每分钟点击数到redis
             adc.getRule().adTimeCounts(adc.getAds().getId(), adc.getRule().getRuleId(), cacheRecord, udid, true);
             // 记录总投放pv到缓存
-            logger.info("记录投放pv次数 advId={}, ruleId={}", adc.getAds().getId(), adc.getRule().getRuleId());
-            DynamicRegulation.IncValueSedPV(adc.getAds().getId(), adc.getRule().getRuleId());
+//            logger.info("记录投放pv次数 advId={}, ruleId={}", adc.getAds().getId(), adc.getRule().getRuleId());
+//            DynamicRegulation.IncValueSedPV(adc.getAds().getId(), adc.getRule().getRuleId());
         }
     }
 

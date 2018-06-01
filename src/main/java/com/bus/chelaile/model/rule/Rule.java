@@ -25,7 +25,6 @@ import com.bus.chelaile.util.LocationKDTree;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.thread.Queue;
 
 public class Rule {
@@ -112,20 +111,23 @@ public class Rule {
 			// 该分钟发送次数已经到达上限
 			int countMinute = StaticAds.getMinuteNumbers(advId + "#" + ruleId, minuteStr, udid);
 			logger.info("adv send times per minute info : advId={}, udid={}, ruleId:{}, countMinute:{}, countReal:{}", advId, udid, ruleId, countMinute, count);
-			double pvRate = CalculatePerMinCount.getPVRate(advId + "#" + ruleId);
-			logger.info("advId={}, totalPVRate={}, udid={}, countMinute after rate ={}", advId, pvRate, udid, countMinute * pvRate);
+//			double pvRate = CalculatePerMinCount.getPVRate(advId + "#" + ruleId);
+//			logger.info("advId={}, totalPVRate={}, udid={}, countMinute after rate ={}", advId, pvRate, udid, countMinute * pvRate);
 			
-			if (countMinute == 0 || countMinute * pvRate <= count) {
-				// 新增规则，如果该用户之前投过了，那么不受分钟投放限制，接着投放
-				if(cacheRecord.hasPulished(advId)) {
-					logger.info("have send adv today, udid={}, advId={},ruleId={}", udid, advId, ruleId);
-					return true;
-				}
-				return false;
-			} else {
-				return true;
-			}
-
+//			if (countMinute == 0 || countMinute * pvRate <= count) {
+//				// 新增规则，如果该用户之前投过了，那么不受分钟投放限制，接着投放
+//				if(cacheRecord.hasPulished(advId)) {
+//					logger.info("have send adv today, udid={}, advId={},ruleId={}", udid, advId, ruleId);
+//					return true;
+//				}
+//				return false;
+//			} 
+			// 2018-06-01， 严格按照每分钟投放，不再考虑‘连续投放’和‘比例因子’的东西
+            if (countMinute == 0 || countMinute <= count) {
+                return false;
+            } else {
+                return true;
+            }
 		} else if (isRecord) { // true 的时候才需要记录
 			// 广告每分钟发送总次数
 			setAdTimeCount(ruleId, minuteStr);
