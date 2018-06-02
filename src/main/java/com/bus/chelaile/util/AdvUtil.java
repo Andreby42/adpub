@@ -360,6 +360,12 @@ public class AdvUtil {
         if (StringUtils.isBlank(orgLink)) {
             return "";
         }
+        
+        // 2018-06-03 增加不中转的h5链接
+        if(link_extra == 2) {
+            return orgLink;
+        }
+        
         String waild = waildUrl;
         // 需要将orgLink之中的所有的参数copy一分放到外面去。
         String redirectUrl = getRedirectUrl();
