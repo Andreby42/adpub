@@ -329,6 +329,18 @@ public class AdPubCacheRecord {
 		}
 		return false;
 	}
+	
+    public boolean hasClickedToday(int adId) {
+        if (cacheRecordMap.containsKey(adId)) {
+            String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+            CacheRecord cacheRecord = cacheRecordMap.get(adId);
+            if (cacheRecord.getDayClickMap().size() > 0 && cacheRecord.getDayClickMap().containsKey(todayStr)) {
+                return true;
+            }
+        }
+        return false;
+    }
+	
 
 	public boolean todayCanPub(AdContent ad, Rule rule) {
 		int adId = ad.getId();

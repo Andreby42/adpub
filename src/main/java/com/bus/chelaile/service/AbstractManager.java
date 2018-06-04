@@ -19,6 +19,7 @@ import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.model.Platform;
+import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -33,6 +34,7 @@ import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
 import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.util.New;
+import com.bus.chelaile.util.config.PropertiesUtils;
 
 import scala.util.Random;
 
@@ -41,6 +43,8 @@ public abstract class AbstractManager {
     private AdvInvalidService invaildService;
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractManager.class);
+    protected static String AD_GOTO_INFO_URL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+            "ad.gotoinfo.url", "http://api.chelaile.net.cn/infoflow/api/v1/ad/goto?udid=%s&stats_act=%s&s=%s&vc=%d&showType=%s");
 
     /**
      * 
@@ -146,6 +150,7 @@ public abstract class AbstractManager {
                 if (entities.get(0).getId() == sendId) {
                     Collections.swap(entities, 0, size - 1);
                 }
+                
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -177,6 +182,17 @@ public abstract class AbstractManager {
                         return;
                     }
                 }
+            }
+        }
+    }
+    
+    protected void setClickAtLast(AdPubCacheRecord cacheRecord, List<BaseAdEntity> entities) {
+        for(int index = 0; index < entities.size(); index++) {
+            BaseAdEntity entity = entities.get(index);
+            if(cacheRecord.hasClickedToday(entity.getId()) && (entity.getClickDown() == 1)) {
+                //点击过， 并且属于‘点击后排最后’的属性，那么直接挪到最后
+                //这里，可能会冲掉之前的‘轮播’或者权重设置。不过考虑到点击用户占极少数，所以可以接受
+                Collections.swap(entities, index, entities.size() - 1);
             }
         }
     }
@@ -213,7 +229,7 @@ public abstract class AbstractManager {
             int adId = entity.getId();
             // 2017.12.28，开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
             // 2018-05-27 修改此处，去掉这个限制了    // TODO  【因为实际研发中，发送依旧是等于展示的】
-//            if (showType != ShowType.OPEN_SCREEN)
+            // if (showType != ShowType.OPEN_SCREEN)
             cacheRecord.buildAdPubCacheRecord(adId);
             if (adMap.get(adId).getRule().getUvLimit() > 0) {
                 // 首次访问, 2017.12.28，这里对不再记录发送的开屏广告记录有误
@@ -222,6 +238,9 @@ public abstract class AbstractManager {
                     cacheRecord.setAdToUvMap(adId);
                 }
             }
+
+            // 每个时间段的发送次数
+            adTimeCounts(cacheRecord, advParam.getUdid(), adMap.get(adId));
         }
     }
 
@@ -381,6 +400,11 @@ public abstract class AbstractManager {
         }
         if (!rule.isUserTypeMatch(advParam)) {
             //			logger.info("isUserTypeMatch return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
+            return false;
+        }
+        
+        if(rule.getProjectClick() > 0 && rule.projectClickOut(advParam.getUdid(), ad.getProjectId())) {
+            logger.info("projectClick return false, udid={}, ruleId={}", advParam.getUdid(), rule.getRuleId());
             return false;
         }
 
@@ -616,8 +640,8 @@ public abstract class AbstractManager {
         if (showType == ShowType.LINE_DETAIL) {
             RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
         } else {
-            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
-                                                      // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+//            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28，
+//                                                      // 开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
                 RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
         }
 
@@ -638,7 +662,9 @@ public abstract class AbstractManager {
         if (showType == ShowType.LINE_DETAIL) {
             RecordManager.recordAdd(advParam.getUdid(), showType.getType(), cacheRecord);
         } else {
-            if (showType != ShowType.OPEN_SCREEN) // 2017.12.28开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+         // 2017.12.28开屏广告记录不再走发送，而是走来自埋点日志处理的‘展示’
+           // 2018.06.01 开屏重新开始记录发送
+//            if (showType != ShowType.OPEN_SCREEN) 
                 RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
         }
         return entities;
@@ -655,8 +681,8 @@ public abstract class AbstractManager {
             // 记录firstClickMap到缓存，和每分钟点击数到redis
             adc.getRule().adTimeCounts(adc.getAds().getId(), adc.getRule().getRuleId(), cacheRecord, udid, true);
             // 记录总投放pv到缓存
-            //			logger.info("记录投放pv次数 advId={}, ruleId={}", adc.getAds().getId(), adc.getRule().getRuleId());
-            DynamicRegulation.IncValueSedPV(adc.getAds().getId(), adc.getRule().getRuleId());
+//            logger.info("记录投放pv次数 advId={}, ruleId={}", adc.getAds().getId(), adc.getRule().getRuleId());
+//            DynamicRegulation.IncValueSedPV(adc.getAds().getId(), adc.getRule().getRuleId());
         }
     }
 

@@ -26,6 +26,7 @@ public class AdFullInnerContent extends AdInnerContent {
     private int backup;
     private int timeout; // 超时
     private int AdWeight; // 权重
+    private int clickDown; // 点击后排序到最后
 
     @Override
     protected void parseJson(String jsonr) {
@@ -47,6 +48,7 @@ public class AdFullInnerContent extends AdInnerContent {
             this.backup = ad.backup;
             this.timeout = ad.timeout;
             this.AdWeight = ad.AdWeight;
+            this.clickDown = ad.clickDown;
         }
     }
 
@@ -221,5 +223,19 @@ public class AdFullInnerContent extends AdInnerContent {
      */
     public void setApiType(int apiType) {
         this.apiType = apiType;
+    }
+    
+    /**
+     * @return the clickDown
+     */
+    public int getClickDown() {
+        return clickDown;
+    }
+
+    /**
+     * @param clickDown the clickDown to set
+     */
+    public void setClickDown(int clickDown) {
+        this.clickDown = clickDown;
     }
 }

@@ -5,7 +5,7 @@
     
     
     <select id="listValidAds" resultType="com.bus.chelaile.model.ads.AdContent">
-        SELECT id,showType,title,link,openType,content,status,createTime,modifyTime,targetType,unfoldMonitorLink,clickMonitorLink,monitorType,priority,is_fullScreen,link_extra FROM APP_ADV_CONTENT WHERE showType != '03' and (status='1' or status='2');
+        SELECT id,showType,title,link,openType,content,status,createTime,modifyTime,targetType,unfoldMonitorLink,clickMonitorLink,monitorType,priority,is_fullScreen,link_extra,projectId FROM APP_ADV_CONTENT WHERE showType != '03' and (status='1' or status='2');
     </select>
     
     <select id="query4Id" resultType="com.bus.chelaile.model.ads.AdContent">

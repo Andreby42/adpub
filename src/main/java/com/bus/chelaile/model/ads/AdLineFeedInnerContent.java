@@ -13,11 +13,6 @@ import com.bus.chelaile.mvc.AdvParam;
 public class AdLineFeedInnerContent extends AdInnerContent {
     private String pic; // 广告图片的URL
     
-    private int adWeight; // 权重
-    private long autoInterval; // 自动刷新时间
-    private long mixInterval; // 最小展示时间
-    private int backup; // 是否是备选方案
-    
     
     private int apiType;
     private int provider_id; // 广告提供商， 0 自采买， 2 广点通
@@ -25,6 +20,12 @@ public class AdLineFeedInnerContent extends AdInnerContent {
     private String feedAdTitle;
     private int imgsType; // 图片样式：0：单图小图， 1 宽图大图
 
+    private int adWeight; // 权重
+    private long autoInterval; // 自动刷新时间
+    private long mixInterval; // 最小展示时间
+    private int backup; // 是否是备选方案
+    private int clickDown; // 点击后排序到最后
+    
     
     @Override
     protected void parseJson(String jsonr) {
@@ -41,6 +42,7 @@ public class AdLineFeedInnerContent extends AdInnerContent {
             this.setFeedAdTitle(ad.getFeedAdTitle());
             this.setImgsType(ad.getImgsType());
             this.pic = ad.pic;
+            this.clickDown = ad.clickDown;
         }
     }
 
@@ -191,6 +193,20 @@ public class AdLineFeedInnerContent extends AdInnerContent {
      */
     public void setApiType(int apiType) {
         this.apiType = apiType;
+    }
+    
+    /**
+     * @return the clickDown
+     */
+    public int getClickDown() {
+        return clickDown;
+    }
+
+    /**
+     * @param clickDown the clickDown to set
+     */
+    public void setClickDown(int clickDown) {
+        this.clickDown = clickDown;
     }
 
 }

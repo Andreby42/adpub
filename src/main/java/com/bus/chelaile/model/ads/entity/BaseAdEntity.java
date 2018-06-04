@@ -44,6 +44,8 @@ public abstract class BaseAdEntity {
 	private int priority;
 	@JSONField(serialize=false)  
     private int adWeight;    // 轮播权重
+	@JSONField(serialize=false)
+	private int clickDown;   // 点击后排序到最后 ，用于第三方
 
 	public BaseAdEntity(int showType) {
 		this.showType = showType;
@@ -421,5 +423,16 @@ public abstract class BaseAdEntity {
      */
     public void setApiType(int apiType) {
         this.apiType = apiType;
+    }
+
+    public int getClickDown() {
+        return clickDown;
+    }
+
+    /**
+     * @param clickDown the clickDown to set
+     */
+    public void setClickDown(int clickDown) {
+        this.clickDown = clickDown;
     }
 }

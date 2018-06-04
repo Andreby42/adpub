@@ -349,6 +349,21 @@ public class ServiceManager {
      */
     public Object getCoopenAds(AdvParam advParam) {
         JSONObject resultMap = new JSONObject();
+        // 读取配置的‘热启动调用广告的时间间隔’
+        if (StaticAds.SETTINGSMAP.containsKey(Constants.INTERVALTIME_KEY)) {
+            String sL = StaticAds.SETTINGSMAP.get(Constants.INTERVALTIME_KEY);
+            try {
+                resultMap.put("intervalTime", Integer.parseInt(sL));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        // 如果读取不到配置项，那么设置默认为0
+        if(! resultMap.containsKey("intervalTime")) {
+            logger.error("配置项，intervalTime丢失 ！ ");
+            resultMap.put("intervalTime", 30);
+        }
+        
 
         List<BaseAdEntity> entities = openManager.doServiceList(advParam, ShowType.OPEN_SCREEN, new QueryParam());
 
@@ -365,41 +380,50 @@ public class ServiceManager {
         }
         return resultMap;
 
-        //	    // TODO 手动设置返回内容给客户端使用
-        //	    List<BaseAdEntity> doubleEntities = New.arrayList();
-        //        OpenAdEntity ad = new OpenAdEntity(ShowType.OPEN_SCREEN.getValue());
-        //        ad.setDuration(4);
-        //        ad.setId(10012971);
-        //        ad.setLink("https://dev.ad.chelaile.net.cn/?link=https%3A%2F%2Fclk.gentags.net%2Fnck%2Fiv-40182%2Fst-1801%2Fcr-2%2Foi-1287763%2For-6825%2Fadv-403%2Fpcon-0%2Ft_ip%3D__IP__%26imei%3D__IMEI__%26mac%3D__MAC__%26mac1%3D__MAC1__%26androidid%3D__AndroidID__%26androidid1%3D__AndroidID1__%26aaid%3D__AAID__%26udid%3D__UDID__%26idfa%3D__IDFA__%26openudid%3D__OpenUDID__%26duid%3D__DUID__%26os%3D__OS__%26ts%3D__TS__%26ua%3D__UA__%2Fhttps%3A%2F%2Fccc-x.jd.com%2Fdsp%2Fcl%3Fposid%3D1999%26v%3D707%26union_id%3D1000023388%26pid%3D1137%26tagid%3D103156%26to%3Dhttps%3A%2F%2Fpro.m.jd.com%2Fmall%2Factive%2F27bZ5vqCqs1k3yZ8AcCt2ue8ahYM%2Findex.html%3Fad_od%3D1&adtype=04&advId=10012971&udid=a143270d-0453-4e34-9e34-bbf5c8eb38c2");
-        //        ad.setPic("https://pic1.chelaile.net.cn/adv/android5675983e-9a66-4a03-bd90-fd553bb24365.jpg");
-        //        
-        //        OpenAdEntity ad0 = new OpenAdEntity(ShowType.OPEN_SCREEN.getValue());
-        //        ad0.setProvider_id("2");
-        //        ad0.setId(11111);
-        //        
-        //        OpenAdEntity ad1 = new OpenAdEntity(ShowType.OPEN_SCREEN.getValue());
-        //        ad1.setProvider_id("5");
-        //        ad1.setId(11112);
-        //        
-        //        OpenAdEntity ad2 = new OpenAdEntity(ShowType.OPEN_SCREEN.getValue());
-        //        ad2.setProvider_id("7");
-        //        ad2.setId(11113);
-        //        
-        //        OpenAdEntity ad3 = new OpenAdEntity(ShowType.OPEN_SCREEN.getValue());
-        //        ad3.setProvider_id("10");
-        //        ad3.setId(11114);
-        //        
-        //        doubleEntities.add(ad);
-        //        doubleEntities.add(ad0);
-        //        doubleEntities.add(ad1);
-        //        doubleEntities.add(ad2);
-        //        doubleEntities.add(ad3);
-        //        
-        //        resultMap.put("ads", doubleEntities);
-        //        resultMap.put("timeout", 2000);
-        //        
-        //        return resultMap;
-        //        
+    }
+    
+    /**
+     * 详情页下方feed位广告
+     * 
+     * @param advParam
+     * @return
+     */
+    private Object getLineFeedAds(AdvParam advParam) {
+        JSONObject resultMap = new JSONObject();
+        // 是否展开
+        if (StaticAds.SETTINGSMAP.containsKey(Constants.SCREENHEIGHT_KEY)) {
+            String sL = StaticAds.SETTINGSMAP.get(Constants.SCREENHEIGHT_KEY);
+            try {
+                if (sL != null && Integer.parseInt(sL) >= advParam.getScreenHeight()) {
+                    resultMap.put("unfoldFeed", 0); // 0 小屏手机不展开
+                    return resultMap;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
+
+        if (entities == null || entities.size() == 0) {
+            return resultMap;
+        } else {
+            if (((LineFeedAdEntity) entities.get(0)).getAutoInterval() == 0
+                    || ((LineFeedAdEntity) entities.get(0)).getMixInterval() == 0) {
+                resultMap.put("ads", entities);
+                resultMap.put("autoInterval", 15000);
+                resultMap.put("mixInterval", 5000);
+            } else {
+                resultMap.put("ads", entities);
+                resultMap.put("autoInterval", ((LineFeedAdEntity) entities.get(0)).getAutoInterval());
+                resultMap.put("mixInterval", ((LineFeedAdEntity) entities.get(0)).getMixInterval());
+            }
+        }
+        resultMap.put("unfoldFeed", 1);
+
+
+        return resultMap;
+
     }
 
     // 新版站点广告（ 原来在getLineDetailAds接口中返回， 现在单拆出来）
@@ -410,6 +434,10 @@ public class ServiceManager {
         List<BaseAdEntity> entities = stationAdsManager.doServiceList(advParam, ShowType.STATION_ADV, new QueryParam());
 
         if (entities == null || entities.size() == 0) {
+            resultMap.put("desc", "等车无聊，公交出行有福利哦！");
+            resultMap.put("descType", 14);   // 23 上车；14 福利社
+            resultMap.put("autoInterval", 15000);
+            resultMap.put("mixInterval", 5000);
             return resultMap;
         } else {
             resultMap.put("ads", entities);
@@ -425,72 +453,8 @@ public class ServiceManager {
         }
         return resultMap;
 
-        // TODO 手动设置返回内容给客户端使用
-        //        List<BaseAdEntity> doubleEntities = New.arrayList();
-        //        StationAdEntity ad = new StationAdEntity();
-        //        BannerInfo bannerInfo = new BannerInfo();
-        //        bannerInfo.setBannerType(5);
-        //        AdButtonInfo button = new AdButtonInfo();
-        //        button.setButtonPic("https://image3.chelaile.net.cn/f96cc9c7fb5e4953b4957ccdba2afd81#176,96");
-        //        button.setButtonRim("255, 166, 0, 1");
-        //        bannerInfo.setButton(button);
-        //        bannerInfo.setColor("51, 51, 51, 1");
-        //        bannerInfo.setSlogan("新人199元 无门槛优惠券");
-        //        bannerInfo.setSloganColor("102, 102, 102, 1");
-        //        AdTagInfo tag = new AdTagInfo();tag.setTagPic("https://image3.chelaile.net.cn/eed6e61956d9419684b1eaa3a1703155#134,96");
-        //        bannerInfo.setTag(tag);
-        //        ad.setBannerInfo(bannerInfo);
-        //        ad.setLink("https://ad.chelaile.net.cn/?link=http%3A%2F%2Fm.juanpi.com%2FTaoke%3Fimei%3D428bf79ff6949806435e68a230a9c9b7%26platform%3Dandroid&stn_lng=116.41421048142914&stn_lat=40.00368207617647&stn_name=%E7%82%8E%E9%BB%84%E8%89%BA%E6%9C%AF%E9%A6%86&advId=14321&adtype=15&udid=a143270d-0453-4e34-9e34-bbf5c8eb38c2");
-        //        ad.setPic("https://image3.chelaile.net.cn/720fb9951c804f0a8a65a4c7e5c02347#48,48");
-        //        ad.setId(14321);
-        //        
-        //        
-        //        StationAdEntity ad0 = new StationAdEntity();
-        //        ad0.setProvider_id("2");
-        //        ad0.setId(11111);
-        //        BannerInfo bannerInfo0 = createApiBanner();
-        //        ad0.setBannerInfo(bannerInfo0);
-        //        
-        //        StationAdEntity ad1 = new StationAdEntity();
-        //        ad1.setProvider_id("5");
-        //        ad1.setId(11112);
-        //        BannerInfo bannerInfo1 = createApiBanner();
-        //        ad1.setBannerInfo(bannerInfo1);
-        //        
-        //        StationAdEntity ad2 = new StationAdEntity();
-        //        ad2.setProvider_id("7");
-        //        ad2.setId(11113);
-        //        BannerInfo bannerInfo2 = createApiBanner();
-        //        ad2.setBannerInfo(bannerInfo2);
-        //        
-        //        StationAdEntity ad3 = new StationAdEntity();
-        //        ad3.setProvider_id("10");
-        //        ad3.setId(11114);
-        //        BannerInfo bannerInfo3 = createApiBanner();
-        //        ad3.setBannerInfo(bannerInfo3);
-        //        
-        //        doubleEntities.add(ad);
-        //        doubleEntities.add(ad0);
-        //        doubleEntities.add(ad1);
-        //        doubleEntities.add(ad2);
-        //        doubleEntities.add(ad3);
-        //        
-        //        resultMap.put("ads", doubleEntities);
-        //        resultMap.put("autoInterval", 8000);
-        //        resultMap.put("mixInterval", 4000);
-        //        resultMap.put("unfold", 1);
-        //        
-        //        return resultMap;
     }
 
-    //    private BannerInfo createApiBanner() {
-    //        BannerInfo bannerInfo3 = new BannerInfo();
-    //        bannerInfo3.setBannerType(4);  // 广点通专用样式，文字+标签（文案由客户端自定义）
-    //        AdButtonInfo buttonInfo3 = new AdButtonInfo();
-    //        buttonInfo3.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
-    //        bannerInfo3.setButton(buttonInfo3);
-    //        return bannerInfo3;
-    //    }
 
     // 新版首页广告（原单双栏位置）
     public Object getColumntAds(AdvParam advParam) {
@@ -513,46 +477,6 @@ public class ServiceManager {
         }
         return resultMap;
 
-        // TODO 手动设置返回内容给客户端使用
-
-        //	    List<BaseAdEntity> doubleEntities = New.arrayList();
-        //	    AdEntity ad = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
-        //        ad.setBarColor("255,255,255,1");
-        //        ad.setBrandIcon("https://pic1.chelaile.net.cn/adv/brandIcon305320170413.png");
-        //        ad.setBrandName("车来了");
-        //        ad.setButtonIcon("https://pic1.chelaile.net.cn/adv/buttonIcon305320170413.png");
-        //        ad.setButtonType(1);
-        //        ad.setHead("小车需要你");
-        //        ad.setLink("https://ad.chelaile.net.cn/?link=https%3A%2F%2Fsojump.com%2Fm%2F13332385.aspx&adtype=00&distance=-1&advId=3053&udid=57f41bf99791d7b3668595bc23eed2b0cae99a2d&storder=1");
-        //        ad.setSubhead("你的意见将直达公路院哦~");
-        //        ad.setId(3053);
-        //	    
-        //	    AdEntity ad0 = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
-        //	    ad0.setProvider_id("2");
-        //	    ad0.setId(11111);
-        //	    
-        //	    AdEntity ad1 = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
-        //        ad1.setProvider_id("5");
-        //        ad1.setId(11112);
-        //        
-        //        AdEntity ad2 = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
-        //        ad2.setProvider_id("7");
-        //        ad2.setId(11113);
-        //        
-        //        AdEntity ad3 = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
-        //        ad3.setProvider_id("10");
-        //        ad3.setId(11114);
-        //	    
-        //        doubleEntities.add(ad);
-        //        doubleEntities.add(ad0);
-        //        doubleEntities.add(ad1);
-        //        doubleEntities.add(ad2);
-        //        doubleEntities.add(ad3);
-        //        
-        //        resultMap.put("ads", doubleEntities);
-        //        resultMap.put("autoInterval", 8000);
-        //        resultMap.put("mixInterval", 4000);
-        //        return resultMap;
     }
 
     /**
@@ -780,65 +704,7 @@ public class ServiceManager {
         return resultMap;
     }
 
-    /**
-     * 详情页下方feed位广告
-     * 
-     * @param advParam
-     * @return
-     */
-    private Object getLineFeedAds(AdvParam advParam) {
-        JSONObject resultMap = new JSONObject();
-        // 是否展开
-        if (StaticAds.SETTINGSMAP.containsKey(Constants.SCREENHEIGHT_KEY)) {
-            String sL = StaticAds.SETTINGSMAP.get(Constants.SCREENHEIGHT_KEY);
-            try {
-                if (sL != null && Integer.parseInt(sL) >= advParam.getScreenHeight()) {
-                    resultMap.put("unfoldFeed", 0); // 0 小屏手机不展开
-                    return resultMap;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        List<BaseAdEntity> entities = lineFeedAdsManager.doServiceList(advParam, ShowType.LINE_FEED_ADV, new QueryParam());
-
-        if (entities == null || entities.size() == 0) {
-            return resultMap;
-        } else {
-            if (((LineFeedAdEntity) entities.get(0)).getAutoInterval() == 0
-                    || ((LineFeedAdEntity) entities.get(0)).getMixInterval() == 0) {
-                resultMap.put("ads", entities);
-                resultMap.put("autoInterval", 15000);
-                resultMap.put("mixInterval", 5000);
-            } else {
-                resultMap.put("ads", entities);
-                resultMap.put("autoInterval", ((LineFeedAdEntity) entities.get(0)).getAutoInterval());
-                resultMap.put("mixInterval", ((LineFeedAdEntity) entities.get(0)).getMixInterval());
-            }
-        }
-        resultMap.put("unfoldFeed", 1);
-
-        // 手动增加一条自采买广告，供测试用   TODO 
-        //        LineFeedAdEntity ad = new LineFeedAdEntity();
-        //        ad.setPic("https://image3.chelaile.net.cn/8160d592675042daa5cd182383d4c799#686,200");
-        //        ad.setImgsType(1);
-        //        ad.setProvider_id("1");
-        //        entities.add(0, ad);
-        //
-        //        
-        //        LineFeedAdEntity ad1 = new LineFeedAdEntity();
-        //        ad1.setPic("https://image3.chelaile.net.cn/2d78d8bf077148e998f2821a67ad6f68#225,150");
-        //        ad1.setImgsType(0);
-        //        ad1.setProvider_id("1");
-        //        ad1.setSubhead("限时9.9包邮，淘宝天猫内部券大放送，速领！");
-        //        ad1.setHead("卷皮九块邮");
-        //        
-        //        entities.add(0, ad1);
-
-        return resultMap;
-
-    }
+    
 
     /*
      * 旧版本预加载
