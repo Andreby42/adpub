@@ -25,7 +25,6 @@ import com.bus.chelaile.third.ThirdAdData;
 import com.bus.chelaile.third.youdao.YoudaoService;
 import com.bus.chelaile.thread.Queue;
 import com.bus.chelaile.thread.model.QueueObject;
-import com.bus.chelaile.util.New;
 
 /**
  * 广告相关接口
@@ -42,7 +41,7 @@ public class BusAdvActionV2 extends AbstractController {
     @Resource
     private ServiceManager serviceManager;
 
-    private static final Logger log = LoggerFactory.getLogger(BusAdvActionV2.class);
+    private static final Logger logger = LoggerFactory.getLogger(BusAdvActionV2.class);
 
     /*
      * 详情页下方广告（及之前的feed流顶部广告)
@@ -153,6 +152,7 @@ public class BusAdvActionV2 extends AbstractController {
         AdvParam advParam = getActionParam(request);
 //        
         ThirdAdData data = YoudaoService.getYouDaoData(advParam, ShowType.OPEN_SCREEN, "");
+        logger.info("data={}", JSONObject.toJSONString(data));
         
         
         response.getWriter().write("alert('下载文件不存在！');");
