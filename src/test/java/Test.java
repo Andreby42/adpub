@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSONObject;
@@ -6,6 +7,7 @@ import com.bus.chelaile.util.New;
 
 public class Test {
 	public static void main(String[] args) throws Exception {
+
 //		ApplicationContext context = new ClassPathXmlApplicationContext(
 //				"classpath:servicebiz/locator-baseservice.xml");
 //		
