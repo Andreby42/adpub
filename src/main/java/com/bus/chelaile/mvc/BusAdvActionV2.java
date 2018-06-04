@@ -18,10 +18,14 @@ import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
+import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.service.StaticAds;
+import com.bus.chelaile.third.ThirdAdData;
+import com.bus.chelaile.third.youdao.YoudaoService;
 import com.bus.chelaile.thread.Queue;
 import com.bus.chelaile.thread.model.QueueObject;
+import com.bus.chelaile.util.New;
 
 /**
  * 广告相关接口
@@ -137,5 +141,23 @@ public class BusAdvActionV2 extends AbstractController {
         }
         
         return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    
+    /*
+     * 处理点击埋点
+     */
+    @ResponseBody
+    @RequestMapping(value = "adv!writeJ.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    public void writeJ(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        AdvParam advParam = getActionParam(request);
+//        
+        ThirdAdData data = YoudaoService.getYouDaoData(advParam, ShowType.OPEN_SCREEN, "");
+        
+        
+        response.getWriter().write("alert('下载文件不存在！');");
+        response.getWriter().flush();
+        
+//        return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
 }
