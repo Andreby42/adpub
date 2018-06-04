@@ -1,5 +1,6 @@
 package com.bus.chelaile.service.impl;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,9 +9,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 
 import scala.util.Random;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
@@ -19,6 +22,7 @@ import com.bus.chelaile.koubei.CouponInfo;
 import com.bus.chelaile.koubei.KBUtil;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.ProductType;
+import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdButtonInfo;
@@ -33,8 +37,12 @@ import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.service.StaticAds;
+import com.bus.chelaile.service.model.Ads;
+import com.bus.chelaile.service.model.FeedAdGoto;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
+import com.bus.chelaile.util.config.PropertiesUtils;
 
 public class StationAdsManager extends AbstractManager {
 
@@ -94,6 +102,13 @@ public class StationAdsManager extends AbstractManager {
                     return null;
                 }
             }
+            
+            // 跳转feed流的targetType处理。 从永春接口获取内容填充
+            if(ad.getTargetType() == 12){
+                res = createFeedEntity(advParam, ad, stationInner);
+                return res;
+            }
+            
 
             res.setTitle(ad.getTitle());
             res.setAdWeight(stationInner.getAdWeight());
@@ -167,6 +182,7 @@ public class StationAdsManager extends AbstractManager {
 
         return res;
     }
+
 
     // app低版本判断
     private boolean isLowPlatfomr(AdvParam advParam) {
@@ -256,14 +272,49 @@ public class StationAdsManager extends AbstractManager {
         return entity;
     }
 
-    public static void main(String[] args) {
-        // String url =
-        // "http%3A%2F%2F121.40.95.166%3A7000%2Foutman%2Fadv%2FqueryAdv%3Fid%3D12024";
-        // System.out.println(HttpUtils.get(url, "utf-8"));
-        // int totalWeight = 0;
-        // int randomOut = new Random().nextInt(totalWeight);
-        // System.out.println(randomOut);
+    
+    private StationAdEntity createFeedEntity(AdvParam p, AdContent ad, AdStationlInnerContent inner) {
+        String response = null;
+        String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(), ShowType.STATION_ADV.getType());
+        StationAdEntity entity = null;
+        try {
+            response = HttpUtils.get(url, "UTF-8");
+            response = response.substring(6, response.length() - 6);
+            FeedAdGoto feedAdGoto = JSON.parseObject(response, FeedAdGoto.class);
+            if(feedAdGoto.getJsonr().getStatus().equals("00")) {
+                List<Ads> ads = feedAdGoto.getJsonr().getData().getAds();
+                if(ads != null && ads.size() > 0) {
+                    String slogan = ads.get(0).getTitle();
+                    entity = new StationAdEntity();
 
+                    entity.setId(ad.getId());
+                    entity.setTitle(ad.getTitle());
+                    entity.setBuyOut(inner.getBuyOut());
+                    entity.setAdWeight(inner.getAdWeight());
+                    entity.setClickDown(inner.getClickDown());
+                    entity.setAutoInterval(inner.getAutoInterval());
+                    entity.setMixInterval(inner.getMixInterval());
+
+                    BannerInfo bannerInfo = new BannerInfo();
+                    bannerInfo.setSlogan(slogan);
+                    bannerInfo.setBannerType(4); // 专用样式，文字+标签（文案由客户端自定义）
+                    AdButtonInfo buttonInfo = new AdButtonInfo();
+                    buttonInfo.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
+                    bannerInfo.setButton(buttonInfo);
+
+                    entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
+                    entity.setBannerInfo(bannerInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取跳转feed流广告内容失败， url={}, response={}", url, response);;
+        }
+        return entity;
+    }
+    
+    
+    public static void main(String[] args) {
         StationAdEntity a = new StationAdEntity();
         StationAdEntity b = new StationAdEntity();
 

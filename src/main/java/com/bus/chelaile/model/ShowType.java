@@ -25,7 +25,7 @@ public enum ShowType {
     LINEDETAIL_REFRESH_OPEN_ADV("19"), // 详情页下拉刷新位，全屏广告
     WECHATAPP_BANNER_ADV("20"), // 小程序 banner位广告
     WECHAT_FULL_ADV("21"),  // 小程序浮层广告
-    LINE_FEED_ADV("22");    // 详情页下方feed流广告
+    LINE_FEED_ADV("22");    // 详情页底部广告
     
     private String type;
     private int val;

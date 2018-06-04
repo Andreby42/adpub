@@ -19,6 +19,7 @@ import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.model.Platform;
+import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -33,6 +34,7 @@ import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
 import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.util.New;
+import com.bus.chelaile.util.config.PropertiesUtils;
 
 import scala.util.Random;
 
@@ -41,6 +43,8 @@ public abstract class AbstractManager {
     private AdvInvalidService invaildService;
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractManager.class);
+    protected static String AD_GOTO_INFO_URL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+            "ad.gotoinfo.url", "http://api.chelaile.net.cn/infoflow/api/v1/ad/goto?udid=%s&stats_act=%s&s=%s&vc=%d&showType=%s");
 
     /**
      * 

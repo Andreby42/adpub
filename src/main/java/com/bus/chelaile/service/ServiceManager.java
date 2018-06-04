@@ -434,6 +434,10 @@ public class ServiceManager {
         List<BaseAdEntity> entities = stationAdsManager.doServiceList(advParam, ShowType.STATION_ADV, new QueryParam());
 
         if (entities == null || entities.size() == 0) {
+            resultMap.put("desc", "等车无聊，公交出行有福利哦！");
+            resultMap.put("descType", 14);   // 23 上车；14 福利社
+            resultMap.put("autoInterval", 15000);
+            resultMap.put("mixInterval", 5000);
             return resultMap;
         } else {
             resultMap.put("ads", entities);

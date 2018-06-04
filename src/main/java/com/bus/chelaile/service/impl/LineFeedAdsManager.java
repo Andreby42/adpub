@@ -5,18 +5,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.ads.AdButtonInfo;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
+import com.bus.chelaile.model.ads.AdStationlInnerContent;
+import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
+import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
+import com.bus.chelaile.service.model.Ads;
+import com.bus.chelaile.service.model.FeedAdGoto;
+import com.bus.chelaile.service.model.Thumbnails;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
 public class LineFeedAdsManager extends AbstractManager {
@@ -140,6 +149,59 @@ public class LineFeedAdsManager extends AbstractManager {
         entity.setMixInterval(inner.getMixInterval());
         entity.setApiType(1);
         entity.setClickDown(inner.getClickDown());
+        return entity;
+    }
+    
+    // 跳转feed流的广告体
+    private LineFeedAdEntity createFeedEntity(AdvParam p, AdContent ad, AdStationlInnerContent inner) {
+        String response = null;
+        String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(), ShowType.LINE_FEED_ADV.getType());
+        LineFeedAdEntity entity = null;
+        try {
+            response = HttpUtils.get(url, "UTF-8");
+            response = response.substring(6, response.length() - 6);
+            FeedAdGoto feedAdGoto = JSON.parseObject(response, FeedAdGoto.class);
+            if(feedAdGoto.getJsonr().getStatus().equals("00")) {
+                List<Ads> ads = feedAdGoto.getJsonr().getData().getAds();
+                if(ads != null && ads.size() > 0) {
+                    String title = ads.get(0).getTitle();
+                    String source = ads.get(0).getSource();
+                    String timeShow = ads.get(0).getTimeShow();
+                    int imgsType = ads.get(0).getThumbnailType();
+                    List<Thumbnails> thumbnails = ads.get(0).getThumbnails();
+                    if(thumbnails == null || thumbnails.size() == 0) {
+                        logger.error("返回内容没有图片 , url={}, response={}", url, response);
+                        return null;
+                    }
+
+                    entity = new LineFeedAdEntity(ShowType.LINE_FEED_ADV.getValue());
+                    entity.setId(ad.getId());
+                    entity.setTitle(ad.getTitle());
+                    entity.setAdWeight(inner.getAdWeight());
+                    entity.setClickDown(inner.getClickDown());
+                    entity.setAutoInterval(inner.getAutoInterval());
+                    entity.setMixInterval(inner.getMixInterval());
+                    entity.setPic(thumbnails.get(0).getUrl());
+
+                    if(imgsType == 1) {
+                        entity.setImgsType(0);
+                    } else if(imgsType == 2) {
+                        entity.setImgsType(1);
+                        entity.setHead(title);
+                        entity.setSubhead(source);
+                    } else {
+                        logger.error("详情页底部，不支持的图片类型 , url={}, response={}", url, response);
+                        return null;
+                    }
+                    
+                    
+                    
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取跳转feed流广告内容失败， url={}, response={}", url, response);;
+        }
         return entity;
     }
 
