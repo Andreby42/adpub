@@ -154,8 +154,8 @@ public class BusAdvActionV2 extends AbstractController {
         ThirdAdData data = YoudaoService.getYouDaoData(advParam, ShowType.OPEN_SCREEN, "");
         logger.info("data={}", JSONObject.toJSONString(data));
         
-        
-        response.getWriter().write("alert('下载文件不存在！');");
+        String s = StaticAds.JS_FILE_STR;
+        response.getWriter().write(s);
         response.getWriter().flush();
         
 //        return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);

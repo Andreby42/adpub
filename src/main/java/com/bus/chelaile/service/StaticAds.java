@@ -1,16 +1,16 @@
 package com.bus.chelaile.service;
 
+import java.io.*;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.internal.mapping.Reader;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
-import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -22,7 +22,7 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 /**
  * 保存静态的广告数据
  * 
- * @author zzz
+ * @author linzi
  *
  */
 public class StaticAds {
@@ -51,6 +51,7 @@ public class StaticAds {
 	
 	public static Map<String, String> SETTINGSMAP = New.hashMap();
 	private static String settingKeys = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "setting_keys", "AD_SETTING_linefeed_screenHeight;");
+	public static String JS_FILE_STR;
 	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;
@@ -143,7 +144,22 @@ public class StaticAds {
 		
 		SETTINGSMAP.clear();
 		readSettings();
+		readJSFILESTR();
 	}
+
+    private static void readJSFILESTR() {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(new File("/data/advConfig/banner.js")));
+            String bufs = null;
+            while ((bufs = reader.readLine()) != null) {
+                JS_FILE_STR += bufs;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static void readSettings() {
         if (settingKeys != null) {
