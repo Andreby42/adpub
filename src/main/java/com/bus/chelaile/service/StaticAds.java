@@ -51,7 +51,7 @@ public class StaticAds {
 	
 	public static Map<String, String> SETTINGSMAP = New.hashMap();
 	private static String settingKeys = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "setting_keys", "AD_SETTING_linefeed_screenHeight;");
-	public static String JS_FILE_STR;
+	public static Map<String, String> JS_FILE_STR = New.hashMap();
 	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;
@@ -141,8 +141,9 @@ public class StaticAds {
 		minuteTimes.clear();
 		minuteNumber.clear();
 		advTBKTitleKey.clear();
-		
+		JS_FILE_STR.clear();
 		SETTINGSMAP.clear();
+		
 		readSettings();
 		readJSFILESTR();
 	}
@@ -150,12 +151,19 @@ public class StaticAds {
     private static void readJSFILESTR() {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(new File("/data/advConfig/banner.js")));
-            String bufs = null;
-            while ((bufs = reader.readLine()) != null) {
-                JS_FILE_STR += bufs;
+            File file = new File("/data/advConfig/js/");
+            File[] tempList = file.listFiles();
+            for (int i = 0; i < tempList.length; i++) {
+                reader = new BufferedReader(new FileReader(tempList[i]));
+                String jsStr = "";
+                String bufs = null;
+                while ((bufs = reader.readLine()) != null) {
+                    jsStr += bufs;
+                }
+                JS_FILE_STR.put(tempList[i].getName(), jsStr);
+                reader.close();
             }
-            reader.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

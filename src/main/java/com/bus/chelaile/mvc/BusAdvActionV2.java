@@ -154,7 +154,9 @@ public class BusAdvActionV2 extends AbstractController {
         ThirdAdData data = YoudaoService.getYouDaoData(advParam, ShowType.OPEN_SCREEN, "");
         logger.info("data={}", JSONObject.toJSONString(data));
         
-        String s = StaticAds.JS_FILE_STR;
+        logger.info("js_str={}", JSONObject.toJSONString(StaticAds.JS_FILE_STR));
+        
+        String s = StaticAds.JS_FILE_STR.get("banner.js");
         response.getWriter().write(s);
         response.getWriter().flush();
         
