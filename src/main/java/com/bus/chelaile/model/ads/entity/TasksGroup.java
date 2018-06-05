@@ -9,7 +9,7 @@ import com.bus.chelaile.util.New;
 public class TasksGroup {
 
     private List<List<String>> tasks;
-    private List<List<Long>> timeouts;
+    private List<Long> timeouts;
     
     public static void main(String[] args) {
         
@@ -55,22 +55,21 @@ public class TasksGroup {
 
 
 
-
     /**
      * @return the timeouts
      */
-    public List<List<Long>> getTimeouts() {
+    public List<Long> getTimeouts() {
         return timeouts;
     }
-
 
 
 
     /**
      * @param timeouts the timeouts to set
      */
-    public void setTimeouts(List<List<Long>> timeouts) {
+    public void setTimeouts(List<Long> timeouts) {
         this.timeouts = timeouts;
     }
+
 
 }

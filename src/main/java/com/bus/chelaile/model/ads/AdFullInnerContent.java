@@ -1,9 +1,12 @@
 package com.bus.chelaile.model.ads;
 
+import java.util.Collections;
 import java.util.List;
 import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.model.ads.entity.AdEntity;
+import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.util.New;
 
 /**
  * 推送的广告的内部的内容， 就是数据之中content的结构化表示。
@@ -30,7 +33,8 @@ public class AdFullInnerContent extends AdInnerContent {
     private int clickDown; // 点击后排序到最后
     
 //    private String tasksStr; // tasks列表
-    private List<TaskModel> tasks;
+    private List<TaskModel> tasksJ;
+    private TasksGroup tasksGroup;
     
     @Override
     protected void parseJson(String jsonr) {
@@ -53,7 +57,13 @@ public class AdFullInnerContent extends AdInnerContent {
             this.timeout = ad.timeout;
             this.AdWeight = ad.AdWeight;
             this.clickDown = ad.clickDown;
-            this.tasks = ad.tasks;
+            this.tasksJ = ad.tasksJ;
+            
+            if(this.tasks != null && this.tasks.size() > 0) {
+                List<List<String>> tasks = New.arrayList();
+                
+                Collections.sort(tasks,);
+            }
         }
     }
 
@@ -242,6 +252,20 @@ public class AdFullInnerContent extends AdInnerContent {
      */
     public void setClickDown(int clickDown) {
         this.clickDown = clickDown;
+    }
+
+    /**
+     * @return the tasksGroup
+     */
+    public TasksGroup getTasksGroup() {
+        return tasksGroup;
+    }
+
+    /**
+     * @param tasksGroup the tasksGroup to set
+     */
+    public void setTasksGroup(TasksGroup tasksGroup) {
+        this.tasksGroup = tasksGroup;
     }
 
 }
