@@ -151,7 +151,7 @@ public class StaticAds {
     private static void readJSFILESTR() {
         BufferedReader reader = null;
         try {
-            File file = new File("/data/advConfig/js/", "UTF-8");
+            File file = new File("/data/advConfig/js/");
             File[] tempList = file.listFiles();
             for (int i = 0; i < tempList.length; i++) {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8"));
