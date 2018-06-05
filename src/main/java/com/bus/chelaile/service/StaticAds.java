@@ -161,7 +161,7 @@ public class StaticAds {
                         jsStr.append((char)tempchar);
                     }
                 }
-                JS_FILE_STR.put(tempList[i].getName(), jsStr.toString());
+                JS_FILE_STR.put(tempList[i].getName().split(".")[0], jsStr.toString());
                 reader.close();
             }
 

@@ -66,6 +66,14 @@ public class JsRule extends AbstractController {
         String splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
         splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
         
+        for(List<String> tasks : tgs.getTasks()) {
+            for(String task : tasks) {
+                if(task.contains("sdk"))
+                    splashJS += StaticAds.JS_FILE_STR.get(task);
+            }
+        }
+        
+        
 //        return "hello, splashAd";
         return splashJS;
     }
