@@ -161,7 +161,7 @@
 
 
 	<logger name="org.springframework.web" additivity="false" level="debug">
-		<appender-ref ref="singleInfoLog" />
+		<appender-ref ref="info" />
 	</logger>
 
 	<root level="INFO">
