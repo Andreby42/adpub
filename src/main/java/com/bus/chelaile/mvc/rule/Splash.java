@@ -14,4 +14,11 @@ public class Splash {
         return "hello";
     }
 
+    
+    @ResponseBody
+    @RequestMapping("/splashAd.js")
+    public Object splashAd(){
+        return "hello, splashAd";
+    }
+    
 }

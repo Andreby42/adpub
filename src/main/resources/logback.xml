@@ -51,11 +51,11 @@
 		<File>
 			${log.dir.logback}/error.log
 		</File>
+        
+        
+        
+        
 		<append>true</append>
-        
-        
-        
-        
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${log.dir.logback}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
 		</rollingPolicy>
@@ -166,6 +166,20 @@
 	<logger name="org.springframework.web" additivity="false" level="debug">
 		<appender-ref ref="info" />
 	</logger>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	<root level="INFO">
 		<!-- <appender-ref ref="info" /> -->
