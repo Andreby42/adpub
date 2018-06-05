@@ -329,7 +329,7 @@ var api_wrong = {
 
 function ads() {
     return {
-        timeouts:[3500,3500],
+        timeouts:[1500,2500],
         tasks: [
             [sdk_gdt,sdk_baidu,sdk_toutiao]
         ]
