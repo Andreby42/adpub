@@ -1,5 +1,7 @@
 package com.bus.chelaile.mvc;
 
+import java.io.OutputStream;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -157,9 +159,10 @@ public class BusAdvActionV2 extends AbstractController {
         logger.info("js_str={}", JSONObject.toJSONString(StaticAds.JS_FILE_STR));
         
         String s = StaticAds.JS_FILE_STR.get("banner.js");
-        response.getWriter().write(s);
-        response.getWriter().flush();
-        
+        OutputStream ps = response.getOutputStream();
+        ps.write(s.getBytes("UTF-8"));
+        ps.flush();
+        ps.close();
 //        return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
 }
