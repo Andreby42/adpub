@@ -9,9 +9,7 @@ import com.bus.chelaile.util.New;
 public class TasksGroup {
 
     private List<List<String>> tasks;
-    private List<Long> timeouts;
-    
-    
+    private List<List<Long>> timeouts;
     
     public static void main(String[] args) {
         
@@ -30,12 +28,11 @@ public class TasksGroup {
         times.add(500L);times.add(5500L);
         
         tgs.setTasks(ts);
-        tgs.setTimeouts(times);
+//        tgs.setTimeouts(times);
         
         System.out.println(JSONObject.toJSON(tgs));
         
     }
-
 
 
 
@@ -62,7 +59,7 @@ public class TasksGroup {
     /**
      * @return the timeouts
      */
-    public List<Long> getTimeouts() {
+    public List<List<Long>> getTimeouts() {
         return timeouts;
     }
 
@@ -72,7 +69,8 @@ public class TasksGroup {
     /**
      * @param timeouts the timeouts to set
      */
-    public void setTimeouts(List<Long> timeouts) {
+    public void setTimeouts(List<List<Long>> timeouts) {
         this.timeouts = timeouts;
     }
+
 }

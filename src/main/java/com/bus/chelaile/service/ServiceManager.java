@@ -349,20 +349,8 @@ public class ServiceManager {
      */
     public Object getCoopenAds(AdvParam advParam) {
         JSONObject resultMap = new JSONObject();
-        // 读取配置的‘热启动调用广告的时间间隔’
-        if (StaticAds.SETTINGSMAP.containsKey(Constants.INTERVALTIME_KEY)) {
-            String sL = StaticAds.SETTINGSMAP.get(Constants.INTERVALTIME_KEY);
-            try {
-                resultMap.put("intervalTime", Integer.parseInt(sL));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        // 如果读取不到配置项，那么设置默认为0
-        if(! resultMap.containsKey("intervalTime")) {
-            logger.error("配置项，intervalTime丢失 ！ ");
-            resultMap.put("intervalTime", 30);
-        }
+        // 一些配置项
+        settingsConfig(resultMap);
         
 
         List<BaseAdEntity> entities = openManager.doServiceList(advParam, ShowType.OPEN_SCREEN, new QueryParam());
@@ -380,6 +368,38 @@ public class ServiceManager {
         }
         return resultMap;
 
+    }
+
+    private void settingsConfig(JSONObject resultMap) {
+        // 读取配置的‘热启动调用广告的时间间隔’
+        if (StaticAds.SETTINGSMAP.containsKey(Constants.INTERVALTIME_KEY)) {
+            String sL = StaticAds.SETTINGSMAP.get(Constants.INTERVALTIME_KEY);
+            try {
+                resultMap.put("intervalTime", Integer.parseInt(sL));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        // 如果读取不到配置项，那么设置默认为30
+        if (!resultMap.containsKey("intervalTime")) {
+            logger.error("配置项，intervalTime丢失 ！ ");
+            resultMap.put("intervalTime", 30);
+        }
+
+        // 读取配置的‘最长开屏时间’
+        if (StaticAds.SETTINGSMAP.containsKey(Constants.OPENTIMEOUT_KEY)) {
+            String sL = StaticAds.SETTINGSMAP.get(Constants.OPENTIMEOUT_KEY);
+            try {
+                resultMap.put("openTimeout", Long.parseLong(sL));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        // 如果读取不到配置项，那么设置默认为6000
+        if (!resultMap.containsKey("openTimeout")) {
+            logger.error("配置项，openTimeout 丢失 ！ ");
+            resultMap.put("openTimeout", 6000);
+        }
     }
     
     /**

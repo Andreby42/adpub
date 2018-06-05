@@ -1,5 +1,6 @@
 package com.bus.chelaile.model.ads;
 
+import java.util.List;
 import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.mvc.AdvParam;
@@ -27,7 +28,10 @@ public class AdFullInnerContent extends AdInnerContent {
     private int timeout; // 超时
     private int AdWeight; // 权重
     private int clickDown; // 点击后排序到最后
-
+    
+//    private String tasksStr; // tasks列表
+    private List<TaskModel> tasks;
+    
     @Override
     protected void parseJson(String jsonr) {
         AdFullInnerContent ad = null;
@@ -49,6 +53,7 @@ public class AdFullInnerContent extends AdInnerContent {
             this.timeout = ad.timeout;
             this.AdWeight = ad.AdWeight;
             this.clickDown = ad.clickDown;
+            this.tasks = ad.tasks;
         }
     }
 
@@ -238,4 +243,5 @@ public class AdFullInnerContent extends AdInnerContent {
     public void setClickDown(int clickDown) {
         this.clickDown = clickDown;
     }
+
 }
