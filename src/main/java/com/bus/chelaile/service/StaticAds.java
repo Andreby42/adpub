@@ -161,7 +161,7 @@ public class StaticAds {
                         jsStr.append((char)tempchar);
                     }
                 }
-                JS_FILE_STR.put(tempList[i].getName().split(".")[0], jsStr.toString());
+                JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
                 reader.close();
             }
 
@@ -271,9 +271,12 @@ public class StaticAds {
 
 	public static void main(String[] args) {
 
-		System.out.println(minuteTimes.get("adf "));
-		Map<String, Integer> a = New.hashMap();
-		System.out.println(a.get("adf"));
+//		System.out.println(minuteTimes.get("adf "));
+//		Map<String, Integer> a = New.hashMap();
+//		System.out.println(a.get("adf"));
+		
+		String a1 = "banner.js";
+		System.out.println(a1.split("\\.")[0]);
 
 	}
 }
