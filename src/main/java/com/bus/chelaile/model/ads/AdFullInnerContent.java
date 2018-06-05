@@ -59,11 +59,11 @@ public class AdFullInnerContent extends AdInnerContent {
             this.clickDown = ad.clickDown;
             this.tasksJ = ad.tasksJ;
             
-            if(this.tasks != null && this.tasks.size() > 0) {
-                List<List<String>> tasks = New.arrayList();
-                
-                Collections.sort(tasks,);
-            }
+//            if(this.tasks != null && this.tasks.size() > 0) {
+//                List<List<String>> tasks = New.arrayList();
+//                
+//                Collections.sort(tasks,);
+//            }
         }
     }
 
