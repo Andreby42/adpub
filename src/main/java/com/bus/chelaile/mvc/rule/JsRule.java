@@ -28,14 +28,14 @@ public class JsRule extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(JsRule.class);
 
     @ResponseBody
-    @RequestMapping(value = "/splash.js", produces = "text/plain;charset=UTF-8")
+    @RequestMapping("/splash.js")
     public String splash(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         return "hello";
     }
 
     @ResponseBody
-    @RequestMapping(value = "/splashAd.js", produces = "text/plain;charset=UTF-8")
+    @RequestMapping("/splashAd.js")
     public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
