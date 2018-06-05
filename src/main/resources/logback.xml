@@ -52,9 +52,12 @@
 			${log.dir.logback}/error.log
 		</File>
 		<append>true</append>
+        
+        
+        
+        
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir.logback}/error.%d{yyyy-MM-dd}.log
-			</fileNamePattern>
+			<fileNamePattern>${log.dir.logback}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
 			<pattern>
