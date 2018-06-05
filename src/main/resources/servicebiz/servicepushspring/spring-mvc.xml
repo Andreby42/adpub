@@ -42,6 +42,6 @@
 		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" >
 	</bean>
 	
-	<mvc:resources location="/resources/publicResources/" mapping="/js/**"/>
+	<mvc:resources location="/WEB-INF/publicResources/" mapping="/js/**"/>
 	
 </beans>
