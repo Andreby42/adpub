@@ -94,6 +94,8 @@ public class AdvParam {
      private String gpsAccuracy; //经纬度精度
      
      private String wifissid; //wifi 的 ssid 和 mac;
+     
+     private int site; // 标注小程序广告banner广告的位置， 0或者没有是首页， 1 是详情页
      /**
       * 存入的s都会被转换为小写。
       *
@@ -703,6 +705,22 @@ public class AdvParam {
 	public void setWifissid(String wifissid) {
 		this.wifissid = wifissid;
 	}
+
+
+    /**
+     * @return the site
+     */
+    public int getSite() {
+        return site;
+    }
+
+
+    /**
+     * @param site the site to set
+     */
+    public void setSite(int site) {
+        this.site = site;
+    }
 
 
 	

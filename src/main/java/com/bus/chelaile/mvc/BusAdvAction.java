@@ -165,6 +165,7 @@ public class BusAdvAction extends AbstractController {
         if (StringUtils.isEmpty(param.getH5Src()))
             param.setH5Src(request.getParameter("src"));
         param.setUdid(request.getParameter("h5Id"));     // 接口没定义好，客户端上传的是h5Id
+        param.setSite(getInt(request, "site"));
         Object object = serviceManager.getQueryValue(param, "getWXBannerAds");
         if (object == null) {
             return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);

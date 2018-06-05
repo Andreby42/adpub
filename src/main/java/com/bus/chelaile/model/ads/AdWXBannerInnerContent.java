@@ -14,7 +14,7 @@ public class AdWXBannerInnerContent extends AdInnerContent {
 	private String wx_miniPro_path; 
 	private String servingPlace;	 // 投放 小程序范围， 逗号分割的字符串，多个
 	private List<String> servingPlaceList; // 投放的小程序范围，list
-	
+	private int site; // 位置， 0 首页； 1 详情页
 	
 	
 	@Override
@@ -29,6 +29,7 @@ public class AdWXBannerInnerContent extends AdInnerContent {
 			
 			this.wx_miniPro_id = ad.getWx_miniPro_id();
 			this.wx_miniPro_path = ad.getWx_miniPro_path();
+			this.site = ad.site;
 			if(StringUtils.isNotEmpty(ad.getServingPlace())) {
 				this.servingPlaceList = New.arrayList();
 				for(String s : ad.getServingPlace().split(",")) {
@@ -99,5 +100,23 @@ public class AdWXBannerInnerContent extends AdInnerContent {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+
+    /**
+     * @return the site
+     */
+    public int getSite() {
+        return site;
+    }
+
+
+
+    /**
+     * @param site the site to set
+     */
+    public void setSite(int site) {
+        this.site = site;
+    }
 
 }
