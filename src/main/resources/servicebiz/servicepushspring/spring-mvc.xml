@@ -11,7 +11,7 @@
     http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
     
-    <mvc:resources location="/WEB-INF/publicResources/" mapping="/js/**" />
+<!--     <mvc:resources location="/WEB-INF/publicResources/" mapping="/js/**" /> -->
     
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
