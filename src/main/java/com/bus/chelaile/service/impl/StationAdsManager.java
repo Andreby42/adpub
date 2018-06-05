@@ -1,6 +1,5 @@
 package com.bus.chelaile.service.impl;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -9,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.ClientProtocolException;
 
 import scala.util.Random;
 
@@ -22,7 +20,6 @@ import com.bus.chelaile.koubei.CouponInfo;
 import com.bus.chelaile.koubei.KBUtil;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.ProductType;
-import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdButtonInfo;
@@ -42,7 +39,6 @@ import com.bus.chelaile.service.model.FeedAdGoto;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
-import com.bus.chelaile.util.config.PropertiesUtils;
 
 public class StationAdsManager extends AbstractManager {
 
@@ -104,8 +100,15 @@ public class StationAdsManager extends AbstractManager {
             }
             
             // 跳转feed流的targetType处理。 从永春接口获取内容填充
-            if(ad.getTargetType() == 12){
-                res = createFeedEntity(advParam, ad, stationInner);
+            if (ad.getTargetType() == 12) {
+                if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528)
+                        || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528)) {
+                    res = createFeedEntity(advParam, ad, stationInner);
+                } else {
+                    logger.error("低版本投放了跳转信息流的广告， adId={}, s={}, v={}, vc={}", ad.getId(), advParam.getS(), advParam.getV(),
+                            advParam.getVc());
+                    return null;
+                }
                 return res;
             }
             

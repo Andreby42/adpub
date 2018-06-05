@@ -152,13 +152,20 @@ public class BusAdvActionV2 extends AbstractController {
     @RequestMapping(value = "adv!writeJ.action", produces = "Content-Type=text/plain;charset=UTF-8")
     public void writeJ(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
+        String sitePlace = request.getParameter("sitePlace");
 //        
         ThirdAdData data = YoudaoService.getYouDaoData(advParam, ShowType.OPEN_SCREEN, "");
         logger.info("data={}", JSONObject.toJSONString(data));
         
         logger.info("js_str={}", JSONObject.toJSONString(StaticAds.JS_FILE_STR));
         
-        String s = StaticAds.JS_FILE_STR.get("banner.js");
+        String s ="";
+        if(sitePlace.equals("banner")) {
+            s = StaticAds.JS_FILE_STR.get("banner.js");
+        } else if(sitePlace.equals("coopen")){
+            s = StaticAds.JS_FILE_STR.get("splash.js");
+        }
+        
         OutputStream ps = response.getOutputStream();
         ps.write(s.getBytes("UTF-8"));
         ps.flush();
