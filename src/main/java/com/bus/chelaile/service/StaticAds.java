@@ -151,10 +151,10 @@ public class StaticAds {
     private static void readJSFILESTR() {
         BufferedReader reader = null;
         try {
-            File file = new File("/data/advConfig/js/");
+            File file = new File("/data/advConfig/js/", "UTF-8");
             File[] tempList = file.listFiles();
             for (int i = 0; i < tempList.length; i++) {
-                reader = new BufferedReader(new FileReader(tempList[i]));
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8"));
                 String jsStr = "";
                 String bufs = null;
                 while ((bufs = reader.readLine()) != null) {
@@ -164,7 +164,7 @@ public class StaticAds {
                 reader.close();
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
