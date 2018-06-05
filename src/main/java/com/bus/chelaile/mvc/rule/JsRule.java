@@ -29,14 +29,14 @@ public class JsRule extends AbstractController {
 
     @ResponseBody
     @RequestMapping(value = "/splash.js", produces = "text/plain;charset=UTF-8")
-    public Object splash(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public String splash(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         return "hello";
     }
 
     @ResponseBody
     @RequestMapping(value = "/splashAd.js", produces = "text/plain;charset=UTF-8")
-    public Object splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(), p.getCityId());

@@ -14,14 +14,14 @@
     
  <!--    <mvc:resources location="/js/" mapping="/js/**" /> -->
     
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <!-- <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
 				<ref bean="utf8StringHttpMessageConverter" />
 				<ref bean="jacksonMessageConverter" />
 			</list>
 		</property>
-	</bean>
+	</bean> -->
     
     <bean id="utf8StringHttpMessageConverter"
 		class="com.bus.chelaile.mvc.utils.UTF8StringHttpMessageConverter">
