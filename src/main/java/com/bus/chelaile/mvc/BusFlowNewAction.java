@@ -38,7 +38,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 获取详情页下方滚动单栏内容 3.0
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!getLineDetailFeeds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!getLineDetailFeeds.action", produces = "text/plain;charset=UTF-8")
 	public String getLineDetailFeeds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -51,7 +51,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 获取详情页下方滚动单栏内容  4.0
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!getLineDetailNewFeeds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!getLineDetailNewFeeds.action", produces = "text/plain;charset=UTF-8")
 	public String getLineDetailNewFeeds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -63,7 +63,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 点赞  4.0
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!addLike.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!addLike.action", produces = "text/plain;charset=UTF-8")
 	public String addLike(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -75,7 +75,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 取消点赞  4.0
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!delLike.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!delLike.action", produces = "text/plain;charset=UTF-8")
 	public String delLike(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -89,7 +89,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 取消点赞  4.0
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!uninterestNewFeeds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!uninterestNewFeeds.action", produces = "text/plain;charset=UTF-8")
 	public String uninterestNewFeeds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -104,7 +104,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 获取详情页下方滚动单栏内容 3.0版本
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!getLineDetailFlows.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!getLineDetailFlows.action", produces = "text/plain;charset=UTF-8")
 	public String getLineDetailFlows(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -124,7 +124,7 @@ public class BusFlowNewAction extends AbstractController {
 //	 * @return
 //	 */
 //	@ResponseBody
-//	@RequestMapping(value = "flow!getArticleList.action", produces = "Content-Type=text/plain;charset=UTF-8")
+//	@RequestMapping(value = "flow!getArticleList.action", produces = "text/plain;charset=UTF-8")
 //	public String getArticleList(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 //
 //		AdvParam param = getActionParam(request);
@@ -144,7 +144,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 查询过杂志的真实‘阅读过’人数
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!getChannelReadNum.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!getChannelReadNum.action", produces = "text/plain;charset=UTF-8")
 	public String getChannelReadNum(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -158,7 +158,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 记录阅读过杂志的人数
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!recordChannelClick.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!recordChannelClick.action", produces = "text/plain;charset=UTF-8")
 	public String recordChannelClick(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -172,7 +172,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 记录阅读文章
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!recordArticleClick.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!recordArticleClick.action", produces = "text/plain;charset=UTF-8")
 	public String recordArticleClick(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam advParam = getActionParam(request);
@@ -195,7 +195,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 分享杂志
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!updateShareStatus.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!updateShareStatus.action", produces = "text/plain;charset=UTF-8")
 	public String updateShareStatus(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -210,7 +210,7 @@ public class BusFlowNewAction extends AbstractController {
 	 * 清除用户阅读文章记录的次数
 	 */
 	@ResponseBody
-	@RequestMapping(value = "flow!clearArticleClickRecord.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!clearArticleClickRecord.action", produces = "text/plain;charset=UTF-8")
 	public String clearArticleClickRecord(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -222,7 +222,7 @@ public class BusFlowNewAction extends AbstractController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "flow!clearArticleSharedRecord.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!clearArticleSharedRecord.action", produces = "text/plain;charset=UTF-8")
 	public String clearArticleSharedRecord(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -243,7 +243,7 @@ public class BusFlowNewAction extends AbstractController {
 	 */
 
 	@ResponseBody
-	@RequestMapping(value = "flow!clearArticleNoRecord.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "flow!clearArticleNoRecord.action", produces = "text/plain;charset=UTF-8")
 	public String clearArticleNoRecord(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		String date = DateUtil.getTodayStr("yyyy-MM-dd");

@@ -49,7 +49,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 详情页下方广告（及之前的feed流顶部广告)
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getLineFeedAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getLineFeedAds.action", produces = "text/plain;charset=UTF-8")
     public String getLineFeedAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 
         AdvParam param = getActionParam(request);
@@ -62,7 +62,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 新版首页广告（既之前的首页单双栏位置广告)
      */
     @ResponseBody
-    @RequestMapping(value = "adv!geColumntAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!geColumntAds.action", produces = "text/plain;charset=UTF-8")
     public String geColumntAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 
         AdvParam advParam = getActionParam(request);
@@ -76,7 +76,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 新版开屏广告
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getCoopenAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getCoopenAds.action", produces = "text/plain;charset=UTF-8")
     public String getCoopenAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
         advParam.setStartMode(getInt(request, "startMode"));
@@ -89,7 +89,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 新版站点位置广告（从原来的详情页广告中拆分出来的）
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getStationAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getStationAds.action", produces = "text/plain;charset=UTF-8")
     public String getStationAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
         if(StringUtils.isBlank(advParam.getStnName()))
@@ -103,7 +103,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 点击上报街接口
      */
     @ResponseBody
-    @RequestMapping(value = "adv!ca.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!ca.action", produces = "text/plain;charset=UTF-8")
     public String ca(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
         
@@ -128,7 +128,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 处理点击埋点
      */
     @ResponseBody
-    @RequestMapping(value = "adv!handleClick.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!handleClick.action", produces = "text/plain;charset=UTF-8")
     public String handleClick(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 //        AdvParam advParam = getActionParam(request);
 //        
@@ -149,7 +149,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 处理点击埋点
      */
     @ResponseBody
-    @RequestMapping(value = "adv!writeJ.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!writeJ.action", produces = "text/plain;charset=UTF-8")
     public void writeJ(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
         String sitePlace = request.getParameter("sitePlace");

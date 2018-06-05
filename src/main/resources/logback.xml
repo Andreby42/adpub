@@ -170,7 +170,11 @@
 	<root level="INFO">
 		<!-- <appender-ref ref="info" /> -->
 		<appender-ref ref="error" />
-		<!-- <appender-ref ref="ASYNC" /> -->
+		
+        
+        <!-- <appender-ref ref="ASYNC" /> -->
+        
+        
 	</root>
 
 

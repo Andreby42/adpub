@@ -65,7 +65,7 @@ public class BusUCArticlesAction extends AbstractController {
 	 * 2018/03/05记：，仅供‘福利社’下方信息流使用
 	 */
 	@ResponseBody
-	@RequestMapping(value = "adv!getUCArticles.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "adv!getUCArticles.action", produces = "text/plain;charset=UTF-8")
 	public String getUCArticles(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		AdvParam advParam = getActionParam(request);
 		advParam.setPicHeight(request.getParameter("picHeight"));
@@ -97,7 +97,7 @@ public class BusUCArticlesAction extends AbstractController {
 	 * uc 信息流 不感兴趣
 	 */
 	@ResponseBody
-	@RequestMapping(value = "adv!uninterestUC.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "adv!uninterestUC.action", produces = "text/plain;charset=UTF-8")
 	public String uninterestUC(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		AdvParam advParam = getActionParam(request);
 
@@ -113,7 +113,7 @@ public class BusUCArticlesAction extends AbstractController {
 	 * reloadUCArticles
 	 */
 	@ResponseBody
-	@RequestMapping(value = "adv!reloadUCArticles.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "adv!reloadUCArticles.action", produces = "text/plain;charset=UTF-8")
 	public String reloadUCArticles(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws Exception {
 		logger.info("reload UCArticles ***********************************");
@@ -143,7 +143,7 @@ public class BusUCArticlesAction extends AbstractController {
 	 * uc 信息流 点击跳转我们自己写的网页
 	 */
 	@ResponseBody
-	@RequestMapping(value = "adv!articlesPage.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "adv!articlesPage.action", produces = "text/plain;charset=UTF-8")
 	public void articlesPage(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws ServletException, IOException {
 		try {
@@ -213,7 +213,7 @@ public class BusUCArticlesAction extends AbstractController {
 	 * 更新收藏频道
 	 */
 	@ResponseBody
-	@RequestMapping(value = "adv!updateArticleChannels.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "adv!updateArticleChannels.action", produces = "text/plain;charset=UTF-8")
 	public String updateArticleChannels(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws Exception {
 		logger.info("update articleChannels ***********************************");
@@ -239,7 +239,7 @@ public class BusUCArticlesAction extends AbstractController {
 	 * tab弹窗活动
 	 */
 	@ResponseBody
-	@RequestMapping(value = "adv!getTabActivities.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "adv!getTabActivities.action", produces = "text/plain;charset=UTF-8")
 	public String getTabActivities(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);
@@ -269,7 +269,7 @@ public class BusUCArticlesAction extends AbstractController {
 	 * @int id
 	 */
 	@ResponseBody
-	@RequestMapping(value = "adv!clearTabActivitiesRecord.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "adv!clearTabActivitiesRecord.action", produces = "text/plain;charset=UTF-8")
 	public String clearTabActivitiesRecord(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam param = getActionParam(request);

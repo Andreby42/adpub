@@ -49,7 +49,7 @@ public class BusPushAction extends AbstractController {
 	 * 广告推送
 	 */
 	@ResponseBody
-	@RequestMapping(value = "notice!newNotice.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "notice!newNotice.action", produces = "text/plain;charset=UTF-8")
 	public String newNotice(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws Exception {
 		long st = System.currentTimeMillis();
@@ -74,7 +74,7 @@ public class BusPushAction extends AbstractController {
 	 * 话题推送
 	 */
 	@ResponseBody
-	@RequestMapping(value = "notice!pushFeedInfo.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "notice!pushFeedInfo.action", produces = "text/plain;charset=UTF-8")
 	public String pushFeedInfo(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws Exception {
 
@@ -107,7 +107,7 @@ public class BusPushAction extends AbstractController {
 	 * 对单个用户的消息推送
 	 */
 	@ResponseBody
-	@RequestMapping(value = "notice!noticePush.action", produces = "Content-Type=text/plain;charset=UTF-8")
+	@RequestMapping(value = "notice!noticePush.action", produces = "text/plain;charset=UTF-8")
 	public String noticePush(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws Exception {
 
