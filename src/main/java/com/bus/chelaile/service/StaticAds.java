@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.internal.mapping.Reader;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.model.PropertiesName;
@@ -149,18 +148,20 @@ public class StaticAds {
 	}
 
     private static void readJSFILESTR() {
-        BufferedReader reader = null;
+        Reader reader = null;
         try {
             File file = new File("/data/advConfig/js/");
             File[] tempList = file.listFiles();
             for (int i = 0; i < tempList.length; i++) {
-                reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8"));
-                String jsStr = "";
-                String bufs = null;
-                while ((bufs = reader.readLine()) != null) {
-                    jsStr += bufs;
+                reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
+                int tempchar;
+                StringBuilder jsStr = new StringBuilder();
+                while ((tempchar = reader.read()) != -1) {
+                    if(((char)tempchar) != '\r') {
+                        jsStr.append((char)tempchar);
+                    }
                 }
-                JS_FILE_STR.put(tempList[i].getName(), jsStr);
+                JS_FILE_STR.put(tempList[i].getName(), jsStr.toString());
                 reader.close();
             }
 
