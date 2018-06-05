@@ -42,7 +42,7 @@ public class JsRule extends AbstractController {
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(), p.getCityId());
 
         // 模板 
-        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin.js");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
         //        TasksGroup tasksGroups = JSService.getTask("splash");
         TasksGroup tgs = new TasksGroup();
         List<String> task1 = New.arrayList();
