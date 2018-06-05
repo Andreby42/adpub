@@ -28,7 +28,7 @@ public class JsRule extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(JsRule.class);
 
     @ResponseBody
-    @RequestMapping("/splash.js")
+    @RequestMapping( value = "/splash.js",  produces = "text/plain;charset=UTF-8")
     public String splash(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         return "hello";
@@ -63,8 +63,8 @@ public class JsRule extends AbstractController {
         tgs.setTasks(ts);
         tgs.setTimeouts(times);
 
-        String splashJS = splashOrigin.replace("${TIMEOUTS}", tgs.getTasks().toString());
-        splashJS = splashOrigin.replace("${TASKS}", tgs.getTimeouts().toString());
+        String splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
+        splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
         
 //        return "hello, splashAd";
         return splashJS;
