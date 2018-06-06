@@ -194,6 +194,12 @@ public class OpenManager extends AbstractManager {
         entity.setAdWeight(inner.getAdWeight());
         entity.setTimeout(inner.getTimeout());
         entity.setClickDown(inner.getClickDown());
+        
+        // 任务列表
+        // 2018-06-06
+        if(inner.getTasksGroup() != null) {
+            entity.setTasksGroup(inner.getTasksGroup());
+        }
 
         return entity;
     }

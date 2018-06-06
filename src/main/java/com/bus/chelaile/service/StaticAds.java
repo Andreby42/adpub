@@ -164,8 +164,8 @@ public class StaticAds {
                 JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
                 reader.close();
             }
-
         } catch (Exception e) {
+            logger.error("读取js文件到缓存出错！ ", e);
             e.printStackTrace();
         }
     }

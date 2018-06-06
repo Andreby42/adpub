@@ -20,6 +20,9 @@
 	<!-- 调用类 -->
 	<bean id="serviceManager" class="com.bus.chelaile.service.ServiceManager" >
 	</bean>
+    <!-- 调用类 -->
+    <bean id="jSService" class="com.bus.chelaile.service.JSService" >
+    </bean>
 	<!-- 线路详情 -->
 	<bean id="lineDetailsManager" class="com.bus.chelaile.service.impl.LineDetailsManager" parent="abstractService">
 	</bean>

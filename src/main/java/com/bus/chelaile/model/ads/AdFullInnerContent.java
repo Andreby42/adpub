@@ -1,8 +1,14 @@
 package com.bus.chelaile.model.ads;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.alibaba.fastjson.JSON;
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
@@ -31,11 +37,14 @@ public class AdFullInnerContent extends AdInnerContent {
     private int timeout; // 超时
     private int AdWeight; // 权重
     private int clickDown; // 点击后排序到最后
-    
-//    private String tasksStr; // tasks列表
+
+    //    private String tasksStr; // tasks列表
     private List<TaskModel> tasksJ;
+    private List<Long> timeouts; // 超时时间段设置
+
     private TasksGroup tasksGroup;
-    
+
+    @Autowired
     @Override
     protected void parseJson(String jsonr) {
         AdFullInnerContent ad = null;
@@ -57,13 +66,31 @@ public class AdFullInnerContent extends AdInnerContent {
             this.timeout = ad.timeout;
             this.AdWeight = ad.AdWeight;
             this.clickDown = ad.clickDown;
-            this.tasksJ = ad.tasksJ;
-            
-//            if(this.tasks != null && this.tasks.size() > 0) {
-//                List<List<String>> tasks = New.arrayList();
-//                
-//                Collections.sort(tasks,);
-//            }
+            this.setTasksJ(ad.getTasksJ());
+            //            this.timeouts = ad.timeouts;
+
+            List<List<String>> tasksG = New.arrayList();
+            if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
+                Collections.sort(tasksJ, TaskModel_COMPARATOR);
+//                getTasksJ().sort((final TaskModel t1, final TaskModel t2) -> (t1.getPriority() - t2.getPriority()));
+                Set<Integer> prioritys = New.hashSet();
+                for (TaskModel t : getTasksJ()) {
+                    if (!prioritys.contains(t.getPriority())) {
+                        List<String> ts = New.arrayList();
+                        ts.add(t.getApiName());
+                        tasksG.add(ts);
+                        prioritys.add(t.getPriority());
+                    } else {
+                        tasksG.get(tasksG.size() - 1).add(t.getApiName());
+                    }
+                }
+            }
+            if (tasksG != null && tasksG.size() > 0 && ad.timeouts != null) {
+                TasksGroup tasksGroups = new TasksGroup();
+                tasksGroups.setTasks(tasksG);
+                tasksGroups.setTimeouts(ad.timeouts);
+                this.tasksGroup = tasksGroups;
+            }
         }
     }
 
@@ -82,13 +109,6 @@ public class AdFullInnerContent extends AdInnerContent {
     @Override
     public String extractAudiosUrl(String s, int type) {
         return null;
-    }
-
-    public static void main(String[] args) {
-        AdFullInnerContent adPush = new AdFullInnerContent();
-        adPush.setAndParseJson("{\"pic\":\"http://cdn.www.chelaile.net.cn/img/subway/line10_pic.png\"}");
-        System.out.println("pic: " + adPush.pic);
-        System.out.println("JsonR: " + adPush.jsonContent);
     }
 
     @Override
@@ -239,7 +259,7 @@ public class AdFullInnerContent extends AdInnerContent {
     public void setApiType(int apiType) {
         this.apiType = apiType;
     }
-    
+
     /**
      * @return the clickDown
      */
@@ -267,5 +287,68 @@ public class AdFullInnerContent extends AdInnerContent {
     public void setTasksGroup(TasksGroup tasksGroup) {
         this.tasksGroup = tasksGroup;
     }
+
+    public static void main(String[] args) {
+        List<TaskModel> tasksJ1 = New.arrayList();
+        TaskModel t1 = new TaskModel();
+        t1.setApiName("a");
+        t1.setPriority(1);
+        TaskModel t2 = new TaskModel();
+        t2.setApiName("a2");
+        t2.setPriority(2);
+        tasksJ1.add(t2);
+        tasksJ1.add(t1);
+
+        System.out.println(JSONObject.toJSONString(tasksJ1));
+        Collections.sort(tasksJ1, TaskModel_COMPARATOR);
+        System.out.println(JSONObject.toJSONString(tasksJ1));
+
+        AdFullInnerContent adPush = new AdFullInnerContent();
+        adPush.setAndParseJson("{\"timeouts\":[500,1500],\"tasksJ\":[{\"apiName\":\"sdk_toutiao\",\"priority\":1},{\"apiName\":\"sdk_baidu\",\"priority\":1},{\"apiName\":\"sdk_gdt\",\"priority\":2}]}");
+        System.out.println("pic: " + adPush.pic);
+        System.out.println("JsonR: " + adPush.jsonContent);
+        System.out.println(JSONObject.toJSONString(adPush));
+        System.out.println(adPush.getTasksGroup().getTimeouts().toString());
+        System.out.println(adPush.getTasksGroup().getTasks().toString());
+    }
+
+    /**
+     * @return the timeouts
+     */
+    public List<Long> getTimeouts() {
+        return timeouts;
+    }
+
+    /**
+     * @param timeouts the timeouts to set
+     */
+    public void setTimeouts(List<Long> timeouts) {
+        this.timeouts = timeouts;
+    }
+
+    /**
+     * @return the tasksJ
+     */
+    public List<TaskModel> getTasksJ() {
+        return tasksJ;
+    }
+
+    /**
+     * @param tasksJ the tasksJ to set
+     */
+    public void setTasksJ(List<TaskModel> tasksJ) {
+        this.tasksJ = tasksJ;
+    }
+    
+    private static final Comparator<TaskModel> TaskModel_COMPARATOR = new Comparator<TaskModel>() {
+        @Override
+        public int compare(TaskModel o1, TaskModel o2) {
+            if (o1 == null)
+                return -1;
+            if (o2 == null)
+                return 1;
+            return o1.getPriority() - o2.getPriority();
+        }
+    };
 
 }
