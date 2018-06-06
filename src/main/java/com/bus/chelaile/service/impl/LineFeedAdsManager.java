@@ -41,7 +41,7 @@ public class LineFeedAdsManager extends AbstractManager {
         boolean hasOwnAd = false;
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
-            
+
             // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
             AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) ad.getAds().getAdInnerContent();
             if (lineFeedInner.getProvider_id() <= 1 && lineFeedInner.getBackup() == 0) { // 非自采买的provider_id都大于1
@@ -50,7 +50,7 @@ public class LineFeedAdsManager extends AbstractManager {
                     entities.add(entity);
                     int adId = ad.getAds().getId();
                     ids.add(adId);
-                    
+
                     hasOwnAd = true;
                     break;
                 }
@@ -61,7 +61,7 @@ public class LineFeedAdsManager extends AbstractManager {
             AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
-                if(((AdLineFeedInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
+                if (((AdLineFeedInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
                     backupad = ad;
                     continue;
                 }
@@ -76,7 +76,7 @@ public class LineFeedAdsManager extends AbstractManager {
             if (!checkSendLog(advParam, entities, showType.getType()))
                 rankAds(advParam, entities);
             setClickAtLast(cacheRecord, entities);
-            if(backupad != null) {
+            if (backupad != null) {
                 LineFeedAdEntity entity = from(advParam, cacheRecord, backupad.getAds(), showType);
                 entities.add(entity);
             }
@@ -89,7 +89,6 @@ public class LineFeedAdsManager extends AbstractManager {
 
         return entities;
     }
-
 
     //    protected boolean checkSendLog(AdvParam advParam, List<BaseAdEntity> lineFeedAds) {
     //        String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(advParam.getUdid());
@@ -117,8 +116,8 @@ public class LineFeedAdsManager extends AbstractManager {
         AdInnerContent inner = ad.getInnerContent();
         if (inner instanceof AdLineFeedInnerContent) {
             AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) inner;
-            
-         // 跳转feed流的targetType处理。 从永春接口获取内容填充
+
+            // 跳转feed流的targetType处理。 从永春接口获取内容填充
             if (ad.getTargetType() == 12) {
                 if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528)
                         || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528)) {
@@ -130,7 +129,7 @@ public class LineFeedAdsManager extends AbstractManager {
                 }
                 return res;
             }
-            
+
             // 第三方特殊处理
             if (lineFeedInner.getProvider_id() > 1) {
                 res = createSDKOpenAds(ad, lineFeedInner);
@@ -154,40 +153,41 @@ public class LineFeedAdsManager extends AbstractManager {
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
         entity.setTitle(ad.getTitle());
-        
+
         entity.setAdWeight(inner.getAdWeight());
         entity.setAutoInterval(inner.getAutoInterval());
         entity.setMixInterval(inner.getMixInterval());
         entity.setApiType(1);
         entity.setClickDown(inner.getClickDown());
-        
-     // 任务列表
+
+        // 任务列表
         // 2018-06-06
-        if(inner.getTasksGroup() != null) {
+        if (inner.getTasksGroup() != null) {
             entity.setTasksGroup(inner.getTasksGroup());
         }
-        
+
         return entity;
     }
-    
+
     // 跳转feed流的广告体
     private LineFeedAdEntity createFeedEntity(AdvParam p, AdContent ad, AdLineFeedInnerContent inner) {
         String response = null;
-        String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(), ShowType.LINE_FEED_ADV.getType());
+        String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(),
+                ShowType.LINE_FEED_ADV.getType());
         LineFeedAdEntity entity = null;
         try {
             response = HttpUtils.get(url, "UTF-8");
             response = response.substring(6, response.length() - 6);
             FeedAdGoto feedAdGoto = JSON.parseObject(response, FeedAdGoto.class);
-            if(feedAdGoto.getJsonr().getStatus().equals("00")) {
+            if (feedAdGoto.getJsonr().getStatus().equals("00")) {
                 List<Ads> ads = feedAdGoto.getJsonr().getData().getAds();
-                if(ads != null && ads.size() > 0) {
+                if (ads != null && ads.size() > 0) {
                     String title = ads.get(0).getTitle();
                     String source = ads.get(0).getSource();
-//                    String timeShow = ads.get(0).getTimeShow();
+                    //                    String timeShow = ads.get(0).getTimeShow();
                     int imgsType = ads.get(0).getThumbnailType();
                     List<Thumbnails> thumbnails = ads.get(0).getThumbnails();
-                    if(thumbnails == null || thumbnails.size() == 0) {
+                    if (thumbnails == null || thumbnails.size() == 0) {
                         logger.error("返回内容没有图片 , url={}, response={}", url, response);
                         return null;
                     }
@@ -201,9 +201,9 @@ public class LineFeedAdsManager extends AbstractManager {
                     entity.setMixInterval(inner.getMixInterval());
                     entity.setPic(thumbnails.get(0).getUrl());
 
-                    if(imgsType == 1) {
+                    if (imgsType == 1) {
                         entity.setImgsType(0);
-                    } else if(imgsType == 2) {
+                    } else if (imgsType == 2) {
                         entity.setImgsType(2);
                         entity.setSubhead(title);
                         entity.setHead(source);

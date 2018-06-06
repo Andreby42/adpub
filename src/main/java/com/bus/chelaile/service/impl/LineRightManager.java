@@ -4,17 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdLineRightInnerContent;
-import com.bus.chelaile.model.ads.AdWXBannerInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineRightAdEntity;
-import com.bus.chelaile.model.ads.entity.WXAppBannerAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
@@ -40,6 +36,12 @@ public class LineRightManager extends AbstractManager {
         //		res.setWxMiniProPath(inner.getWx_miniPro_path());
         res.setPriority(ad.getAds().getPriority());
 
+        // 任务列表
+        // 2018-06-06
+        if (inner.getTasksGroup() != null) {
+            res.setTasksGroup(inner.getTasksGroup());
+        }
+
         return res;
     }
 
@@ -51,7 +53,7 @@ public class LineRightManager extends AbstractManager {
         // 遍历所有符合条件的广告体
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
-            AdLineRightInnerContent inner = (AdLineRightInnerContent) ad.getAds().getInnerContent();
+//            AdLineRightInnerContent inner = (AdLineRightInnerContent) ad.getAds().getInnerContent();
 
             // 如果广告结构体没有对来源有要求，那么直接返回即可
             LineRightAdEntity adEntity = from(ad, advParam);
