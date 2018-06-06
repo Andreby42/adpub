@@ -115,6 +115,10 @@ public class AdContent {
             AdLineFeedInnerContent adLineFeedInnerContent = new AdLineFeedInnerContent();
             adLineFeedInnerContent.setAndParseJson(content);
             innerContent = adLineFeedInnerContent;
+        } else if(ShowType.LINE_RIGHT_ADV.getType().equals(showType)) {      // 右上角广告
+            AdLineRightInnerContent rightInner = new AdLineRightInnerContent();
+            rightInner.setAndParseJson(content);
+            innerContent = rightInner;
         }
         else {
             logger.error("[Unsupport_ShowType] 无法识别的showType: {}", showType);

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
@@ -139,7 +140,7 @@ public class JsRule extends AbstractController {
                         if(StaticAds.JS_FILE_STR.containsKey(tag + task))
                             splashJS += StaticAds.JS_FILE_STR.get(tag + task);
                         else 
-                            logger.error("没有配置文件的 sdk|api， udid={}, tgs={}, JS_FILE_STR.keys={}", p.getUdid(), tgs, StaticAds.JS_FILE_STR.keySet());
+                            logger.error("没有配置文件的 sdk|api，task={},  udid={}, JS_FILE_STR.keys={}", tag + task, p.getUdid(), StaticAds.JS_FILE_STR.keySet());
                     }
                 }
             }
