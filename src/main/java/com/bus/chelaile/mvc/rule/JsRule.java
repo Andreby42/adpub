@@ -36,7 +36,7 @@ public class JsRule extends AbstractController {
     @RequestMapping(value="/splash.do", produces = "text/plain;charset=UTF-8")
     public String splash(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
-        return "hello_1111111111";
+        return "hello_1111111111你好 啊";
     }
 
     /*
