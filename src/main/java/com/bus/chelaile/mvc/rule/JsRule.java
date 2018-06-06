@@ -31,13 +31,17 @@ public class JsRule extends AbstractController {
 
     private static final Logger logger = LoggerFactory.getLogger(JsRule.class);
 
+    // for test
     @ResponseBody
-    @RequestMapping(value="/splash.js",method=RequestMethod.GET,produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value="/splash.do", produces = "text/plain;charset=UTF-8")
     public String splash(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
-        return "hello";
+        return "hello_1111111111";
     }
 
+    /*
+     * 开屏
+     */
     @ResponseBody
     @RequestMapping("/splashAd.js")
     public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -84,6 +88,10 @@ public class JsRule extends AbstractController {
         return splashJS;
     }
 
+   
+    /*
+     * 开屏
+     */
     @ResponseBody
     @RequestMapping("/splashAd1.js")
     public String splashAd1(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -111,5 +119,131 @@ public class JsRule extends AbstractController {
 
         return splashJS;
     }
+    
+    /*
+     * 首页
+     */
+    @ResponseBody
+    @RequestMapping("/homeAd1.js")
+    public String homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
+        AdvParam p = getActionParam(request);
+        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
+                p.getCityId());
+
+        // 模板 
+        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+        TasksGroup tgs = jSService.getTask(p);
+
+        String splashJS = "";
+        if (tgs != null) {
+            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
+            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
+
+            for (List<String> tasks : tgs.getTasks()) {
+                for (String task : tasks) {
+                    if (task.contains("sdk"))
+                        splashJS += StaticAds.JS_FILE_STR.get(task);
+                }
+            }
+        }
+
+        return splashJS;
+    }
+
+    
+    /*
+     * 详情页右上角
+     */
+    @ResponseBody
+    @RequestMapping("/rightTopAd1.js")
+    public String rightTopAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        AdvParam p = getActionParam(request);
+        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
+                p.getCityId());
+
+        // 模板 
+        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+        TasksGroup tgs = jSService.getTask(p);
+
+        String splashJS = "";
+        if (tgs != null) {
+            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
+            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
+
+            for (List<String> tasks : tgs.getTasks()) {
+                for (String task : tasks) {
+                    if (task.contains("sdk"))
+                        splashJS += StaticAds.JS_FILE_STR.get(task);
+                }
+            }
+        }
+
+        return splashJS;
+    }
+    
+    
+    /*
+     * 站点位置
+     */
+    @ResponseBody
+    @RequestMapping("/stationAd1.js")
+    public String stationAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        AdvParam p = getActionParam(request);
+        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
+                p.getCityId());
+
+        // 模板 
+        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+        TasksGroup tgs = jSService.getTask(p);
+
+        String splashJS = "";
+        if (tgs != null) {
+            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
+            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
+
+            for (List<String> tasks : tgs.getTasks()) {
+                for (String task : tasks) {
+                    if (task.contains("sdk"))
+                        splashJS += StaticAds.JS_FILE_STR.get(task);
+                }
+            }
+        }
+
+        return splashJS;
+    }
+    
+    
+    /*
+     * 详情页底部
+     */
+    @ResponseBody
+    @RequestMapping("/bottomAd1.js")
+    public String bottomAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        AdvParam p = getActionParam(request);
+        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
+                p.getCityId());
+
+        // 模板 
+        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+        TasksGroup tgs = jSService.getTask(p);
+
+        String splashJS = "";
+        if (tgs != null) {
+            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
+            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
+
+            for (List<String> tasks : tgs.getTasks()) {
+                for (String task : tasks) {
+                    if (task.contains("sdk"))
+                        splashJS += StaticAds.JS_FILE_STR.get(task);
+                }
+            }
+        }
+
+        return splashJS;
+    }
 }
