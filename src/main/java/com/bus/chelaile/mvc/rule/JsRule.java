@@ -87,7 +87,6 @@ public class JsRule extends AbstractController {
         return splashJS;
     }
 
-   
     /*
      * 开屏
      */
@@ -103,18 +102,7 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
         TasksGroup tgs = jSService.getTask(p, "splash");
 
-        String splashJS = "";
-        if (tgs != null) {
-            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
-            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
-
-            for (List<String> tasks : tgs.getTasks()) {
-                for (String task : tasks) {
-                    if (task.contains("sdk"))
-                        splashJS += StaticAds.JS_FILE_STR.get(task);
-                }
-            }
-        }
+        String splashJS = produceJS(p, splashOrigin, tgs, "splash_");
 
         return splashJS;
     }
@@ -131,9 +119,15 @@ public class JsRule extends AbstractController {
                 p.getCityId());
 
         // 模板 
-        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
         TasksGroup tgs = jSService.getTask(p, "home");
 
+        String splashJS = produceJS(p, splashOrigin, tgs, "home_");
+
+        return splashJS;
+    }
+
+    private String produceJS(AdvParam p, String splashOrigin, TasksGroup tgs, String tag) {
         String splashJS = "";
         if (tgs != null) {
             splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
@@ -141,12 +135,15 @@ public class JsRule extends AbstractController {
 
             for (List<String> tasks : tgs.getTasks()) {
                 for (String task : tasks) {
-                    if (task.contains("sdk"))
-                        splashJS += StaticAds.JS_FILE_STR.get(task);
+                    if (task.contains("sdk")) {
+                        if(StaticAds.JS_FILE_STR.containsKey(tag + task))
+                            splashJS += StaticAds.JS_FILE_STR.get(tag + task);
+                        else 
+                            logger.error("没有配置文件的 sdk|api， udid={}, tgs={}, JS_FILE_STR.keys={}", p.getUdid(), tgs, StaticAds.JS_FILE_STR.keySet());
+                    }
                 }
             }
         }
-
         return splashJS;
     }
 
@@ -163,21 +160,10 @@ public class JsRule extends AbstractController {
                 p.getCityId());
 
         // 模板 
-        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
         TasksGroup tgs = jSService.getTask(p, "rightTop");
 
-        String splashJS = "";
-        if (tgs != null) {
-            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
-            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
-
-            for (List<String> tasks : tgs.getTasks()) {
-                for (String task : tasks) {
-                    if (task.contains("sdk"))
-                        splashJS += StaticAds.JS_FILE_STR.get(task);
-                }
-            }
-        }
+        String splashJS = produceJS(p, splashOrigin, tgs, "right_");
 
         return splashJS;
     }
@@ -195,21 +181,10 @@ public class JsRule extends AbstractController {
                 p.getCityId());
 
         // 模板 
-        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
         TasksGroup tgs = jSService.getTask(p, "station");
 
-        String splashJS = "";
-        if (tgs != null) {
-            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
-            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
-
-            for (List<String> tasks : tgs.getTasks()) {
-                for (String task : tasks) {
-                    if (task.contains("sdk"))
-                        splashJS += StaticAds.JS_FILE_STR.get(task);
-                }
-            }
-        }
+        String splashJS = produceJS(p, splashOrigin, tgs, "station_");
 
         return splashJS;
     }
@@ -227,21 +202,10 @@ public class JsRule extends AbstractController {
                 p.getCityId());
 
         // 模板 
-        String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
         TasksGroup tgs = jSService.getTask(p, "bottom");
 
-        String splashJS = "";
-        if (tgs != null) {
-            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
-            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
-
-            for (List<String> tasks : tgs.getTasks()) {
-                for (String task : tasks) {
-                    if (task.contains("sdk"))
-                        splashJS += StaticAds.JS_FILE_STR.get(task);
-                }
-            }
-        }
+        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_");
 
         return splashJS;
     }
