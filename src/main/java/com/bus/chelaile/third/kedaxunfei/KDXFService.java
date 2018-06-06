@@ -123,7 +123,6 @@ public class KDXFService {
 			}
 		}
 		
-
 		m.setIp(ap.getIp());
 		m.setUa(ap.getUa());
 		m.setTs(System.currentTimeMillis() / 1000 + "");
