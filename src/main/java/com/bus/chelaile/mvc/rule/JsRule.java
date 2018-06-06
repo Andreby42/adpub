@@ -123,7 +123,7 @@ public class JsRule extends AbstractController {
      * 首页
      */
     @ResponseBody
-    @RequestMapping("/homeAd.do")
+    @RequestMapping(value = "/homeAd.do", produces = "text/plain;charset=UTF-8")
     public String homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
@@ -155,7 +155,7 @@ public class JsRule extends AbstractController {
      * 详情页右上角
      */
     @ResponseBody
-    @RequestMapping("/rightTopAd.do")
+    @RequestMapping(value = "/rightTopAd.do", produces = "text/plain;charset=UTF-8")
     public String rightTopAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
@@ -187,7 +187,7 @@ public class JsRule extends AbstractController {
      * 站点位置
      */
     @ResponseBody
-    @RequestMapping("/stationAd.do")
+    @RequestMapping(value = "/stationAd.do", produces = "text/plain;charset=UTF-8")
     public String stationAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
@@ -219,7 +219,7 @@ public class JsRule extends AbstractController {
      * 详情页底部
      */
     @ResponseBody
-    @RequestMapping("/bottomAd.do")
+    @RequestMapping(value = "/bottomAd.do", produces = "text/plain;charset=UTF-8")
     public String bottomAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
