@@ -30,18 +30,19 @@ public class KDXFService {
 //     * @param type	0:开屏，1：首页-左文右图广告
 //     * @throws UnsupportedEncodingException
 //     */
-//	public void doService(AdvParam ap, int type) throws UnsupportedEncodingException {
-//		RequestModel model = getDeviceModel(ap, type);
-//		String context = null;
+	public void doService(AdvParam ap, ShowType type) throws Exception {
+		ThirdAdData model = getKDXF(ap, type);
+		String context = model.getData();
+		System.out.println(context);
 //		try {
-//			context = JsonBinder.toJson(model, JsonBinder.nonNull);
+//			context = JsonBinder.toJson(model., JsonBinder.nonNull);
 //		} catch (Exception e) {
 //			logger.error(e.getMessage(),e);
 //		}
-//		String result = KDXFRequestResponseManager.fetchAdResponseAsString(context);
-//		String test1 = new String(result.getBytes(),"utf-8");
-//		System.out.println(test1);
-//	}
+		String result = KDXFRequestResponseManager.fetchAdResponseAsString(context);
+		String test1 = new String(result.getBytes(),"utf-8");
+		System.out.println(test1);
+	}
 
 	public static  ThirdAdData getKDXF(AdvParam ap, ShowType type) throws Exception {
 		RequestModel m = new RequestModel();
@@ -65,12 +66,11 @@ public class KDXFService {
 			}else if( type.getValue() == ShowType.LINE_FEED_ADV.getValue() ){
 				
 				m.setAdunitid("5CBF4E804C06EBF6EEAF93DC5EA6BBCF");
+			}else if( type.getValue() == ShowType.LINE_RIGHT_ADV.getValue() ){
+				
+				m.setAdunitid("64D22F2F7B704AC852B7EE6C9A3E1395");
 			}
-			//右上角
-//			else if( type.getValue() == ShowType.LINE_FEED_ADV.getValue() ){
-//				
-//				m.setAdunitid("5CBF4E804C06EBF6EEAF93DC5EA6BBCF");
-//			}
+
 			m.setVendor(ap.getVendor());
 		} else {
 			m.setOs("iOS");
@@ -92,8 +92,11 @@ public class KDXFService {
 			}else if( type.getValue() == ShowType.LINE_FEED_ADV.getValue() ){
 				
 				m.setAdunitid("2D8857EE0D286E80203F7334F8356B1C");
+			}else if( type.getValue() == ShowType.LINE_RIGHT_ADV.getValue() ){
+				
+				m.setAdunitid("F6FDE2EB25CE4A39AC4ED6F3D495F269");
 			}
-			//缺少右上角
+			
 			
 			m.setVendor("apple");
 		}
@@ -141,8 +144,8 @@ public class KDXFService {
 			m.setAdh("92");
 			m.setAdw("359");
 		}else if( type.getValue() == ShowType.STATION_ADV.getValue() ){
-			//m.setAdh(adh);
-			//m.setAdw(adw);
+			m.setAdh("92");
+			m.setAdw(ap.getScreenWidth()+"");
 		}else if( type.getValue() == ShowType.LINE_FEED_ADV.getValue() ){
 			m.setAdh("92");
 			m.setAdw(ap.getScreenWidth()+"");
@@ -155,28 +158,58 @@ public class KDXFService {
 		
 	}
 	
-	public static void main(String[] args) throws UnsupportedEncodingException {
+	public static void main(String[] args) throws Exception {
 		KDXFService s = new KDXFService();
 		AdvParam ap = new AdvParam();
+//		ap.setDpi("2.000000");
+//		ap.setS("ios");
+//		ap.setUdid("d41d8cd98f00b204e9800998ecf8427e089ec208");
+//		ap.setIdfa("F91D631D-B0BF-4F79-9E8E-0331F18E0184");
+//		ap.setIdfv("92669482-B539-4E4C-BCE3-92829225F5BB");
+//		ap.setSv("10.3.3");
+//		//ap.setMac(mac);
+//		
+//		ap.setV("5.50.0");
+//		ap.setNw("2g");
+//		ap.setIp("10.168.0.10");
+//		//ap.setW("320.000000");
+//		ap.setScreenHeight(960);
+//		ap.setScreenWidth(480);
+//		ap.setDeviceType("iPhone5c");
+//		ap.setUa("Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%2010_3_3%20like%20Mac%20OS%20X)%20AppleWebKit/603.3.3%20(KHTML,%20like%20Gecko)%20Mobile/14G5037b");
+//		ap.setLng(116.403538);
+//		ap.setLat(39.994026);
+//		//ap.setWifissid("da");
+//		//TotalUtil.getYouDaoData(ap, ShowType.OPEN_SCREEN, "1");
+//		s.doService(ap, ShowType.OPEN_SCREEN);
+		
+		
+		
+		
+		
+		
 		ap.setDpi("2.000000");
-		ap.setS("ios");
-		ap.setUdid("d41d8cd98f00b204e9800998ecf8427e089ec208");
-		ap.setIdfa("BA8C0E13-F99A-4294-BABA-1489C33E9B6D");
-		ap.setIdfv("92669482-B539-4E4C-BCE3-92829225F5BB");
-		ap.setSv("10.3.3");
+		ap.setS("android");
+		ap.setImei("866032024542652");
+		ap.setUdid("test-bfe5dd89-1a95-4069-bc02-56845a631a2f");
+		//ap.setIdfa("F91D631D-B0BF-4F79-9E8E-0331F18E0184");
+		//ap.setIdfv("92669482-B539-4E4C-BCE3-92829225F5BB");
+		ap.setSv("5.1.1");
 		//ap.setMac(mac);
 		
-		ap.setV("5.50.0");
+		ap.setV("3.52.4_20180605");
 		ap.setNw("2g");
 		ap.setIp("10.168.0.10");
 		//ap.setW("320.000000");
-		ap.setScreenHeight(480);
-		ap.setDeviceType("iPhone5c");
-		ap.setUa("Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%2010_3_3%20like%20Mac%20OS%20X)%20AppleWebKit/603.3.3%20(KHTML,%20like%20Gecko)%20Mobile/14G5037b");
+		ap.setScreenHeight(1848);
+		ap.setScreenWidth(480);
+		ap.setDeviceType("vivo+X7");
+		ap.setUa("Mozilla%2F5.0+%28Linux%3B+Android+5.1.1%3B+vivo+X7+Build%2FLMY47V%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Version%2F4.0+Chrome%2F39.0.0.0+Mobile+Safari%2F537.36");
 		ap.setLng(116.403538);
 		ap.setLat(39.994026);
+		ap.setVendor("vivo");
 		//ap.setWifissid("da");
 		//TotalUtil.getYouDaoData(ap, ShowType.OPEN_SCREEN, "1");
-		//s.doService(ap, 0);
+		s.doService(ap, ShowType.LINE_FEED_ADV);
 	}
 }

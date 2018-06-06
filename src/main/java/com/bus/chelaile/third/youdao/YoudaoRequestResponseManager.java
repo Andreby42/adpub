@@ -34,12 +34,12 @@ public class YoudaoRequestResponseManager {
     }
     
     
-    public String startGet(String context){
+    public static String startGet(String context){
         BufferedReader in = null;        
         StringBuilder result = new StringBuilder(); 
         try {
             //GET请求直接在链接后面拼上请求参数
-            String mPath = TERMINAL + "?";
+            String mPath = "";
             mPath += context;
             URL url = new URL(mPath);
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -121,7 +121,7 @@ public class YoudaoRequestResponseManager {
 
     public static InputStream fetchAdResponseAsStream(String payloadStr) {
      //   String payloadStr = JsonPayloadBuilder.getRequestPayloadJson(request);
-    	 GZIPInputStream gzin;
+    	// GZIPInputStream gzin;
         InputStream is = null;
         if (payloadStr != null) {
             try {

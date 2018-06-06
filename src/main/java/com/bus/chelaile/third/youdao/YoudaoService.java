@@ -94,11 +94,14 @@ public class YoudaoService {
 			}
 		}
 		
+		url += "&rip=" + ap.getIp();
+		
 		url += "&ct=" + ctType + "&dct="+netWork;
 		
 		if(filterIds != null) {
 			url += "&cids=" + filterIds;
 		}
+		
 		
 		
 		ThirdAdData data = new ThirdAdData();
@@ -115,19 +118,13 @@ public class YoudaoService {
 //	 *            0:开屏，1：首页-左文右图广告
 //	 * @throws UnsupportedEncodingException
 //	 */
-//	public void doService(AdvParam ap, int type) throws UnsupportedEncodingException {
-//		RequestModel model = getDeviceModel(ap, type);
-//		String context = null;
-//		try {
-//			context = JsonBinder.toJson(model, JsonBinder.nonNull);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage(), e);
-//		}
-//		 String result =
-//		 YoudaoRequestResponseManager.fetchAdResponseAsString(context);
-//		 String test1 = new String(result.getBytes(),"utf-8");
-//		System.out.println(test1);
-//	}
+	public static void doService(String context) throws Exception {
+		
+		 String result =
+		 YoudaoRequestResponseManager.startGet(context);
+		 String test1 = new String(result.getBytes(),"utf-8");
+		System.out.println(test1);
+	}
 //
 //	private RequestModel getDeviceModel(AdvParam ap, int type) {
 //		RequestModel m = new RequestModel();
@@ -162,14 +159,14 @@ public class YoudaoService {
 //	 * @param args
 //	 * @throws UnsupportedEncodingException
 //	 */
-//	public static void main(String[] args) throws UnsupportedEncodingException {
-//		
-//		String az = DigestUtils.md5Hex("BA8C0E13-F99A-4294-BABA-1489C33E9B6D");
-//		
-//		az = az.toUpperCase();
-//
-//		YoudaoRequestResponseManager ym = new YoudaoRequestResponseManager();
-//
+	public static void main(String[] args) throws Exception {
+		
+		String az = DigestUtils.md5Hex("BA8C0E13-F99A-4294-BABA-1489C33E9B6D");
+		
+		az = az.toUpperCase();
+
+		YoudaoRequestResponseManager ym = new YoudaoRequestResponseManager();
+
 //		String context = "id=e3f49841bbd3ceb0c6a531ca32f4a754&udid=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&"
 //				+ "imei=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&lla=73.0&llp=p&wifi=&rip=10.168.0.10&"
 //				+ "imeimd5=305612168A059FC9CCDAC8D95D99E485&ct=2&dct=0&ll=116.403538,39.994026&auidmd5=305612168A059FC9CCDAC8D95D99E485&av=5.50.0&llt=1";
@@ -178,28 +175,66 @@ public class YoudaoService {
 //		
 //		System.out.println(value);
 //
-//		YoudaoService s = new YoudaoService();
-//		AdvParam ap = new AdvParam();
-//		ap.setDpi("2.000000");
-//		ap.setS("ios");
-//		ap.setUdid("d41d8cd98f00b204e9800998ecf8427e089ec208");
-//		ap.setIdfa("BA8C0E13-F99A-4294-BABA-1489C33E9B6D");
-//		ap.setIdfv("92669482-B539-4E4C-BCE3-92829225F5BB");
-//		ap.setSv("10.3.3");
-//		// ap.setMac(mac);
-//
-//		ap.setV("5.50.0");
-//		ap.setNw("2g");
-//		ap.setIp("10.168.0.10");
-//	//	ap.setW("320.000000");
-//		ap.setScreenHeight(480);
-//		ap.setDeviceType("iPhone5c");
-//		ap.setUa(
-//				"Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%2010_3_3%20like%20Mac%20OS%20X)%20AppleWebKit/603.3.3%20(KHTML,%20like%20Gecko)%20Mobile/14G5037b");
-//		ap.setLng(116.403538);
-//		ap.setLat(39.994026);
-//
-//		s.doService(ap, 1);
-//	}
+		YoudaoService s = new YoudaoService();
+		AdvParam ap = new AdvParam();
+		ap.setDpi("2.000000");
+		ap.setS("ios");
+		ap.setUdid("BA8C0E13-F99A-4294-BABA-1489C33E9B6D");
+		ap.setIdfa("BA8C0E13-F99A-4294-BABA-1489C33E9B6D");
+		ap.setIdfv("92669482-B539-4E4C-BCE3-92829225F5BB");
+		ap.setSv("10.3.3");
+		// ap.setMac(mac);
+
+		ap.setV("5.50.0");
+		ap.setNw("2g");
+		ap.setIp("10.168.0.10");
+	//	ap.setW("320.000000");
+		ap.setScreenHeight(480);
+		ap.setDeviceType("iPhone5c");
+		ap.setUa(
+				"Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%2010_3_3%20like%20Mac%20OS%20X)%20AppleWebKit/603.3.3%20(KHTML,%20like%20Gecko)%20Mobile/14G5037b");
+		ap.setLng(116.403538);
+		ap.setLat(39.994026);
+		ap.setGpsAccuracy("73.0");
+		ap.setIp("10.168.0.10");
+		//System.out.println(getYouDaoData(ap, ShowType.LINE_FEED_ADV,null).getUrl());
+
+		//s.doService(ap, ShwoType);
+		
+		
+		
+		
+
+		//YoudaoService s = new YoudaoService();
+		//AdvParam ap = new AdvParam();
+		ap.setDpi("2.000000");
+		ap.setS("android");
+		ap.setImei("869334022707130");
+		ap.setUdid("355752074283794");
+		ap.setAndroidID("355752074283794");
+		//ap.setIdfa("F91D631D-B0BF-4F79-9E8E-0331F18E0184");
+		//ap.setIdfv("92669482-B539-4E4C-BCE3-92829225F5BB");
+		ap.setSv("5.1.1");
+		//ap.setMac(mac);
+		
+		ap.setV("3.52.4_20180605");
+		ap.setNw("2g");
+		ap.setIp("10.168.0.10");
+		//ap.setW("320.000000");
+		ap.setScreenHeight(1848);
+		ap.setScreenWidth(480);
+		ap.setDeviceType("vivo+X7");
+		ap.setUa("Mozilla%2F5.0+%28Linux%3B+Android+5.1.1%3B+vivo+X7+Build%2FLMY47V%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Version%2F4.0+Chrome%2F39.0.0.0+Mobile+Safari%2F537.36");
+		ap.setLng(116.403538);
+		ap.setLat(39.994026);
+		ap.setVendor("vivo");
+		ap.setGpsAccuracy("73.0");
+		ap.setImei("352136064687524");
+		ap.setIp("10.168.0.10");
+		
+		System.out.println(getYouDaoData(ap, ShowType.LINE_FEED_ADV,null).getUrl());
+		
+		//doService(getYouDaoData(ap, ShowType.LINE_FEED_ADV,null).getUrl());
+	}
 
 }

@@ -16,7 +16,8 @@ import com.bus.chelaile.innob.request.Request;
  * Created by Administrator on 2016/8/9.
  */
 public class KDXFRequestResponseManager {
-    private static final String TERMINAL      = "http://ws.voiceads.cn/ad/request";
+    private static final String TERMINAL      = "http://cs.voiceads.cn/ad/request";
+    											 
    
     private static final Logger logger = LoggerFactory
             .getLogger(KDXFRequestResponseManager.class);

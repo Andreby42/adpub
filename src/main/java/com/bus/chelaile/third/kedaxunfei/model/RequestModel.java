@@ -622,7 +622,7 @@ class Debug {
 	 * 处理。
 	 * 
 	 */
-	private int action_type=2;
+	private int action_type=0;
 	/**
 	 * 用于指定下发广告的落地页类 型，取值范围：0，不限制；1， 包含 landing_url 和 deep_link； 2，仅包含
 	 * landing_url。不指定 的话，按值为 0 处理。
