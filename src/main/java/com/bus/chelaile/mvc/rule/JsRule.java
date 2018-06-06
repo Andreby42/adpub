@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bus.chelaile.model.ads.entity.TasksGroup;
@@ -44,7 +43,7 @@ public class JsRule extends AbstractController {
      */
     @ResponseBody
     @RequestMapping("/splashAd.js")
-    public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public String splashAd1(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
@@ -93,8 +92,8 @@ public class JsRule extends AbstractController {
      * 开屏
      */
     @ResponseBody
-    @RequestMapping("/splashAd1.js")
-    public String splashAd1(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    @RequestMapping(value = "/splashAd.do", produces = "text/plain;charset=UTF-8")
+    public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
@@ -102,7 +101,7 @@ public class JsRule extends AbstractController {
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
-        TasksGroup tgs = jSService.getTask(p);
+        TasksGroup tgs = jSService.getTask(p, "splash");
 
         String splashJS = "";
         if (tgs != null) {
@@ -133,7 +132,7 @@ public class JsRule extends AbstractController {
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
-        TasksGroup tgs = jSService.getTask(p);
+        TasksGroup tgs = jSService.getTask(p, "home");
 
         String splashJS = "";
         if (tgs != null) {
@@ -165,7 +164,7 @@ public class JsRule extends AbstractController {
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
-        TasksGroup tgs = jSService.getTask(p);
+        TasksGroup tgs = jSService.getTask(p, "rightTop");
 
         String splashJS = "";
         if (tgs != null) {
@@ -197,7 +196,7 @@ public class JsRule extends AbstractController {
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
-        TasksGroup tgs = jSService.getTask(p);
+        TasksGroup tgs = jSService.getTask(p, "station");
 
         String splashJS = "";
         if (tgs != null) {
@@ -229,7 +228,7 @@ public class JsRule extends AbstractController {
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
-        TasksGroup tgs = jSService.getTask(p);
+        TasksGroup tgs = jSService.getTask(p, "bottom");
 
         String splashJS = "";
         if (tgs != null) {

@@ -103,6 +103,10 @@ public abstract class AbstractManager {
      * 不涉及到策略
      */
     public List<BaseAdEntity> doServiceList(AdvParam advParam, ShowType showType, QueryParam queryParam) {
+        
+        
+        
+        
         if (!beforeCheck(advParam, showType)) {
             return null;
         }

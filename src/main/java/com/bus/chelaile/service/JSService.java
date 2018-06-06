@@ -22,12 +22,41 @@ public class JSService {
 
     protected static final Logger logger = LoggerFactory.getLogger(JSService.class);
 
-    public TasksGroup getTask(AdvParam param) {
+    public TasksGroup getTask(AdvParam param, String site) {
+        ShowType showType;
+        List<BaseAdEntity> entities = null;
+        switch (site) {
+            case "splash":
+                showType = ShowType.OPEN_SCREEN;
+                entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, new QueryParam());
+                break;
+            case "home":
+                showType = ShowType.DOUBLE_COLUMN;
+                entities = openManager.doServiceList(param, ShowType.DOUBLE_COLUMN, new QueryParam());
+                break;
 
-        List<BaseAdEntity> entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, new QueryParam());
+            case "rightTop":
+                showType = ShowType.LINE_RIGHT_ADV;
+                entities = openManager.doServiceList(param, ShowType.LINE_RIGHT_ADV, new QueryParam());
+                break;
+            case "station":
+                showType = ShowType.STATION_ADV;
+                entities = openManager.doServiceList(param, ShowType.STATION_ADV, new QueryParam());
+                break;
+
+            case "bottom":
+                showType = ShowType.LINE_FEED_ADV;
+                entities = openManager.doServiceList(param, ShowType.LINE_FEED_ADV, new QueryParam());
+                break;
+                
+            default:
+                logger.error("未知类型的 site， udid={}, site={}", param);
+
+        }
+//        List<BaseAdEntity> entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, new QueryParam());
         if (entities != null && entities.size() > 0) {
             for (BaseAdEntity entity : entities) {
-                if(entity.getTasksGroup() != null) {
+                if (entity.getTasksGroup() != null) {
                     return entity.getTasksGroup();
                 }
             }
