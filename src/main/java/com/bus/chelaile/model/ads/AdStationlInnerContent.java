@@ -1,8 +1,14 @@
 package com.bus.chelaile.model.ads;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.model.ads.entity.AdEntity;
+import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.util.New;
 
 /**
  * 推送的广告的内部的内容， 就是数据之中content的结构化表示。
@@ -11,120 +17,150 @@ import com.bus.chelaile.mvc.AdvParam;
  * 
  */
 public class AdStationlInnerContent extends AdInnerContent {
-	private String pic; // 广告图片的URL
-	private AdCard adCard;
-	private BannerInfo bannerInfo;
-	private int buyOut;		// 买断， 0 没有买断； 1 买断。 2018-03-29
-	
-	private String wx_miniPro_id; 
+    private String pic; // 广告图片的URL
+    private AdCard adCard;
+    private BannerInfo bannerInfo;
+    private int buyOut; // 买断， 0 没有买断； 1 买断。 2018-03-29
+
+    private String wx_miniPro_id;
     private String wx_miniPro_path; // 跳转小程序， 2018-04-09
-    
+
     private int apiType;
     private int provider_id; // 广告提供商， 0：自采买广告；8：阅盟；9：Ecoook；10：科大讯飞【其他说明：3 inmobi】
-    
+
     private long autoInterval; // 自动刷新时间
-    private int adWeight;    // 轮播权重
+    private int adWeight; // 轮播权重
     private long mixInterval; // 最小展示时间
     private int backup; // 是否是备选方案
     private int clickDown; // 点击后排序到最后
-	
-	@Override
-	protected void parseJson(String jsonr) {
-		AdStationlInnerContent ad = null;
-		ad = JSON.parseObject(jsonr, AdStationlInnerContent.class);
-		if (ad != null) {
-			this.pic = ad.pic;
-			this.setAdCard(ad.getAdCard());
-			if (this.getAdCard() != null)
-				this.getAdCard().setGpsType("gcj"); // 默认站点坐标取自高德地图的经纬度
-			this.setBannerInfo(ad.getBannerInfo());
-			this.adWeight = ad.getAdWeight();
-			this.buyOut = ad.getBuyOut();
-			this.wx_miniPro_id = ad.getWx_miniPro_id();
-			this.wx_miniPro_path = ad.getWx_miniPro_path();
-			this.apiType = ad.apiType;
-			this.provider_id = ad.getProvider_id();
-			this.autoInterval = ad.autoInterval * 1000;
+
+    //  private String tasksStr; // tasks列表
+    private List<TaskModel> tasksJ;
+    private List<Long> timeouts; // 超时时间段设置
+
+    private TasksGroup tasksGroup;
+
+    @Override
+    protected void parseJson(String jsonr) {
+        AdStationlInnerContent ad = null;
+        ad = JSON.parseObject(jsonr, AdStationlInnerContent.class);
+        if (ad != null) {
+            this.pic = ad.pic;
+            this.setAdCard(ad.getAdCard());
+            if (this.getAdCard() != null)
+                this.getAdCard().setGpsType("gcj"); // 默认站点坐标取自高德地图的经纬度
+            this.setBannerInfo(ad.getBannerInfo());
+            this.adWeight = ad.getAdWeight();
+            this.buyOut = ad.getBuyOut();
+            this.wx_miniPro_id = ad.getWx_miniPro_id();
+            this.wx_miniPro_path = ad.getWx_miniPro_path();
+            this.apiType = ad.apiType;
+            this.provider_id = ad.getProvider_id();
+            this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
             this.clickDown = ad.clickDown;
-		}
-	}
 
-	@Override
-	public String extractFullPicUrl(String s) {
-		return null;
-	}
+            this.setTasksJ(ad.getTasksJ());
+            List<List<String>> tasksG = New.arrayList();
+            if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
+                Collections.sort(tasksJ, TaskModel_COMPARATOR);
+                //                getTasksJ().sort((final TaskModel t1, final TaskModel t2) -> (t1.getPriority() - t2.getPriority()));
+                Set<Integer> prioritys = New.hashSet();
+                for (TaskModel t : getTasksJ()) {
+                    if (!prioritys.contains(t.getPriority())) {
+                        List<String> ts = New.arrayList();
+                        ts.add(t.getApiName());
+                        tasksG.add(ts);
+                        prioritys.add(t.getPriority());
+                    } else {
+                        tasksG.get(tasksG.size() - 1).add(t.getApiName());
+                    }
+                }
+            }
+            if (tasksG != null && tasksG.size() > 0 && ad.timeouts != null) {
+                TasksGroup tasksGroups = new TasksGroup();
+                tasksGroups.setTasks(tasksG);
+                tasksGroups.setTimeouts(ad.timeouts);
+                this.tasksGroup = tasksGroups;
+            }
+        }
+    }
 
-	@Override
-	public String extractAudiosUrl(String s, int type) {
-		return null;
-	}
+    @Override
+    public String extractFullPicUrl(String s) {
+        return null;
+    }
 
-	public static void main(String[] args) {
-		AdStationlInnerContent adPush = new AdStationlInnerContent();
-		
-		adPush.setAndParseJson("{\"pic\":\"https://image3.chelaile.net.cn/98949248b15141a9b5eb0759097b68eb\",\"bannerInfo\":{\"bannerType\":\"3\",\"name\":\"坚持打卡\",\"color\":\"174, 60, 60, 1\",\"slogan\":\"昨天喜欢你，今天喜欢你，明天看心情\",\"sloganColor\":\"29, 116, 113, 1\",\"tag\":{},\"button\":{\"buttonText\":\"测试\",\"buttonColor\":\"255, 255, 255, 1\",\"buttonBG\":\"84, 85, 25, 1\",\"buttonRim\":\"255, 0, 43, 1\",\"buttonPic\":\"\"}},\"adCard\":{\"open\":\"0\",\"cardType\":\"2\",\"logo\":\"\",\"topPic\":\"\",\"tagPic\":\"\",\"name\":\"\",\"address\":\"\",\"lng\":\"12.1\",\"lat\":\"\",\"phoneNum\":\"\",\"link\":\"\"}}");
-		System.out.println("pic: " + adPush.pic);
-		System.out.println("adCard: name " + adPush.getAdCard().getName());
-		System.out.println("adCard: lng " + adPush.getAdCard().getLng());
-		if(adPush.getAdCard().getLng() > 1.0) {
-			System.out.println("lng 太大了");
-		}
-		System.out.println("JsonR: " + adPush.jsonContent);
-	}
+    @Override
+    public String extractAudiosUrl(String s, int type) {
+        return null;
+    }
 
-	@Override
-	public void fillAdEntity(AdEntity adEntity, AdvParam param, int stindex) {
-		if (adEntity == null) {
-			return;
-		}
-	}
+    public static void main(String[] args) {
+        AdStationlInnerContent adPush = new AdStationlInnerContent();
 
-	public void completePicUrl() {
-		this.pic = getFullPicUrl(pic);
-	}
+        adPush.setAndParseJson(
+                "{\"pic\":\"https://image3.chelaile.net.cn/98949248b15141a9b5eb0759097b68eb\",\"bannerInfo\":{\"bannerType\":\"3\",\"name\":\"坚持打卡\",\"color\":\"174, 60, 60, 1\",\"slogan\":\"昨天喜欢你，今天喜欢你，明天看心情\",\"sloganColor\":\"29, 116, 113, 1\",\"tag\":{},\"button\":{\"buttonText\":\"测试\",\"buttonColor\":\"255, 255, 255, 1\",\"buttonBG\":\"84, 85, 25, 1\",\"buttonRim\":\"255, 0, 43, 1\",\"buttonPic\":\"\"}},\"adCard\":{\"open\":\"0\",\"cardType\":\"2\",\"logo\":\"\",\"topPic\":\"\",\"tagPic\":\"\",\"name\":\"\",\"address\":\"\",\"lng\":\"12.1\",\"lat\":\"\",\"phoneNum\":\"\",\"link\":\"\"}}");
+        System.out.println("pic: " + adPush.pic);
+        System.out.println("adCard: name " + adPush.getAdCard().getName());
+        System.out.println("adCard: lng " + adPush.getAdCard().getLng());
+        if (adPush.getAdCard().getLng() > 1.0) {
+            System.out.println("lng 太大了");
+        }
+        System.out.println("JsonR: " + adPush.jsonContent);
+    }
 
+    @Override
+    public void fillAdEntity(AdEntity adEntity, AdvParam param, int stindex) {
+        if (adEntity == null) {
+            return;
+        }
+    }
 
-	public String getPic() {
-		return pic;
-	}
+    public void completePicUrl() {
+        this.pic = getFullPicUrl(pic);
+    }
 
-	public void setPic(String pic) {
-		this.pic = pic;
-	}
+    public String getPic() {
+        return pic;
+    }
 
-	public AdCard getAdCard() {
-		return adCard;
-	}
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
 
-	public void setAdCard(AdCard adCard) {
-		this.adCard = adCard;
-	}
+    public AdCard getAdCard() {
+        return adCard;
+    }
 
-	public BannerInfo getBannerInfo() {
-		return bannerInfo;
-	}
+    public void setAdCard(AdCard adCard) {
+        this.adCard = adCard;
+    }
 
-	public void setBannerInfo(BannerInfo bannerInfo) {
-		this.bannerInfo = bannerInfo;
-	}
+    public BannerInfo getBannerInfo() {
+        return bannerInfo;
+    }
 
-	public int getAdWeight() {
-		return adWeight;
-	}
+    public void setBannerInfo(BannerInfo bannerInfo) {
+        this.bannerInfo = bannerInfo;
+    }
 
-	public void setAdWeight(int adWeight) {
-		this.adWeight = adWeight;
-	}
+    public int getAdWeight() {
+        return adWeight;
+    }
 
-	public int getBuyOut() {
-		return buyOut;
-	}
+    public void setAdWeight(int adWeight) {
+        this.adWeight = adWeight;
+    }
 
-	public void setBuyOut(int buyOut) {
-		this.buyOut = buyOut;
-	}
+    public int getBuyOut() {
+        return buyOut;
+    }
+
+    public void setBuyOut(int buyOut) {
+        this.buyOut = buyOut;
+    }
 
     public String getWx_miniPro_id() {
         return wx_miniPro_id;
@@ -218,5 +254,47 @@ public class AdStationlInnerContent extends AdInnerContent {
      */
     public void setClickDown(int clickDown) {
         this.clickDown = clickDown;
+    }
+
+    /**
+     * @return the tasksGroup
+     */
+    public TasksGroup getTasksGroup() {
+        return tasksGroup;
+    }
+
+    /**
+     * @param tasksGroup the tasksGroup to set
+     */
+    public void setTasksGroup(TasksGroup tasksGroup) {
+        this.tasksGroup = tasksGroup;
+    }
+
+    /**
+     * @return the timeouts
+     */
+    public List<Long> getTimeouts() {
+        return timeouts;
+    }
+
+    /**
+     * @param timeouts the timeouts to set
+     */
+    public void setTimeouts(List<Long> timeouts) {
+        this.timeouts = timeouts;
+    }
+
+    /**
+     * @return the tasksJ
+     */
+    public List<TaskModel> getTasksJ() {
+        return tasksJ;
+    }
+
+    /**
+     * @param tasksJ the tasksJ to set
+     */
+    public void setTasksJ(List<TaskModel> tasksJ) {
+        this.tasksJ = tasksJ;
     }
 }

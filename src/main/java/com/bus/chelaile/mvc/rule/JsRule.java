@@ -123,7 +123,7 @@ public class JsRule extends AbstractController {
      * 首页
      */
     @ResponseBody
-    @RequestMapping("/homeAd1.js")
+    @RequestMapping("/homeAd.do")
     public String homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
@@ -155,7 +155,7 @@ public class JsRule extends AbstractController {
      * 详情页右上角
      */
     @ResponseBody
-    @RequestMapping("/rightTopAd1.js")
+    @RequestMapping("/rightTopAd.do")
     public String rightTopAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
@@ -187,7 +187,7 @@ public class JsRule extends AbstractController {
      * 站点位置
      */
     @ResponseBody
-    @RequestMapping("/stationAd1.js")
+    @RequestMapping("/stationAd.do")
     public String stationAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
@@ -219,7 +219,7 @@ public class JsRule extends AbstractController {
      * 详情页底部
      */
     @ResponseBody
-    @RequestMapping("/bottomAd1.js")
+    @RequestMapping("/bottomAd.do")
     public String bottomAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);

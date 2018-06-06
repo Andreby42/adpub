@@ -104,9 +104,6 @@ public abstract class AbstractManager {
      */
     public List<BaseAdEntity> doServiceList(AdvParam advParam, ShowType showType, QueryParam queryParam) {
         
-        
-        
-        
         if (!beforeCheck(advParam, showType)) {
             return null;
         }

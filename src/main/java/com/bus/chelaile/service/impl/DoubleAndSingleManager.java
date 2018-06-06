@@ -238,6 +238,13 @@ public class DoubleAndSingleManager extends AbstractManager {
         entity.setSindex(inner.getPosition());
         entity.setClickDown(inner.getClickDown());
 //        entity.setApiType(1);
+        
+     // 任务列表
+        // 2018-06-06
+        if(inner.getTasksGroup() != null) {
+            entity.setTasksGroup(inner.getTasksGroup());
+        }
+        
         return entity;
     }
 }

@@ -272,6 +272,12 @@ public class StationAdsManager extends AbstractManager {
         entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
         entity.setBannerInfo(bannerInfo);
         
+        // 任务列表
+        // 2018-06-06
+        if(inner.getTasksGroup() != null) {
+            entity.setTasksGroup(inner.getTasksGroup());
+        }
+        
         return entity;
     }
 

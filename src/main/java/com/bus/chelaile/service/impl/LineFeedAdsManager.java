@@ -160,6 +160,13 @@ public class LineFeedAdsManager extends AbstractManager {
         entity.setMixInterval(inner.getMixInterval());
         entity.setApiType(1);
         entity.setClickDown(inner.getClickDown());
+        
+     // 任务列表
+        // 2018-06-06
+        if(inner.getTasksGroup() != null) {
+            entity.setTasksGroup(inner.getTasksGroup());
+        }
+        
         return entity;
     }
     

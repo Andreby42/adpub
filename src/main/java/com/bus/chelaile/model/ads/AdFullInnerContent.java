@@ -1,7 +1,6 @@
 package com.bus.chelaile.model.ads;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -67,12 +66,10 @@ public class AdFullInnerContent extends AdInnerContent {
             this.AdWeight = ad.AdWeight;
             this.clickDown = ad.clickDown;
             this.setTasksJ(ad.getTasksJ());
-            //            this.timeouts = ad.timeouts;
-
             List<List<String>> tasksG = New.arrayList();
             if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
-//                getTasksJ().sort((final TaskModel t1, final TaskModel t2) -> (t1.getPriority() - t2.getPriority()));
+                //                getTasksJ().sort((final TaskModel t1, final TaskModel t2) -> (t1.getPriority() - t2.getPriority()));
                 Set<Integer> prioritys = New.hashSet();
                 for (TaskModel t : getTasksJ()) {
                     if (!prioritys.contains(t.getPriority())) {
@@ -288,30 +285,6 @@ public class AdFullInnerContent extends AdInnerContent {
         this.tasksGroup = tasksGroup;
     }
 
-    public static void main(String[] args) {
-        List<TaskModel> tasksJ1 = New.arrayList();
-        TaskModel t1 = new TaskModel();
-        t1.setApiName("a");
-        t1.setPriority(1);
-        TaskModel t2 = new TaskModel();
-        t2.setApiName("a2");
-        t2.setPriority(2);
-        tasksJ1.add(t2);
-        tasksJ1.add(t1);
-
-        System.out.println(JSONObject.toJSONString(tasksJ1));
-        Collections.sort(tasksJ1, TaskModel_COMPARATOR);
-        System.out.println(JSONObject.toJSONString(tasksJ1));
-
-        AdFullInnerContent adPush = new AdFullInnerContent();
-        adPush.setAndParseJson("{\"timeouts\":[500,1500],\"tasksJ\":[{\"apiName\":\"sdk_toutiao\",\"priority\":1},{\"apiName\":\"sdk_baidu\",\"priority\":1},{\"apiName\":\"sdk_gdt\",\"priority\":2}]}");
-        System.out.println("pic: " + adPush.pic);
-        System.out.println("JsonR: " + adPush.jsonContent);
-        System.out.println(JSONObject.toJSONString(adPush));
-        System.out.println(adPush.getTasksGroup().getTimeouts().toString());
-        System.out.println(adPush.getTasksGroup().getTasks().toString());
-    }
-
     /**
      * @return the timeouts
      */
@@ -339,16 +312,29 @@ public class AdFullInnerContent extends AdInnerContent {
     public void setTasksJ(List<TaskModel> tasksJ) {
         this.tasksJ = tasksJ;
     }
-    
-    private static final Comparator<TaskModel> TaskModel_COMPARATOR = new Comparator<TaskModel>() {
-        @Override
-        public int compare(TaskModel o1, TaskModel o2) {
-            if (o1 == null)
-                return -1;
-            if (o2 == null)
-                return 1;
-            return o1.getPriority() - o2.getPriority();
-        }
-    };
 
+    public static void main(String[] args) {
+        List<TaskModel> tasksJ1 = New.arrayList();
+        TaskModel t1 = new TaskModel();
+        t1.setApiName("a");
+        t1.setPriority(1);
+        TaskModel t2 = new TaskModel();
+        t2.setApiName("a2");
+        t2.setPriority(2);
+        tasksJ1.add(t2);
+        tasksJ1.add(t1);
+
+        System.out.println(JSONObject.toJSONString(tasksJ1));
+        Collections.sort(tasksJ1, TaskModel_COMPARATOR);
+        System.out.println(JSONObject.toJSONString(tasksJ1));
+
+        AdFullInnerContent adPush = new AdFullInnerContent();
+        adPush.setAndParseJson(
+                "{\"timeouts\":[500,1500],\"tasksJ\":[{\"apiName\":\"sdk_toutiao\",\"priority\":1},{\"apiName\":\"sdk_baidu\",\"priority\":1},{\"apiName\":\"sdk_gdt\",\"priority\":2}]}");
+        System.out.println("pic: " + adPush.pic);
+        System.out.println("JsonR: " + adPush.jsonContent);
+        System.out.println(JSONObject.toJSONString(adPush));
+        System.out.println(adPush.getTasksGroup().getTimeouts().toString());
+        System.out.println(adPush.getTasksGroup().getTasks().toString());
+    }
 }
