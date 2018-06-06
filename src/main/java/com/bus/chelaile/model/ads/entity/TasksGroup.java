@@ -11,31 +11,32 @@ public class TasksGroup {
     private List<List<String>> tasks;
     private List<Long> timeouts;
     
-    
-    
     public static void main(String[] args) {
         
         TasksGroup tgs = new TasksGroup();
         List<String> task1 = New.arrayList();
+        task1.add("api_voicead");
         task1.add("sdk_toutiao");
-        task1.add("api_kdxf");
-        
+
         List<String> task2 = New.arrayList();
-        task2.add("sdk_gdt");
-        
+        task2.add("sdk_baidu");
+
         List<List<String>> ts = new ArrayList<List<String>>();
-        ts.add(task1);ts.add(task2);
-        
+        ts.add(task1);
+        ts.add(task2);
+
         List<Long> times = New.arrayList();
-        times.add(500L);times.add(5500L);
-        
+        times.add(200L);
+        times.add(1500L);
+
         tgs.setTasks(ts);
         tgs.setTimeouts(times);
         
         System.out.println(JSONObject.toJSON(tgs));
+        System.out.println(tgs.getTasks().toString());
+        System.out.println(tgs.getTimeouts().toString());
         
     }
-
 
 
 
@@ -58,7 +59,6 @@ public class TasksGroup {
 
 
 
-
     /**
      * @return the timeouts
      */
@@ -68,11 +68,12 @@ public class TasksGroup {
 
 
 
-
     /**
      * @param timeouts the timeouts to set
      */
     public void setTimeouts(List<Long> timeouts) {
         this.timeouts = timeouts;
     }
+
+
 }

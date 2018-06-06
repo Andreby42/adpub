@@ -51,6 +51,11 @@ public class WXBannerManager extends AbstractManager {
 		for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
 			AdContentCacheEle ad = entry.getValue();
 			AdWXBannerInnerContent adWXBanner = (AdWXBannerInnerContent) ad.getAds().getAdInnerContent();
+			
+			if( (adWXBanner.getSite() == 1 && advParam.getSite() != 1) ||  // 配置详情页，site不是1
+			        (adWXBanner.getSite() == 0 && advParam.getSite() == 1)) { // 配置首页， site是1
+			    continue;
+			}
 
 			// 广告结构体有对来源的要求
 			if (adWXBanner.getServingPlaceList() != null && adWXBanner.getServingPlaceList().size() > 0) {

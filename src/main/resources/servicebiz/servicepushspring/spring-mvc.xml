@@ -3,21 +3,28 @@
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:util="http://www.springframework.org/schema/util
+                http://www.springframework.org/schema/util
+                http://www.springframework.org/schema/util/spring-util-3.0.xsd "
 	xsi:schemaLocation="
     http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-3.2.xsd
     http://www.springframework.org/schema/mvc
-    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+    ">
+    
+ <!--    <mvc:resources location="/js/" mapping="/js/**" /> -->
+    
+<!--     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
 				<ref bean="utf8StringHttpMessageConverter" />
 				<ref bean="jacksonMessageConverter" />
 			</list>
 		</property>
-	</bean>
+	</bean> -->
     
     <bean id="utf8StringHttpMessageConverter"
 		class="com.bus.chelaile.mvc.utils.UTF8StringHttpMessageConverter">
@@ -41,5 +48,16 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" >
 	</bean>
+    
+<!--     <mvc:annotation-driven >  
+    消息转换器  
+    <mvc:message-converters register-defaults="true">  
+      <bean class="org.springframework.http.converter.StringHttpMessageConverter">  
+        <property name="supportedMediaTypes" value="text/html;charset=UTF-8"/>  
+      </bean>  
+    </mvc:message-converters>  
+  </mvc:annotation-driven>  
+	 -->
+	
 	
 </beans>

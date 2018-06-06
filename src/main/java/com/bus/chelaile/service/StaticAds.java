@@ -1,8 +1,8 @@
 package com.bus.chelaile.service;
 
+import java.io.*;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
-import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -22,7 +21,7 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 /**
  * 保存静态的广告数据
  * 
- * @author zzz
+ * @author linzi
  *
  */
 public class StaticAds {
@@ -51,6 +50,7 @@ public class StaticAds {
 	
 	public static Map<String, String> SETTINGSMAP = New.hashMap();
 	private static String settingKeys = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "setting_keys", "AD_SETTING_linefeed_screenHeight;");
+	public static Map<String, String> JS_FILE_STR = New.hashMap();
 	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;
@@ -140,10 +140,35 @@ public class StaticAds {
 		minuteTimes.clear();
 		minuteNumber.clear();
 		advTBKTitleKey.clear();
-		
+		JS_FILE_STR.clear();
 		SETTINGSMAP.clear();
+		
 		readSettings();
+		readJSFILESTR();
 	}
+
+    private static void readJSFILESTR() {
+        Reader reader = null;
+        try {
+            File file = new File("/data/advConfig/js/");
+            File[] tempList = file.listFiles();
+            for (int i = 0; i < tempList.length; i++) {
+                reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
+                int tempchar;
+                StringBuilder jsStr = new StringBuilder();
+                while ((tempchar = reader.read()) != -1) {
+                    if(((char)tempchar) != '\r') {
+                        jsStr.append((char)tempchar);
+                    }
+                }
+                JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
+                reader.close();
+            }
+        } catch (Exception e) {
+            logger.error("读取js文件到缓存出错！ ", e);
+            e.printStackTrace();
+        }
+    }
 
     private static void readSettings() {
         if (settingKeys != null) {
@@ -246,9 +271,12 @@ public class StaticAds {
 
 	public static void main(String[] args) {
 
-		System.out.println(minuteTimes.get("adf "));
-		Map<String, Integer> a = New.hashMap();
-		System.out.println(a.get("adf"));
+//		System.out.println(minuteTimes.get("adf "));
+//		Map<String, Integer> a = New.hashMap();
+//		System.out.println(a.get("adf"));
+		
+		String a1 = "banner.js";
+		System.out.println(a1.split("\\.")[0]);
 
 	}
 }

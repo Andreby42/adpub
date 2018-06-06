@@ -45,7 +45,7 @@ public class BusAdvAction extends AbstractController {
 //    private static final  int TINGYUN_SWITCH = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "tingyunSwitch", "1"));
     
     @ResponseBody
-    @RequestMapping(value = "adv!getLineDetailAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getLineDetailAds.action", produces = "text/plain;charset=UTF-8")
     public String getLineDetailAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws Exception {
         AdvParam param = getActionParam(request);
@@ -61,7 +61,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!getNewOpenAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getNewOpenAds.action", produces = "text/plain;charset=UTF-8")
     public String getNewOpenAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         param.setType(getInt(request, "type"));
@@ -71,7 +71,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!getAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getAds.action", produces = "text/plain;charset=UTF-8")
     public String getAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         param.setStnList(request.getParameter("stnList")); //首页站线组合
@@ -86,7 +86,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!getOpenScreenAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getOpenScreenAds.action", produces = "text/plain;charset=UTF-8")
     public String getOpenScreenAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws Exception {
         AdvParam param = getActionParam(request);
@@ -96,7 +96,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!getFullAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getFullAds.action", produces = "text/plain;charset=UTF-8")
     public String getFullAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         param.setType(1);
@@ -105,7 +105,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!preloadAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!preloadAds.action", produces = "text/plain;charset=UTF-8")
     public String preloadAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
 
@@ -113,7 +113,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!precacheResource.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!precacheResource.action", produces = "text/plain;charset=UTF-8")
     public String precacheResource(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws Exception {
         AdvParam param = getActionParam(request);
@@ -122,7 +122,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!getActiveAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getActiveAds.action", produces = "text/plain;charset=UTF-8")
     public String getActiveAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         param.setType(0);
@@ -131,7 +131,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!getRide.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getRide.action", produces = "text/plain;charset=UTF-8")
     public String getRide(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         param.setType(1);
@@ -140,7 +140,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!getH5Banner.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getH5Banner.action", produces = "text/plain;charset=UTF-8")
     public String getH5Banner(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
 
@@ -156,7 +156,7 @@ public class BusAdvAction extends AbstractController {
      * 小程序 banner 位广告
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getWechatAppHomeBanner.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getWechatAppHomeBanner.action", produces = "text/plain;charset=UTF-8")
     public String getWechatAppHomeBanner(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws Exception {
         AdvParam param = getActionParam(request);
@@ -165,6 +165,7 @@ public class BusAdvAction extends AbstractController {
         if (StringUtils.isEmpty(param.getH5Src()))
             param.setH5Src(request.getParameter("src"));
         param.setUdid(request.getParameter("h5Id"));     // 接口没定义好，客户端上传的是h5Id
+        param.setSite(getInt(request, "site"));
         Object object = serviceManager.getQueryValue(param, "getWXBannerAds");
         if (object == null) {
             return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);
@@ -178,7 +179,7 @@ public class BusAdvAction extends AbstractController {
      * 小程序 浮层 位广告
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getWechatFullAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getWechatFullAds.action", produces = "text/plain;charset=UTF-8")
     public String getWechatFullAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws Exception {
         AdvParam param = getActionParam(request);
@@ -197,7 +198,7 @@ public class BusAdvAction extends AbstractController {
     
 
     @ResponseBody
-    @RequestMapping(value = "adv!getChat.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getChat.action", produces = "text/plain;charset=UTF-8")
     public String getChat(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         param.setType(2);
@@ -209,7 +210,7 @@ public class BusAdvAction extends AbstractController {
      * reload
      */
     @ResponseBody
-    @RequestMapping(value = "adv!reloadDatas.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!reloadDatas.action", produces = "text/plain;charset=UTF-8")
     public String reloadDatas(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         log.info("reload ******************************");
 
@@ -221,7 +222,7 @@ public class BusAdvAction extends AbstractController {
      * 
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getSwSwitch.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getSwSwitch.action", produces = "text/plain;charset=UTF-8")
     public String getSwSwitch(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         log.info("[entergetSwSwitch]");
         String swSwitch = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "swSwitch", "1");
@@ -239,7 +240,7 @@ public class BusAdvAction extends AbstractController {
 //     * 
 //     */
 //    @ResponseBody
-//    @RequestMapping(value = "adv!getTYSwitch.action", produces = "Content-Type=text/plain;charset=UTF-8")
+//    @RequestMapping(value = "adv!getTYSwitch.action", produces = "text/plain;charset=UTF-8")
 //    public String getTYSwitch(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 //        log.info("[entergetTYSwitch]");
 //        JSONObject ty = new JSONObject();
@@ -252,7 +253,7 @@ public class BusAdvAction extends AbstractController {
      * uninterest
      */
     @ResponseBody
-    @RequestMapping(value = "adv!uninterest.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!uninterest.action", produces = "text/plain;charset=UTF-8")
     public String uninterest(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         String secret = request.getParameter("secret");
@@ -276,7 +277,7 @@ public class BusAdvAction extends AbstractController {
      * interest,内部测试使用
      */
     @ResponseBody
-    @RequestMapping(value = "adv!interest.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!interest.action", produces = "text/plain;charset=UTF-8")
     public String interest(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         int showType = getInt(request, "showType");
@@ -300,7 +301,7 @@ public class BusAdvAction extends AbstractController {
      * invalidUser(会员定制不投放广告功能)
      */
     @ResponseBody
-    @RequestMapping(value = "notice!invalidUser.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "notice!invalidUser.action", produces = "text/plain;charset=UTF-8")
     public String invalidUser(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         String startInvalidDate = request.getParameter("startInvalidDate"); // 失效开始时间
@@ -314,7 +315,7 @@ public class BusAdvAction extends AbstractController {
      * clearInvalidAds(取消 用户不投放广告)
      */
     @ResponseBody
-    @RequestMapping(value = "adv!clearInvalidAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!clearInvalidAds.action", produces = "text/plain;charset=UTF-8")
     public String clearInvalidAds(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws Exception {
         AdvParam param = getActionParam(request);
@@ -327,7 +328,7 @@ public class BusAdvAction extends AbstractController {
      * getDisplayAdv(获取所有可投放的广告，客服系统使用)
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getDisplayAdv.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getDisplayAdv.action", produces = "text/plain;charset=UTF-8")
     public String getDisplayAdv(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
 
@@ -335,7 +336,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!getShortUrl.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getShortUrl.action", produces = "text/plain;charset=UTF-8")
     public String getShortUrl(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         String srcUrl = request.getParameter("srcUrl");
@@ -374,7 +375,7 @@ public class BusAdvAction extends AbstractController {
      * 给三妹返回上车提醒的文字配置
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getAboardText.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getAboardText.action", produces = "text/plain;charset=UTF-8")
     public String getAboardText(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam param = getActionParam(request);
@@ -384,7 +385,7 @@ public class BusAdvAction extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "adv!reloadConfigs.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!reloadConfigs.action", produces = "text/plain;charset=UTF-8")
     public String reloadConfigs(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws IOException {
 
@@ -397,7 +398,7 @@ public class BusAdvAction extends AbstractController {
     }
     
     @ResponseBody
-    @RequestMapping(value = "adv!getFeedAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getFeedAds.action", produces = "text/plain;charset=UTF-8")
     public String getFeedAds(HttpServletRequest request) {
         
         AdvParam param = getActionParam(request);
@@ -410,7 +411,7 @@ public class BusAdvAction extends AbstractController {
      * setNewUserstoOCS(往ocs中塞入用户创建时间，测试新用户不投放广告的时候使用)
      */
     @ResponseBody
-    @RequestMapping(value = "adv!setNewUserstoOCS.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!setNewUserstoOCS.action", produces = "text/plain;charset=UTF-8")
     public String setNewUserstoOCS(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws Exception {
         String udid = request.getParameter("udid");

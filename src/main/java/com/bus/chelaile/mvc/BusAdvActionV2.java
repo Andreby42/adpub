@@ -1,5 +1,7 @@
 package com.bus.chelaile.mvc;
 
+import java.io.OutputStream;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +20,12 @@ import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
+import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.service.StaticAds;
+import com.bus.chelaile.third.ThirdAdData;
+import com.bus.chelaile.third.kedaxunfei.KDXFService;
+import com.bus.chelaile.third.youdao.YoudaoService;
 import com.bus.chelaile.thread.Queue;
 import com.bus.chelaile.thread.model.QueueObject;
 
@@ -38,13 +44,13 @@ public class BusAdvActionV2 extends AbstractController {
     @Resource
     private ServiceManager serviceManager;
 
-    private static final Logger log = LoggerFactory.getLogger(BusAdvActionV2.class);
+    private static final Logger logger = LoggerFactory.getLogger(BusAdvActionV2.class);
 
     /*
      * 详情页下方广告（及之前的feed流顶部广告)
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getLineFeedAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getLineFeedAds.action", produces = "text/plain;charset=UTF-8")
     public String getLineFeedAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 
         AdvParam param = getActionParam(request);
@@ -57,7 +63,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 新版首页广告（既之前的首页单双栏位置广告)
      */
     @ResponseBody
-    @RequestMapping(value = "adv!geColumntAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!geColumntAds.action", produces = "text/plain;charset=UTF-8")
     public String geColumntAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 
         AdvParam advParam = getActionParam(request);
@@ -71,7 +77,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 新版开屏广告
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getCoopenAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getCoopenAds.action", produces = "text/plain;charset=UTF-8")
     public String getCoopenAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
         advParam.setStartMode(getInt(request, "startMode"));
@@ -84,7 +90,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 新版站点位置广告（从原来的详情页广告中拆分出来的）
      */
     @ResponseBody
-    @RequestMapping(value = "adv!getStationAds.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!getStationAds.action", produces = "text/plain;charset=UTF-8")
     public String getStationAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
         if(StringUtils.isBlank(advParam.getStnName()))
@@ -98,7 +104,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 点击上报街接口
      */
     @ResponseBody
-    @RequestMapping(value = "adv!ca.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!ca.action", produces = "text/plain;charset=UTF-8")
     public String ca(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam advParam = getActionParam(request);
         
@@ -123,7 +129,7 @@ public class BusAdvActionV2 extends AbstractController {
      * 处理点击埋点
      */
     @ResponseBody
-    @RequestMapping(value = "adv!handleClick.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!handleClick.action", produces = "text/plain;charset=UTF-8")
     public String handleClick(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 //        AdvParam advParam = getActionParam(request);
 //        
@@ -137,5 +143,37 @@ public class BusAdvActionV2 extends AbstractController {
         }
         
         return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    
+    /*
+     * 处理点击埋点
+     */
+    @ResponseBody
+    @RequestMapping(value = "adv!writeJ.action", produces = "text/plain;charset=UTF-8")
+    public void writeJ(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        AdvParam advParam = getActionParam(request);
+//        String sitePlace = request.getParameter("sitePlace");
+//        
+        ThirdAdData data = YoudaoService.getYouDaoData(advParam, ShowType.OPEN_SCREEN, "");
+        ThirdAdData data1 = KDXFService.getKDXF(advParam, ShowType.OPEN_SCREEN);
+        
+        logger.info("有道：data={}", JSONObject.toJSONString(data));
+        logger.info("科大讯飞, data1={}", JSONObject.toJSONString(data1));
+        
+        logger.info("js_str={}", JSONObject.toJSONString(StaticAds.JS_FILE_STR));
+        
+//        String s ="";
+//        if(sitePlace.equals("banner")) {
+//            s = StaticAds.JS_FILE_STR.get("banner.js");
+//        } else if(sitePlace.equals("coopen")){
+//            s = StaticAds.JS_FILE_STR.get("splash.js");
+//        }
+//        
+//        OutputStream ps = response.getOutputStream();
+//        ps.write(s.getBytes("UTF-8"));
+//        ps.flush();
+//        ps.close();
+//        return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
 }

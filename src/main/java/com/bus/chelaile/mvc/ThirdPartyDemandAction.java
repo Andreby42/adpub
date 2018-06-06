@@ -28,7 +28,7 @@ public class ThirdPartyDemandAction extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(ThirdPartyDemandAction.class);
 
     @ResponseBody
-    @RequestMapping(value = "adv!leyuansuActivationBack.action", produces = "Content-Type=text/plain;charset=UTF-8")
+    @RequestMapping(value = "adv!leyuansuActivationBack.action", produces = "text/plain;charset=UTF-8")
     public String activationBack(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam param = getActionParam(request);

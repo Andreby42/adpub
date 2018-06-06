@@ -26,7 +26,7 @@ public enum ShowType {
     WECHATAPP_BANNER_ADV("20"), // 小程序 banner位广告
     WECHAT_FULL_ADV("21"),  // 小程序浮层广告
     LINE_FEED_ADV("22"),    // 详情页底部广告
-	LINE_RIGHT_ADV("23");    // 详情页右上角广告
+    LINE_RIGHT_ADV("23");   // 详情页右上角广告位
     
     private String type;
     private int val;

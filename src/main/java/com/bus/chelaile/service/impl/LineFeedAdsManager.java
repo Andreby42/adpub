@@ -6,18 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
-import com.bus.chelaile.model.ads.AdButtonInfo;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
-import com.bus.chelaile.model.ads.AdStationlInnerContent;
-import com.bus.chelaile.model.ads.BannerInfo;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
-import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
@@ -120,6 +117,20 @@ public class LineFeedAdsManager extends AbstractManager {
         AdInnerContent inner = ad.getInnerContent();
         if (inner instanceof AdLineFeedInnerContent) {
             AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) inner;
+            
+         // 跳转feed流的targetType处理。 从永春接口获取内容填充
+            if (ad.getTargetType() == 12) {
+                if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528)
+                        || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528)) {
+                    res = createFeedEntity(advParam, ad, lineFeedInner);
+                } else {
+                    logger.error("低版本投放了跳转信息流的广告， adId={}, s={}, v={}, vc={}", ad.getId(), advParam.getS(), advParam.getV(),
+                            advParam.getVc());
+                    return null;
+                }
+                return res;
+            }
+            
             // 第三方特殊处理
             if (lineFeedInner.getProvider_id() > 1) {
                 res = createSDKOpenAds(ad, lineFeedInner);
@@ -153,7 +164,7 @@ public class LineFeedAdsManager extends AbstractManager {
     }
     
     // 跳转feed流的广告体
-    private LineFeedAdEntity createFeedEntity(AdvParam p, AdContent ad, AdStationlInnerContent inner) {
+    private LineFeedAdEntity createFeedEntity(AdvParam p, AdContent ad, AdLineFeedInnerContent inner) {
         String response = null;
         String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(), ShowType.LINE_FEED_ADV.getType());
         LineFeedAdEntity entity = null;
@@ -166,7 +177,7 @@ public class LineFeedAdsManager extends AbstractManager {
                 if(ads != null && ads.size() > 0) {
                     String title = ads.get(0).getTitle();
                     String source = ads.get(0).getSource();
-                    String timeShow = ads.get(0).getTimeShow();
+//                    String timeShow = ads.get(0).getTimeShow();
                     int imgsType = ads.get(0).getThumbnailType();
                     List<Thumbnails> thumbnails = ads.get(0).getThumbnails();
                     if(thumbnails == null || thumbnails.size() == 0) {
@@ -186,16 +197,13 @@ public class LineFeedAdsManager extends AbstractManager {
                     if(imgsType == 1) {
                         entity.setImgsType(0);
                     } else if(imgsType == 2) {
-                        entity.setImgsType(1);
-                        entity.setHead(title);
-                        entity.setSubhead(source);
+                        entity.setImgsType(2);
+                        entity.setSubhead(title);
+                        entity.setHead(source);
                     } else {
                         logger.error("详情页底部，不支持的图片类型 , url={}, response={}", url, response);
                         return null;
                     }
-                    
-                    
-                    
                 }
             }
         } catch (Exception e) {
