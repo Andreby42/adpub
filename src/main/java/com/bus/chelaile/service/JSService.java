@@ -14,6 +14,7 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.impl.DoubleAndSingleManager;
 import com.bus.chelaile.service.impl.LineDetailsManager;
 import com.bus.chelaile.service.impl.LineFeedAdsManager;
+import com.bus.chelaile.service.impl.LineRightManager;
 import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.StationAdsManager;
 
@@ -30,8 +31,8 @@ public class JSService {
     private LineFeedAdsManager lineFeedAdsManager;
     @Autowired
     private DoubleAndSingleManager doubleAndSingleManager;
-//    @Autowired
-//    private LineRightTopManager lineRightManager;
+    @Autowired
+    private LineRightManager lineRightManager;
 
     protected static final Logger logger = LoggerFactory.getLogger(JSService.class);
 
@@ -48,10 +49,10 @@ public class JSService {
                 entities = doubleAndSingleManager.doServiceList(param, ShowType.DOUBLE_COLUMN, new QueryParam());
                 break;
 
-//            case "rightTop":
-//                showType = ShowType.LINE_RIGHT_ADV;
-//                entities = lineRightManager.doServiceList(param, ShowType.LINE_RIGHT_ADV, new QueryParam());
-//                break;
+            case "rightTop":
+                showType = ShowType.LINE_RIGHT_ADV;
+                entities = lineRightManager.doServiceList(param, ShowType.LINE_RIGHT_ADV, new QueryParam());
+                break;
             case "station":
                 showType = ShowType.STATION_ADV;
                 entities = stationAdsManager.doServiceList(param, ShowType.STATION_ADV, new QueryParam());

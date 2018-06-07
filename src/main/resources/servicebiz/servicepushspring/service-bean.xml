@@ -38,6 +38,8 @@
 	<!-- 线路详情页下方feed位广告 -->
 	<bean id="lineFeedAdsManager" class="com.bus.chelaile.service.impl.LineFeedAdsManager" parent="abstractService">
 	</bean>
+    <bean id="lineRightManager" class="com.bus.chelaile.service.impl.LineRightManager" parent="abstractService">
+    </bean>
 	<!-- 小程序banner位广告 -->
 	<bean id="wXFullManager" class="com.bus.chelaile.service.impl.WXFullManager" parent="abstractService">
 	</bean>
