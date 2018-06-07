@@ -23,6 +23,8 @@ public class StationAdEntity extends BaseAdEntity {
     private long autoInterval;
     @JSONField(serialize = false)
     private long mixInterval;
+    
+    private String action; //跳转信息流使用的字段
 
     // 构造方法
     public StationAdEntity() {
@@ -134,4 +136,19 @@ public class StationAdEntity extends BaseAdEntity {
     public void setMixInterval(long mixInterval) {
         this.mixInterval = mixInterval;
     }
+
+    /**
+     * @return the action
+     */
+    public String getAction() {
+        return action;
+    }
+
+    /**
+     * @param action the action to set
+     */
+    public void setAction(String action) {
+        this.action = action;
+    }
+
 }

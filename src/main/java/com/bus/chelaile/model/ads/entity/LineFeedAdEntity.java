@@ -3,68 +3,66 @@ package com.bus.chelaile.model.ads.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.bus.chelaile.model.ShowType;
 
-
 /**
  * 详情页下方feed流广告，返回广告体【底部广告】
  * @author Administrator
  *
  */
 public class LineFeedAdEntity extends BaseAdEntity {
-	
-	public LineFeedAdEntity(int showType) {
+
+    public LineFeedAdEntity(int showType) {
         super(showType);
     }
 
     private String pic; // 图片URL
-	
-	@JSONField(serialize=false)
-    private String title;
-	@JSONField(serialize=false)
-	private long autoInterval;
-	@JSONField(serialize=false)
-	private long mixInterval;
-	
-	private String subhead; //  上面的文字
-	private String head; // 单图文章样式中，下面的文字
-	private int imgsType; // 图片样式  0小图， 1 大图
-	
-	// 构造方法
-//	public LineFeedAdEntity() {
-//	    this.showType = ShowType.LINE_FEED_ADV.getValue();
-//        this.pic = EMPTY_STR;
-//	}
-	
-	@Override
-	protected ShowType gainShowTypeEnum() {
-		return ShowType.LINE_FEED_ADV;
-	}
 
-	public String buildIdentity() {
+    @JSONField(serialize = false)
+    private String title;
+    @JSONField(serialize = false)
+    private long autoInterval;
+    @JSONField(serialize = false)
+    private long mixInterval;
+
+    private String subhead; //  上面的文字
+    private String head; // 单图文章样式中，下面的文字
+    private int imgsType; // 图片样式  0小图， 1 大图
+
+    private String action; //跳转信息流使用的字段
+
+    // 构造方法
+    //	public LineFeedAdEntity() {
+    //	    this.showType = ShowType.LINE_FEED_ADV.getValue();
+    //        this.pic = EMPTY_STR;
+    //	}
+
+    @Override
+    protected ShowType gainShowTypeEnum() {
+        return ShowType.LINE_FEED_ADV;
+    }
+
+    public String buildIdentity() {
         StringBuilder sb = new StringBuilder();
-        sb.append("ADV[id=").append(id)
-            .append("#showType=").append(showType)
-            .append("#title=").append((getTitle() != null && getTitle().length() > 10) ? getTitle().substring(0, 10) : getTitle())
-            .append("]");
-        
+        sb.append("ADV[id=").append(id).append("#showType=").append(showType).append("#title=")
+                .append((getTitle() != null && getTitle().length() > 10) ? getTitle().substring(0, 10) : getTitle()).append("]");
+
         return sb.toString();
     }
 
-	public String getPic() {
-		return pic;
-	}
+    public String getPic() {
+        return pic;
+    }
 
-	public void setPic(String pic) {
-		this.pic = pic;
-	}
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
 
+    public String getTitle() {
+        return title;
+    }
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     /**
      * @return the autoInterval
@@ -93,7 +91,6 @@ public class LineFeedAdEntity extends BaseAdEntity {
     public void setMixInterval(long mixInterval) {
         this.mixInterval = mixInterval;
     }
-
 
     /**
      * @return the subhead
@@ -135,5 +132,19 @@ public class LineFeedAdEntity extends BaseAdEntity {
      */
     public void setImgsType(int imgsType) {
         this.imgsType = imgsType;
+    }
+
+    /**
+     * @return the action
+     */
+    public String getAction() {
+        return action;
+    }
+
+    /**
+     * @param action the action to set
+     */
+    public void setAction(String action) {
+        this.action = action;
     }
 }

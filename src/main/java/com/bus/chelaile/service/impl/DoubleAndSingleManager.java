@@ -219,6 +219,10 @@ public class DoubleAndSingleManager extends AbstractManager {
 
         entity.fillBaseInfo(ad, advParam, paramMap);
         entity.dealLink(advParam);
+        
+        if(doubleInner.getTasksGroup() != null) {
+            entity.setTasksGroup(doubleInner.getTasksGroup());
+        }
 
         return entity;
     }

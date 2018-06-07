@@ -46,7 +46,7 @@ public abstract class BaseAdEntity {
     private int adWeight;    // 轮播权重
 	@JSONField(serialize=false)
 	private int clickDown;   // 点击后排序到最后 ，用于第三方
-	@JSONField(serialize=false)
+//	@JSONField(serialize=false)
 	private TasksGroup tasksGroup; // 任务单 
 
 	public BaseAdEntity(int showType) {
