@@ -39,7 +39,7 @@ public class JsRule extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping("/splashAd.js")
+    @RequestMapping(value="/splashAd.do",produces = "text/plain;charset=UTF-8")
     public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
