@@ -162,34 +162,33 @@
 		<appender-ref ref="analysis" />
 	</logger>
 
-
 	<logger name="org.springframework.web" additivity="false" level="debug">
 		<appender-ref ref="info" />
 	</logger>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<root level="INFO">
 		<!-- <appender-ref ref="info" /> -->
 		<appender-ref ref="error" />
-		
-        
+        <!-- 
         <appender-ref ref="ASYNC" />
-        
+         -->
         
 	</root>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </configuration>	
