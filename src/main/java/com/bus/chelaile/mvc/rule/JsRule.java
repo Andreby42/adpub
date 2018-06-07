@@ -74,13 +74,14 @@ public class JsRule extends AbstractController {
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
         TasksGroup tgs = jSService.getTask(p, "home");
+//        setMaidianParams(p, );
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "home_", );
+        String splashJS = produceJS(p, splashOrigin, tgs, "home_");
 
         return splashJS;
     }
 
-    private String produceJS(AdvParam p, String originJs, TasksGroup tgs, String tag, String maidianParam) {
+    private String produceJS(AdvParam p, String originJs, TasksGroup tgs, String tag) {
         if(StringUtils.isBlank(originJs)) {
             return "┭┮﹏┭┮ 原始js文件为空 ";
         }
@@ -89,7 +90,7 @@ public class JsRule extends AbstractController {
         if (tgs != null) {
             splashJS = originJs.replace("${TASKS}", tgs.getTasks().toString());
             splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
-            splashJS = splashJS.replaceAll("${MAIDIAN_PARAM}", );
+//            splashJS = splashJS.replaceAll("${MAIDIAN_PARAM}", );
 
             for (List<String> tasks : tgs.getTasks()) {
                 for (String task : tasks) {
