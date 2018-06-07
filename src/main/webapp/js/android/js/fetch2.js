@@ -60,6 +60,10 @@ function getSdk(sdkname) {
 //
 
 function ourUrls(traceInfo, entity, urls) {
+	var ret = {};
+	for (var k in urls)
+		ret[k] = urls[k];
+	for (var k in traceInfo
   return urls;
 }
 
@@ -230,6 +234,8 @@ function tryNthTaskGroup(rule, nth, callback) {
               var urls = ourUrls(rule.traceInfo, entity, rule.urls);
               console.log('ourUrls: ' + JSON.stringify(urls));
               data.urls = urls;
+			  if (typeof sdfInfo.task.aid == 'function')
+				data.aid = sdkInfo.aid();
             }
         });
     });
