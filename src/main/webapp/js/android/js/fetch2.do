@@ -63,8 +63,8 @@ function ourUrls(traceInfo, entity, urls) {
 	var ret = {};
 	for (var k in urls)
 		ret[k] = urls[k];
-	for (var k in traceInfo
-  return urls;
+	for (var k in traceInfo)
+		return urls;
 }
 
 
