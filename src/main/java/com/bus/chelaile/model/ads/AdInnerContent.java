@@ -1,5 +1,7 @@
 package com.bus.chelaile.model.ads;
 
+import java.util.Comparator;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.bus.chelaile.model.PropertiesName;
@@ -45,5 +47,16 @@ public abstract class AdInnerContent {
     public abstract String extractFullPicUrl(String s);
     
     public abstract String extractAudiosUrl(String s, int type);
+    
+    protected static final Comparator<TaskModel> TaskModel_COMPARATOR = new Comparator<TaskModel>() {
+        @Override
+        public int compare(TaskModel o1, TaskModel o2) {
+            if (o1 == null)
+                return -1;
+            if (o2 == null)
+                return 1;
+            return o1.getPriority() - o2.getPriority();
+        }
+    };
     
 }

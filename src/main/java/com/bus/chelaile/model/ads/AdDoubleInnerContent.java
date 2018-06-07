@@ -1,13 +1,19 @@
 package com.bus.chelaile.model.ads;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.TypeNumber;
 import com.bus.chelaile.model.ads.entity.AdEntity;
+import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.GpsUtils;
+import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
 /**
@@ -41,7 +47,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
     private String feedId; //话题详情页id
 
     private String desc; //
-    
+
     /**
     * 站级别位置，双栏广告的显示位置：第n位， 0表示第一条线前面（首位），
     * 1表示第一条线后面，2表示第二条线后面，等，而-1表示最后一条线后面（末位）。
@@ -56,7 +62,12 @@ public class AdDoubleInnerContent extends AdInnerContent {
     private int adWeight; //权重
     private int backup; // 是否是备选方案
     private int clickDown; // 点击后排序到最后
-    
+
+    //  private String tasksStr; // tasks列表
+    private List<TaskModel> tasksJ;
+    private List<Long> timeouts; // 超时时间段设置
+
+    private TasksGroup tasksGroup;
 
     @Override
     public void parseJson(String jsonr) {
@@ -86,12 +97,36 @@ public class AdDoubleInnerContent extends AdInnerContent {
             this.provider_id = ad.provider_id;
             this.apiType = ad.apiType;
             this.desc = ad.desc;
-            
+
             this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
             this.adWeight = ad.adWeight;
             this.clickDown = ad.clickDown;
+
+            this.setTasksJ(ad.getTasksJ());
+            List<List<String>> tasksG = New.arrayList();
+            if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
+                Collections.sort(tasksJ, TaskModel_COMPARATOR);
+                //                getTasksJ().sort((final TaskModel t1, final TaskModel t2) -> (t1.getPriority() - t2.getPriority()));
+                Set<Integer> prioritys = New.hashSet();
+                for (TaskModel t : getTasksJ()) {
+                    if (!prioritys.contains(t.getPriority())) {
+                        List<String> ts = New.arrayList();
+                        ts.add(t.getApiName());
+                        tasksG.add(ts);
+                        prioritys.add(t.getPriority());
+                    } else {
+                        tasksG.get(tasksG.size() - 1).add(t.getApiName());
+                    }
+                }
+            }
+            if (tasksG != null && tasksG.size() > 0 && ad.timeouts != null) {
+                TasksGroup tasksGroups = new TasksGroup();
+                tasksGroups.setTasks(tasksG);
+                tasksGroups.setTimeouts(ad.timeouts);
+                this.tasksGroup = tasksGroups;
+            }
         }
     }
 
@@ -130,12 +165,12 @@ public class AdDoubleInnerContent extends AdInnerContent {
         adEntity.setButtonTitle(nullToEmpty(this.buttonTitle));
         adEntity.setButtonColor(nullToEmpty(this.buttonColor));
         adEntity.setFeedId(this.getFeedId());
-        
+
         adEntity.setMixInterval(this.getMixInterval());
         adEntity.setAdWeight(this.adWeight);
         adEntity.setAutoInterval(this.autoInterval);
-        
-        if(param.getType() == TypeNumber.ONE.getType()) { // type=1：线路规划页广告
+
+        if (param.getType() == TypeNumber.ONE.getType()) { // type=1：线路规划页广告
             adEntity.setDesc(this.desc);
         }
         if (this.tag != null && this.tagId != null) {
@@ -167,13 +202,13 @@ public class AdDoubleInnerContent extends AdInnerContent {
         this.brandIcon = getFullPicUrl(brandIcon);
         this.buttonIcon = getFullPicUrl(buttonIcon);
     }
-    
+
     public static void main(String[] args) {
         String s = "{\"provider_id\":2,\"position\":1,\"promoteTitle\":\"活动\",\"showDistance\":0,\"subhead\":\"上班不迟到，放心睡懒觉\"}";
-        
+
         AdDoubleInnerContent ad = new AdDoubleInnerContent();
         ad.parseJson(s);
-        
+
         System.out.println(JSONObject.toJSONString(ad));
     }
 
@@ -414,7 +449,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
     public void setApiType(int apiType) {
         this.apiType = apiType;
     }
-    
+
     /**
      * @return the clickDown
      */
@@ -427,5 +462,47 @@ public class AdDoubleInnerContent extends AdInnerContent {
      */
     public void setClickDown(int clickDown) {
         this.clickDown = clickDown;
+    }
+
+    /**
+     * @return the tasksGroup
+     */
+    public TasksGroup getTasksGroup() {
+        return tasksGroup;
+    }
+
+    /**
+     * @param tasksGroup the tasksGroup to set
+     */
+    public void setTasksGroup(TasksGroup tasksGroup) {
+        this.tasksGroup = tasksGroup;
+    }
+
+    /**
+     * @return the timeouts
+     */
+    public List<Long> getTimeouts() {
+        return timeouts;
+    }
+
+    /**
+     * @param timeouts the timeouts to set
+     */
+    public void setTimeouts(List<Long> timeouts) {
+        this.timeouts = timeouts;
+    }
+
+    /**
+     * @return the tasksJ
+     */
+    public List<TaskModel> getTasksJ() {
+        return tasksJ;
+    }
+
+    /**
+     * @param tasksJ the tasksJ to set
+     */
+    public void setTasksJ(List<TaskModel> tasksJ) {
+        this.tasksJ = tasksJ;
     }
 }
