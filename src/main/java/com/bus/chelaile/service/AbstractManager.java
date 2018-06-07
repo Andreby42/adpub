@@ -871,9 +871,9 @@ public abstract class AbstractManager {
         if (platform.isH5(platform.getDisplay())) {
             if (StringUtils.isNoneBlank(advParam.getFrom())
                     && (advParam.getFrom().equalsIgnoreCase("city_taian") || advParam.getFrom().equalsIgnoreCase("wxcityservice"))) {
-                return true;
-            } else {
                 return false;
+            } else {
+                return true;
             }
         }
 
