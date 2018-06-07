@@ -869,7 +869,7 @@ public abstract class AbstractManager {
         }
         // 来自城市服务|泰安，不返回广告
         if (platform.isH5(platform.getDisplay())) {
-            if (StringUtils.isBlank(advParam.getFrom())
+            if (StringUtils.isNoneBlank(advParam.getFrom())
                     && (advParam.getFrom().equalsIgnoreCase("city_taian") || advParam.getFrom().equalsIgnoreCase("wxcityservice"))) {
                 return true;
             } else {
