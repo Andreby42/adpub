@@ -1,10 +1,45 @@
-// 手机处理任务
-// api task ===============
-// 根据taskname找到js fun，获取download url
-
+// home ad js
 
 env = {
     wifi: true
+}
+
+var api_chelaile = {
+    sdkname: function() {
+        return 'api_chelaile'
+    },
+
+    adurl: function() {
+        return {
+            url: 'http://dev.chelaile.net.cn/adpub/adv!getCoopenAds.action?last_src=app_360_sj&s=ios&push_open=1&userId=unknown&geo_lt=6&idfa=&geo_lat=22.8994&ol=e63166503869e58e344bb28edc630e35318118cc&vc=105&sv=7.1.1&v=5.50.1&startMode=0&imei=867977033452765&udid=0a47fad2-59c9-48ea-a01f-0e952e36a117111&type=0&cityId=027&sign=wM%2FOYSfqDhH4rk62aieVLg%3D%3D&mac=02%3A00%3A00%3A00%3A00%3A00&deviceType=12+MAX+2&wifi_open=0&geo_type=gcj&lchsrc=icon&nw=MOBILE_LTE&AndroidID=4deac64641b12eb6&geo_lac=550.0&language=1&first_src=app_baidu_as&userAgent=Mozilla%2F5.0+%28Linux%3B+Android+7.1.1%3B+MI+MAX+2+Build%2FNMF26F%3B+wv%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Version%2F4.0+Chrome%2F64.0.3282.137+Mobile+Safari%2F537.36&geo_lng=112.886266&remote_addr=223.104.63.159&x_forwarded_for=&requestid=1527574692647619ad176ee25caebf8a'
+        }
+    },
+
+    filter: function(data) {
+      var array = data.split("YGKJ");
+      if (array.length < 2) {
+          return null;
+      }
+      data = array[1];
+      if (typeof data == 'string')
+          data = eval("a=" + data);
+
+      var rows = data.jsonr.data.ads;
+
+      if (!rows || rows.length == 0)
+          return null;
+      var row = rows[0];
+      var ad = {
+          provider_id: 1,
+          link: row.link,
+          unfoldMonitorLink: row.unfoldMonitorLink,
+          clickMonitorLink: row.clickMonitorLink,
+          openType: row.openType,
+		  ad_order: 0,
+          pic: row.pic
+      }
+      return ad;
+    }
 }
 
 var api_yd = {
@@ -32,7 +67,7 @@ var api_yd = {
             var row = rows[i];
 
             var ad = {
-                type: 2,
+                provider_id: 11,
                 link: row.clk,
                 unfoldMonitorLink: row.imptracker.join(";"),
                 clickMonitorLink: row.clktrackers.join(";"),
@@ -43,6 +78,7 @@ var api_yd = {
                 brandIcon: row.iconimage,
                 pic: row.mainimage,
                 head: row.title,
+				ad_order: i,
                 subhead: row.text,
                 packageName: row.packageName
             }
@@ -114,13 +150,14 @@ var api_voicead = {
             var row = rows[i];
 
             var ad = {
-                type: 1,
+                provider_id: 10,
                 adType: row.adType,
                 downloadType: row.download_type,
                 packageName: row.package_name,
                 head: row.title,
                 subhead: row.sub_title,
                 pic: row.image,
+				ad_order: i,
                 brandIcon: row.icon,
                 link: row.landing_url,
                 deepLink: row.deep_link,
@@ -132,6 +169,8 @@ var api_voicead = {
         return null;
     }
 }
+
+
 
 // sdk taks ===================
 // 手机调用sdk

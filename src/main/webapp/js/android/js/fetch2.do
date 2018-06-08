@@ -137,13 +137,13 @@ function tryNthTaskGroup(rule, nth, callback) {
             return callback(data);
         }
 
-        if (nth == taskGroups.length - 1) {
+        if (nth == rule.length - 1) {
             console.log('Non data, and is the last group. Fail at last.');
             return callback(null);
         }
 
         console.log('try next group.')
-        tryNthTaskGroup(taskGroups, nth + 1, callback);
+        tryNthTaskGroup(rule, nth + 1, callback);
     }
 
     /**
@@ -236,7 +236,7 @@ function tryNthTaskGroup(rule, nth, callback) {
               data.urls = urls;
 			  console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
 			  //if (typeof sdfInfo.task.aid == 'function')
-				data.aid = sdkInfo.aid();
+				data.aid = sdkInfo.task.aid();
             }
         });
     });

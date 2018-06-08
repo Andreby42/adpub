@@ -1,11 +1,7 @@
-// 手机处理任务
-// api task ===============
-// 根据taskname找到js fun，获取download url
-
-
 env = {
     wifi: true
 }
+
 
 var api_chelaile = {
     sdkname: function() {
@@ -19,6 +15,7 @@ var api_chelaile = {
     },
 
     filter: function(data) {
+    
       var array = data.split("YGKJ");
       if (array.length < 2) {
           return null;
@@ -33,10 +30,11 @@ var api_chelaile = {
           return null;
       var row = rows[0];
       var ad = {
-          type: 0,
+          provider_id: 1,
           link: row.link,
           unfoldMonitorLink: row.unfoldMonitorLink,
           clickMonitorLink: row.clickMonitorLink,
+		  ad_order: 0,
           openType: row.openType,
           pic: row.pic
       }
@@ -69,7 +67,7 @@ var api_yd = {
             var row = rows[i];
 
             var ad = {
-                type: 2,
+                provider_id: 11,
                 link: row.clk,
                 unfoldMonitorLink: row.imptracker.join(";"),
                 clickMonitorLink: row.clktrackers.join(";"),
@@ -80,6 +78,7 @@ var api_yd = {
                 brandIcon: row.iconimage,
                 pic: row.mainimage,
                 head: row.title,
+				ad_order: i,
                 subhead: row.text,
                 packageName: row.packageName
             }
@@ -126,7 +125,7 @@ var api_voicead = {
                 "osv": "10.3.3",
                 "ts": "1527056043",
                 "appid": "5acf1d60",
-                "appname": "车来了",
+                "appname": "è½¦æ¥äº†",
                 "os": "iOS",
                 "openudid": "d41d8cd98f00b204e9800998ecf8427e089ec208",
                 "devicetype": "1",
@@ -152,7 +151,8 @@ var api_voicead = {
             var row = rows[i];
 
             var ad = {
-                type: 1,
+                provider_id: 10,
+				ad_order: i,
                 adType: row.adType,
                 downloadType: row.download_type,
                 packageName: row.package_name,
@@ -170,6 +170,9 @@ var api_voicead = {
         return null;
     }
 }
+
+
+
 
 // sdk taks ===================
 // 手机调用sdk

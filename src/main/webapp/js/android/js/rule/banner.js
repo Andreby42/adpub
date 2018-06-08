@@ -1,21 +1,45 @@
-// 手机处理任务
-// api task ===============
-// 根据taskname找到js fun，获取download url
-
-
-LTAG = 'chelaile';
+// home ad js
 
 env = {
     wifi: true
 }
 
-function api_exurls(standardRow) {
-    return {
-        click: 'http://163.com/click',
-        exhibit: 'exhibit',
-        response: '',
-        close: 'close'
-    };
+var api_chelaile = {
+    sdkname: function() {
+        return 'api_chelaile'
+    },
+
+    adurl: function() {
+        return {
+            url: 'http://dev.chelaile.net.cn/adpub/adv!getCoopenAds.action?last_src=app_360_sj&s=ios&push_open=1&userId=unknown&geo_lt=6&idfa=&geo_lat=22.8994&ol=e63166503869e58e344bb28edc630e35318118cc&vc=105&sv=7.1.1&v=5.50.1&startMode=0&imei=867977033452765&udid=0a47fad2-59c9-48ea-a01f-0e952e36a117111&type=0&cityId=027&sign=wM%2FOYSfqDhH4rk62aieVLg%3D%3D&mac=02%3A00%3A00%3A00%3A00%3A00&deviceType=12+MAX+2&wifi_open=0&geo_type=gcj&lchsrc=icon&nw=MOBILE_LTE&AndroidID=4deac64641b12eb6&geo_lac=550.0&language=1&first_src=app_baidu_as&userAgent=Mozilla%2F5.0+%28Linux%3B+Android+7.1.1%3B+MI+MAX+2+Build%2FNMF26F%3B+wv%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Version%2F4.0+Chrome%2F64.0.3282.137+Mobile+Safari%2F537.36&geo_lng=112.886266&remote_addr=223.104.63.159&x_forwarded_for=&requestid=1527574692647619ad176ee25caebf8a'
+        }
+    },
+
+    filter: function(data) {
+      var array = data.split("YGKJ");
+      if (array.length < 2) {
+          return null;
+      }
+      data = array[1];
+      if (typeof data == 'string')
+          data = eval("a=" + data);
+
+      var rows = data.jsonr.data.ads;
+
+      if (!rows || rows.length == 0)
+          return null;
+      var row = rows[0];
+      var ad = {
+          provider_id: 1,
+          link: row.link,
+          unfoldMonitorLink: row.unfoldMonitorLink,
+          clickMonitorLink: row.clickMonitorLink,
+          openType: row.openType,
+		  ad_order: 0,
+          pic: row.pic
+      }
+      return ad;
+    }
 }
 
 var api_yd = {
@@ -26,22 +50,52 @@ var api_yd = {
     adurl: function() {
         return {
             url: 'http://gorgon.youdao.com/gorgon/request.s?id=e3f49841bbd3ceb0c6a531ca32f4a754&udid=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&imei=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&lla=73.0&llp=p&wifi=&rip=10.168.0.10&imeimd5=305612168A059FC9CCDAC8D95D99E485&ct=2&dct=0&ll=116.403538,39.994026&auidmd5=305612168A059FC9CCDAC8D95D99E485&av=5.50.0&llt=1'
+
         }
     },
 
     filter: function(data) {
-        var ad = eval('a=' + data);
-        return ad;
+        if (typeof data == 'string')
+            data = eval("a=" + data);
+
+        var rows = data.mainimage ? [data] : data;
+
+        if (!rows || rows.length == 0)
+            return null;
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+
+            var ad = {
+                provider_id: 11,
+                link: row.clk,
+                unfoldMonitorLink: row.imptracker.join(";"),
+                clickMonitorLink: row.clktrackers.join(";"),
+                deeplink: row.deeplink,
+                dptrackers: row.dptrackers,
+                adType: row.ydAdType,
+                // styleName: row.styleName,
+                brandIcon: row.iconimage,
+                pic: row.mainimage,
+                head: row.title,
+				ad_order: i,
+                subhead: row.text,
+                packageName: row.packageName
+            }
+            return ad;
+        }
+        return null;
     }
+
 }
 
 var api_voicead = {
 
-    sdkname: function() {
+    sdkname : function() {
         return "api_voicead";
     },
 
-    adurl: function() {
+    adurl : function() {
         return {
             url: 'http://ws.voiceads.cn/ad/request',
             data: {
@@ -84,231 +138,163 @@ var api_voicead = {
         };
     },
 
-    filter: function(data) {
-        console.log('api_voicead get data:' + data)
-
+    filter : function(data) {
         if (typeof data == 'string')
             data = eval("a=" + data);
 
         var rows = data.batch_ma;
-        if (!rows || rows.length == 0)
+        if (!rows || rows.length === 0)
             return null;
 
         for (var i = 0; i < rows.length; i++) {
             var row = rows[i];
-            if (this.hide(row))
-                continue;
 
             var ad = {
-                title: row.title,
-                sub_title: row.sub_title,
-                image: row.image,
-                loading_url: row.loading_url,
-                click_url: row.click_url,
-                impr_url: row.impr_url,
-                inst_installsucc_url: row.inst_installsucc_url
+                provider_id: 10,
+                adType: row.adType,
+                downloadType: row.download_type,
+                packageName: row.package_name,
+                head: row.title,
+                subhead: row.sub_title,
+                pic: row.image,
+				ad_order: i,
+                brandIcon: row.icon,
+                link: row.landing_url,
+                deepLink: row.deep_link,
+                unfoldMonitorLink: row.impr_url.join(";"),
+                clickMonitorLink: row.click_url.join(";")
             }
             return ad;
         }
         return null;
-    },
-
-    hide: function(row, vendor) {
-        if (row.adtype == 'download' && !env.wifi) {
-            return true;
-        }
-        return false;
     }
 }
 
 
-// sdk taks ===================
-// 手机调用sdk
-// 广点通
-var sdk_toutiao = {
-
-    adurl: function() {
-        return {
-            url: "TOUTIAOSDK",
-            pos: "banner",
-            data: {
-                appId: "1106616441",
-                placementId: "8010016467754860777"
-                // placementId:"9040714184494018"
-            }
-        }
-    },
-
-    sdkname: function() {
-        return "sdk_toutiao";
-    },
-
-    hide: function(row) {
-        if (row.title.indexOf('抖音') > -1) {
-            return true;
-        }
-        if (row.title.indexOf('西瓜') > -1) {
-            return true;
-        }
-        return false;
-    },
-
-    exurls: function(row) {
-        return {}
-    },
-
-    filter: function(list) {
-        return list[0];
-    }
-}
-
 
 // sdk taks ===================
 // 手机调用sdk
-// 广点通
+
 var sdk_gdt = {
 
-    adurl: function() {
+    adurl : function() {
         return {
-            url: "GDTSDK",
-            pos: "banner",
-            data: {
-                appId: "1106616441",
-                placementId: "8010016467754860777"
-                // placementId:"9040714184494018"
+            url:"GDTSDK",
+            pos:"banner",
+            data:{
+                appId:"1106616441",
+                placementId:"9040714184494018"
             }
         }
     },
 
-    sdkname: function() {
+    sdkname : function() {
         return "sdk_gdt";
     },
 
-    hide: function(row) {
-        if (row.title.indexOf('抖音') > -1) {
-            return true;
-        }
-        if (row.title.indexOf('西瓜') > -1) {
-            return true;
-        }
-        return false;
-    },
-
-    exurls: function(row) {
-        return {}
-    },
-
-    filter: function(list) {
+    filter : function(list) {
         return list;
     }
 }
 
+
 var sdk_baidu = {
 
-    adurl: function() {
+    adurl : function() {
         return {
-            url: "BaiduSDK",
-            pos: "banner",
-            data: {
-                appId: "1106616441",
-                placementId: "8010016467754860777"
-                // placementId:"9040714184494018"
+            url:"BaiduSDK",
+            pos:"banner",
+            data:{
+                appId:"",
+                placementId:"5826174"
             }
         }
     },
 
-    sdkname: function() {
+    sdkname : function() {
         return "sdk_baidu";
     },
 
-    hide: function(row) {
-        if (row.title.indexOf('抖音') > -1) {
-            return true;
-        }
-        if (row.title.indexOf('西瓜') > -1) {
-            return true;
-        }
-        return false;
+    asEntity : function(ad){
+      return {};
     },
 
-    exurls: function(row) {
-        return {}
-    },
-
-    filter: function(list) {
-        return list[0];
+    filter : function(list) {
+        return list[0] || null;
     }
 }
 
-// 手机sdk inmobi
-var sdk_inmobi = {
+var sdk_toutiao = {
 
-    adurl: function() {
+    adurl : function() {
         return {
-            url: "InMobiSDK",
-            pos: "banner",
-            data: {
-                appId: "f83af5e921de42cf813dc475c362aaf0",
-                placementId: "1522609003688"
+            url:"TOUTIAOSDK",
+            pos:"banner",
+            data:{
+                appId:"",
+                placementId:"900673326"
             }
         }
     },
 
-    sdkname: function() {
-        return "sdk_inmobi";
+    sdkname : function() {
+        return "sdk_toutiao";
     },
 
-    hide: function(row) {
-        if (row.title.indexOf('抖音') > -1) {
-            return true;
-        }
-        if (row.title.indexOf('西瓜') > -1) {
-            return true;
-        }
-        return false;
+    asEntity : function (ad) {
+      // TODO
+      return {};
     },
 
-    exurls: function(row) {
-        return {}
-    },
-
-    filter: function(list) {
+    filter : function(list) {
         return list[0];
     }
 }
 
-// ================================
-var api_wrong = {
+var sdk_voicead = {
 
-    sdkname: function() {
-        return "api_wrong";
-    },
-
-    adurl: function() {
+    adurl : function() {
         return {
-            url: 'http://google.com',
-            data: {}
+            url:"IFLYSDK",
+            pos:"splash",
+            data:{
+                appId:"",
+                placementId:"D028C0ADDDBC38952DA01241B4939E64"
+            }
         }
     },
 
-    hide: function(row) {
-        return true;
+    sdkname : function() {
+        return "sdk_voicead";
     },
 
-    filter: function(list) {
-        return null;
+    asEntity : function (ad) {
+      // TODO
+      return {}
+    },
+
+    filter : function(ad) {
+        return ad;
     }
 }
 
 function ads() {
     return {
-        timeouts: [1500, 1500],
+      traceInfo : {
+        ip : '192.168.100.100'
+      },
+      urls : {
+        exposeUrl:'http://atrace.chelaile.net.cn/exhibit',
+        clickUrl:'http://atrace.chelaile.net.cn/click',
+        closeUrl:'http://atrace.chelaile.net.cn/close'
+      },
+        timeouts:[1000, 2000],
         tasks: [
-            [api_yd]
+              [sdk_baidu]
         ]
     }
 }
 
 module.exports = ads;
 
-console.log('banner loaded');
+console.log('splash loaded');

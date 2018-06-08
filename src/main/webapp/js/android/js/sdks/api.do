@@ -16,6 +16,10 @@ function load(task, userdata, callback) {
             console.log(e);
             return callback(null);
         }
+		
+		var wrapAd = new Object();
+        wrapAd.ad = ad;
+        callback(wrapAd);
 
         callback(ad);
     }
