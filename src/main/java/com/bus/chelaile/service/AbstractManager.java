@@ -383,7 +383,7 @@ public abstract class AbstractManager {
             return false;
         }
         // 开屏是否投给MIUI，投且只投
-        if (showType == ShowType.OPEN_SCREEN && !rule.devicePub(advParam.getDeviceType(), advParam.getStartMode())) {
+        if (showType == ShowType.OPEN_SCREEN && !rule.devicePub(advParam.getUdid(), advParam.getDeviceType(), advParam.getStartMode())) {
             logger.info("MIUI OPEN return false, deviceType={}, canPubMIUI={}, startMode={}, udid={}", advParam.getDeviceType(),
                     rule.getCanPubMIUI(), advParam.getStartMode(), advParam.getUdid());
             return false;
@@ -867,9 +867,10 @@ public abstract class AbstractManager {
                 return false;
             }
         }
-        // 城市服务不返回广告
+        // 来自城市服务|泰安，不返回广告
         if (platform.isH5(platform.getDisplay())) {
-            if (StringUtils.isNoneBlank(advParam.getFrom()) && advParam.getFrom().equals("wxcityservice")) {
+            if (StringUtils.isNoneBlank(advParam.getFrom())
+                    && (advParam.getFrom().equalsIgnoreCase("city_taian") || advParam.getFrom().equalsIgnoreCase("wxcityservice"))) {
                 return false;
             }
         }

@@ -81,6 +81,11 @@ public class SelfOpenManager {
 	            if(fullInner.getTag() != null && fullInner.getTagId() != null) {
 	                res.setTag(new Tag(fullInner.getTag(), fullInner.getTagId()));
 	            }
+	            
+	            if(fullInner.getTasksGroup() != null) {
+	                res.setTasksGroup(fullInner.getTasksGroup());
+	            }
+	            
 	                
 	        }
 	    

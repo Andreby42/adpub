@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,14 @@ public class JsRule extends AbstractController {
      * 开屏
      */
     @ResponseBody
-    @RequestMapping(value="/splashAd.do",produces = "text/plain;charset=UTF-8")
+    @RequestMapping("/splashAd.js")
     public String splashAd1(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+
+
+
+
+
 
         AdvParam p = getActionParam(request);
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
@@ -122,6 +129,7 @@ public class JsRule extends AbstractController {
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
         TasksGroup tgs = jSService.getTask(p, "home");
+//        setMaidianParams(p, );
 
         String splashJS = produceJS(p, splashOrigin, tgs, "home_");
 
@@ -129,10 +137,17 @@ public class JsRule extends AbstractController {
     }
 
     private String produceJS(AdvParam p, String splashOrigin, TasksGroup tgs, String tag) {
+    private String produceJS(AdvParam p, String originJs, TasksGroup tgs, String tag) {
+        if(StringUtils.isBlank(originJs)) {
+            return "┭┮﹏┭┮ 原始js文件为空 ";
+        }
+        
         String splashJS = "";
         if (tgs != null) {
             splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
+            splashJS = originJs.replace("${TASKS}", tgs.getTasks().toString());
             splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
+//            splashJS = splashJS.replaceAll("${MAIDIAN_PARAM}", );
 
             for (List<String> tasks : tgs.getTasks()) {
                 for (String task : tasks) {
@@ -144,6 +159,8 @@ public class JsRule extends AbstractController {
                     }
                 }
             }
+        } else {
+            return "┭┮﹏┭┮ tasks为空 ";
         }
         return splashJS;
     }

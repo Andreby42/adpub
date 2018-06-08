@@ -118,6 +118,10 @@ public class StationAdsManager extends AbstractManager {
             res.setBuyOut(stationInner.getBuyOut());
             res.setWxMiniProId(stationInner.getWx_miniPro_id());
             res.setWxMiniProPath(stationInner.getWx_miniPro_path());
+            
+            if (stationInner.getTasksGroup() != null) {
+                res.setTasksGroup(stationInner.getTasksGroup());
+            }
 
             // 对空串情况做一下处理
             if (stationInner.getBannerInfo() != null
@@ -294,8 +298,10 @@ public class StationAdsManager extends AbstractManager {
                 List<Ads> ads = feedAdGoto.getJsonr().getData().getAds();
                 if(ads != null && ads.size() > 0) {
                     String slogan = ads.get(0).getTitle();
+                    String action = ads.get(0).getAction();
                     entity = new StationAdEntity();
-
+                    
+                    entity.setAction(action);
                     entity.setId(ad.getId());
                     entity.setTitle(ad.getTitle());
                     entity.setBuyOut(inner.getBuyOut());
@@ -313,6 +319,10 @@ public class StationAdsManager extends AbstractManager {
 
                     entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
                     entity.setBannerInfo(bannerInfo);
+                    
+                    if(inner.getTasksGroup() != null) {
+                        entity.setTasksGroup(inner.getTasksGroup());
+                    }
                 }
             }
         } catch (Exception e) {

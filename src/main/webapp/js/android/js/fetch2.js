@@ -64,7 +64,7 @@ function ourUrls(traceInfo, entity, urls) {
 	for (var k in urls)
 		ret[k] = urls[k];
 	for (var k in traceInfo)
-		return urls;
+  return urls;
 }
 
 
@@ -236,7 +236,7 @@ function tryNthTaskGroup(rule, nth, callback) {
               data.urls = urls;
 			  console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
 			  //if (typeof sdfInfo.task.aid == 'function')
-				data.aid = sdkInfo.aid();
+				data.aid = sdkInfo.task.aid();
             }
         });
     });

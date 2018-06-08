@@ -73,7 +73,7 @@ public class LineFeedAdsManager extends AbstractManager {
             // 重新排序
             // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个
             // 如果超过半小时，那么按照权重排序
-            if (!checkSendLog(advParam, entities, showType.getType()))
+//            if (!checkSendLog(advParam, entities, showType.getType()))
                 rankAds(advParam, entities);
             setClickAtLast(cacheRecord, entities);
             if (backupad != null) {
@@ -140,6 +140,10 @@ public class LineFeedAdsManager extends AbstractManager {
                 res.setSubhead(lineFeedInner.getSlogan());
                 res.setHead(lineFeedInner.getFeedAdTitle());
                 res.setPic(lineFeedInner.getPic());
+                
+                if(lineFeedInner.getTasksGroup() != null) {
+                    res.setTasksGroup(lineFeedInner.getTasksGroup());
+                }
             }
         }
         return res;
@@ -184,6 +188,7 @@ public class LineFeedAdsManager extends AbstractManager {
                 if (ads != null && ads.size() > 0) {
                     String title = ads.get(0).getTitle();
                     String source = ads.get(0).getSource();
+                    String action = ads.get(0).getAction();
                     //                    String timeShow = ads.get(0).getTimeShow();
                     int imgsType = ads.get(0).getThumbnailType();
                     List<Thumbnails> thumbnails = ads.get(0).getThumbnails();
@@ -200,6 +205,11 @@ public class LineFeedAdsManager extends AbstractManager {
                     entity.setAutoInterval(inner.getAutoInterval());
                     entity.setMixInterval(inner.getMixInterval());
                     entity.setPic(thumbnails.get(0).getUrl());
+                    entity.setAction(action);
+                    
+                    if(inner.getTasksGroup() != null) {
+                        entity.setTasksGroup(inner.getTasksGroup());
+                    }
 
                     if (imgsType == 1) {
                         entity.setImgsType(0);
