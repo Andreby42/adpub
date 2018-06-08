@@ -234,8 +234,9 @@ function tryNthTaskGroup(rule, nth, callback) {
               var urls = ourUrls(rule.traceInfo, entity, rule.urls);
               console.log('ourUrls: ' + JSON.stringify(urls));
               data.urls = urls;
-			  if (typeof sdfInfo.task.aid == 'function')
-				data.aid = sdkInfo.aid();
+			  console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
+			  //if (typeof sdfInfo.task.aid == 'function')
+				data.aid = sdkInfo.task.aid();
             }
         });
     });
