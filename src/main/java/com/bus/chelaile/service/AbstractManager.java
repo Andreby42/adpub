@@ -383,7 +383,7 @@ public abstract class AbstractManager {
             return false;
         }
         // 开屏是否投给MIUI，投且只投
-        if (showType == ShowType.OPEN_SCREEN && !rule.devicePub(advParam.getDeviceType(), advParam.getStartMode())) {
+        if (showType == ShowType.OPEN_SCREEN && !rule.devicePub(advParam.getUdid(), advParam.getDeviceType(), advParam.getStartMode())) {
             logger.info("MIUI OPEN return false, deviceType={}, canPubMIUI={}, startMode={}, udid={}", advParam.getDeviceType(),
                     rule.getCanPubMIUI(), advParam.getStartMode(), advParam.getUdid());
             return false;
