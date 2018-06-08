@@ -65,6 +65,10 @@ public class AbstractController {
         } else {
             param.setIp(request.getParameter("remote_addr"));
         }
+        param.setScreenWidth( getInt(request, "screenWidth"));
+        param.setDpi(request.getParameter("dpi"));
+        param.setGpsAccuracy(request.getParameter("gpsAccuracy"));
+        param.setWifissid(request.getParameter("wifissid"));
 
         return param;
     }
