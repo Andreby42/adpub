@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
@@ -136,7 +135,6 @@ public class JsRule extends AbstractController {
         return splashJS;
     }
 
-    private String produceJS(AdvParam p, String splashOrigin, TasksGroup tgs, String tag) {
     private String produceJS(AdvParam p, String originJs, TasksGroup tgs, String tag) {
         if(StringUtils.isBlank(originJs)) {
             return "┭┮﹏┭┮ 原始js文件为空 ";
@@ -144,7 +142,6 @@ public class JsRule extends AbstractController {
         
         String splashJS = "";
         if (tgs != null) {
-            splashJS = splashOrigin.replace("${TASKS}", tgs.getTasks().toString());
             splashJS = originJs.replace("${TASKS}", tgs.getTasks().toString());
             splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
 //            splashJS = splashJS.replaceAll("${MAIDIAN_PARAM}", );
