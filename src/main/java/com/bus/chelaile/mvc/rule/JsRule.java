@@ -1,6 +1,5 @@
 package com.bus.chelaile.mvc.rule;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.JSService;
 import com.bus.chelaile.service.StaticAds;
-import com.bus.chelaile.util.New;
 
 @Controller
 @RequestMapping("/js/android/js/rule")
@@ -127,7 +125,7 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
         TasksGroup tgs = jSService.getTask(p, "splash");
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "splash_");
+        String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request);
 
         return splashJS;
     }
@@ -148,38 +146,8 @@ public class JsRule extends AbstractController {
         TasksGroup tgs = jSService.getTask(p, "home");
 //        setMaidianParams(p, );
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "home_");
+        String splashJS = produceJS(p, splashOrigin, tgs, "home_", request);
 
-        return splashJS;
-    }
-
-    private String produceJS(AdvParam p, String originJs, TasksGroup tgs, String tag) {
-        if(StringUtils.isBlank(originJs)) {
-            return "┭┮﹏┭┮ 原始js文件为空 ";
-        }
-        
-        String splashJS = "";
-        if (tgs != null) {
-            splashJS = originJs.replace("${TASKS}", tgs.getTasks().toString());
-            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
-//            splashJS = splashJS.replaceAll("${MAIDIAN_PARAM}", );
-
-            for (List<String> tasks : tgs.getTasks()) {
-                for (String task : tasks) {
-                    if(task.contains("api_chelaile")) {
-                        
-                    }
-                    if (task.contains("sdk")) {
-                        if(StaticAds.JS_FILE_STR.containsKey(tag + task))
-                            splashJS += StaticAds.JS_FILE_STR.get(tag + task);
-                        else 
-                            logger.error("没有配置文件的 sdk|api，task={},  udid={}, JS_FILE_STR.keys={}", tag + task, p.getUdid(), StaticAds.JS_FILE_STR.keySet());
-                    }
-                }
-            }
-        } else {
-            return "┭┮﹏┭┮ tasks为空 ";
-        }
         return splashJS;
     }
 
@@ -199,7 +167,7 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
         TasksGroup tgs = jSService.getTask(p, "rightTop");
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "right_");
+        String splashJS = produceJS(p, splashOrigin, tgs, "right_", request);
 
         return splashJS;
     }
@@ -220,7 +188,7 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
         TasksGroup tgs = jSService.getTask(p, "station");
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "station_");
+        String splashJS = produceJS(p, splashOrigin, tgs, "station_", request);
 
         return splashJS;
     }
@@ -241,8 +209,39 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
         TasksGroup tgs = jSService.getTask(p, "bottom");
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_");
+        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request);
 
         return splashJS;
     }
+    
+    
+    private String produceJS(AdvParam p, String originJs, TasksGroup tgs, String tag, HttpServletRequest request) {
+        if(StringUtils.isBlank(originJs)) {
+            return "┭┮﹏┭┮ 原始js文件为空 ";
+        }
+        
+        String splashJS = "";
+        if (tgs != null) {
+            splashJS = originJs.replace("${TASKS}", tgs.getTasks().toString());
+            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTimeouts().toString());
+//            splashJS = splashJS.replaceAll("${MAIDIAN_PARAM}", );
+
+            for (List<String> tasks : tgs.getTasks()) {
+                for (String task : tasks) {
+                    if(task.contains("api_chelaile")) {
+                        splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
+                    } else if (task.contains("sdk")) {
+                        if(StaticAds.JS_FILE_STR.containsKey(tag + task))
+                            splashJS += StaticAds.JS_FILE_STR.get(tag + task);
+                        else 
+                            logger.error("没有配置文件的 sdk|api，task={},  udid={}, JS_FILE_STR.keys={}", tag + task, p.getUdid(), StaticAds.JS_FILE_STR.keySet());
+                    }
+                }
+            }
+        } else {
+            return "┭┮﹏┭┮ tasks为空 ";
+        }
+        return splashJS;
+    }
+
 }
