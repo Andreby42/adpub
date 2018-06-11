@@ -57,12 +57,12 @@ public class JsRule extends AbstractController {
     }
     
  // for test
-    @ResponseBody
-    @RequestMapping(value="/splash3.js", produces = "charset=UTF-8")
-    public String splash3(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-        return "hello_1111111111你好 啊";
-    }
+//    @ResponseBody
+//    @RequestMapping(value="/splash3.js", produces = "charset=UTF-8")
+//    public String splash3(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+//
+//        return "hello_1111111111你好 啊";
+//    }
 
 //    /*
 //     * 开屏
