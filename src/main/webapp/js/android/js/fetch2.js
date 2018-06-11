@@ -6,29 +6,17 @@ function sdkfile(sdkname) {
     return "sdks/" + sdkname;
 }
 
-var mapRules = {},
-    mapSdks = {};
+var mapSdks = {};
 /**
  * @param {string!} uni_tag
  * @brief 通过 type+pos得到的唯一标识，获取规则描述。
  */
-function getRule(uni_tag) {
-    var rule = mapRules[uni_tag];
-    if (!rule) {
-        try {
-            rule = require(rulefile(uni_tag));
-        } catch (e) {
-            console.log(e);
-        }
-        if (rule) {
-            mapRules[uni_tag] = rule;
-        }
-    }
-    return rule;
+function getRuleFn(uni_tag) {
+    return require(rulefile(uni_tag));
 }
 
 
-function getExistSdks(taskGroup) {
+function getSdkInfos(taskGroup) {
     var existSdks = [];
     taskGroup.forEach(function(task) {
         var sdk = getSdk(task.sdkname());
@@ -68,6 +56,18 @@ function getSdk(sdkname) {
 
 }
 
+//
+//
+
+function ourUrls(traceInfo, entity, urls) {
+	var ret = {};
+	for (var k in urls)
+		ret[k] = urls[k];
+	for (var k in traceInfo)
+		return urls;
+}
+
+
 function getAds(type, pos, userdata, callback) {
 
     console.log("getAds:" + type + "," + pos + "," + userdata + "," + (callback));
@@ -80,16 +80,19 @@ function getAds(type, pos, userdata, callback) {
         if (isString(type) && isString(pos)) {
             var uni_tag = type;
             if (pos) uni_tag += "_" + pos;
-            var rule = getRule(uni_tag);
-            if (rule) {
-                fetchRule(rule(), callback);
+            var ruleFn = getRuleFn(uni_tag);
+            if (ruleFn) {
+                fetchRule(ruleFn(), callback);
                 callback = null;
+            } else {
+              console.log('rule not found: ' + uni_tag)
             }
         }
     } catch (e) {
         console.log(e);
     } finally {
-        if (callback) callback(null);
+        if (callback)
+          callback(null);
     }
 }
 
@@ -108,7 +111,6 @@ function fetchRule(rule, callback) {
         secondTime = rule.timeouts[1] || secondTime;
     }
 
-
     function feedData(data) {
         if (data) {
             console.log('get data ' + data);
@@ -119,27 +121,29 @@ function fetchRule(rule, callback) {
         }
     }
 
-    tryNthTaskGroup(rule.tasks, 0, feedData);
+    tryNthTaskGroup(rule, 0, feedData);
 }
 
 
 /**
  * 尝试第n个taskGroup
  */
-function tryNthTaskGroup(taskGroups, nth, callback) {
+function tryNthTaskGroup(rule, nth, callback) {
+
+  var taskGroups = rule.tasks;
     function wrappedFn(data) {
         if (data) {
             console.log('Get data, callback directly.');
             return callback(data);
         }
 
-        if (nth == taskGroups.length - 1) {
+        if (nth == rule.length - 1) {
             console.log('Non data, and is the last group. Fail at last.');
             return callback(null);
         }
 
         console.log('try next group.')
-        tryNthTaskGroup(taskGroups, nth + 1, callback);
+        tryNthTaskGroup(rule, nth + 1, callback);
     }
 
     /**
@@ -212,20 +216,30 @@ function tryNthTaskGroup(taskGroups, nth, callback) {
             }
         }
 
-        // console.log('Not Greedy_Mode. continue...');
     }
     checkResults._count = 0;
 
     console.log('try taskGroup ' + nth);
     var stamp1 = now(),
         interval = 50;
-    var sdkInfos = getExistSdks(taskGroups[nth]);
+    var sdkInfos = getSdkInfos(taskGroups[nth]);
     sdkInfos.forEach(function(sdkInfo) {
         var req = sdkInfo.task.adurl();
         console.log('try sdk: ' + req.url);
         sdkInfo.sdk.load(sdkInfo.task, {}, function(data) {
             console.log('data comes ' + data);
             sdkInfo._result = [data];
+            if (data) {
+              var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(data.ad) : data.ad;
+              var urls = ourUrls(rule.traceInfo, entity, rule.urls);
+              console.log('ourUrls: ' + JSON.stringify(urls));
+              data.urls = urls;
+			  console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
+			  //if (typeof sdfInfo.task.aid == 'function')
+				data.aid = sdkInfo.task.aid();
+				data.refreshTime = 15000;
+				data.mixRefreshAdInterval = 5000;
+            }
         });
     });
 

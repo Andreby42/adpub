@@ -237,6 +237,8 @@ function tryNthTaskGroup(rule, nth, callback) {
 			  console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
 			  //if (typeof sdfInfo.task.aid == 'function')
 				data.aid = sdkInfo.task.aid();
+				data.refreshTime = 15000;
+				data.mixRefreshAdInterval = 5000;
             }
         });
     });
