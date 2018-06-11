@@ -93,15 +93,15 @@ public class LineFeedAdsManager extends AbstractManager {
 
     private LineFeedAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
         LineFeedAdEntity res = new LineFeedAdEntity(ShowType.LINE_FEED_ADV.getValue());
-        AdInnerContent inner = ad.getInnerContent();
-        if (inner instanceof AdLineFeedInnerContent) {
-            AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) inner;
+        AdInnerContent innerI = ad.getInnerContent();
+        if (innerI instanceof AdLineFeedInnerContent) {
+            AdLineFeedInnerContent inner = (AdLineFeedInnerContent) innerI;
 
             // 跳转feed流的targetType处理。 从永春接口获取内容填充
             if (ad.getTargetType() == 12) {
                 if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0605)
                         || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0605)) {
-                    res = createFeedEntity(advParam, ad, lineFeedInner);
+                    res = createFeedEntity(advParam, ad, inner);
                 } else {
                     logger.error("低版本投放了跳转信息流的广告， adId={}, s={}, v={}, vc={}", ad.getId(), advParam.getS(), advParam.getV(),
                             advParam.getVc());
@@ -111,18 +111,18 @@ public class LineFeedAdsManager extends AbstractManager {
             }
 
             // 第三方特殊处理
-            if (lineFeedInner.getProvider_id() > 1) {
-                res = createSDKOpenAds(ad, lineFeedInner);
+            if (inner.getProvider_id() > 1) {
+                res = createSDKOpenAds(ad, inner);
             } else {
                 res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
                 res.dealLink(advParam);
-                res.setImgsType(lineFeedInner.getImgsType());
-                res.setSubhead(lineFeedInner.getSlogan());
-                res.setHead(lineFeedInner.getFeedAdTitle());
-                res.setPic(lineFeedInner.getPic());
+                res.setImgsType(inner.getImgsType());
+                res.setSubhead(inner.getSlogan());
+                res.setHead(inner.getFeedAdTitle());
+                res.setPic(inner.getPic());
                 
-                if(lineFeedInner.getTasksGroup() != null) {
-                    res.setTasksGroup(lineFeedInner.getTasksGroup());
+                if(inner.getTasksGroup() != null) {
+                    res.setTasksGroup(inner.getTasksGroup());
                 }
             }
         }
