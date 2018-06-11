@@ -20,6 +20,8 @@ public class AdLineRightInnerContent extends AdInnerContent {
     private String pic; // 广告图片的URL
     private int provider_id;
     private int backup; // 是否是备选方案
+    private long autoInterval; // 自动刷新时间
+    private long mixInterval; // 最小展示时间
     //    private String tag;	//话题标签名
     //    private String tagId;	//话题标签id
     //    private String feedId; //话题详情页id
@@ -37,6 +39,8 @@ public class AdLineRightInnerContent extends AdInnerContent {
             this.pic = ad.pic;
             this.provider_id = ad.provider_id;
             this.backup = ad.backup;
+            this.autoInterval = ad.autoInterval;
+            this.mixInterval = ad.mixInterval;
             if (ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
                 this.pic = ad.pic.split("#")[0];
                 //				this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
@@ -182,5 +186,33 @@ public class AdLineRightInnerContent extends AdInnerContent {
      */
     public void setBackup(int backup) {
         this.backup = backup;
+    }
+
+    /**
+     * @return the autoInterval
+     */
+    public long getAutoInterval() {
+        return autoInterval;
+    }
+
+    /**
+     * @param autoInterval the autoInterval to set
+     */
+    public void setAutoInterval(long autoInterval) {
+        this.autoInterval = autoInterval;
+    }
+
+    /**
+     * @return the mixInterval
+     */
+    public long getMixInterval() {
+        return mixInterval;
+    }
+
+    /**
+     * @param mixInterval the mixInterval to set
+     */
+    public void setMixInterval(long mixInterval) {
+        this.mixInterval = mixInterval;
     }
 }

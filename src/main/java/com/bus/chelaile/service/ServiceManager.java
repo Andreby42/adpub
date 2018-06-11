@@ -34,6 +34,7 @@ import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
+import com.bus.chelaile.model.ads.entity.LineRightAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.client.ClientDto;
@@ -46,6 +47,7 @@ import com.bus.chelaile.service.impl.DoubleAndSingleManager;
 import com.bus.chelaile.service.impl.FeedAdsManager;
 import com.bus.chelaile.service.impl.LineDetailsManager;
 import com.bus.chelaile.service.impl.LineFeedAdsManager;
+import com.bus.chelaile.service.impl.LineRightManager;
 import com.bus.chelaile.service.impl.SimpleAdManager;
 import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.RideManager;
@@ -65,6 +67,8 @@ public class ServiceManager {
     private LineDetailsManager lineDetailsManager;
     @Autowired
     private StationAdsManager stationAdsManager;
+    @Autowired
+    private LineRightManager lineRightManager;
     @Autowired
     private SimpleAdManager simpleAdManager;
     @Autowired
@@ -469,6 +473,33 @@ public class ServiceManager {
             } else {
                 resultMap.put("autoInterval", ((StationAdEntity) entities.get(0)).getAutoInterval());
                 resultMap.put("mixInterval", ((StationAdEntity) entities.get(0)).getMixInterval());
+            }
+        }
+        return resultMap;
+
+    }
+    
+    // 新版右上角广告（ 原来在getLineDetailAds接口中返回， 现在单拆出来）
+    public Object getRightAds(AdvParam advParam) {
+
+        JSONObject resultMap = new JSONObject();
+
+        List<BaseAdEntity> entities = lineRightManager.doServiceList(advParam, ShowType.LINE_RIGHT_ADV, new QueryParam());
+
+        if (entities == null || entities.size() == 0) {
+            resultMap.put("autoInterval", 15000);
+            resultMap.put("mixInterval", 5000);
+            return resultMap;
+        } else {
+            resultMap.put("ads", entities);
+            if (((LineRightAdEntity)entities.get(0)).getAutoInterval() == 0
+                    || ((LineRightAdEntity) entities.get(0)).getMixInterval() == 0) {
+                resultMap.put("ads", entities);
+                resultMap.put("autoInterval", 15000);
+                resultMap.put("mixInterval", 5000);
+            } else {
+                resultMap.put("autoInterval", ((LineRightAdEntity) entities.get(0)).getAutoInterval());
+                resultMap.put("mixInterval", ((LineRightAdEntity) entities.get(0)).getMixInterval());
             }
         }
         return resultMap;

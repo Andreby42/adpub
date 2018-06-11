@@ -99,6 +99,20 @@ public class BusAdvActionV2 extends AbstractController {
     }
     
     /*
+     * 新版详情页右上角广告（从原来的详情页广告中拆分出来的）
+     */
+    @ResponseBody
+    @RequestMapping(value = "adv!getRightTopAds.action", produces = "text/plain;charset=UTF-8")
+    public String getRightTopAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        AdvParam advParam = getActionParam(request);
+        if(StringUtils.isBlank(advParam.getStnName()))
+            advParam.setStnName(request.getParameter("stationName"));
+
+        Object result = serviceManager.getStationAds(advParam);
+        return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    /*
      * 点击上报街接口
      */
     @ResponseBody

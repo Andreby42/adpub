@@ -39,7 +39,8 @@ public class LineRightManager extends AbstractManager {
             res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
             res.dealLink(advParam);
             res.setPic(inner.getPic());
-
+            res.setAutoInterval(inner.getAutoInterval());
+            res.setMixInterval(inner.getMixInterval());
             if (inner.getTasksGroup() != null) {
                 res.setTasksGroup(inner.getTasksGroup());
             }
@@ -114,7 +115,8 @@ public class LineRightManager extends AbstractManager {
         entity.setProvider_id(inner.getProvider_id() + "");
         entity.setOpenType(0); // 页面打开方式，0-内部
         entity.setType(3); // 第三方广告
-
+        entity.setAutoInterval(inner.getAutoInterval());
+        entity.setMixInterval(inner.getMixInterval());
         entity.setApiType(1);
 
         // 任务列表
