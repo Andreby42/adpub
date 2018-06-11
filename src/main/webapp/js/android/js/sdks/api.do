@@ -9,6 +9,12 @@ function load(task, userdata, callback) {
         try {
             console.log('filter with data');
             var ad = task.filter(data);
+			if(task.sdkname != 'api_chelaile') {
+				ad.isSkip = 0;
+				ad.isDisplay = 0;
+				ad.duration = 4;
+				ad.isFullShow = 0;
+			}
             console.log('after filter ' + ad)
         } catch (e) {
             console.log(e);

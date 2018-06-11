@@ -231,10 +231,12 @@ public class JsRule extends AbstractController {
                     if(task.contains("api_chelaile")) {
                         splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
                     } else if (task.contains("sdk")) {
-                        if(StaticAds.JS_FILE_STR.containsKey(tag + task))
+                        if(StaticAds.JS_FILE_STR.containsKey(tag + task)) {
                             splashJS += StaticAds.JS_FILE_STR.get(tag + task);
-                        else 
+                        }
+                        else {
                             logger.error("没有配置文件的 sdk|api，task={},  udid={}, JS_FILE_STR.keys={}", tag + task, p.getUdid(), StaticAds.JS_FILE_STR.keySet());
+                        }
                     }
                 }
             }

@@ -29,6 +29,12 @@ function load(task, userdata, callback) {
           return callback(null);
         } else {
           console.log(logHead + ' get ad:' + ad);
+		  if (requestInfo.pos == "splash") {
+		      ad.isSkip = 0;
+			  ad.isDisplay = 0;
+			  ad.duration = 4;
+			  ad.isFullShow = 0;
+		  }
           data.ad = ad;
           data.entity = task.asEntity ? task.asEntity(ad) : ad;
           callback(data);
