@@ -126,6 +126,16 @@ public class AdDoubleInnerContent extends AdInnerContent {
                 tasksGroups.setTasks(tasksG);
                 tasksGroups.setTimeouts(ad.timeouts);
                 this.tasksGroup = tasksGroups;
+            } else {    // 如果tasks为空，设置默认的值，既车来了api
+                TasksGroup tasksGroups = new TasksGroup();
+                List<String> ts = New.arrayList();
+                ts.add("api_chelaile");
+                List<List<String>> tasks = New.arrayList();
+                tasks.add(ts);
+                List<Long> times = New.arrayList();
+                times.add(4000L);times.add(4000L);
+                tasksGroups.setTasks(tasks);
+                tasksGroups.setTimeouts(times);
             }
         }
     }
