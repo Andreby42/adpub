@@ -43,8 +43,8 @@ public class LineFeedAdsManager extends AbstractManager {
             AdContentCacheEle ad = entry.getValue();
 
             // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
-            AdLineFeedInnerContent lineFeedInner = (AdLineFeedInnerContent) ad.getAds().getAdInnerContent();
-            if (lineFeedInner.getProvider_id() <= 1 && lineFeedInner.getBackup() == 0) { // 非自采买的provider_id都大于1
+            AdLineFeedInnerContent inner = (AdLineFeedInnerContent) ad.getAds().getAdInnerContent();
+            if (inner.getProvider_id() <= 1 && inner.getBackup() == 0) { // 非自采买的provider_id都大于1
                 LineFeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
                 if (entity != null) {
                     entities.add(entity);
@@ -119,8 +119,8 @@ public class LineFeedAdsManager extends AbstractManager {
 
             // 跳转feed流的targetType处理。 从永春接口获取内容填充
             if (ad.getTargetType() == 12) {
-                if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528)
-                        || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528)) {
+                if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0605)
+                        || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0605)) {
                     res = createFeedEntity(advParam, ad, lineFeedInner);
                 } else {
                     logger.error("低版本投放了跳转信息流的广告， adId={}, s={}, v={}, vc={}", ad.getId(), advParam.getS(), advParam.getV(),
@@ -178,6 +178,7 @@ public class LineFeedAdsManager extends AbstractManager {
         String response = null;
         String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(),
                 ShowType.LINE_FEED_ADV.getType());
+        logger.info("请求信息流**********： url={}", url);
         LineFeedAdEntity entity = null;
         try {
             response = HttpUtils.get(url, "UTF-8");
