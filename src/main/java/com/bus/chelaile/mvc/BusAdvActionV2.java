@@ -108,7 +108,7 @@ public class BusAdvActionV2 extends AbstractController {
         if(StringUtils.isBlank(advParam.getStnName()))
             advParam.setStnName(request.getParameter("stationName"));
 
-        Object result = serviceManager.getStationAds(advParam);
+        Object result = serviceManager.getRightAds(advParam);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
     }
     
