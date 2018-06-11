@@ -51,6 +51,7 @@
 		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" >
 	</bean>
     
+    <!-- 
 <mvc:annotation-driven >  
     <mvc:message-converters register-defaults="true">  
       <bean class="org.springframework.http.converter.StringHttpMessageConverter">  
@@ -58,7 +59,7 @@
       </bean>  
     </mvc:message-converters>  
   </mvc:annotation-driven>  
-
+ -->
 	
 	
 </beans>
