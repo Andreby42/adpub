@@ -38,7 +38,16 @@ public class TasksGroup {
         
     }
 
+    public TasksGroup() {
+        super();
+    }
 
+
+    public TasksGroup(List<List<String>> tasks, List<Long> timeouts) {
+        super();
+        this.tasks = tasks;
+        this.timeouts = timeouts;
+    }
 
     /**
      * @return the tasks
