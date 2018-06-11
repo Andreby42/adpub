@@ -86,6 +86,9 @@ public class SelfOpenManager {
 	                res.setTasksGroup(fullInner.getTasksGroup());
 	            }
 	            
+	            if(fullInner.getTasksGroup() != null) {
+	                res.setTasksGroup(fullInner.getTasksGroup());
+	            }
 	                
 	        }
 	    
