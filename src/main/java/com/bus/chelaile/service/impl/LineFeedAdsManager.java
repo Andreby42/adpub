@@ -187,6 +187,7 @@ public class LineFeedAdsManager extends AbstractManager {
                     entity.setMixInterval(inner.getMixInterval());
                     entity.setPic(thumbnails.get(0).getUrl());
                     entity.setAction(action);
+                    entity.setTargetType(ad.getTargetType());
                     
                     if(inner.getTasksGroup() != null) {
                         entity.setTasksGroup(inner.getTasksGroup());
