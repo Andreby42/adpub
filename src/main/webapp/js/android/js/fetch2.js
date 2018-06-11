@@ -1,3 +1,4 @@
+
 function rulefile(uni_tag) {
     return "rule/" + uni_tag;
 }
@@ -7,17 +8,18 @@ function sdkfile(sdkname) {
 }
 
 var mapSdks = {};
+
 /**
  * @param {string!} uni_tag
  * @brief 通过 type+pos得到的唯一标识，获取规则描述。
  */
 function getRuleFn(uni_tag) {
-    return require(rulefile(uni_tag));
+    return require(rulefile(uni_tag), true);
 }
-
 
 function getSdkInfos(taskGroup) {
     var existSdks = [];
+    console.log('taskGroup ' + taskGroup )
     taskGroup.forEach(function(task) {
         var sdk = getSdk(task.sdkname());
         // var sdk = getSdk('sdk'); // sdk实际上没起作用
@@ -60,13 +62,47 @@ function getSdk(sdkname) {
 //
 
 function ourUrls(traceInfo, entity, urls) {
-	var ret = {};
-	for (var k in urls)
-		ret[k] = urls[k];
-	for (var k in traceInfo)
-		return urls;
+    var ret = {};
+    for (var k in urls)
+        ret[k] = urls[k];
+    for (var k in traceInfo)
+        return urls;
 }
 
+
+testRepeat = function(entity, pos, vendor) {
+    const max = 10;
+
+    var key = 'repeat-filter/' + (pos ? pos : 'pos-all') + '/' + (vendor ? vendor : 'vendor-all');
+    var s = LocalStorage.get(key);
+    // console.log('old data:' + s)
+    var data = s ? eval('a=' + s) : [];
+
+    var matched = false;
+    var sum = sumEntity(entity);
+    for (var i = 0; i < data.length; i++) {
+        if (data[i] == sum) {
+            matched = true;
+            break;
+        }
+    }
+
+    if (matched) {
+        console.log('entity found before: ' + sum)
+        return true;
+    }
+
+    console.log('add entity ' + sum + ' to list ' + key);
+    data.splice(0, data.length > max ? data.length - max : 0, sum);
+    // console.log('new data:' + (data));
+    LocalStorage.set(key, JSON.stringify(data));
+
+    return false;
+}
+
+function sumEntity(ad) {
+    return ad.head + '#' + ad.subhead;
+}
 
 function getAds(type, pos, userdata, callback) {
 
@@ -85,14 +121,14 @@ function getAds(type, pos, userdata, callback) {
                 fetchRule(ruleFn(), callback);
                 callback = null;
             } else {
-              console.log('rule not found: ' + uni_tag)
+                console.log('rule not found: ' + uni_tag)
             }
         }
     } catch (e) {
         console.log(e);
     } finally {
         if (callback)
-          callback(null);
+            callback(null);
     }
 }
 
@@ -130,14 +166,15 @@ function fetchRule(rule, callback) {
  */
 function tryNthTaskGroup(rule, nth, callback) {
 
-  var taskGroups = rule.tasks;
+    var taskGroups = rule.tasks;
+
     function wrappedFn(data) {
         if (data) {
             console.log('Get data, callback directly.');
             return callback(data);
         }
 
-        if (nth == rule.length - 1) {
+        if (nth >= taskGroups.length - 1) {
             console.log('Non data, and is the last group. Fail at last.');
             return callback(null);
         }
@@ -221,7 +258,7 @@ function tryNthTaskGroup(rule, nth, callback) {
 
     console.log('try taskGroup ' + nth);
     var stamp1 = now(),
-        interval = 50;
+        interval = 30;
     var sdkInfos = getSdkInfos(taskGroups[nth]);
     sdkInfos.forEach(function(sdkInfo) {
         var req = sdkInfo.task.adurl();
@@ -230,20 +267,20 @@ function tryNthTaskGroup(rule, nth, callback) {
             console.log('data comes ' + data);
             sdkInfo._result = [data];
             if (data) {
-              var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(data.ad) : data.ad;
-              var urls = ourUrls(rule.traceInfo, entity, rule.urls);
-              console.log('ourUrls: ' + JSON.stringify(urls));
-              data.urls = urls;
-			  console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
-			  //if (typeof sdfInfo.task.aid == 'function')
-				data.aid = sdkInfo.task.aid();
-				data.refreshTime = 15000;
-				data.mixRefreshAdInterval = 5000;
+                var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(data.ad) : data.ad;
+                var urls = ourUrls(rule.traceInfo, entity, rule.urls);
+                console.log('ourUrls: ' + JSON.stringify(urls));
+                data.urls = urls;
+                console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
+                data.aid = sdkInfo.task.aid();
+                data.refreshTime = 25000;
+                data.mixRefreshAdInterval = 5000;
             }
         });
     });
 
     var checker = setInterval(checkResults, interval);
+    console.log('start a new interval:' + checker)
 }
 
 function now() {

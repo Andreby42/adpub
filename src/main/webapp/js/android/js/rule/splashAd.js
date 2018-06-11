@@ -15,30 +15,30 @@ var api_chelaile = {
     },
 
     filter: function(data) {
-    
-      var array = data.split("YGKJ");
-      if (array.length < 2) {
-          return null;
-      }
-      data = array[1];
-      if (typeof data == 'string')
-          data = eval("a=" + data);
 
-      var rows = data.jsonr.data.ads;
+        var array = data.split("YGKJ");
+        if (array.length < 2) {
+            return null;
+        }
+        data = array[1];
+        if (typeof data == 'string')
+            data = eval("a=" + data);
 
-      if (!rows || rows.length == 0)
-          return null;
-      var row = rows[0];
-      var ad = {
-          provider_id: 1,
-          link: row.link,
-          unfoldMonitorLink: row.unfoldMonitorLink,
-          clickMonitorLink: row.clickMonitorLink,
-		  ad_order: 0,
-          openType: row.openType,
-          pic: row.pic
-      }
-      return ad;
+        var rows = data.jsonr.data.ads;
+
+        if (!rows || rows.length == 0)
+            return null;
+        var row = rows[0];
+        var ad = {
+            provider_id: 1,
+            link: row.link,
+            unfoldMonitorLink: row.unfoldMonitorLink,
+            clickMonitorLink: row.clickMonitorLink,
+            ad_order: 0,
+            openType: row.openType,
+            pic: row.pic
+        }
+        return ad;
     }
 }
 
@@ -78,11 +78,11 @@ var api_yd = {
                 brandIcon: row.iconimage,
                 pic: row.mainimage,
                 head: row.title,
-				ad_order: i,
+                ad_order: i,
                 subhead: row.text,
                 packageName: row.packageName
             }
-          console.log("ad = " + ad.link + "  ad  pic ==  " + ad.pic);
+            console.log("ad = " + ad.link + "  ad  pic ==  " + ad.pic);
             return ad;
         }
         return null;
@@ -92,11 +92,11 @@ var api_yd = {
 
 var api_voicead = {
 
-    sdkname : function() {
+    sdkname: function() {
         return "api_voicead";
     },
 
-    adurl : function() {
+    adurl: function() {
         return {
             url: 'http://ws.voiceads.cn/ad/request',
             data: {
@@ -139,7 +139,7 @@ var api_voicead = {
         };
     },
 
-    filter : function(data) {
+    filter: function(data) {
         if (typeof data == 'string')
             data = eval("a=" + data);
 
@@ -152,7 +152,7 @@ var api_voicead = {
 
             var ad = {
                 provider_id: 10,
-				ad_order: i,
+                ad_order: i,
                 adType: row.adType,
                 downloadType: row.download_type,
                 packageName: row.package_name,
@@ -179,22 +179,22 @@ var api_voicead = {
 
 var sdk_gdt = {
 
-    adurl : function() {
+    adurl: function() {
         return {
-            url:"GDTSDK",
-            pos:"splash",
-            data:{
-                appId:"1106616441",
-                placementId:"9040714184494018"
+            url: "GDTSDK",
+            pos: "splash",
+            data: {
+                appId: "1106616441",
+                placementId: "9040714184494018"
             }
         }
     },
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_gdt";
     },
 
-    filter : function(list) {
+    filter: function(list) {
         return list;
     }
 }
@@ -202,98 +202,93 @@ var sdk_gdt = {
 
 var sdk_baidu = {
 
-    adurl : function() {
+    adurl: function() {
         return {
-            url:"BaiduSDK",
-            pos:"splash",
-            data:{
-                appId:"",
-                placementId:"5826172"
+            url: "BaiduSDK",
+            pos: "splash",
+            data: {
+                appId: "",
+                placementId: "5826172"
             }
         }
     },
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_baidu";
     },
 
-    asEntity : function(ad){
-      // baidu开屏无法获取广告信息
-      return {};
-    },
-
-    filter : function(msg) {
+    filter: function(msg) {
         return msg;
     }
 }
 
 var sdk_toutiao = {
 
-    adurl : function() {
+    adurl: function() {
         return {
-            url:"TOUTIAOSDK",
-            pos:"splash",
-            data:{
-                appId:"",
-                placementId:"800673832"
+            url: "TOUTIAOSDK",
+            pos: "splash",
+            data: {
+                appId: "",
+                placementId: "800673832"
             }
         }
     },
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_toutiao";
     },
 
-    asEntity : function (ad) {
-      // TODO
-      return {};
+    asEntity: function(ad) {
+        // TODO
+        return {};
     },
 
-    filter : function(ad) {
+    filter: function(ad) {
         return ad;
     }
 }
 
 var sdk_voicead = {
 
-    adurl : function() {
+    adurl: function() {
         return {
-            url:"IFLYSDK",
-            pos:"splash",
-            data:{
-                appId:"",
-                placementId:"D028C0ADDDBC38952DA01241B4939E64"
+            url: "IFLYSDK",
+            pos: "splash",
+            data: {
+                appId: "",
+                placementId: "D028C0ADDDBC38952DA01241B4939E64"
             }
         }
     },
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_voicead";
     },
 
-    asEntity : function (ad) {
-      // TODO
-      return {}
+    asEntity: function(ad) {
+        // TODO
+        return {}
     },
 
-    filter : function(ad) {
+    filter: function(ad) {
         return ad;
     }
 }
 
 function ads() {
     return {
-      traceInfo : {
-        ip : '192.168.100.100'
-      },
-      urls : {
-        exposeUrl:'http://atrace.chelaile.net.cn/exhibit',
-        clickUrl:'http://atrace.chelaile.net.cn/click',
-        closeUrl:'http://atrace.chelaile.net.cn/close'
-      },
-        timeouts:[3000, 2000],
+        traceInfo: {
+            ip: '192.168.100.100'
+        },
+        urls: {
+            exposeUrl: 'http://atrace.chelaile.net.cn/exhibit',
+            clickUrl: 'http://atrace.chelaile.net.cn/click',
+            closeUrl: 'http://atrace.chelaile.net.cn/close'
+        },
+        timeouts: [3000, 2000],
         tasks: [
-              [api_yd]
+            [api_yd]
         ]
     }
 }

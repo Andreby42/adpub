@@ -4,6 +4,7 @@ env = {
     wifi: true
 }
 
+
 var api_chelaile = {
     sdkname: function() {
         return 'api_chelaile'
@@ -16,29 +17,33 @@ var api_chelaile = {
     },
 
     filter: function(data) {
-      var array = data.split("YGKJ");
-      if (array.length < 2) {
-          return null;
-      }
-      data = array[1];
-      if (typeof data == 'string')
-          data = eval("a=" + data);
+        var array = data.split("YGKJ");
+        if (array.length < 2) {
+            return null;
+        }
+        data = array[1];
+        if (typeof data == 'string')
+            data = eval("a=" + data);
 
-      var rows = data.jsonr.data.ads;
+        var rows = data.jsonr.data.ads;
 
-      if (!rows || rows.length == 0)
-          return null;
-      var row = rows[0];
-      var ad = {
-          provider_id: 1,
-          link: row.link,
-          unfoldMonitorLink: row.unfoldMonitorLink,
-          clickMonitorLink: row.clickMonitorLink,
-          openType: row.openType,
-		  ad_order: 0,
-          pic: row.pic
-      }
-      return ad;
+        if (!rows || rows.length == 0)
+            return null;
+        var row = rows[0];
+        var ad = {
+            provider_id: '1',
+            link: row.link,
+            unfoldMonitorLink: row.unfoldMonitorLink,
+            clickMonitorLink: row.clickMonitorLink,
+            openType: row.openType,
+            ad_order: 0,
+            pic: row.pic
+        }
+        return ad;
+    },
+
+    aid : function () {
+        return 'api_chelaile';
     }
 }
 
@@ -67,7 +72,7 @@ var api_yd = {
             var row = rows[i];
 
             var ad = {
-                provider_id: 11,
+                provider_id: '11',
                 link: row.clk,
                 unfoldMonitorLink: row.imptracker.join(";"),
                 clickMonitorLink: row.clktrackers.join(";"),
@@ -78,24 +83,27 @@ var api_yd = {
                 brandIcon: row.iconimage,
                 pic: row.mainimage,
                 head: row.title,
-				ad_order: i,
+                ad_order: i,
                 subhead: row.text,
                 packageName: row.packageName
             }
             return ad;
         }
         return null;
-    }
+    },
 
+    aid : function () {
+        return 'api_yd';
+    }
 }
 
 var api_voicead = {
 
-    sdkname : function() {
+    sdkname: function() {
         return "api_voicead";
     },
 
-    adurl : function() {
+    adurl: function() {
         return {
             url: 'http://ws.voiceads.cn/ad/request',
             data: {
@@ -138,7 +146,7 @@ var api_voicead = {
         };
     },
 
-    filter : function(data) {
+    filter: function(data) {
         if (typeof data == 'string')
             data = eval("a=" + data);
 
@@ -150,14 +158,14 @@ var api_voicead = {
             var row = rows[i];
 
             var ad = {
-                provider_id: 10,
+                provider_id: '10',
                 adType: row.adType,
                 downloadType: row.download_type,
                 packageName: row.package_name,
                 head: row.title,
                 subhead: row.sub_title,
                 pic: row.image,
-				ad_order: i,
+                ad_order: i,
                 brandIcon: row.icon,
                 link: row.landing_url,
                 deepLink: row.deep_link,
@@ -167,130 +175,176 @@ var api_voicead = {
             return ad;
         }
         return null;
+    },
+
+    aid : function () {
+        return 'api_voicead';
     }
 }
-
-
 
 // sdk taks ===================
 // 手机调用sdk
 
 var sdk_gdt = {
 
-    adurl : function() {
+    adurl: function() {
         return {
-            url:"GDTSDK",
-            pos:"banner",
-            data:{
-                appId:"1106616441",
-                placementId:"9040714184494018"
+            url: "GDTSDK",
+            pos: "banner",
+            data: {
+                appId: "1106616441",
+                placementId: "9040714184494018"
             }
         }
     },
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_gdt";
     },
 
-    filter : function(list) {
+    filter: function(list) {
         return list;
+    },
+
+    asEntity: function(ad) {
+        return !ad ? null : {
+            head: ad.getTitle(),
+            subhead: ad.getDesc(),
+            pic: ad.getImgUrl()
+        }
+    },
+
+    aid : function () {
+        return 'sdk_gdt';
     }
 }
 
 
 var sdk_baidu = {
 
-    adurl : function() {
+    adurl: function() {
         return {
-            url:"BaiduSDK",
-            pos:"banner",
-            data:{
-                appId:"",
-                placementId:"5826174"
+            url: "BaiduSDK",
+            pos: "banner",
+            data: {
+                appId: "",
+                placementId: "5826174"
             }
         }
     },
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_baidu";
     },
 
-    asEntity : function(ad){
-      return {};
+    asEntity: function(ad) {
+        return !ad ? null : {
+            head: ad.getTitle(),
+            subhead: ad.getDesc(),
+            pic: ad.getImageUrl()
+        }
     },
 
-    filter : function(list) {
-        return list[0] || null;
+    filter: function(list) {
+        if (!list || !list[0])
+            return null;
+
+        for (var i = 0; i < list.length; i++) {
+            var ad = list[i];
+            var entity = this.asEntity(ad);
+            if (!testRepeat(entity, 'home-ad', 'baidu'))
+                return ad;
+        }
+
+        return null;
+    },
+
+    aid : function () {
+        return 'sdk_baidu';
     }
 }
 
 var sdk_toutiao = {
 
-    adurl : function() {
+    adurl: function() {
         return {
-            url:"TOUTIAOSDK",
-            pos:"banner",
-            data:{
-                appId:"",
-                placementId:"900673326"
+            url: "TOUTIAOSDK",
+            pos: "banner",
+            data: {
+                appId: "",
+                placementId: "900673326"
             }
         }
     },
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_toutiao";
     },
 
-    asEntity : function (ad) {
-      // TODO
-      return {};
+    asEntity: function(ad) {
+        return !ad ? null : {
+            head: ad.getTitle(),
+            subhead: ad.getDescription(),
+            pic: ad.getImageUrl()
+        };
     },
 
-    filter : function(list) {
-        return list[0];
+    filter: function(list) {
+        return list && list[0];
+    },
+
+    aid : function () {
+        return 'sdk_toutiao';
     }
 }
 
 var sdk_voicead = {
 
-    adurl : function() {
+    adurl: function() {
         return {
-            url:"IFLYSDK",
-            pos:"splash",
-            data:{
-                appId:"",
-                placementId:"D028C0ADDDBC38952DA01241B4939E64"
+            url: "IFLYSDK",
+            pos: "splash",
+            data: {
+                appId: "",
+                placementId: "D028C0ADDDBC38952DA01241B4939E64"
             }
         }
     },
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_voicead";
     },
 
-    asEntity : function (ad) {
-      // TODO
-      return {}
+    asEntity: function(ad) {
+        return !ad ? null : {
+            head: ad.getTitle(),
+            subhead: ad.getSubTitle(),
+            pic: ad.getImage()
+        }
     },
 
-    filter : function(ad) {
+    filter: function(ad) {
         return ad;
+    },
+
+    aid : function () {
+        return 'sdk_voicead';
     }
 }
 
 function ads() {
     return {
-      traceInfo : {
-        ip : '192.168.100.100'
-      },
-      urls : {
-        exposeUrl:'http://atrace.chelaile.net.cn/exhibit',
-        clickUrl:'http://atrace.chelaile.net.cn/click',
-        closeUrl:'http://atrace.chelaile.net.cn/close'
-      },
-        timeouts:[1000, 2000],
+        traceInfo: {
+            ip: '192.168.100.100'
+        },
+        urls: {
+            exposeUrl: 'http://atrace.chelaile.net.cn/exhibit',
+            clickUrl: 'http://atrace.chelaile.net.cn/click',
+            closeUrl: 'http://atrace.chelaile.net.cn/close'
+        },
+        timeouts: [1000, 2000],
         tasks: [
-              [sdk_baidu]
+            [sdk_gdt], [api_yd]
         ]
     }
 }
