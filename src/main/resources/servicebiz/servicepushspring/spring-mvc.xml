@@ -16,20 +16,22 @@
     ">
     
  <!--    <mvc:resources location="/js/" mapping="/js/**" /> -->
-    
-<!--     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <!-- 
+     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
 				<ref bean="utf8StringHttpMessageConverter" />
 				<ref bean="jacksonMessageConverter" />
 			</list>
 		</property>
-	</bean> -->
+	</bean> 
+     -->
     
     <bean id="utf8StringHttpMessageConverter"
 		class="com.bus.chelaile.mvc.utils.UTF8StringHttpMessageConverter">
 		<property name="writeAcceptCharset" value="false" />
 	</bean>
+    
 	<!-- 扫描controller（controller层注入） -->
 	<context:component-scan base-package="com.bus.chelaile.mvc" />
 
@@ -49,15 +51,15 @@
 		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" >
 	</bean>
     
-<!--     <mvc:annotation-driven >  
-    消息转换器  
+<mvc:annotation-driven >  
+  //  消息转换器  
     <mvc:message-converters register-defaults="true">  
       <bean class="org.springframework.http.converter.StringHttpMessageConverter">  
         <property name="supportedMediaTypes" value="text/html;charset=UTF-8"/>  
       </bean>  
     </mvc:message-converters>  
   </mvc:annotation-driven>  
-	 -->
+
 	
 	
 </beans>
