@@ -38,6 +38,15 @@ public class JsRule extends AbstractController {
 
         return "hello_1111111111你好 啊";
     }
+    
+    
+ // for test
+    @ResponseBody
+    @RequestMapping(value="/splash.js", produces = "text/plain;charset=UTF-8")
+    public String splash1(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        return "hello_1111111111你好 啊";
+    }
 
     /*
      * 开屏
