@@ -68,6 +68,9 @@ public class JSService {
 
         }
 //        List<BaseAdEntity> entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, new QueryParam());
+      
+        
+        
         if (entities != null && entities.size() > 0) {
             for (BaseAdEntity entity : entities) {
                 if (entity.getTasksGroup() != null) {

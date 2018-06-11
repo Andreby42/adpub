@@ -23,7 +23,7 @@ public class UTF8StringHttpMessageConverter extends AbstractHttpMessageConverter
 	private boolean writeAcceptCharset = true;
 
 	public UTF8StringHttpMessageConverter() {
-		super(new MediaType[] { new MediaType("text", "html", DEFAULT_CHARSET), MediaType.ALL });
+		super(new MediaType[] { new MediaType("text", "html", DEFAULT_CHARSET), new MediaType("text", "js", DEFAULT_CHARSET), MediaType.ALL });
 		this.availableCharsets = new ArrayList(Charset.availableCharsets().values());
 	}
 
