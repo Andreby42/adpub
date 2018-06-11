@@ -21,7 +21,10 @@ function load(task, userdata, callback) {
             return callback(null);
         }
 
-        callback(ad ? {ad: ad} : null);
+		var wrapAd = new Object();
+        wrapAd.ad = ad;
+        callback(wrapAd);
+
     }
 
     if (requestInfo.data)

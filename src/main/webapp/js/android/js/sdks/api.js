@@ -9,19 +9,28 @@ function load(task, userdata, callback) {
         try {
             console.log('filter with data');
             var ad = task.filter(data);
-			if(task.sdkname != 'api_chelaile') {
-				ad.isSkip = 0;
-				ad.isDisplay = 0;
-				ad.duration = 4;
-				ad.isFullShow = 0;
-			}
             console.log('after filter ' + ad)
         } catch (e) {
             console.log(e);
             return callback(null);
         }
 
-        callback(ad ? {ad: ad} : null);
+		if(!ad) {
+			return callback(null);
+		}
+		
+		//if(task.sdkname() == 'api_chelaile') {
+		//	return callback({ad : ad});
+		//}
+		
+		var ret = {
+			isSkip : 0,
+			isDisplay : 0,
+			duration : 4,
+			isFullShow : 0,
+			ad : ad
+		}
+        callback(ret);
     }
 
     if (requestInfo.data)
