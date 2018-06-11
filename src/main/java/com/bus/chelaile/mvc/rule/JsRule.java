@@ -45,13 +45,6 @@ public class JsRule extends AbstractController {
     @ResponseBody
     @RequestMapping("/splashAd.js")
     public String splashAd1(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-
-
-
-
-
-
         AdvParam p = getActionParam(request);
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
                 p.getCityId());
