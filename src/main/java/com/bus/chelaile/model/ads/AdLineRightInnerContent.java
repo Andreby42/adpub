@@ -18,6 +18,7 @@ import com.bus.chelaile.util.New;
  */
 public class AdLineRightInnerContent extends AdInnerContent {
     private String pic; // 广告图片的URL
+    private int adMode; // 广告显示控制模式（不同的二进制位表示不同区域的图片显示，详见LineDetailAdMode
     private int provider_id;
     private int backup; // 是否是备选方案
     private long autoInterval; // 自动刷新时间
@@ -214,5 +215,19 @@ public class AdLineRightInnerContent extends AdInnerContent {
      */
     public void setMixInterval(long mixInterval) {
         this.mixInterval = mixInterval;
+    }
+
+    /**
+     * @return the adMode
+     */
+    public int getAdMode() {
+        return adMode;
+    }
+
+    /**
+     * @param adMode the adMode to set
+     */
+    public void setAdMode(int adMode) {
+        this.adMode = adMode;
     }
 }

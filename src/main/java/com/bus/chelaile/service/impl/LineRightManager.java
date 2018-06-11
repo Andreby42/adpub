@@ -37,6 +37,7 @@ public class LineRightManager extends AbstractManager {
             res = createSDKOpenAds(ad, inner);
         } else {
             res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
+            res.setAdMode(inner.getAdMode());
             res.dealLink(advParam);
             res.setPic(inner.getPic());
             res.setAutoInterval(inner.getAutoInterval());
