@@ -7,19 +7,15 @@ function load(task, userdata, callback) {
     function wrappedFn(data) {
         console.log("api data=" + data);
         try {
-            if (task.filter) {
-                console.log('filter with data');
-                var ad = task.filter(data);
-                console.log('after filter ' + ad)
-            }
+            console.log('filter with data');
+            var ad = task.filter(data);
+            console.log('after filter ' + ad)
         } catch (e) {
             console.log(e);
             return callback(null);
         }
 
-		var wrapAd = new Object();
-        wrapAd.ad = ad;
-        callback(wrapAd);
+        callback(ad ? {ad: ad} : null);
     }
 
     if (requestInfo.data)

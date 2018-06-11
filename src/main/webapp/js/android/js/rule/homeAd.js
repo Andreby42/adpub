@@ -39,6 +39,7 @@ var api_chelaile = {
             ad_order: 0,
             pic: row.pic
         }
+
         return ad;
     },
 
@@ -87,6 +88,10 @@ var api_yd = {
                 subhead: row.text,
                 packageName: row.packageName
             }
+
+            if (testRepeat(ad, 'home-ad', 'yd'))
+                continue;
+
             return ad;
         }
         return null;
@@ -344,7 +349,7 @@ function ads() {
         },
         timeouts: [1000, 2000],
         tasks: [
-            [sdk_gdt], [api_yd]
+            [sdk_gdt], [api_yd], [api_voicead], [api_chelaile]
         ]
     }
 }

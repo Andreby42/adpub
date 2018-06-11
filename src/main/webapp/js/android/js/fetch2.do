@@ -258,7 +258,7 @@ function tryNthTaskGroup(rule, nth, callback) {
 
     console.log('try taskGroup ' + nth);
     var stamp1 = now(),
-        interval = 30;
+        interval = 50;
     var sdkInfos = getSdkInfos(taskGroups[nth]);
     sdkInfos.forEach(function(sdkInfo) {
         var req = sdkInfo.task.adurl();
