@@ -158,7 +158,7 @@ var api_voicead = {
             var row = rows[i];
 
             var ad = {
-                provider_id: '10',
+                provider_id: '12',
                 adType: row.adType,
                 downloadType: row.download_type,
                 packageName: row.package_name,
