@@ -42,6 +42,7 @@ public class AdLineRightInnerContent extends AdInnerContent {
             this.backup = ad.backup;
             this.autoInterval = ad.autoInterval;
             this.mixInterval = ad.mixInterval;
+            this.adMode = ad.adMode;
             if (ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
                 this.pic = ad.pic.split("#")[0];
                 //				this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
