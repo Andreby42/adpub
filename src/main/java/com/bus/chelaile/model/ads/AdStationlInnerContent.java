@@ -93,6 +93,7 @@ public class AdStationlInnerContent extends AdInnerContent {
                 times.add(4000L);times.add(4000L);
                 tasksGroups.setTasks(tasks);
                 tasksGroups.setTimeouts(times);
+                this.tasksGroup = tasksGroups;
             }
         }
     }
