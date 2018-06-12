@@ -89,8 +89,8 @@ var api_yd = {
                 packageName: row.packageName
             }
 
-            if (testRepeat(ad, 'home-ad', 'yd'))
-                continue;
+            // if (testRepeat(ad, 'home-ad', 'yd'))
+            //     continue;
 
             return ad;
         }
@@ -290,7 +290,7 @@ var sdk_toutiao = {
         return !ad ? null : {
             head: ad.getTitle(),
             subhead: ad.getDescription(),
-            pic: ad.getImageUrl()
+            pic: ad.getIcon().getImageUrl()
         };
     },
 
@@ -349,7 +349,7 @@ function ads() {
         },
         timeouts: [1000, 2000],
         tasks: [
-            [sdk_gdt], [api_yd], [api_voicead], [api_chelaile]
+            [api_yd]
         ]
     }
 }

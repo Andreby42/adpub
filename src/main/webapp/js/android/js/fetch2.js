@@ -1,4 +1,3 @@
-
 function rulefile(uni_tag) {
     return "rule/" + uni_tag;
 }
@@ -19,7 +18,7 @@ function getRuleFn(uni_tag) {
 
 function getSdkInfos(taskGroup) {
     var existSdks = [];
-    console.log('taskGroup ' + taskGroup )
+    console.log('taskGroup ' + taskGroup)
     taskGroup.forEach(function(task) {
         var sdk = getSdk(task.sdkname());
         // var sdk = getSdk('sdk'); // sdk实际上没起作用
@@ -263,7 +262,9 @@ function tryNthTaskGroup(rule, nth, callback) {
     sdkInfos.forEach(function(sdkInfo) {
         var req = sdkInfo.task.adurl();
         console.log('try sdk: ' + req.url);
-        sdkInfo.sdk.load(sdkInfo.task, {}, function(data) {
+        sdkInfo.sdk.load(sdkInfo.task, {
+            traceInfo: rule.traceInfo
+        }, function(data) {
             console.log('data comes ' + data);
             sdkInfo._result = [data];
             if (data) {
