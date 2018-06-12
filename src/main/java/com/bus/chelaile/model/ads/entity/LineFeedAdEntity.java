@@ -25,7 +25,7 @@ public class LineFeedAdEntity extends BaseAdEntity {
 
     private String subhead; //  上面的文字
     private String head; // 单图文章样式中，下面的文字
-    private int imgsType; // 图片样式  0小图， 1 大图
+    private int imgsType; // 图片样式  0小图， 1 大图， 2 信息流专用右图小图样式
 
     private String action; //跳转信息流使用的字段
 

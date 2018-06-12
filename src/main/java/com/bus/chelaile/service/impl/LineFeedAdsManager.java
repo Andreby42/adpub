@@ -181,6 +181,8 @@ public class LineFeedAdsManager extends AbstractManager {
                     entity = new LineFeedAdEntity(ShowType.LINE_FEED_ADV.getValue());
                     entity.setId(ad.getId());
                     entity.setTitle(ad.getTitle());
+//                    entity.setHead(head);
+//                    entity.setSubhead(title);
                     entity.setAdWeight(inner.getAdWeight());
                     entity.setClickDown(inner.getClickDown());
                     entity.setAutoInterval(inner.getAutoInterval());
@@ -193,9 +195,10 @@ public class LineFeedAdsManager extends AbstractManager {
                         entity.setTasksGroup(inner.getTasksGroup());
                     }
 
-                    if (imgsType == 1) {
-                        entity.setImgsType(0);
-                    } else if (imgsType == 2) {
+                    // 信息流接口返回类型定义：http://wiki-rd.chelaile.net.cn/index.php?title=%E4%BF%A1%E6%81%AF%E6%B5%81%E5%90%8E%E5%8F%B0%E6%8E%A5%E5%8F%A3#FeedAdGoto_.E8.B7.B3.E8.BD.AC.E4.BF.A1.E6.81.AF.E6.B5.81.E5.B9.BF.E5.91.8A
+                    if (imgsType == 2) {    // 大图
+                        entity.setImgsType(1);
+                    } else if (imgsType == 1) { // 右图
                         entity.setImgsType(2);
                         entity.setSubhead(title);
                         entity.setHead(source);
