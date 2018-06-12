@@ -81,7 +81,7 @@ public class JSService {
             }
         }
         taskEntity.setTaskGroups(new TasksGroup(tasks, times));
-        taskEntity.setTraceid(param.getUdid() + System.currentTimeMillis());
+        taskEntity.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
 
         return taskEntity;
     }
