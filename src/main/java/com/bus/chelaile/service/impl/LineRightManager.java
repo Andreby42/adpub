@@ -9,7 +9,6 @@ import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
-import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
 import com.bus.chelaile.model.ads.AdLineRightInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineRightAdEntity;
@@ -79,7 +78,7 @@ public class LineRightManager extends AbstractManager {
             AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
-                if (((AdLineFeedInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
+                if (((AdLineRightInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
                     backupad = ad;
                     continue;
                 }
