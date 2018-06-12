@@ -105,6 +105,8 @@ public class JsRule extends AbstractController {
     public String rightTopAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
+        if(StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
                 p.getCityId());
 
@@ -126,6 +128,8 @@ public class JsRule extends AbstractController {
     public String stationAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
+        if(StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
                 p.getCityId());
 
@@ -147,6 +151,8 @@ public class JsRule extends AbstractController {
     public String bottomAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
+        if(StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
         logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
                 p.getCityId());
 
