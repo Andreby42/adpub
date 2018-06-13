@@ -67,8 +67,16 @@ public class AbstractController {
         }
         param.setScreenWidth( getInt(request, "screenWidth"));
         param.setDpi(request.getParameter("dpi"));
-        param.setGpsAccuracy(request.getParameter("gpsAccuracy"));
-        param.setWifissid(request.getParameter("wifissid"));
+        param.setGpsAccuracy(request.getParameter("geo_lac"));
+        if( request.getParameter("wifissid") != null ) {
+        	if( param.getMac() != null ) {
+        		param.setWifissid(param.getMac() + "," + request.getParameter("wifissid"));
+        	}else {
+        		param.setWifissid( request.getParameter("wifissid"));
+        	}
+        	
+        }
+        
 
         return param;
     }
