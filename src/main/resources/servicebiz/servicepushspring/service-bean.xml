@@ -78,11 +78,10 @@
 	<bean id="dynamicRegulation" class="com.bus.chelaile.service.DynamicRegulation" >
 	</bean>
 	
-	<!-- 获取所有类型可投放广告 -->
-	<!-- 
-	<bean id="commonService" class="com.bus.chelaile.service.CommonService" parent="abstractService">
+	<!-- 读取kafka -->
+	<bean id="infoStreamForAdvClick" class="com.bus.chelaile.kafka.InfoStreamForAdvClick" >
 	</bean>
-	 -->
+
 	
 	<!-- pushServer类 -->
 	<bean id="abstractPushManager" class="com.bus.chelaile.push.AbstractPushManager"  abstract="true">

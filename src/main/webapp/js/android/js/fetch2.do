@@ -305,9 +305,9 @@ var MdLogger = {
     url: 'http://atrace.chelaile.net.cn/thirdPartyResponse?',
     send: function(data) {
         console.log('发送埋点:' + this.url);
-        //Http.post(this.url, {}, typeof data == 'string' ? data : '', 1000, function() {
-        //    console.log('自我埋点完成' + this.url);
-        //});
+        Http.post(this.url, {}, typeof data == 'string' ? data : '', 1000, function() {
+            console.log('自我埋点完成' + this.url);
+        });
     },
     addPar: function(field, value) {
         this.url += '&' + field + '=' + value;
