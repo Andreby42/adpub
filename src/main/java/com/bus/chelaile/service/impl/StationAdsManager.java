@@ -289,6 +289,7 @@ public class StationAdsManager extends AbstractManager {
     private StationAdEntity createFeedEntity(AdvParam p, AdContent ad, AdStationlInnerContent inner) {
         String response = null;
         String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(), ShowType.STATION_ADV.getType());
+        logger.info("请求信息流**********： url={}", url);
         StationAdEntity entity = null;
         try {
             response = HttpUtils.get(url, "UTF-8");
