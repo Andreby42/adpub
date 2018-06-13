@@ -459,7 +459,7 @@ public class ServiceManager {
 
         if (entities == null || entities.size() == 0) {
             resultMap.put("desc", "等车无聊，公交出行有福利哦！");
-            resultMap.put("descType", 14);   // 23 上车；14 福利社
+            resultMap.put("descType", 4);   // 2\3 上车；1\4 福利社
             resultMap.put("autoInterval", 15000);
             resultMap.put("mixInterval", 5000);
             return resultMap;
