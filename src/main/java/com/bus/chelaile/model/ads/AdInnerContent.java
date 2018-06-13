@@ -1,12 +1,15 @@
 package com.bus.chelaile.model.ads;
 
 import java.util.Comparator;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ads.entity.AdEntity;
+import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
 
@@ -55,8 +58,22 @@ public abstract class AdInnerContent {
                 return -1;
             if (o2 == null)
                 return 1;
+//            return o2.getPriority() - o1.getPriority();
             return o1.getPriority() - o2.getPriority();
         }
     };
+    
+    protected TasksGroup createOwnAdTask() {
+        TasksGroup tasksGroups = new TasksGroup();
+        List<String> ts = New.arrayList();
+        ts.add("api_chelaile");
+        List<List<String>> tasks = New.arrayList();
+        tasks.add(ts);
+        List<Long> times = New.arrayList();
+        times.add(4000L);times.add(4000L);
+        tasksGroups.setTasks(tasks);
+        tasksGroups.setTimeouts(times);
+        return tasksGroups;
+    }
     
 }

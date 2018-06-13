@@ -108,7 +108,6 @@ public class AdDoubleInnerContent extends AdInnerContent {
             List<List<String>> tasksG = New.arrayList();
             if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
-                //                getTasksJ().sort((final TaskModel t1, final TaskModel t2) -> (t1.getPriority() - t2.getPriority()));
                 Set<Integer> prioritys = New.hashSet();
                 for (TaskModel t : getTasksJ()) {
                     if (!prioritys.contains(t.getPriority())) {
@@ -127,16 +126,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
                 tasksGroups.setTimeouts(ad.timeouts);
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
-                TasksGroup tasksGroups = new TasksGroup();
-                List<String> ts = New.arrayList();
-                ts.add("api_chelaile");
-                List<List<String>> tasks = New.arrayList();
-                tasks.add(ts);
-                List<Long> times = New.arrayList();
-                times.add(4000L);times.add(4000L);
-                tasksGroups.setTasks(tasks);
-                tasksGroups.setTimeouts(times);
-                this.tasksGroup = tasksGroups;
+                this.tasksGroup = createOwnAdTask();
             }
         }
     }

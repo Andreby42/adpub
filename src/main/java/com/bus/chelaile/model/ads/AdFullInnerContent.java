@@ -37,7 +37,7 @@ public class AdFullInnerContent extends AdInnerContent {
     private int AdWeight; // 权重
     private int clickDown; // 点击后排序到最后
 
-    //    private String tasksStr; // tasks列表
+//    private List<List<TaskModel>> tasksJ;
     private List<TaskModel> tasksJ;
     private List<Long> timeouts; // 超时时间段设置
 
@@ -68,8 +68,16 @@ public class AdFullInnerContent extends AdInnerContent {
             this.setTasksJ(ad.getTasksJ());
             List<List<String>> tasksG = New.arrayList();
             if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
+//                Set<Integer> prioritys = New.hashSet();
+//                for (List<TaskModel> tList : getTasksJ()) {
+//                    Collections.sort(tList, TaskModel_COMPARATOR);
+//                    List<String> ts = New.arrayList();
+//                    for(TaskModel t : tList) {
+//                        ts.add(t.getApiName());
+//                    }
+//                    tasksG.add(ts);
+//                }
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
-                //                getTasksJ().sort((final TaskModel t1, final TaskModel t2) -> (t1.getPriority() - t2.getPriority()));
                 Set<Integer> prioritys = New.hashSet();
                 for (TaskModel t : getTasksJ()) {
                     if (!prioritys.contains(t.getPriority())) {
@@ -82,25 +90,18 @@ public class AdFullInnerContent extends AdInnerContent {
                     }
                 }
             }
+            
             if (tasksG != null && tasksG.size() > 0 && ad.timeouts != null) {
                 TasksGroup tasksGroups = new TasksGroup();
                 tasksGroups.setTasks(tasksG);
                 tasksGroups.setTimeouts(ad.timeouts);
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
-                TasksGroup tasksGroups = new TasksGroup();
-                List<String> ts = New.arrayList();
-                ts.add("api_chelaile");
-                List<List<String>> tasks = New.arrayList();
-                tasks.add(ts);
-                List<Long> times = New.arrayList();
-                times.add(4000L);times.add(4000L);
-                tasksGroups.setTasks(tasks);
-                tasksGroups.setTimeouts(times);
-                this.tasksGroup = tasksGroups;
+                this.tasksGroup = createOwnAdTask();
             }
         }
     }
+
 
     @Override
     public String extractFullPicUrl(String s) {
@@ -310,19 +311,6 @@ public class AdFullInnerContent extends AdInnerContent {
         this.timeouts = timeouts;
     }
 
-    /**
-     * @return the tasksJ
-     */
-    public List<TaskModel> getTasksJ() {
-        return tasksJ;
-    }
-
-    /**
-     * @param tasksJ the tasksJ to set
-     */
-    public void setTasksJ(List<TaskModel> tasksJ) {
-        this.tasksJ = tasksJ;
-    }
 
     public static void main(String[] args) {
         List<TaskModel> tasksJ1 = New.arrayList();
@@ -341,11 +329,28 @@ public class AdFullInnerContent extends AdInnerContent {
 
         AdFullInnerContent adPush = new AdFullInnerContent();
         adPush.setAndParseJson(
-                "{\"timeouts\":[500,1500],\"tasksJ\":[{\"apiName\":\"sdk_toutiao\",\"priority\":1},{\"apiName\":\"sdk_baidu\",\"priority\":1},{\"apiName\":\"sdk_gdt\",\"priority\":2}]}");
+                "{\"tasksJ\":[{\"apiName\":\"sdk_toutiao\",\"priority\":\"1\"},{\"apiName\":\"sdk_baidu\",\"priority\":\"2\"},{\"apiName\":\"sdk_gdt\",\"priority\":\"2\"},{\"apiName\":\"api_voicead\",\"priority\":1}],\"timeouts\":[500,1500],\"provider_id\":100}");
         System.out.println("pic: " + adPush.pic);
         System.out.println("JsonR: " + adPush.jsonContent);
         System.out.println(JSONObject.toJSONString(adPush));
         System.out.println(adPush.getTasksGroup().getTimeouts().toString());
         System.out.println(adPush.getTasksGroup().getTasks().toString());
     }
+
+
+    /**
+     * @return the tasksJ
+     */
+    public List<TaskModel> getTasksJ() {
+        return tasksJ;
+    }
+
+
+    /**
+     * @param tasksJ the tasksJ to set
+     */
+    public void setTasksJ(List<TaskModel> tasksJ) {
+        this.tasksJ = tasksJ;
+    }
+
 }

@@ -1,4 +1,4 @@
-var version = 30;
+var version = 25;
 var tag_version = 'js_engine_version';
 
 var localVersion = (function() {
@@ -12,8 +12,12 @@ var localVersion = (function() {
 console.log(localVersion + ' => ' + version);
 if (localVersion != version) {
     console.log('Update jsengine from ' + localVersion + ' to ' + version);
+    var success = true;
     ['fetch2', 'sdks/api', 'sdks/sdk'].forEach(function(js) {
-        require(js, false, true);
+        success = success && (!!require(js, false, true));
     });
-    LocalStorage.set(tag_version, version);
+    if (success) {
+        console.log('Js Updated.');
+        LocalStorage.set(tag_version, version);
+    }
 }

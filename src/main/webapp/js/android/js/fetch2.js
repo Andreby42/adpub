@@ -59,13 +59,23 @@ function getSdk(sdkname) {
 
 //
 //
-
 function ourUrls(traceInfo, entity, urls) {
     var ret = {};
     for (var k in urls)
         ret[k] = urls[k];
-    for (var k in traceInfo)
-        return urls;
+
+    ['adid', 'traceid', 'pid', 'ad_order'].forEach(function(field) {
+        var v = traceInfo[field] || entity[field];
+        if (v) {
+            var added = '&' + field + '=' + v;
+            for (var k in urls) {
+                ret[k] += added;
+            }
+        }
+    })
+
+    console.log('exposeUrl: ' + ret.exposeUrl)
+    return ret;
 }
 
 
@@ -268,13 +278,15 @@ function tryNthTaskGroup(rule, nth, callback) {
             MdLogger.addPar(field, rule.traceInfo[field]);
         });
         MdLogger.addPar('aid', sdkInfo.task.aid());
+        MdLogger.addPar('is_backup', nth == rule.tasks.length - 1 ? 1 : 0);
 
         sdkInfo.sdk.load(sdkInfo.task, {
             traceInfo: rule.traceInfo
         }, function(data) {
             console.log('data comes ' + data);
 
-            MdLogger.addPar('req_time', now() - stamp1);
+            var used = now() - stamp1;
+            MdLogger.addPar('req_time', used);
             MdLogger.addPar('code', data ? 200 : 500);
 
             sdkInfo._result = [data];
@@ -290,9 +302,9 @@ function tryNthTaskGroup(rule, nth, callback) {
 
                 MdLogger.addPar('ad_order', entity.ad_order || 0);
 
-                MdLogger.send(data.data);
+                MdLogger.sendThirdParty(data.data);
             } else {
-                MdLogger.send();
+                MdLogger.sendThirdParty();
             }
         });
     });
@@ -302,15 +314,19 @@ function tryNthTaskGroup(rule, nth, callback) {
 }
 
 var MdLogger = {
-    url: 'http://atrace.chelaile.net.cn/thirdPartyResponse?',
-    send: function(data) {
-        console.log('发送埋点:' + this.url);
-        Http.post(this.url, {}, typeof data == 'string' ? data : '', 1000, function() {
-            console.log('自我埋点完成' + this.url);
+    pars: {},
+    sendThirdParty: function(data) {
+        var url = 'http://atrace.chelaile.net.cn/thirdPartyResponse?';
+        for (var k in this.pars) {
+            url += '&' + k + '=' + this.pars[k];
+        }
+        console.log('发送第三方埋点:' + url);
+        Http.post(url, {}, typeof data == 'string' ? data : '', 5000, function() {
+            console.log('成功发送第三方埋点:' + url);
         });
     },
     addPar: function(field, value) {
-        this.url += '&' + field + '=' + value;
+        this.pars[field] = value;
     }
 }
 
