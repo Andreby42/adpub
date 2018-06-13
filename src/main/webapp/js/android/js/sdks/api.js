@@ -18,9 +18,6 @@ function load(task, userdata, callback) {
         if (!ad) {
             return callback(null);
         }
-
-        mypar('ad_order', ad.ad_order);
-        Http.post(myurl, {}, data, 1000, mypostOk);
 		
 		
 		if(task.sdkname() == 'api_chelaile') {
