@@ -1,7 +1,7 @@
 var status = 0;
 
 function mypostOk(){
-    console.log('自我埋点完成')
+    console.log('鑷垜鍩嬬偣瀹屾垚')
 }
 
 function load(task, userdata, callback) {
@@ -43,15 +43,28 @@ function load(task, userdata, callback) {
 
         mypar('ad_order', ad.ad_order);
         Http.post(myurl, {}, data, 1000, mypostOk);
-
-        var ret = {
+		
+		
+		if(task.sdkname() == 'api_chelaile') {
+			var ret = {
+            isSkip: ad.isSkip,
+            isDisplay: ad.isDisplay,
+            duration: ad.duration,
+            isFullShow: ad.isFullShow,
+            ad: ad
+			}
+			callback(ret);
+		} else {
+			var ret = {
             isSkip: 0,
             isDisplay: 0,
             duration: 4,
             isFullShow: 0,
             ad: ad
-        }
-        callback(ret);
+			}
+			callback(ret);
+		}
+        
     }
 
     var stamp1 = new Date().getTime();
