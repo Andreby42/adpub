@@ -18,29 +18,27 @@ function load(task, userdata, callback) {
         if (!ad) {
             return callback(null);
         }
-		
-		
-		if(task.sdkname() == 'api_chelaile') {
-			var ret = {
-            isSkip: ad.isSkip,
-            isDisplay: ad.isDisplay,
-            duration: ad.duration,
-            isFullShow: ad.isFullShow,
-            ad: ad
-			}
-			callback(ret);
-		} else {
-			var ret = {
-            isSkip: 0,
-            isDisplay: 0,
-            duration: 4,
-            isFullShow: 0,
-            ad: ad
-			}
-			callback(ret);
-        }
-	}
 
+        if (task.sdkname() == 'api_chelaile') {
+            var ret = {
+                isSkip: ad.isSkip,
+                isDisplay: ad.isDisplay,
+                duration: ad.duration,
+                isFullShow: ad.isFullShow,
+                ad: ad
+            }
+            callback(ret);
+        } else {
+            var ret = {
+                isSkip: 0,
+                isDisplay: 0,
+                duration: 4,
+                isFullShow: 0,
+                ad: ad
+            }
+            callback(ret);
+        }
+    }
 
     if (requestInfo.data)
         Http.post(requestInfo.url, {

@@ -59,8 +59,8 @@ public class InfoStreamHelp {
 			}
 			if(! Constants.ISTEST)
 			    logger.info("点击日志解析结果： advId={}, udid={}", advId, udid);
-//			System.out.println(advId);
-//			System.out.println(udid);
+			System.out.println(advId);
+			System.out.println(udid);
 			if(StaticAds.allAds.get(advId) == null) {
 				if(! Constants.ISTEST) {	// 线上需要打印这种情况，测试无需
 					logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
@@ -174,7 +174,7 @@ public class InfoStreamHelp {
 //		//		(s.split("\\|#").length > 3 && s.split("\\|#")[3].trim().split(" ").length > 1)
 //		analysisClick(s);
 		
-		String clickS = "May 21 10:44:25 web5 nginx: 182.18.10.10 |# - |# 2018-05-21 10:44:25 |# 302 |# 0.000 |# 264 |# - |# Mozilla/5.0 (Linux; Android 8.0.0; MI 6 Build/OPR1.170623.027; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/62.0.3202.84 Mobile Safari/537.36Chelaile/3.50.2 Duiba/1.0.7 |#- |# ad.chelaile.net.cn |# - |# - |# /?advId=14333&adtype=05&udid=a143270d-0453-4e34-9e34-bbf5c8eb38c2&stn_name=%E7%A7%80%E5%9B%AD&stats_act=switch_stn&utm_medium=banner&adv_type=5&nw=WIFI&stats_referer=lineAd&language=1&cityId=027&AndroidID=bec0ee697731878d&line_id=010-387-0&mac=02%3A00%3A00%3A00%3A00%3A00&api_type=0&adv_id=14333&lchsrc=icon&udid=a143270d-0453-4e34-9e34-bbf5c8eb38c2&stn_order=18&ad_switch=7&timestamp=1526870666080&deviceType=MI+6&geo_type=gcj&push_open=1&sv=8.0.0&geo_lac=56.0&first_src=app_wandoujia&vc=103&userId=unknown&platform_v=26&geo_lt=4&s=android&last_src=app_wandoujia&geo_lng=116.409727&geo_lat=39.996334&v=3.50.2&wifi_open=1&imei=866822030825525&provider_id=1&utm_source=app_linedetail |# 1 |# 14333 |# https";
+		String clickS = "112.224.71.206 |# - |# 2018-06-12 12:07:04 |# 302 |# 0.000 |# 264 |# - |# Mozilla/5.0 (iPhone; CPU iPhone OS 11_0_2 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Mobile/15A421 Chelaile/5.50.3 |#- |# ad.chelaile.net.cn |# - |# - |# GET //?link=https%3A%2F%2Fm.zhuaqianmao.com%2Factivity%2Fpopularize%2Fchelaile%2F&advId=14597&adtype=05&udid=806a6f9c5ce466b06f4005cb87e778dbccfbb9ec&mac=&line_id=0532-502-1&utm_source=app_linedetail&adv_type=5&accountId=72298271&userAgent=Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%2011_0_2%20like%20Mac%20OS%20X)%20AppleWebKit/604.1.38%20(KHTML,%20like%20Gecko)%20Mobile/15A421&vc=10553&adv_id=14597&sv=11.0.2&geo_lat=36.090779&screenWidth=1242&pushkey=&provider_id=1&geo_lac=65.000000&secret=67bb6e7c40624b67ae61ef58a4bdbd39&gpsAccuracy=65.000000&stats_act=pull_refresh&stn_order=4&deviceType=iPhone10,2&idfa=C067540D-9C38-4999-9DF4-A1E16E6DE031&idfv=35520AF5-E41F-42A0-BEB5-F6EAC3A16AB1&screenHeight=2208&utm_medium=bus&cityId=009&sign=uXmUrQk4FhtLr8/Fsib93w==&s=IOS&wifi_open=1&dpi=3&push_open=0&stats_referer=lineAd&ad_switch=7&api_type=1&v=5.50.3&geo_type=wgs&stn_name=%E9%9E%8D%E5%B1%B1%E8%B7%AF&nw=4G&language=1&vendor=apple&lchsrc=icon&userId=&geo_lng=120.368375 HTTP/1.1 |# 1 |# 14597 |# https";
 		analysisClick(clickS);
 		
 	}
