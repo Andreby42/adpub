@@ -2,7 +2,7 @@ var status = 0;
 
 function load(task, userdata, callback) {
     var requestInfo = task.adurl();
-    console.log('API for ' + requestInfo.url)
+    console.log('API for ' + requestInfo.url);
 
     function wrappedFn(data) {
         console.log("api data=" + data);
@@ -15,23 +15,35 @@ function load(task, userdata, callback) {
             return callback(null);
         }
 
-		if(!ad) {
-			return callback(null);
-		}
+        if (!ad) {
+            return callback(null);
+        }
+
+        mypar('ad_order', ad.ad_order);
+        Http.post(myurl, {}, data, 1000, mypostOk);
 		
-		//if(task.sdkname() == 'api_chelaile') {
-		//	return callback({ad : ad});
-		//}
 		
-		var ret = {
-			isSkip : 0,
-			isDisplay : 0,
-			duration : 4,
-			isFullShow : 0,
-			ad : ad
-		}
-        callback(ret);
-    }
+		if(task.sdkname() == 'api_chelaile') {
+			var ret = {
+            isSkip: ad.isSkip,
+            isDisplay: ad.isDisplay,
+            duration: ad.duration,
+            isFullShow: ad.isFullShow,
+            ad: ad
+			}
+			callback(ret);
+		} else {
+			var ret = {
+            isSkip: 0,
+            isDisplay: 0,
+            duration: 4,
+            isFullShow: 0,
+            ad: ad
+			}
+			callback(ret);
+        }
+	}
+
 
     if (requestInfo.data)
         Http.post(requestInfo.url, {

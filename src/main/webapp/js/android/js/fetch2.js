@@ -262,10 +262,21 @@ function tryNthTaskGroup(rule, nth, callback) {
     sdkInfos.forEach(function(sdkInfo) {
         var req = sdkInfo.task.adurl();
         console.log('try sdk: ' + req.url);
+
+        var stamp1 = now();
+        ['traceid', 'pid', 'adid'].forEach(function(field) {
+            MdLogger.addPar(field, rule.traceInfo[field]);
+        });
+        MdLogger.addPar('aid', sdkInfo.task.aid());
+
         sdkInfo.sdk.load(sdkInfo.task, {
             traceInfo: rule.traceInfo
         }, function(data) {
             console.log('data comes ' + data);
+
+            MdLogger.addPar('req_time', now() - stamp1);
+            MdLogger.addPar('code', data ? 200 : 500);
+
             sdkInfo._result = [data];
             if (data) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(data.ad) : data.ad;
@@ -276,12 +287,31 @@ function tryNthTaskGroup(rule, nth, callback) {
                 data.aid = sdkInfo.task.aid();
                 data.refreshTime = 25000;
                 data.mixRefreshAdInterval = 5000;
+
+                MdLogger.addPar('ad_order', entity.ad_order || 0);
+
+                MdLogger.send(data.data);
+            } else {
+                MdLogger.send();
             }
         });
     });
 
     var checker = setInterval(checkResults, interval);
     console.log('start a new interval:' + checker)
+}
+
+var MdLogger = {
+    url: 'http://atrace.chelaile.net.cn/thirdPartyResponse?',
+    send: function(data) {
+        console.log('发送埋点:' + this.url);
+        Http.post(this.url, typeof data == 'string' ? data : '', {}, 1000, function() {
+            console.log('自我埋点完成' + this.url);
+        });
+    },
+    addPar: function(field, value) {
+        this.url += '&' + field + '=' + value;
+    }
 }
 
 function now() {

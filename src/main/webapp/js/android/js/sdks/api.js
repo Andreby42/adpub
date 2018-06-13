@@ -1,27 +1,10 @@
 var status = 0;
 
-function mypostOk(){
-    console.log('自我埋点完成')
-}
-
 function load(task, userdata, callback) {
     var requestInfo = task.adurl();
     console.log('API for ' + requestInfo.url);
 
-    var myurl = "http://atrace.chelaile.net.cn/thirdPartyResponse?";
-    function mypar(field, value) {
-        myurl += '&' + field + '=' + value;
-    }
-
-    ['traceid', 'pid', 'adid'].forEach(function(field) {
-        mypar(field, userdata.traceInfo[field]);
-    });
-    mypar('aid', task.aid());
-
     function wrappedFn(data) {
-        var used = new Date().getTime() - stamp1;
-        mypar('req_time', used);
-
         console.log("api data=" + data);
         try {
             console.log('filter with data');
@@ -29,15 +12,10 @@ function load(task, userdata, callback) {
             console.log('after filter ' + ad)
         } catch (e) {
             console.log(e);
-
-            mypar('code', 500);
-            Http.post(myurl, {}, {}, 1000, mypostOk);
-
             return callback(null);
         }
 
         if (!ad) {
-            Http.post(myurl, {}, data, 1000, mypostOk);
             return callback(null);
         }
 
@@ -63,11 +41,9 @@ function load(task, userdata, callback) {
             ad: ad
 			}
 			callback(ret);
-		}
-        
-    }
+        }
+	}
 
-    var stamp1 = new Date().getTime();
 
     if (requestInfo.data)
         Http.post(requestInfo.url, {
