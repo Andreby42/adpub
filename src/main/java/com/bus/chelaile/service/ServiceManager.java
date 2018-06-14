@@ -376,33 +376,36 @@ public class ServiceManager {
 
     private void settingsConfig(JSONObject resultMap) {
         // 读取配置的‘热启动调用广告的时间间隔’
-        if (StaticAds.SETTINGSMAP.containsKey(Constants.INTERVALTIME_KEY)) {
-            String sL = StaticAds.SETTINGSMAP.get(Constants.INTERVALTIME_KEY);
-            try {
-                resultMap.put("intervalTime", Integer.parseInt(sL));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        // 如果读取不到配置项，那么设置默认为30
+        settings(resultMap, Constants.INTERVALTIME_KEY, "intervalTime");
         if (!resultMap.containsKey("intervalTime")) {
             logger.error("配置项，intervalTime丢失 ！ ");
             resultMap.put("intervalTime", 30);
         }
 
         // 读取配置的‘最长开屏时间’
-        if (StaticAds.SETTINGSMAP.containsKey(Constants.OPENTIMEOUT_KEY)) {
-            String sL = StaticAds.SETTINGSMAP.get(Constants.OPENTIMEOUT_KEY);
+        settings(resultMap, Constants.OPENTIMEOUT_KEY, "openTimeout");
+        if (!resultMap.containsKey("openTimeout")) {
+            logger.error("配置项，openTimeout 丢失 ！ ");
+            resultMap.put("openTimeout", 8001);
+        }
+        
+        // 读取配置的‘最长热启动开屏时间’
+        settings(resultMap, Constants.OPENTIMEOUT_HOT_KEY, "hotOpenTimeout");
+        if (!resultMap.containsKey("hotOpenTimeout")) {
+            logger.error("配置项，hotOpenTimeout 丢失 ！ ");
+            resultMap.put("hotOpenTimeout", 4001);
+        }
+        
+    }
+
+    private void settings(JSONObject resultMap, String key, String value) {
+        if (StaticAds.SETTINGSMAP.containsKey(key)) {
+            String sL = StaticAds.SETTINGSMAP.get(key);
             try {
-                resultMap.put("openTimeout", Long.parseLong(sL));
+                resultMap.put(value, Integer.parseInt(sL));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        // 如果读取不到配置项，那么设置默认为6000
-        if (!resultMap.containsKey("openTimeout")) {
-            logger.error("配置项，openTimeout 丢失 ！ ");
-            resultMap.put("openTimeout", 6000);
         }
     }
     
