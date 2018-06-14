@@ -280,8 +280,6 @@ function tryNthTaskGroup(rule, nth, callback) {
         ['traceid', 'pid', 'adid'].forEach(function(field) {
             MdLogger.addPar(field, rule.traceInfo[field]);
         });
-        MdLogger.addPar('aid', sdkInfo.task.aid());
-        MdLogger.addPar('is_backup', nth == rule.tasks.length - 1 ? 1 : 0);
 
         sdkInfo.sdk.load(sdkInfo.task, {
             traceInfo: rule.traceInfo
@@ -291,6 +289,8 @@ function tryNthTaskGroup(rule, nth, callback) {
             var used = now() - stamp1;
             MdLogger.addPar('req_time', used);
             MdLogger.addPar('code', resp.data ? 200 : 500);
+            MdLogger.addPar('is_backup', nth == rule.tasks.length - 1 ? 1 : 0);
+            MdLogger.addPar('aid', sdkInfo.task.aid());
 
             sdkInfo._result = resp;
             if (resp.ad) {
