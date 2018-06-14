@@ -8,41 +8,43 @@ function load(task, userdata, callback) {
     var sdkIns = task._sdkIns = newInstance(requestInfo.url);
     if (!sdkIns) {
         console.log(' vendor not found: ' + requestInfo.url);
-        return callback(null);
+        return callback({});
     }
 
-    function wrappedFn(data) {
-      var logHead = vendor + " " + requestInfo.pos;
-      console.log( logHead + " success data=" +  data);
+    function wrappedFn(resp) {
+        var logHead = vendor + " " + requestInfo.pos;
+        console.log(logHead + " success resp=" + resp);
 
-      if (!data || !data.data){
-        console.log(logHead + ' no ad data. return null.')
-        return callback(null);
-      }
+        if (!resp) resp = {};
 
-      try {
-        // console.log(data);
-        var ad = task.filter(data.data);
-
-        if (ad == null ) {
-          console.log(logHead + ' ad is null ');
-          return callback(null);
-        } else {
-          console.log(logHead + ' get ad:' + ad);
-          data.ad = ad;
-		  if (requestInfo.pos == "splash") {
-		      data.isSkip = 0;
-			  data.isDisplay = 0;
-			  data.duration = 4;
-			  data.isFullShow = 0;
-		  }
-          data.entity = task.asEntity ? task.asEntity(ad) : ad;
-          callback(data);
+        if (!resp.data) {
+            console.log(logHead + ' no ad resp. return null.')
+            return callback(resp);
         }
-      } catch (e) {
-        console.log(' ' + e);
-        callback(null);
-      }
+
+        try {
+            // console.log(resp);
+            var ad = task.filter(resp.data);
+
+            if (ad == null) {
+                console.log(logHead + ' ad is null ');
+                return callback(resp);
+            } else {
+                console.log(logHead + ' get ad:' + ad);
+                resp.ad = ad;
+                if (requestInfo.pos == "splash") {
+                    resp.isSkip = 0;
+                    resp.isDisplay = 0;
+                    resp.duration = 4;
+                    resp.isFullShow = 0;
+                }
+                resp.entity = task.asEntity ? task.asEntity(ad) : ad;
+                callback(resp);
+            }
+        } catch (e) {
+            console.log(' ' + e);
+            callback(resp);
+        }
     }
 
     console.log("*********" + requestInfo.pos);
@@ -59,7 +61,7 @@ function stop2(task) {
     var vendor = requestInfo.url;
     console.log('Stop ' + vendor + " " + JSON.stringify(requestInfo));
 
-    if (task._sdkIns && task._sdkIns.stopSplash){
+    if (task._sdkIns && task._sdkIns.stopSplash) {
         if (requestInfo.pos == "splash") {
             task._sdkIns.stopSplash();
         }

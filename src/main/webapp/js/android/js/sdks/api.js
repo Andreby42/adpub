@@ -6,17 +6,19 @@ function load(task, userdata, callback) {
 
     function wrappedFn(data) {
         console.log("api data=" + data);
+        var ret = {
+            data: data
+        };
         try {
             console.log('filter with data');
             var ad = task.filter(data);
             console.log('after filter ' + ad)
         } catch (e) {
             console.log(e);
-            return callback(null);
         }
 
         if (!ad) {
-            return callback(null);
+            return callback(ret);
         }
 
         if (task.sdkname() == 'api_chelaile') {
@@ -24,20 +26,19 @@ function load(task, userdata, callback) {
                 isSkip: ad.isSkip,
                 isDisplay: ad.isDisplay,
                 duration: ad.duration,
-                isFullShow: ad.isFullShow,
-                ad: ad
+                isFullShow: ad.isFullShow
             }
-            callback(ret);
         } else {
             var ret = {
                 isSkip: 0,
                 isDisplay: 0,
                 duration: 4,
-                isFullShow: 0,
-                ad: ad
+                isFullShow: 0
             }
-            callback(ret);
         }
+        ret.ad = ad;
+        ret.data = data;
+        callback(ret);
     }
 
     if (requestInfo.data)
