@@ -66,7 +66,7 @@ function ourUrls(traceInfo, entity, urls) {
 
     ['adid', 'traceid', 'pid', 'ad_order'].forEach(function(field) {
         var v = traceInfo[field] || entity[field];
-        if (v) {
+        if (!nullOrUndefined(v)) {
             var added = '&' + field + '=' + v;
             for (var k in urls) {
                 ret[k] += added;
@@ -236,7 +236,7 @@ function tryNthTaskGroup(rule, nth, callback) {
             finishCount++; // increase finish counter
 
             // skip if NO_RESULT
-            if (!result[0]) continue;
+            if (!result.ad) continue;
 
             succeedCount++; // increase succeed counter
 
@@ -246,7 +246,7 @@ function tryNthTaskGroup(rule, nth, callback) {
             ) {
                 console.log('Succeed Immediately.');
                 stopCheckerAndTasks(i);
-                wrappedFn(result[0]);
+                wrappedFn(result);
                 return;
             }
         }
@@ -289,8 +289,8 @@ function tryNthTaskGroup(rule, nth, callback) {
             MdLogger.addPar('req_time', used);
             MdLogger.addPar('code', data ? 200 : 500);
 
-            sdkInfo._result = [data];
-            if (data) {
+            sdkInfo._result = data;
+            if (data.ad) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(data.ad) : data.ad;
                 var urls = ourUrls(rule.traceInfo, entity, rule.urls);
                 console.log('ourUrls: ' + JSON.stringify(urls));
@@ -301,11 +301,8 @@ function tryNthTaskGroup(rule, nth, callback) {
                 data.mixRefreshAdInterval = 5000;
 
                 MdLogger.addPar('ad_order', entity.ad_order || 0);
-
-                MdLogger.sendThirdParty(data.data);
-            } else {
-                MdLogger.sendThirdParty();
             }
+            MdLogger.sendThirdParty(data.data);
         });
     });
 
@@ -326,8 +323,12 @@ var MdLogger = {
         });
     },
     addPar: function(field, value) {
-        this.pars[field] = value;
+        this.pars[field] = nullOrUndefined(value) ? '' : value;
     }
+}
+
+function nullOrUndefined(a) {
+    return typeof a == 'undefined' || a == null
 }
 
 function now() {
