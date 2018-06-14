@@ -163,8 +163,8 @@ public class AdContent {
         if (inner != null) {
             int isbackUp = inner.getIsBackup();
             logger.info("traceInfo set to redis ********, id={}, title={}, isbackup={}", this.id, this.title, isbackUp);
-            CacheUtil.setToAtrace("AD_PROPERTY_TITLE" + this.id, title);
-            CacheUtil.setToAtrace("AD_PROPERTY_BACKUP" + this.id, isbackUp + "");
+            CacheUtil.setToAtrace("AD_PROPERTY_TITLE_" + this.id, title);
+            CacheUtil.setToAtrace("AD_PROPERTY_BACKUP_" + this.id, isbackUp + "");
             
             inner.completePicUrl();	 // 将AdInnerContent中的url完整化
         }
