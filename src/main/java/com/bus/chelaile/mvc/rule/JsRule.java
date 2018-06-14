@@ -149,7 +149,7 @@ public class JsRule extends AbstractController {
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
         TaskEntity tgs = jSService.getTask(p, "bottom");
-
+        
         String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request);
 
         return splashJS;
@@ -159,6 +159,11 @@ public class JsRule extends AbstractController {
     private String produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request) {
         if(StringUtils.isBlank(originJs)) {
             return "┭┮﹏┭┮ 原始js文件为空 ";
+        }
+        
+        if(StringUtils.isBlank(tgs.getTraceid())) {
+            logger.info("traceId is null -- , udid={},s={}, v={}", p.getUdid(), p.getS(), p.getV());
+            return originJs;
         }
         
         String splashJS = "";
@@ -183,8 +188,6 @@ public class JsRule extends AbstractController {
 //                    }
                 }
             }
-        } else {
-            return "┭┮﹏┭┮ tasks为空 ";
         }
         return splashJS;
     }

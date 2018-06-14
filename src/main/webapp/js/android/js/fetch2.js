@@ -67,7 +67,7 @@ function ourUrls(traceInfo, entity, urls) {
         ret[k] = urls[k];
 
 
-    ['adid', 'traceid', 'pid', 'ad_order'].forEach(function(field) {
+    ['adid', 'traceid', 'pid', 'ad_order', 'is_backup'].forEach(function(field) {
         var v = traceInfo[field] || entity[field];
         if (!nullOrUndefined(v)) {
             var added = '&' + field + '=' + v;
@@ -280,8 +280,6 @@ function tryNthTaskGroup(rule, nth, callback) {
         ['traceid', 'pid', 'adid'].forEach(function(field) {
             MdLogger.addPar(field, rule.traceInfo[field]);
         });
-        MdLogger.addPar('aid', sdkInfo.task.aid());
-        MdLogger.addPar('is_backup', nth == rule.tasks.length - 1 ? 1 : 0);
 
         sdkInfo.sdk.load(sdkInfo.task, {
             traceInfo: rule.traceInfo
@@ -291,10 +289,13 @@ function tryNthTaskGroup(rule, nth, callback) {
             var used = now() - stamp1;
             MdLogger.addPar('req_time', used);
             MdLogger.addPar('code', resp.data ? 200 : 500);
+            MdLogger.addPar('is_backup', nth == rule.tasks.length - 1 ? 1 : 0);
+            MdLogger.addPar('aid', sdkInfo.task.aid());
 
             sdkInfo._result = resp;
             if (resp.ad) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
+                entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
                 var urls = ourUrls(rule.traceInfo, entity, rule.urls);
                 console.log('ourUrls: ' + JSON.stringify(urls));
                 resp.urls = urls;
