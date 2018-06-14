@@ -60,9 +60,12 @@ function getSdk(sdkname) {
 //
 //
 function ourUrls(traceInfo, entity, urls) {
+    entity = entity || {};
+
     var ret = {};
     for (var k in urls)
         ret[k] = urls[k];
+
 
     ['adid', 'traceid', 'pid', 'ad_order'].forEach(function(field) {
         var v = traceInfo[field] || entity[field];
@@ -282,27 +285,27 @@ function tryNthTaskGroup(rule, nth, callback) {
 
         sdkInfo.sdk.load(sdkInfo.task, {
             traceInfo: rule.traceInfo
-        }, function(data) {
-            console.log('data comes ' + data);
+        }, function(resp) {
+            console.log('resp comes ' + resp);
 
             var used = now() - stamp1;
             MdLogger.addPar('req_time', used);
-            MdLogger.addPar('code', data ? 200 : 500);
+            MdLogger.addPar('code', resp.data ? 200 : 500);
 
-            sdkInfo._result = data;
-            if (data.ad) {
-                var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(data.ad) : data.ad;
+            sdkInfo._result = resp;
+            if (resp.ad) {
+                var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
                 var urls = ourUrls(rule.traceInfo, entity, rule.urls);
                 console.log('ourUrls: ' + JSON.stringify(urls));
-                data.urls = urls;
+                resp.urls = urls;
                 console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
-                data.aid = sdkInfo.task.aid();
-                data.refreshTime = 25000;
-                data.mixRefreshAdInterval = 5000;
+                resp.aid = sdkInfo.task.aid();
+                resp.refreshTime = 25000;
+                resp.mixRefreshAdInterval = 5000;
 
                 MdLogger.addPar('ad_order', entity.ad_order || 0);
             }
-            MdLogger.sendThirdParty(data.data);
+            MdLogger.sendThirdParty(resp.data);
         });
     });
 
@@ -318,6 +321,7 @@ var MdLogger = {
             url += '&' + k + '=' + this.pars[k];
         }
         console.log('发送第三方埋点:' + url);
+        console.log('data:' + data);
         Http.post(url, {}, typeof data == 'string' ? data : '', 5000, function() {
             console.log('成功发送第三方埋点:' + url);
         });
