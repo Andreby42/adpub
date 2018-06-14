@@ -2,10 +2,14 @@ package com.bus.chelaile.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
@@ -81,9 +85,17 @@ public class JSService {
                     times = entity.getTasksGroup().getTimeouts();
                 }
             }
+            // 存储atraceInfo到redis中
+            if(StringUtils.isBlank(param.getTraceid())) {
+//            logger.info("traceid为空 ┭┮﹏┭┮");
+                param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
+            }
+            String traceInfo = JSONObject.toJSONString(param);
+            CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME);
+            
         }
         taskEntity.setTaskGroups(new TasksGroup(tasks, times));
-        taskEntity.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
+        taskEntity.setTraceid(param.getTraceid());
         logger.info("js方式，获取到的有效广告id列表是： udid={}, cityId={}, s={}, v={}, vc={}, ids={}", param.getUdid(), param.getCityId(),
                 param.getS(), param.getV(), param.getVc(), ids);
 

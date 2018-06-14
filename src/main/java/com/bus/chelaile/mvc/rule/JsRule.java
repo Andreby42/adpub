@@ -63,8 +63,6 @@ public class JsRule extends AbstractController {
     public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
-        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
-                p.getCityId());
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
@@ -83,8 +81,6 @@ public class JsRule extends AbstractController {
     public String homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
-        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
-                p.getCityId());
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
@@ -107,8 +103,6 @@ public class JsRule extends AbstractController {
         AdvParam p = getActionParam(request);
         if(StringUtils.isBlank(p.getStnName()))
             p.setStnName(request.getParameter("stationName"));
-        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
-                p.getCityId());
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
@@ -130,8 +124,6 @@ public class JsRule extends AbstractController {
         AdvParam p = getActionParam(request);
         if(StringUtils.isBlank(p.getStnName()))
             p.setStnName(request.getParameter("stationName"));
-        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
-                p.getCityId());
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
@@ -153,8 +145,6 @@ public class JsRule extends AbstractController {
         AdvParam p = getActionParam(request);
         if(StringUtils.isBlank(p.getStnName()))
             p.setStnName(request.getParameter("stationName"));
-        logger.info("***请求splashAds.js, s={}, v={}, vc={}, udid={}, cityId={}", p.getS(), p.getV(), p.getVc(), p.getUdid(),
-                p.getCityId());
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");

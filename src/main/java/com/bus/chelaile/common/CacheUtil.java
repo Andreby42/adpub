@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
+import com.bus.chelaile.common.cache.RedisAtraceCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisBUSCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTBKCacheImplUtil;
@@ -35,6 +36,8 @@ public class CacheUtil {
 	private static ICache redisToken;
 	// 存储tbk title的redis
     private static ICache redisTBK;
+    // 存储 traceInfo的redis
+    private static ICache redisAtrace;
     // 存储bus后台设置的cshow值的redis
     private static ICache redisBUS;
 	//  用来获取用户头像的redis
@@ -130,6 +133,7 @@ public class CacheUtil {
        redisToken = new RedisTokenCacheImplUtil();
        redisTBK = new RedisTBKCacheImplUtil();
        redisBUS = new RedisBUSCacheImplUtil();
+       redisAtrace = new RedisAtraceCacheImplUtil();
        isInitSuccess = true;
     }
     
@@ -283,6 +287,15 @@ public class CacheUtil {
         return redisClient.allKeys(pattern);
     }
  
+    // 将traceInfo保存到redis中, 永久
+    public static void setToAtrace(String key, String value) {
+        redisAtrace.set(key, -1, value);
+    }
+    // 同上
+    public static void setToAtrace(String key, String value, int exp) {
+        redisAtrace.set(key, exp, value);
+    }
+    
 //	public static Object getActiveOcs(String key) {
 //		return cacheActivitiesClient.get(key);
 //	}

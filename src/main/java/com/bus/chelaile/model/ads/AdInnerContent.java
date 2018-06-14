@@ -63,6 +63,10 @@ public abstract class AdInnerContent {
         }
     };
     
+    public int getIsBackup() {
+        return 0;
+    }
+    
     protected TasksGroup createOwnAdTask() {
         TasksGroup tasksGroups = new TasksGroup();
         List<String> ts = New.arrayList();

@@ -10,6 +10,9 @@ public class AbstractController {
 
     public AdvParam getActionParam(HttpServletRequest request) {
         AdvParam param = new AdvParam();
+        
+        param.setTraceid(request.getParameter("traceid"));
+        
         param.setUserId(request.getParameter("userId"));
         param.setAccountId(request.getParameter("accountId"));
         param.setS(request.getParameter("s"));

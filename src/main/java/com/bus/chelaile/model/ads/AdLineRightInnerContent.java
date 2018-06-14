@@ -76,6 +76,12 @@ public class AdLineRightInnerContent extends AdInnerContent {
     }
 
     @Override
+    public int getIsBackup() {
+        return this.backup;
+    }
+    
+    
+    @Override
     public String extractFullPicUrl(String s) {
         return null;
     }

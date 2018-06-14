@@ -9,6 +9,7 @@ import com.bus.chelaile.model.ads.Station;
 
 
 public class AdvParam {
+    private String traceid;
 	 private String userId;
      private String accountId;
      // 需要保证每一个s的值都是小写的。
@@ -720,6 +721,22 @@ public class AdvParam {
      */
     public void setSite(int site) {
         this.site = site;
+    }
+
+
+    /**
+     * @return the traceid
+     */
+    public String getTraceid() {
+        return traceid;
+    }
+
+
+    /**
+     * @param traceid the traceid to set
+     */
+    public void setTraceid(String traceid) {
+        this.traceid = traceid;
     }
 
 

@@ -130,6 +130,11 @@ public class AdDoubleInnerContent extends AdInnerContent {
             }
         }
     }
+    
+    @Override
+    public int getIsBackup() {
+        return this.backup;
+    }
 
     @Override
     public String extractFullPicUrl(String s) {
