@@ -349,7 +349,7 @@ function ads() {
         },
         timeouts: [1000, 2000],
         tasks: [
-            [api_yd]
+            [sdk_baidu, sdk_gdt]
         ]
     }
 }

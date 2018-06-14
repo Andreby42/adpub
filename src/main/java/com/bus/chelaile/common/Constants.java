@@ -136,6 +136,7 @@ public class Constants {
     public static final String SCREENHEIGHT_KEY = "AD_SETTING_linefeed_screenHeight";  // 详情页下方feed位是否打开，存储分界线value的对应key
     public static final String INTERVALTIME_KEY = "AD_SETTING_intervalTime";  // 开屏热启动调用广告的时间间隔
     public static final String OPENTIMEOUT_KEY = "AD_SETTING_openTimeout";  // 开屏最长时间
+    public static final String OPENTIMEOUT_HOT_KEY = "AD_SETTING_hotOpenTimeout"; //热启动开屏最长时间
     
     // 版本控制号
     public static final int PLATFORM_LOG_ANDROID_0118 = 96; // 3.45.0

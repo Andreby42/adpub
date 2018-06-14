@@ -66,7 +66,7 @@ function ourUrls(traceInfo, entity, urls) {
 
     ['adid', 'traceid', 'pid', 'ad_order'].forEach(function(field) {
         var v = traceInfo[field] || entity[field];
-        if (v) {
+        if (!nullOrUndefined(v)) {
             var added = '&' + field + '=' + v;
             for (var k in urls) {
                 ret[k] += added;
@@ -326,8 +326,12 @@ var MdLogger = {
         });
     },
     addPar: function(field, value) {
-        this.pars[field] = value;
+        this.pars[field] = nullOrUndefined(value) ? '' : value;
     }
+}
+
+function nullOrUndefined(a) {
+    return typeof a == 'undefined' || a == null
 }
 
 function now() {

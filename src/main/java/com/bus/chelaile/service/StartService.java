@@ -102,20 +102,21 @@ public class StartService {
             StaticAds.addAds(ad);
 
             // 详情页广告与其他广告分开
-            if (ad.getShowType() != null) {
-                // 只要线路详情
-                if (isLineDetails.equals("0") && !(ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
-                        || ad.getShowType().equals(ShowType.STATION_ADV.getType())
-                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
-                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
-                    continue;
-                } else if (isLineDetails.equals("2") && (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
-                        || ad.getShowType().equals(ShowType.STATION_ADV.getType())
-                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
-                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
-                    continue;
-                }
-            }
+            // 2018-06-14日去除这个  // TODO 
+//            if (ad.getShowType() != null) {
+//                // 只要线路详情
+//                if (isLineDetails.equals("0") && !(ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
+//                        || ad.getShowType().equals(ShowType.STATION_ADV.getType())
+//                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
+//                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
+//                    continue;
+//                } else if (isLineDetails.equals("2") && (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
+//                        || ad.getShowType().equals(ShowType.STATION_ADV.getType())
+//                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
+//                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
+//                    continue;
+//                }
+//            }
             // 黑名单
             initBlackListMap(ad, ruleList);
             // 把广告分按照用户投放和不按照用户投放两种，分开初始化入map中
