@@ -66,9 +66,8 @@ function ourUrls(traceInfo, entity, urls) {
     for (var k in urls)
         ret[k] = urls[k];
 
-
     ['adid', 'traceid', 'pid', 'ad_order', 'is_backup'].forEach(function(field) {
-        var v = traceInfo[field] || entity[field];
+        var v = selectValue(field, traceInfo, entity);
         if (!nullOrUndefined(v)) {
             var added = '&' + field + '=' + v;
             for (var k in urls) {
@@ -296,6 +295,8 @@ function tryNthTaskGroup(rule, nth, callback) {
             if (resp.ad) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
                 entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
+                // ad_order != null
+                if (nullOrUndefined(entity.ad_order)) entity.ad_order = 0;
                 var urls = ourUrls(rule.traceInfo, entity, rule.urls);
                 console.log('ourUrls: ' + JSON.stringify(urls));
                 resp.urls = urls;
@@ -334,6 +335,15 @@ var MdLogger = {
 
 function nullOrUndefined(a) {
     return typeof a == 'undefined' || a == null
+}
+
+function selectValue(field, m1, m2) {
+    for (var i = 1; i < arguments.length; i++) {
+        var value = arguments[i][field];
+        if (!nullOrUndefined(value))
+            return value;
+    }
+    return null;
 }
 
 function now() {

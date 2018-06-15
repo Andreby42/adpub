@@ -741,7 +741,7 @@ public class Rule {
 	 */
     public boolean devicePub(String udid, String deviceType, int startMode) {
         boolean isMIUIcold = false;
-        if (StringUtils.isNoneBlank(udid) && udid.equals("a143270d-0453-4e34-9e34-bbf5c8eb38c2")) {
+        if (StringUtils.isNoneBlank(udid) && udid.contains("a143270d-0453-4e34-9e34-bbf5c8eb38c2")) {
             return true;
         }
         if (StringUtils.isNoneBlank(deviceType) && (deviceType.toLowerCase().contains("mi") || deviceType.contains("HM "))
