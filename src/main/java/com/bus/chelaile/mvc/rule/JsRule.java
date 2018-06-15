@@ -163,6 +163,8 @@ public class JsRule extends AbstractController {
         
         if(StringUtils.isBlank(tgs.getTraceid())) {
             logger.info("traceId is null -- , udid={},s={}, v={}", p.getUdid(), p.getS(), p.getV());
+            originJs = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
+            originJs = originJs.replace("${TIMEOUTS}", tgs.getTaskGroups().getTasks().toString());
             return originJs;
         }
         

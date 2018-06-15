@@ -44,28 +44,30 @@ public class JSService {
         TaskEntity taskEntity = new TaskEntity();
         //        ShowType showType;
         List<BaseAdEntity> entities = null;
+        QueryParam queryParam = new QueryParam();
+        queryParam.setJS(true);
         switch (site) {
             case "splash":
                 //                showType = ShowType.OPEN_SCREEN;
-                entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, new QueryParam());
+                entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, queryParam);
                 break;
             case "home":
                 //                showType = ShowType.DOUBLE_COLUMN;
-                entities = doubleAndSingleManager.doServiceList(param, ShowType.DOUBLE_COLUMN, new QueryParam());
+                entities = doubleAndSingleManager.doServiceList(param, ShowType.DOUBLE_COLUMN, queryParam);
                 break;
 
             case "rightTop":
                 //                showType = ShowType.LINE_RIGHT_ADV;
-                entities = lineRightManager.doServiceList(param, ShowType.LINE_RIGHT_ADV, new QueryParam());
+                entities = lineRightManager.doServiceList(param, ShowType.LINE_RIGHT_ADV, queryParam);
                 break;
             case "station":
                 //                showType = ShowType.STATION_ADV;
-                entities = stationAdsManager.doServiceList(param, ShowType.STATION_ADV, new QueryParam());
+                entities = stationAdsManager.doServiceList(param, ShowType.STATION_ADV, queryParam);
                 break;
 
             case "bottom":
                 //                showType = ShowType.LINE_FEED_ADV;
-                entities = lineFeedAdsManager.doServiceList(param, ShowType.LINE_FEED_ADV, new QueryParam());
+                entities = lineFeedAdsManager.doServiceList(param, ShowType.LINE_FEED_ADV, queryParam);
                 break;
 
             default:

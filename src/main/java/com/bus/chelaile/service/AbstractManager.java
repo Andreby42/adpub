@@ -240,7 +240,7 @@ public abstract class AbstractManager {
                 }
             }
 
-            // 每个时间段的发送次数
+            // 每分钟发送量
             adTimeCounts(cacheRecord, advParam.getUdid(), adMap.get(adId));
         }
     }
@@ -679,7 +679,7 @@ public abstract class AbstractManager {
         }*/
 
         if (adc.getRule().getTotalCount() > 0) {
-            // 记录firstClickMap到缓存，和每分钟点击数到redis
+            // 记录每分钟的发送量
             adc.getRule().adTimeCounts(adc.getAds().getId(), adc.getRule().getRuleId(), cacheRecord, udid, true);
             // 记录总投放pv到缓存
 //            logger.info("记录投放pv次数 advId={}, ruleId={}", adc.getAds().getId(), adc.getRule().getRuleId());
