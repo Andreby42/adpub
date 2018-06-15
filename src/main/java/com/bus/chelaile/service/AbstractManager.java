@@ -123,6 +123,7 @@ public abstract class AbstractManager {
         if (adMap.size() == 0) {
             // 此处，经过规则判断不返回广告，如果是feedAd，需要记录'不投放'的次数
             List<Integer> adIds = New.arrayList();
+            adIds.add(-1);
             cacheRecord.setNoAdHistoryMap(adIds, showType.getType());
             return null;
         }
