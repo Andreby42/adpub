@@ -122,6 +122,8 @@ public abstract class AbstractManager {
 
         if (adMap.size() == 0) {
             // 此处，经过规则判断不返回广告，如果是feedAd，需要记录'不投放'的次数
+            List<Integer> adIds = New.arrayList();
+            cacheRecord.setNoAdHistoryMap(adIds, showType.getType());
             return null;
         }
         //        logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
