@@ -125,6 +125,7 @@ public abstract class AbstractManager {
             List<Integer> adIds = New.arrayList();
             adIds.add(-1);
             cacheRecord.setNoAdHistoryMap(adIds, showType.getType());
+            AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
             return null;
         }
         //        logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(), advParam.getUdid(), showType);
