@@ -54,9 +54,9 @@ public class ConsumerHandle implements Runnable {
         if ((str.contains(Constants.AD_DOMAIN_NAME) || str.contains(Constants.REDIRECT_DOMAIN_NAME))
                 && (str.contains(Constants.PARAM_AD_ID) && !str.contains(Constants.FOR_DEVELOP_EXHIBIT))) { // 广告点击
             //			logger.info("读取到广告点击日志= {}", str);
-            if (str.contains("s=IOS")) { // 仅处理iOS即可，android的有点击埋点了
+//            if (str.contains("s=IOS")) { // 仅处理iOS即可，android的有点击埋点了
                 return Constants.ROW_ADV_CLICK;
-            }
+//            }
         }
         return Constants.ROW_SKIP;
     }

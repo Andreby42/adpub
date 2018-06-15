@@ -88,6 +88,12 @@ public class MaidianLogsHandle {
             if (params.containsKey("udid")) {
                 udid = params.get("udid");
             }
+            String provider_id = params.get("provider_id");
+            if(StringUtils.isNoneBlank(provider_id) && provider_id.equals("1")) {
+                // 自采买的广告，不从埋点处理
+                return;
+            }
+            
             String advId = params.get("adv_id");
             if (udid == null || advId == null) {
                 logger.error("点击埋点解析， 广告为空 line={}", line);
