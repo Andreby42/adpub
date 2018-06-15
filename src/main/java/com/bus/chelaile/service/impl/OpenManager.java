@@ -455,8 +455,10 @@ public class OpenManager extends AbstractManager {
         }
         // 记录投放的第一条广告， 记录发送日志
         if (entities != null && entities.size() > 0) {
+            if (! (queryParam.isJS() && entities.get(0).getProvider_id().equals("1"))) {
             cacheRecord.setNoAdHistoryMap(ids, showType.getType());
             recordSend(advParam, cacheRecord, adMap, showType, entities);
+            }
         }
 
         return entities;
