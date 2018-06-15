@@ -1,6 +1,5 @@
 package com.bus.chelaile.service.impl;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -177,10 +176,10 @@ public class DoubleAndSingleManager extends AbstractManager {
                 }
             }
             // 记录投放的第一条广告， 记录发送日志
+            cacheRecord.setNoAdHistoryMap(ids, showType.getType());
             if (entities != null && entities.size() > 0) {
                 // 下发js且是自采买广告的时候，不予计数
                 if (! (queryParam.isJS() && entities.get(0).getProvider_id().equals("1"))) {
-                    cacheRecord.setNoAdHistoryMap(ids, showType.getType());
                     recordSend(advParam, cacheRecord, adMap, showType, entities);
                 }
             }

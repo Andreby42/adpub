@@ -26,6 +26,10 @@ public class AbstractController {
         // 位置相关
         param.setLng(getDouble(request, "lng"));
         param.setLat(getDouble(request, "lat"));
+        if(param.getLng() == -1.0 || param.getLat() == -1.0) {
+            param.setLng(getDouble(request, "geo_lng"));
+            param.setLat(getDouble(request, "geo_lat"));
+        }
         param.setStnName(request.getParameter("stnName"));
 
         param.setDeviceType(request.getParameter("deviceType"));
