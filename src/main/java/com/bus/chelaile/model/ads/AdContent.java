@@ -162,7 +162,7 @@ public class AdContent {
         AdInnerContent inner = getInnerContent(); // 将广告数据库中content字段，转换成对应类型的 AdInnerContent
         if (inner != null) {
             int isbackUp = inner.getIsBackup();
-            logger.info("traceInfo set to redis ********, id={}, title={}, isbackup={}", this.id, this.title, isbackUp);
+//            logger.info("traceInfo set to redis ********, id={}, title={}, isbackup={}", this.id, this.title, isbackUp);
             CacheUtil.setToAtrace("AD_PROPERTY_TITLE_" + this.id, title);
             CacheUtil.setToAtrace("AD_PROPERTY_BACKUP_" + this.id, isbackUp + "");
             
