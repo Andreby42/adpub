@@ -1,15 +1,22 @@
 import java.util.HashMap;
 import java.util.Set;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.util.New;
 
 
 public class Test {
 	public static void main(String[] args) throws Exception {
 
-//		ApplicationContext context = new ClassPathXmlApplicationContext(
-//				"classpath:servicebiz/locator-baseservice.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				"classpath:servicebiz/locator-baseservice.xml");
+		
+		   CacheUtil.initClient();
+		
 //		
 //		StartService st = context.getBean(StartService.class);
 //		ServiceManager ld = context.getBean(ServiceManager.class);

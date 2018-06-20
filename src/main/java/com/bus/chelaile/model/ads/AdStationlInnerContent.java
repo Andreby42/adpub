@@ -39,6 +39,8 @@ public class AdStationlInnerContent extends AdInnerContent {
     private List<Long> timeouts; // 超时时间段设置
 
     private TasksGroup tasksGroup;
+    
+    private String adProducer;	//广告主
 
     @Override
     protected void parseJson(String jsonr) {
@@ -60,6 +62,9 @@ public class AdStationlInnerContent extends AdInnerContent {
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
             this.clickDown = ad.clickDown;
+            if( ad.getAdProducer() != null ) {
+            	this.adProducer = ad.getAdProducer();
+            }
 
             this.setTasksJ(ad.getTasksJ());
             List<List<String>> tasksG = New.arrayList();
@@ -303,4 +308,14 @@ public class AdStationlInnerContent extends AdInnerContent {
     public void setTasksJ(List<TaskModel> tasksJ) {
         this.tasksJ = tasksJ;
     }
+
+	public String getAdProducer() {
+		return adProducer;
+	}
+
+	public void setAdProducer(String adProducer) {
+		this.adProducer = adProducer;
+	}
+    
+    
 }

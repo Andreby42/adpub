@@ -37,6 +37,8 @@ import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.service.model.Ads;
 import com.bus.chelaile.service.model.FeedAdGoto;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.third.meituan.MeiTuanService;
+import com.bus.chelaile.third.meituan.MeituanData;
 import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
@@ -186,6 +188,20 @@ public class StationAdsManager extends AbstractManager {
 
         res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
         res.dealLink(advParam);
+        
+        
+        AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
+        if( stationInner.getAdProducer() != null ) {
+        	MeituanData data = MeiTuanService.getContext(advParam);
+        	if( data != null ) {
+        		res.setAdProducer(null);
+        		res.setOpenType(0);
+        		res.setLink(data.getDeepLink());
+        		res.setTitle(data.getName());
+        		logger.info("res.title={},res.link={}",res.getTitle(),res.getLink());
+        	}
+        }
+      
 
         return res;
     }
@@ -281,6 +297,7 @@ public class StationAdsManager extends AbstractManager {
         if(inner.getTasksGroup() != null) {
             entity.setTasksGroup(inner.getTasksGroup());
         }
+      
         
         return entity;
     }

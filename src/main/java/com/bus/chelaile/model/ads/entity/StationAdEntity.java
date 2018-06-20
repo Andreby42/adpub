@@ -25,6 +25,8 @@ public class StationAdEntity extends BaseAdEntity {
     private long mixInterval;
     
     private String action; //跳转信息流使用的字段
+    
+    private String adProducer; //广告主
 
     // 构造方法
     public StationAdEntity() {
@@ -151,4 +153,14 @@ public class StationAdEntity extends BaseAdEntity {
         this.action = action;
     }
 
+	public String getAdProducer() {
+		return adProducer;
+	}
+
+	public void setAdProducer(String adProducer) {
+		this.adProducer = adProducer;
+	}
+
+    
+    
 }
