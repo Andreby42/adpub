@@ -1,6 +1,7 @@
 package com.bus.chelaile.model.ads.entity;
 
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -48,7 +49,14 @@ public abstract class BaseAdEntity {
 	private int clickDown;   // 点击后排序到最后 ，用于第三方
 	@JSONField(serialize=false)
 	private TasksGroup tasksGroup; // 任务单 
+	
+	private int displayType = 2;// 左⽂右图⼤ 2 左⽂右图小 3 三图 4 单图， 5 右侧单图（跳转信息流，没有‘广告’字样） ,2018-06-19 增加，满足三图片要求
 
+	private List<String> picsList;
+	
+	private String placementId;
+	
+	
 	public BaseAdEntity(int showType) {
 		this.showType = showType;
 	}
@@ -451,4 +459,30 @@ public abstract class BaseAdEntity {
     public void setTasksGroup(TasksGroup tasksGroup) {
         this.tasksGroup = tasksGroup;
     }
+
+	public int getDisplayType() {
+		return displayType;
+	}
+
+	public void setDisplayType(int displayType) {
+		this.displayType = displayType;
+	}
+
+	public List<String> getPicsList() {
+		return picsList;
+	}
+
+	public void setPicsList(List<String> picsList) {
+		this.picsList = picsList;
+	}
+
+	public String getPlacementId() {
+		return placementId;
+	}
+
+	public void setPlacementId(String placementId) {
+		this.placementId = placementId;
+	}
+    
+    
 }

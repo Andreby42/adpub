@@ -198,10 +198,10 @@ public class StationAdsManager extends AbstractManager {
         		res.setOpenType(0);
         		res.setLink(data.getDeepLink());
         		res.setTitle(data.getName());
-        		res.setTargetType(0);
-        		res.getBannerInfo().setSlogan(data.getName());
-        		res.getBannerInfo().setName("");
-        		logger.info("res.title={},res.link={}",res.getTitle(),res.getLink());
+        		res.setTargetType(4);
+        		res.getBannerInfo().setSlogan("");
+        		res.getBannerInfo().setName(data.getName());
+        		logger.info("美团,res.title={},res.link={}",res.getTitle(),res.getLink());
         	}
         }
       

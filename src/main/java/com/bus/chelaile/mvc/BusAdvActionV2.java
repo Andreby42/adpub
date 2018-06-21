@@ -188,4 +188,30 @@ public class BusAdvActionV2 extends AbstractController {
 //        ps.close();
 //        return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
+    
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!getTransfer.action", produces = "text/plain;charset=UTF-8")
+    public String getTransfer(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+    	String str = "**YGKJ{\"jsonr\":{\"data\":{\"ads\":[{\"apiType\":1,\"clickMonitorLink\":\"\",\"id\":10013305,\"imgsType\":0,\"link\":\"\",\"monitorType\":0,\"openType\":0,\"provider_id\":\"10\",\"showType\":24,\"targetType\":0,\"type\":3,\"unfoldMonitorLink\":\"\"}],\"autoInterval\":15000,\"unfoldFeed\":1,\"mixInterval\":5000,\"placementId\":\"18F4307EE781076E5FCB43DB0413C6FD\"},\"errmsg\":\"\",\"status\":\"00\",\"sversion\":\"\"}}YGKJ##";
+        
+        return str;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!getAllCar.action", produces = "text/plain;charset=UTF-8")
+    public String getAllCar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+    	String str = "**YGKJ{\"jsonr\":{\"data\":{\"ads\":[{\"apiType\":1,\"clickMonitorLink\":\"\",\"id\":10013305,\"imgsType\":0,\"link\":\"\",\"monitorType\":0,\"openType\":0,\"provider_id\":\"10\",\"showType\":26,\"targetType\":0,\"type\":3,\"unfoldMonitorLink\":\"\"}],\"autoInterval\":15000,\"unfoldFeed\":1,\"mixInterval\":5000,\"placementId\":\"9B3FF3E3654C83C5063DB8A55A857304\"},\"errmsg\":\"\",\"status\":\"00\",\"sversion\":\"\"}}YGKJ##";
+        
+        return str;
+    }
+    
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!getStationLine.action", produces = "text/plain;charset=UTF-8")
+    public String getStationLine(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+    	String str = "**YGKJ{\"jsonr\":{\"data\":{\"ads\":[{\"apiType\":1,\"clickMonitorLink\":\"\",\"id\":10013305,\"imgsType\":0,\"link\":\"\",\"monitorType\":0,\"openType\":0,\"provider_id\":\"10\",\"showType\":25,\"targetType\":0,\"type\":3,\"unfoldMonitorLink\":\"\"}],\"autoInterval\":15000,\"unfoldFeed\":1,\"mixInterval\":5000,\"placementId\":\"1A3AFF2C97A22A174C6C75978C55B67D\"},\"errmsg\":\"\",\"status\":\"00\",\"sversion\":\"\"}}YGKJ##";
+        
+        return str;
+    }
 }

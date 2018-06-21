@@ -93,7 +93,8 @@ public class JSService {
                 param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
             }
             String traceInfo = JSONObject.toJSONString(param);
-            CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME);
+            CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 48);
+            
             
         }
         taskEntity.setTaskGroups(new TasksGroup(tasks, times));

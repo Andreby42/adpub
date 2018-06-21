@@ -39,6 +39,10 @@ function load(task, userdata, callback) {
                     resp.isFullShow = 0;
                 }
                 resp.entity = task.asEntity ? task.asEntity(ad) : ad;
+				if( task.banner ){
+					resp.banner = task.banner();
+				}
+				
                 callback(resp);
             }
         } catch (e) {

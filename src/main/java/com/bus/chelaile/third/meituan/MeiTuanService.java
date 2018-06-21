@@ -43,11 +43,13 @@ public class MeiTuanService {
 		if( mc == null ) {
 			return null;
 		}
+		MeituanData data = new MeituanData();
 
 		java.util.Random random = new java.util.Random();// 定义随机类
 		int result = random.nextInt(mc.getPoi().size());// 返回[0,10)集合中的整数，注意不包括10
 
 		poiMt mt = mc.getPoi().get(result);
+		data.setDeepLink(mt.getDeeplinkurl());
 
 		if (mt == null || mt.getDeals() == null || mt.getDeals().size() == 0) {
 			return null;
@@ -55,8 +57,8 @@ public class MeiTuanService {
 		result = random.nextInt(mt.getDeals().size());
 		dealsMt value = mt.getDeals().get(result);
 
-		MeituanData data = new MeituanData();
-		data.setDeepLink(value.getDeaplink_home());
+		
+		
 		data.setName(value.getDescription());
 
 		return data;
@@ -131,7 +133,7 @@ public class MeiTuanService {
 		ap.setStnOrder(1);
 		mt.getContext(ap);
 		// entity =
-		// HttpUtils.get("http://openapi.meituan.com/poi/search?appkey=meituan&limit=5&offset=0&pos=39.994337,116.43323&query=洗浴",
+		// HttpUtils.get("http://openapi.meituan.com/poi/search?appkey=139244d8feda47288c25c57746a32ed2550&limit=30&dist=1000&orderby=rating:desc&offset=0&query=美食&deal=true&pos=39.994337,116.43323",
 		// "utf-8");
 		// mt.getContext(null);
 	}
@@ -161,7 +163,7 @@ class mtContext {
 
 class poiMt {
 	List<dealsMt> deals;
-
+	String deeplinkurl;
 	public List<dealsMt> getDeals() {
 		return deals;
 	}
@@ -170,6 +172,14 @@ class poiMt {
 		this.deals = deals;
 	}
 
+	public String getDeeplinkurl() {
+		return deeplinkurl;
+	}
+
+	public void setDeeplinkurl(String deeplinkurl) {
+		this.deeplinkurl = deeplinkurl;
+	}
+	
 }
 
 class dealsMt {
