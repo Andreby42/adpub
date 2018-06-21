@@ -191,13 +191,16 @@ public class StationAdsManager extends AbstractManager {
         
         
         AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
-        if( stationInner.getAdProducer() != null ) {
+        if( stationInner.getAdProducer() != null && stationInner.getAdProducer().equals("meituan") ) {
         	MeituanData data = MeiTuanService.getContext(advParam);
         	if( data != null ) {
         		res.setAdProducer(null);
         		res.setOpenType(0);
         		res.setLink(data.getDeepLink());
         		res.setTitle(data.getName());
+        		res.setTargetType(0);
+        		res.getBannerInfo().setSlogan(data.getName());
+        		res.getBannerInfo().setName("");
         		logger.info("res.title={},res.link={}",res.getTitle(),res.getLink());
         	}
         }
