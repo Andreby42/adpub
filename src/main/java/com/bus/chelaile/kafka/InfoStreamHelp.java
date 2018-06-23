@@ -10,6 +10,7 @@ package com.bus.chelaile.kafka;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,12 @@ public class InfoStreamHelp {
 			// 存储用户点击广告到ocs中
 			setClickToRecord(advId, udid);
 			
-			
+			// 存储项目点击
+            String projectId = StaticAds.allAds.get(advId).getProjectId();
+            if(StringUtils.isNotBlank(projectId)) {
+                String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
+                CacheUtil.incrToCache(projectClickKey, Constants.LONGEST_CACHE_TIME);    // 存储30天
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
