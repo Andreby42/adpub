@@ -311,6 +311,12 @@ function tryNthTaskGroup(rule, nth, callback) {
                 resp.refreshTime = 25000;
                 resp.mixRefreshAdInterval = 15000;
 
+                if (sdkInfo.task.adStyle) {
+                  resp.adStyle = sdkInfo.task.adStyle();
+                } else if (sdkInfo.task.sdkname() == 'api_chelaile') {
+                  resp.adStyle = resp.ad.adStyle;
+                }
+
                 try {
                   MdLogger.addPar('ad_order', entity.ad_order || 0);
                 } catch(error) {
