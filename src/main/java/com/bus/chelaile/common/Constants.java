@@ -18,6 +18,7 @@ public class Constants {
     
     public static final String STATUS_ILLEGAL_OPERATION = "06";
     
+    public static final int HALF_YEAR_CACHE_TIME = 180 * 24 * 60 * 60 - 1; 
     public static final int LONGEST_CACHE_TIME = 30 * 24 * 60 * 60 - 1; 
     public static final int ONE_DAY_TIME = 1 * 24 * 60 * 60; //一天，单位 S
     public static final int SEVEN_DAY_TIME = 7 * 24 * 60 * 60; //七天，单位 S

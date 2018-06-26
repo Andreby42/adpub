@@ -86,7 +86,7 @@ public class JSService {
 
             case "allCars":
                 //                showType = ShowType.LINE_FEED_ADV;
-                entities = otherManager.doServiceList(param, ShowType.CAR_ALL_LINE_ADV, queryParam);
+                entities = otherManager.doServiceList(param, ShowType.ALL_CAR_ADV, queryParam);
                 break; 
 
             default:

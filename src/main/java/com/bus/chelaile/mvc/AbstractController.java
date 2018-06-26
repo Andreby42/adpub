@@ -31,6 +31,8 @@ public class AbstractController {
             param.setLat(getDouble(request, "geo_lat"));
         }
         param.setStnName(request.getParameter("stnName"));
+        if(StringUtils.isBlank(param.getStnName()))
+            param.setStnName(request.getParameter("stationName"));
 
         param.setDeviceType(request.getParameter("deviceType"));
         param.setIdfa(request.getParameter("idfa"));

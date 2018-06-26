@@ -250,6 +250,7 @@ public class DoubleAndSingleManager extends AbstractManager {
         if(inner.getTasksGroup() != null) {
             entity.setTasksGroup(inner.getTasksGroup());
         }
+        entity.setDisplayType(inner.getDisplayType());
         
         return entity;
     }
