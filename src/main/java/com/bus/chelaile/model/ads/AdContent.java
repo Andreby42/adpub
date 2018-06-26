@@ -119,7 +119,12 @@ public class AdContent {
             AdLineRightInnerContent rightInner = new AdLineRightInnerContent();
             rightInner.setAndParseJson(content);
             innerContent = rightInner;
+        }else if(ShowType.TRANSFER_ADV.getType().equals(showType) || ShowType.CAR_ALL_LINE_ADV.getType().equals(showType) || ShowType.ALL_CAR_ADV.getType().equals(showType) ) {      // 通用
+        	AdCommonContent inner = new AdCommonContent();
+            inner.setAndParseJson(content);
+            innerContent = inner;
         }
+        
         else {
             logger.error("[Unsupport_ShowType] 无法识别的showType: {}", showType);
         }

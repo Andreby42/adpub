@@ -36,6 +36,8 @@ public class AdWXBannerInnerContent extends AdInnerContent {
 					this.servingPlaceList.add(s);
 				}
 			}
+			
+			setCommentContext(ad, this.pic);
 		}
 	}
 	

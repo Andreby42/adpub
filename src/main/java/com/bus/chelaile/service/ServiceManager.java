@@ -36,6 +36,7 @@ import com.bus.chelaile.model.ads.entity.LineAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.ads.entity.LineRightAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenAdEntity;
+import com.bus.chelaile.model.ads.entity.OtherAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.model.client.ClientDto;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -50,6 +51,7 @@ import com.bus.chelaile.service.impl.LineFeedAdsManager;
 import com.bus.chelaile.service.impl.LineRightManager;
 import com.bus.chelaile.service.impl.SimpleAdManager;
 import com.bus.chelaile.service.impl.OpenManager;
+import com.bus.chelaile.service.impl.OtherManager;
 import com.bus.chelaile.service.impl.RideManager;
 import com.bus.chelaile.service.impl.SelfManager;
 import com.bus.chelaile.service.impl.StationAdsManager;
@@ -89,6 +91,9 @@ public class ServiceManager {
 
     @Autowired
     private RideManager rideManager;
+    
+    @Autowired
+    private OtherManager otherManager;
 
     @Autowired
     private SelfManager selfManager;
@@ -532,6 +537,30 @@ public class ServiceManager {
         return resultMap;
 
     }
+    
+    public Object getCommont(AdvParam advParam,ShowType showType) {
+
+        JSONObject resultMap = new JSONObject();
+        List<BaseAdEntity> entities = otherManager.doServiceList(advParam, showType, new QueryParam());
+
+        if (entities == null || entities.size() == 0) {
+            return resultMap;
+        } else {
+        	OtherAdEntity entity = (OtherAdEntity)entities.get(0);
+            if (entity.getAutoInterval() == 0 || entity.getMixInterval() == 0) {
+                resultMap.put("ads", entities);
+                resultMap.put("autoInterval", 15000);
+                resultMap.put("mixInterval", 5000);
+            } else {
+                resultMap.put("ads", entities);
+                resultMap.put("autoInterval", entity.getAutoInterval());
+                resultMap.put("mixInterval", entity.getMixInterval());
+            }
+        }
+        return resultMap;
+
+    }    
+    
 
     /**
      * 详情页

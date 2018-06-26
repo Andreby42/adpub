@@ -30,6 +30,8 @@ public class AdLineRefreshOpenInnerContent extends AdInnerContent {
 			this.freshDoc = ad.freshDoc;
 			this.openDoc = ad.openDoc;
 			this.bgColor = ad.bgColor;
+			
+			setCommentContext(ad, this.pic);
 		}
 	}
 

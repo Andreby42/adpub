@@ -1,22 +1,35 @@
 package com.bus.chelaile.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bus.chelaile.common.AnalysisLog;
+
+import com.alibaba.fastjson.JSON;
+
 import com.bus.chelaile.common.Constants;
-import com.bus.chelaile.model.Platform;
+
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.ads.AdCommonContent;
+import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
-import com.bus.chelaile.model.ads.entity.ApiLineEntity;
+import com.bus.chelaile.model.ads.AdInnerContent;
+
+
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+
+import com.bus.chelaile.model.ads.entity.OtherAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
+import com.bus.chelaile.service.model.Ads;
+import com.bus.chelaile.service.model.FeedAdGoto;
+import com.bus.chelaile.service.model.Thumbnails;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.util.HttpUtils;
+import com.bus.chelaile.util.New;
 /**
  * 换乘，更多车辆，站点对应线路接口走这个manager
  * @author 41945
@@ -24,164 +37,196 @@ import com.bus.chelaile.strategy.AdCategory;
  */
 public class OtherManager extends AbstractManager {
 
-	@Autowired
-	private SelfManager selfManager;
-	@Autowired
-	private ApiDetailsManager apiDetailsManager;
-
 	@Override
-	/*
-	 * 自采买广告，除非当天没有投放过，否则自动刷新不计数
-	 */
-	public BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam,
-			AdPubCacheRecord cacheRecord,
-			Map<Integer, AdContentCacheEle> adMap, ShowType showType,
-			QueryParam queryParam, boolean isRecord) throws Exception {
-		
-		boolean isAutoRefresh = false;  // 是否是自动刷新。默认不是
-		if(advParam.getStatsAct() != null
-				&& advParam.getStatsAct().equals(Constants.STATSACT_AUTO_REFRESH)) {
-			isAutoRefresh = true;
-		}
+    protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
+            Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord) throws Exception {
+        return null;
+    }
 
-		//	旧版本的广告接口
-		if (cateGory == null) {
-			for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
-				// 自采买
-				// 自动刷新且今天投放过该广告的用户，不再记录投放次数
-				if (! (isAutoRefresh && cacheRecord.hasPulished(entry.getValue().getAds().getId()))) {
-					isAutoRefresh = false;
-				} else {
-					isAutoRefresh = true;
-				}
-				return getSelfAdEntity(advParam, cacheRecord, entry.getValue(), showType, isAutoRefresh);
-			}
-		}
+    @Override
+    protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
+            Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
+        List<BaseAdEntity> entities = New.arrayList();
+        List<Integer> ids = New.arrayList();
+        boolean hasOwnAd = false;
+        for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+            AdContentCacheEle ad = entry.getValue();
 
-		if (cateGory.getAdType() == 1) {
-			//自采买
-			// 自动刷新且今天投放过该广告的用户，不再记录投放次数
-			if (! (isAutoRefresh && cacheRecord.hasPulished(cateGory.getAdId()))) {
-				cacheRecord.setAdHistory(cateGory);
-				isAutoRefresh = false;
-			} else {
-				isAutoRefresh = true;
-			}
-			return getSelfAdEntity(advParam, cacheRecord, adMap.get(cateGory.getAdId()), showType, isAutoRefresh);
-		} else {
-			ApiLineEntity entity = apiDetailsManager.from(
-					Platform.from(advParam.getS()), advParam, cacheRecord,
-					cateGory, showType.getType());
-			
-			if( entity == null ){
-				//logger.info("udid={}第三方广告返回为空");
-				if (! isAutoRefresh) {
-					cacheRecord.setAdHistory(new AdCategory(-1, -1, -1));
-				}
-				return null;
-			}
-			
-			
-				if (cateGory.getAdType() == 7 || cateGory.getAdType() == 3 || cateGory.getAdType() == 6) {
-					AnalysisLog
-						.info("[LINE_DETAIL_ADS]: adKey=ADV[id={}#showType=05#title={}],des={},link={} ,userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},provider_id={},clickMonitorLink={},unfoldMonitorLink={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}",
-								entity.getId(), entity.getApiTitle(),
-								entity.getApiDes(), entity.getCombpic(),
-								advParam.getUserId(), advParam.getAccountId(),
-								advParam.getUdid(), advParam.getCityId(),
-								advParam.getS(), advParam.getV(),
-								advParam.getLineId(), advParam.getStnName(),
-								entity.getProvider_id(),
-								entity.getClickMonitorLink(),
-								entity.getUnfoldMonitorLink(),
-								advParam.getNw(), advParam.getIp(),
-								advParam.getDeviceType(),advParam.getLng(),advParam.getLat());
-				} else {
-					AnalysisLog
-						.info("[LINE_DETAIL_ADS]: adKey=ADV[id={}#showType=05] ,userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={}, provider_id={},nw={},ip={},deviceType={},geo_lng={},geo_lat={}",
-								entity.getId(), advParam.getUserId(),
-								advParam.getAccountId(), advParam.getUdid(),
-								advParam.getCityId(), advParam.getS(),
-								advParam.getV(), advParam.getLineId(),
-								advParam.getStnName(), entity.getProvider_id(),
-								advParam.getNw(), advParam.getIp(),
-								advParam.getDeviceType(),advParam.getLng(),advParam.getLat());
-				}
-			if (! isAutoRefresh) {
-				cacheRecord.setAdHistory(cateGory);
-			}
-			return entity;
-		}
+            // 有非兜底的自采买广告。 直接返回第一个优先级最高的即可
+            AdCommonContent inner = (AdCommonContent) ad.getAds().getAdInnerContent();
+            if (inner.getProvider_id() <= 1 && inner.getBackup() == 0) { // 非自采买的provider_id都大于1
+            	OtherAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
+                if (entity != null) {
+                    entities.add(entity);
+                    int adId = ad.getAds().getId();
+                    ids.add(adId);
 
-	}
+                    hasOwnAd = true;
+                    break;
+                }
+            }
+        }
+        // 如果没有自采买，那么返回一个列表
+        if (!hasOwnAd) {
+            AdContentCacheEle backupad = null;
+            for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
+                AdContentCacheEle ad = entry.getValue();
+                if (((AdCommonContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
+                    backupad = ad;
+                    continue;
+                }
+                OtherAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
+                if (entity != null) {
+                    entities.add(entity);
+                }
+            }
+            // 重新排序
+            // 如果半小时内有上次的投放记录，那么根据上次返回到的位置，轮训下一个
+            // 如果超过半小时，那么按照权重排序
+//            if (!checkSendLog(advParam, entities, showType.getType()))
+                rankAds(advParam, entities);
+            setClickAtLast(cacheRecord, entities);
+            if (backupad != null) {
+            	OtherAdEntity entity = from(advParam, cacheRecord, backupad.getAds(), showType);
+                entities.add(entity);
+            }
+        }
+        // 记录投放的第一条广告， 记录发送日志
+        if (entities != null && entities.size() > 0) {
+            if (! (queryParam.isJS() && entities.get(0).getProvider_id().equals("1"))) {
+                cacheRecord.setNoAdHistoryMap(ids, showType.getType());
+            recordSend(advParam, cacheRecord, adMap, showType, entities);
+            }
+        }
 
-	/**
-	 * 自采买
-	 * 
-	 * @param cateGory
-	 * @param advParam
-	 * @param cacheRecord
-	 * @param ad
-	 * @param showType
-	 * @return
-	 */
-	private BaseAdEntity getSelfAdEntity(AdvParam advParam, AdPubCacheRecord cacheRecord,
-			AdContentCacheEle ad, ShowType showType, boolean isAutoRefresh) {
-		BaseAdEntity entity = selfManager.getEntity(advParam, cacheRecord,
-				ad.getAds(),ad.getRule().getRightPushNum());
+        return entities;
+    }
 
-		// 每个时间段的发送次数
-		if (!isAutoRefresh) {
-			adTimeCounts(cacheRecord, advParam.getUdid(), ad);
-		}
-		wirteLinedetailsLog(advParam, ad.getAds().getLogKey(), advParam.getS(), !isAutoRefresh);
-		return entity;
-	}
 
-	// @Override
-	// public List<AdContentCacheEle> getAllAdsList(String udid, String
-	// accountId) {
-	// return getCommonsAdsList(udid, accountId, ShowType.LINE_DETAIL);
-	// }
+    private OtherAdEntity from(AdvParam advParam, AdPubCacheRecord cacheRecord, AdContent ad, ShowType showType) {
+    	OtherAdEntity res = new OtherAdEntity(showType.getValue());
+    	res.setStype(showType);
+        AdInnerContent innerI = ad.getInnerContent();
+        if (innerI instanceof AdCommonContent) {
+        	AdCommonContent inner = (AdCommonContent) innerI;
 
-	// @Override
-	// public void handleAds(Map<Integer, AdContentCacheEle> adMap,
-	// List<AdContentCacheEle> adsList, ShowType showType,
-	// AdvParam advParam, AdPubCacheRecord cacheRecord, boolean isNeedApid) {
-	// setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid);
-	// }
+            // 跳转feed流的targetType处理。 从永春接口获取内容填充
+//            if (ad.getTargetType() == 12) {
+//                if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0605)
+//                        || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0605)) {
+//                    res = createFeedEntity(advParam, ad, inner);
+//                } else {
+//                    logger.error("低版本投放了跳转信息流的广告， adId={}, s={}, v={}, vc={}", ad.getId(), advParam.getS(), advParam.getV(),
+//                            advParam.getVc());
+//                    return null;
+//                }
+//                return res;
+//            }
 
-	private void wirteLinedetailsLog(AdvParam advParam, String adLogKey,
-			String platform, boolean isRecord) {
+            // 第三方特殊处理
+            if (inner.getProvider_id() > 1) {
+                res = createSDKOpenAds(ad, inner,showType);
+            } else {
+                res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
+                res.dealLink(advParam);
+                res.setImgsType(inner.getImgsType());
+                res.setSubhead(inner.getSlogan());
+                res.setHead(inner.getFeedAdTitle());
+                res.setPic(inner.getPic());
+                
+                if(inner.getTasksGroup() != null) {
+                    res.setTasksGroup(inner.getTasksGroup());
+                }
+            }
+        }
+        return res;
+    }
 
-		boolean isH5 = platform.equalsIgnoreCase(Platform.H5.getValue()); // 当前的客户端是否是H5
-		
-		if (! isH5) {
-			AnalysisLog
-			.info("[LINE_DETAIL_ADS]:  adKey={}, userId={}, accountId={}, udid={}, cityId={}, s={}, v={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},stats_act={},isRecord={}",
-					adLogKey, advParam.getUserId(),
-					advParam.getAccountId(), advParam.getUdid(),
-					advParam.getCityId(), platform, advParam.getV(),
-					advParam.getLineId(), advParam.getStnName(),
-					advParam.getNw(), advParam.getIp(),
-					advParam.getDeviceType(),advParam.getLng(),advParam.getLat(),advParam.getStatsAct(),isRecord);
-			
-		} else {
-			AnalysisLog
-			.info("[H5_LINE_DETAIL_ADS]:  adKey={}, h5User={}, h5Src={}, cityId={}, lineId={}, stnName={},nw={},ip={},deviceType={},geo_lng={},geo_lat={},stats_act={},isRecord={}",
-					adLogKey, advParam.getH5User(),
-					advParam.getH5Src(), advParam.getCityId(),
-					advParam.getLineId(), advParam.getStnName(),
-					advParam.getNw(), advParam.getIp(),
-					advParam.getDeviceType(),advParam.getLng(),advParam.getLat(),advParam.getStatsAct(),isRecord);
-		}
-	}
+    // 2018-05-05 ，详情页下方feed位广告
+    private OtherAdEntity createSDKOpenAds(AdContent ad, AdCommonContent inner, ShowType showType) {
+    	OtherAdEntity entity = new OtherAdEntity(showType.getValue());
+    	entity.setStype(showType);
+        entity.setId(ad.getId());
+        entity.setProvider_id(inner.getProvider_id() + "");
+        entity.setOpenType(0); // 页面打开方式，0-内部
+        entity.setType(3); // 第三方广告
+        entity.setTitle(ad.getTitle());
 
-	@Override
-	protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
-			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        entity.setAdWeight(inner.getAdWeight());
+        entity.setAutoInterval(inner.getAutoInterval());
+        entity.setMixInterval(inner.getMixInterval());
+        entity.setApiType(1);
+        entity.setClickDown(inner.getClickDown());
+
+        // 任务列表
+        // 2018-06-06
+        if (inner.getTasksGroup() != null) {
+            entity.setTasksGroup(inner.getTasksGroup());
+        }
+
+        return entity;
+    }
+
+//    // 跳转feed流的广告体
+//    private LineFeedAdEntity createFeedEntity(AdvParam p, AdContent ad, AdCommonContent inner) {
+//        String response = null;
+//        String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(),
+//                ShowType.LINE_FEED_ADV.getType());
+//        logger.info("请求信息流**********： url={}", url);
+//        LineFeedAdEntity entity = null;
+//        try {
+//            response = HttpUtils.get(url, "UTF-8");
+//            response = response.substring(6, response.length() - 6);
+//            FeedAdGoto feedAdGoto = JSON.parseObject(response, FeedAdGoto.class);
+//            if (feedAdGoto.getJsonr().getStatus().equals("00")) {
+//                List<Ads> ads = feedAdGoto.getJsonr().getData().getAds();
+//                if (ads != null && ads.size() > 0) {
+//                    String title = ads.get(0).getTitle();
+//                    String source = ads.get(0).getSource();
+//                    String action = ads.get(0).getAction();
+//                    //                    String timeShow = ads.get(0).getTimeShow();
+//                    int imgsType = ads.get(0).getThumbnailType();
+//                    List<Thumbnails> thumbnails = ads.get(0).getThumbnails();
+//                    if (thumbnails == null || thumbnails.size() == 0) {
+//                        logger.error("返回内容没有图片 , url={}, response={}", url, response);
+//                        return null;
+//                    }
+//
+//                    entity = new LineFeedAdEntity(ShowType.LINE_FEED_ADV.getValue());
+//                    entity.setId(ad.getId());
+//                    entity.setTitle(ad.getTitle());
+////                    entity.setHead(head);
+////                    entity.setSubhead(title);
+//                    entity.setAdWeight(inner.getAdWeight());
+//                    entity.setClickDown(inner.getClickDown());
+//                    entity.setAutoInterval(inner.getAutoInterval());
+//                    entity.setMixInterval(inner.getMixInterval());
+//                    entity.setPic(thumbnails.get(0).getUrl());
+//                    entity.setAction(action);
+//                    entity.setTargetType(ad.getTargetType());
+//                    
+//                    if(inner.getTasksGroup() != null) {
+//                        entity.setTasksGroup(inner.getTasksGroup());
+//                    }
+//
+//                    // 信息流接口返回类型定义：http://wiki-rd.chelaile.net.cn/index.php?title=%E4%BF%A1%E6%81%AF%E6%B5%81%E5%90%8E%E5%8F%B0%E6%8E%A5%E5%8F%A3#FeedAdGoto_.E8.B7.B3.E8.BD.AC.E4.BF.A1.E6.81.AF.E6.B5.81.E5.B9.BF.E5.91.8A
+//                    if (imgsType == 2) {    // 大图
+//                        entity.setImgsType(1);
+//                    } else if (imgsType == 1) { // 右图
+//                        entity.setImgsType(2);
+//                        entity.setSubhead(title);
+//                        entity.setHead(source);
+//                    } else {
+//                        logger.error("详情页底部，不支持的图片类型 , url={}, response={}", url, response);
+//                        return null;
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            logger.error("获取跳转feed流广告内容失败， url={}, response={}", url, response);;
+//        }
+//        return entity;
+//    }
 
 }

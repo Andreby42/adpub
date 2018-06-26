@@ -18,9 +18,27 @@ public abstract class AdInnerContent {
     private static final String DEFAULT_PIC_URL_PREFIX = "http://pic1.chelaile.net.cn/adv/%1$s";
     protected String jsonContent;
     
+    protected int displayType = 2;// 左⽂右图⼤ 2 左⽂右图小 3 三图 4 单图， 5 右侧单图（跳转信息流，没有‘广告’字样） ,2018-06-19 增加，满足三图片要求
+
+    protected List<String> picsList;
+    
     public void setAndParseJson(String jsonr) {
         this.jsonContent = jsonr;
         parseJson(jsonr);
+    }
+    
+    
+    protected void setCommentContext(AdInnerContent ad,String pic) {
+    	this.displayType = ad.getDisplayType();
+    	this.picsList = ad.getPicsList();
+    	if( picsList == null || picsList.size() == 0 ) {
+    		if( pic != null ) {
+    			picsList = New.arrayList();
+        		picsList.add(pic);
+    		}
+    		
+    	}
+    	
     }
     
     public void fillAdEntity(AdEntity adEntity, AdvParam param, int stindex) {
@@ -79,5 +97,21 @@ public abstract class AdInnerContent {
         tasksGroups.setTimeouts(times);
         return tasksGroups;
     }
+    
+    public int getDisplayType() {
+		return displayType;
+	}
+
+	public void setDisplayType(int displayType) {
+		this.displayType = displayType;
+	}
+
+	public List<String> getPicsList() {
+		return picsList;
+	}
+
+	public void setPicsList(List<String> picsList) {
+		this.picsList = picsList;
+	}
     
 }

@@ -42,6 +42,8 @@ public class AdLineDetailInnerContent extends AdInnerContent {
 			this.arrivingText = ad.arrivingText;
 			this.aboardText = ad.aboardText;
 			// this.rightPushNum = ad.rightPushNum;
+			
+			setCommentContext(ad, this.pic);
 		}
 	}
 

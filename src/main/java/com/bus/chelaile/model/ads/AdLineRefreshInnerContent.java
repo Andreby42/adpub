@@ -30,6 +30,8 @@ public class AdLineRefreshInnerContent extends AdInnerContent {
 			this.tagId = ad.tagId;
             this.tag = ad.tag;
             this.feedId = ad.feedId;
+            
+            setCommentContext(ad, this.pic);
 		}
 	}
 

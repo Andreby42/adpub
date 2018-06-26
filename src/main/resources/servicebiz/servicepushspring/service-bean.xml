@@ -46,6 +46,15 @@
 	<!-- feed流广告 -->
 	<bean id="feedAdsManager" class="com.bus.chelaile.service.impl.FeedAdsManager" parent="abstractService">
 	</bean>
+	
+	
+	
+	<!-- 通用广告 -->
+	<bean id="otherManager" class="com.bus.chelaile.service.impl.OtherManager" parent="abstractService">
+	</bean>
+	
+	
+	
 	<!-- 线路详情自采买广告 -->
 	<bean id="selfManager" class="com.bus.chelaile.service.impl.SelfManager">
 	</bean>

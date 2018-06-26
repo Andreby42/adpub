@@ -27,8 +27,8 @@ public enum ShowType {
     WECHAT_FULL_ADV("21"),  // 小程序浮层广告
     LINE_FEED_ADV("22"),    // 详情页底部广告
     LINE_RIGHT_ADV("23"),   // 详情页右上角广告位
-	TRANSFER_ADV("24"),		//换乘
-	CAR_ALL_LINE_ADV("25"),	//车辆所有线路
+	TRANSFER_ADV("24"),		//路线换乘
+	CAR_ALL_LINE_ADV("25"),	//同站线路
 	ALL_CAR_ADV("26");		//更多车辆
     
     private String type;

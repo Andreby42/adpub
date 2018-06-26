@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
@@ -63,13 +64,20 @@ public class JsRule extends AbstractController {
     public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
-
+        
+        String traceInfo = JSONObject.toJSONString(p);
+        
+        
+        
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
         TaskEntity tgs = jSService.getTask(p, "splash");
 
         String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request);
 
+        
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
         return splashJS;
     }
     
@@ -81,6 +89,8 @@ public class JsRule extends AbstractController {
     public String homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         AdvParam p = getActionParam(request);
+        String traceInfo = JSONObject.toJSONString(p);
+       
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
@@ -88,6 +98,9 @@ public class JsRule extends AbstractController {
 //        setMaidianParams(p, );
 
         String splashJS = produceJS(p, splashOrigin, tgs, "home_", request);
+        
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
 
         return splashJS;
     }
@@ -155,6 +168,66 @@ public class JsRule extends AbstractController {
         return splashJS;
     }
     
+    
+    /*
+     * 换乘
+     */
+    @ResponseBody
+    @RequestMapping(value = "/transfer.do", produces = "text/plain;charset=UTF-8")
+    public String transfer(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        AdvParam p = getActionParam(request);
+        if(StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板 
+        String splashOrigin = StaticAds.JS_FILE_STR.get("transfer_origin");
+        TaskEntity tgs = jSService.getTask(p, "transfer");
+        
+        String splashJS = produceJS(p, splashOrigin, tgs, "route_", request);
+
+        return splashJS;
+    }
+//    
+    /*
+     * 同站线路
+     */
+    @ResponseBody
+    @RequestMapping(value = "/stationDetail.do", produces = "text/plain;charset=UTF-8")
+    public String getStationLine(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        AdvParam p = getActionParam(request);
+        if(StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板 
+        String splashOrigin = StaticAds.JS_FILE_STR.get("stationDetail_origin");
+        TaskEntity tgs = jSService.getTask(p, "stationDetail");
+        
+        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request);
+
+        return splashJS;
+    }
+//    
+//    /*
+//     * 更多车辆
+//     */
+    @ResponseBody
+    @RequestMapping(value = "/allCars.do", produces = "text/plain;charset=UTF-8")
+    public String allCars(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        AdvParam p = getActionParam(request);
+        if(StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板 
+        String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
+        TaskEntity tgs = jSService.getTask(p, "allCars");
+        
+        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request);
+
+        return splashJS;
+    }
     
     private String produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request) {
         if(StringUtils.isBlank(originJs)) {

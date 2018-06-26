@@ -20,6 +20,7 @@ import com.bus.chelaile.service.impl.DoubleAndSingleManager;
 import com.bus.chelaile.service.impl.LineFeedAdsManager;
 import com.bus.chelaile.service.impl.LineRightManager;
 import com.bus.chelaile.service.impl.OpenManager;
+import com.bus.chelaile.service.impl.OtherManager;
 import com.bus.chelaile.service.impl.StationAdsManager;
 import com.bus.chelaile.util.New;
 
@@ -37,6 +38,9 @@ public class JSService {
     private DoubleAndSingleManager doubleAndSingleManager;
     @Autowired
     private LineRightManager lineRightManager;
+    
+    @Autowired
+    private OtherManager otherManager;
 
     protected static final Logger logger = LoggerFactory.getLogger(JSService.class);
 
@@ -69,6 +73,21 @@ public class JSService {
                 //                showType = ShowType.LINE_FEED_ADV;
                 entities = lineFeedAdsManager.doServiceList(param, ShowType.LINE_FEED_ADV, queryParam);
                 break;
+                
+            case "transfer":
+                //                showType = ShowType.LINE_FEED_ADV;
+                entities = otherManager.doServiceList(param, ShowType.TRANSFER_ADV, queryParam);
+                break;
+                
+            case "stationDetail":
+                //                showType = ShowType.LINE_FEED_ADV;
+                entities = otherManager.doServiceList(param, ShowType.CAR_ALL_LINE_ADV, queryParam);
+                break;
+
+            case "allCars":
+                //                showType = ShowType.LINE_FEED_ADV;
+                entities = otherManager.doServiceList(param, ShowType.CAR_ALL_LINE_ADV, queryParam);
+                break; 
 
             default:
                 logger.error("未知类型的 site， udid={}, site={}", param);
@@ -93,7 +112,7 @@ public class JSService {
                 param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
             }
             String traceInfo = JSONObject.toJSONString(param);
-            CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 48);
+            CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 24 * 20 );
             
             
         }

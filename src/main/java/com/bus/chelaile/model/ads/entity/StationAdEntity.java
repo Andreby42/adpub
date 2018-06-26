@@ -27,6 +27,8 @@ public class StationAdEntity extends BaseAdEntity {
     private String action; //跳转信息流使用的字段
     
     private String adProducer; //广告主
+    
+    private String h5Url;
 
     // 构造方法
     public StationAdEntity() {
@@ -159,6 +161,14 @@ public class StationAdEntity extends BaseAdEntity {
 
 	public void setAdProducer(String adProducer) {
 		this.adProducer = adProducer;
+	}
+
+	public String getH5Url() {
+		return h5Url;
+	}
+
+	public void setH5Url(String h5Url) {
+		this.h5Url = h5Url;
 	}
 
     

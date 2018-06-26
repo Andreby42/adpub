@@ -50,6 +50,7 @@ public class MeiTuanService {
 
 		poiMt mt = mc.getPoi().get(result);
 		data.setDeepLink(mt.getDeeplinkurl());
+		data.setH5Url(mt.getIurl());
 
 		if (mt == null || mt.getDeals() == null || mt.getDeals().size() == 0) {
 			return null;
@@ -57,7 +58,7 @@ public class MeiTuanService {
 		result = random.nextInt(mt.getDeals().size());
 		dealsMt value = mt.getDeals().get(result);
 
-		
+		logger.info("美团,res.title={},res.link={},h5Url={}",data.getName(),data.getDeepLink(),data.getH5Url());
 		
 		data.setName(value.getDescription());
 
@@ -164,6 +165,7 @@ class mtContext {
 class poiMt {
 	List<dealsMt> deals;
 	String deeplinkurl;
+	String iurl;
 	public List<dealsMt> getDeals() {
 		return deals;
 	}
@@ -178,6 +180,14 @@ class poiMt {
 
 	public void setDeeplinkurl(String deeplinkurl) {
 		this.deeplinkurl = deeplinkurl;
+	}
+
+	public String getIurl() {
+		return iurl;
+	}
+
+	public void setIurl(String iurl) {
+		this.iurl = iurl;
 	}
 	
 }

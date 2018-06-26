@@ -11,7 +11,8 @@ public enum ProductType {
     TOUTIAO("7", 7), // 今日头条
     YUEMENG("8", 8), // 阅盟
     ECOOOK("9", 9), // Ecoook
-    KEDAXUNFEI("10", 10); //科大讯飞
+    KEDAXUNFEI("10", 10), //科大讯飞
+    WANGYI("11",11); //网易
     
     
     
