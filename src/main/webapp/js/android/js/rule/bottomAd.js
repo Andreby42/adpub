@@ -43,7 +43,7 @@ var api_chelaile = {
         return ad;
     },
 
-    aid : function () {
+    aid: function() {
         return 'api_chelaile';
     }
 }
@@ -97,7 +97,7 @@ var api_yd = {
         return null;
     },
 
-    aid : function () {
+    aid: function() {
         return 'api_yd';
     }
 }
@@ -182,7 +182,7 @@ var api_voicead = {
         return null;
     },
 
-    aid : function () {
+    aid: function() {
         return 'api_voicead';
     }
 }
@@ -219,7 +219,7 @@ var sdk_gdt = {
         }
     },
 
-    aid : function () {
+    aid: function() {
         return 'sdk_gdt';
     }
 }
@@ -264,7 +264,7 @@ var sdk_baidu = {
         return null;
     },
 
-    aid : function () {
+    aid: function() {
         return 'sdk_baidu';
     }
 }
@@ -298,7 +298,16 @@ var sdk_toutiao = {
         return list && list[0];
     },
 
-    aid : function () {
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        ret.head = ad.getTitle();
+        ret.subhead = ad.getDescription();
+        return ret;
+    },
+
+    aid: function() {
         return 'sdk_toutiao';
     }
 }
@@ -332,7 +341,7 @@ var sdk_voicead = {
         return ad;
     },
 
-    aid : function () {
+    aid: function() {
         return 'sdk_voicead';
     }
 }
@@ -349,7 +358,10 @@ function ads() {
         },
         timeouts: [1000, 2000],
         tasks: [
-            [sdk_gdt], [api_yd], [api_voicead], [api_chelaile]
+            [sdk_gdt],
+            [api_yd],
+            [api_voicead],
+            [api_chelaile]
         ]
     }
 }

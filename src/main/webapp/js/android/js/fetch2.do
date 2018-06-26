@@ -294,18 +294,35 @@ function tryNthTaskGroup(rule, nth, callback) {
             sdkInfo._result = resp;
             if (resp.ad) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
-                entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
-                // ad_order != null
-                if (nullOrUndefined(entity.ad_order)) entity.ad_order = 0;
+
+                try {
+                  entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
+                  // ad_order != null
+                  if (nullOrUndefined(entity.ad_order)) entity.ad_order = 0;
+                } catch(error) {
+                
+                }
+                
                 var urls = ourUrls(rule.traceInfo, entity, rule.urls);
                 console.log('ourUrls: ' + JSON.stringify(urls));
                 resp.urls = urls;
                 console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
                 resp.aid = sdkInfo.task.aid();
                 resp.refreshTime = 25000;
-                resp.mixRefreshAdInterval = 5000;
+                resp.mixRefreshAdInterval = 15000;
 
-                MdLogger.addPar('ad_order', entity.ad_order || 0);
+                if (sdkInfo.task.adStyle) {
+                  resp.adStyle = sdkInfo.task.adStyle();
+                } else if (sdkInfo.task.sdkname() == 'api_chelaile') {
+                  resp.adStyle = resp.ad.adStyle;
+                }
+
+                try {
+                  MdLogger.addPar('ad_order', entity.ad_order || 0);
+                } catch(error) {
+                
+                }
+              
             }
             MdLogger.sendThirdParty(resp.data);
         });
