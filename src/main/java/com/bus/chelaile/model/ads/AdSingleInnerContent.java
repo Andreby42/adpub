@@ -100,9 +100,9 @@ public class AdSingleInnerContent extends AdInnerContent {
             case 0:
                 adEntity.setLindex(0);
                 break;
-            case Constants.NULL_POSITION:
-                adEntity.setLindex(getLineLevelDefaultPosition());
-                break;
+//            case Constants.NULL_POSITION:
+//                adEntity.setLindex(getLineLevelDefaultPosition());
+//                break;
             default:
                 adEntity.setLindex(1);
         }
