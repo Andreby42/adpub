@@ -274,11 +274,14 @@ function tryNthTaskGroup(rule, nth, callback) {
     sdkInfos.forEach(function(sdkInfo) {
         var req = sdkInfo.task.adurl();
         console.log('try sdk: ' + req.url);
+        var MdLogger = buildMdLogger();
 
         var stamp1 = now();
         ['traceid', 'pid', 'adid'].forEach(function(field) {
             MdLogger.addPar(field, rule.traceInfo[field]);
         });
+        MdLogger.addPar('aid', sdkInfo.task.aid());
+        MdLogger.sendSimple();
 
         sdkInfo.sdk.load(sdkInfo.task, {
             traceInfo: rule.traceInfo
@@ -289,7 +292,6 @@ function tryNthTaskGroup(rule, nth, callback) {
             MdLogger.addPar('req_time', used);
             MdLogger.addPar('code', resp.data ? 200 : 500);
             MdLogger.addPar('is_backup', nth == rule.tasks.length - 1 ? 1 : 0);
-            MdLogger.addPar('aid', sdkInfo.task.aid());
 
             sdkInfo._result = resp;
             if (resp.ad) {
@@ -300,9 +302,9 @@ function tryNthTaskGroup(rule, nth, callback) {
                   // ad_order != null
                   if (nullOrUndefined(entity.ad_order)) entity.ad_order = 0;
                 } catch(error) {
-                
+
                 }
-                
+
                 var urls = ourUrls(rule.traceInfo, entity, rule.urls);
                 console.log('ourUrls: ' + JSON.stringify(urls));
                 resp.urls = urls;
@@ -320,9 +322,9 @@ function tryNthTaskGroup(rule, nth, callback) {
                 try {
                   MdLogger.addPar('ad_order', entity.ad_order || 0);
                 } catch(error) {
-                
+
                 }
-              
+
             }
             MdLogger.sendThirdParty(resp.data);
         });
@@ -332,23 +334,36 @@ function tryNthTaskGroup(rule, nth, callback) {
     console.log('start a new interval:' + checker)
 }
 
-var MdLogger = {
-    pars: {},
-    sendThirdParty: function(data) {
-        var url = 'http://atrace.chelaile.net.cn/thirdPartyResponse?';
-        for (var k in this.pars) {
-            url += '&' + k + '=' + this.pars[k];
+function buildMdLogger() {
+    return {
+        pars: {},
+        sendSimple : function () {
+            var url = 'http://atrace.chelaile.net.cn/thirdSimple?';
+            for (var k in this.pars) {
+                url += '&' + k + '=' + this.pars[k];
+            }
+            console.log('发送简单上报埋点:' + url);
+            Http.get(url, {}, 5000, function() {
+                console.log('成功发送简单上报埋点:' + url);
+            });
+        },
+        sendThirdParty: function(data) {
+            var url = 'http://atrace.chelaile.net.cn/thirdPartyResponse?';
+            for (var k in this.pars) {
+                url += '&' + k + '=' + this.pars[k];
+            }
+            console.log('发送第三方埋点:' + url);
+            console.log('data:' + data);
+            Http.post(url, {}, typeof data == 'string' ? data : '', 5000, function() {
+                console.log('成功发送第三方埋点:' + url);
+            });
+        },
+        addPar: function(field, value) {
+            this.pars[field] = nullOrUndefined(value) ? '' : value;
         }
-        console.log('发送第三方埋点:' + url);
-        console.log('data:' + data);
-        Http.post(url, {}, typeof data == 'string' ? data : '', 5000, function() {
-            console.log('成功发送第三方埋点:' + url);
-        });
-    },
-    addPar: function(field, value) {
-        this.pars[field] = nullOrUndefined(value) ? '' : value;
     }
 }
+
 
 function nullOrUndefined(a) {
     return typeof a == 'undefined' || a == null
