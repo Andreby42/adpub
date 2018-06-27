@@ -224,7 +224,7 @@ public class JsRule extends AbstractController {
             p.setStnName(request.getParameter("stationName"));
 
         // 模板 
-        String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("allCars_origin");
         TaskEntity tgs = jSService.getTask(p, "allCars");
         
         String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request);

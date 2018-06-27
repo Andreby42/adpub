@@ -186,11 +186,11 @@ public class AdDoubleInnerContent extends AdInnerContent {
         }
 
         if (param.getlSize() == -1) { // 这个参数控制版本，Constants.PLATFORM_LOG_ANDROID_0326 之前的老版本
-            if (position != Constants.NULL_POSITION) {
+//            if (position != Constants.NULL_POSITION) {
                 adEntity.setSindex(position == -1 ? (stindex + 1) : (position == 0 ? 0 : 1));
-            } else {
-                adEntity.setSindex(getStationLevelDefaultPosition());
-            }
+//            } else {
+//                adEntity.setSindex(getStationLevelDefaultPosition());
+//            }
         } else {
             adEntity.setSindex(position == 0 ? 0 : 1); // 仅限 0 和 1
         }

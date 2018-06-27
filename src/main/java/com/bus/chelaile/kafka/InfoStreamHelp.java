@@ -81,7 +81,7 @@ public class InfoStreamHelp {
             String projectId = StaticAds.allAds.get(advId).getProjectId();
             if(StringUtils.isNotBlank(projectId)) {
                 String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
-                CacheUtil.incrToCache(projectClickKey, Constants.LONGEST_CACHE_TIME);    // 存储30天
+                CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
             }
 		} catch (Exception e) {
 			e.printStackTrace();
