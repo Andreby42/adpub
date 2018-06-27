@@ -1025,7 +1025,7 @@ public abstract class AbstractManager {
     			}
     			// innobe
     			else	if( provider_id.equals("3") ) {
-    				placeMentId = "";
+    				placeMentId = "1522609003688";
     			}
     			// 今日头条
     			else	if( provider_id.equals("7") ) {
@@ -1199,7 +1199,7 @@ public abstract class AbstractManager {
     			}
     			// innobe
     			else	if( provider_id.equals("3") ) {
-    				placeMentId = "";
+    				placeMentId = "1526495932479";
     			}
     			// 今日头条
     			else	if( provider_id.equals("7") ) {
@@ -1338,7 +1338,7 @@ public abstract class AbstractManager {
     			}
     			// innobe
     			else	if( provider_id.equals("3") ) {
-    				placeMentId = "";
+    				placeMentId = "1528940869809";
     			}
     			// 今日头条
     			else	if( provider_id.equals("7") ) {
@@ -1430,7 +1430,7 @@ public abstract class AbstractManager {
     			}
     			// innobe
     			else	if( provider_id.equals("3") ) {
-    				placeMentId = "";
+    				placeMentId = "1529526629093";
     			}
     			// 今日头条
     			else	if( provider_id.equals("7") ) {
@@ -1521,7 +1521,7 @@ public abstract class AbstractManager {
     			}
     			// innobe
     			else	if( provider_id.equals("3") ) {
-    				placeMentId = "";
+    				placeMentId = "1529496478073";
     			}
     			// 今日头条
     			else	if( provider_id.equals("7") ) {
@@ -1600,6 +1600,10 @@ public abstract class AbstractManager {
 				}
     			}
     		}
+    	}
+    	
+    	if( provider_id.equals("3") && ( placeMentId == null || placeMentId.equals("") ) ) {
+    		placeMentId = "1526909972727";
     	}
 
 	return placeMentId;

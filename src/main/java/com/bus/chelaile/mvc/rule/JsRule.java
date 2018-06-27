@@ -309,10 +309,12 @@ public class JsRule extends AbstractController {
         	int type = Integer.parseInt(sdk_gdt_displayType);
         	sdk_gdt_placementId = getPlaceMentId(showType, "2", type);
         	map.put("sdk_gdt_placementId", sdk_gdt_placementId);
+        	map.put("sdk_gdt_aid", type+"");
         }else {
         	map.put("sdk_gdt_displayType", "1");
         	sdk_gdt_placementId = getPlaceMentId(showType, "2", 1);
         	map.put("sdk_gdt_placementId", sdk_gdt_placementId);
+        	map.put("sdk_gdt_aid", "1");
         }
         
         // 头条
@@ -322,10 +324,12 @@ public class JsRule extends AbstractController {
         	int type = Integer.parseInt(sdk_toutiao_displayType);
         	sdk_toutiao_placementId = getPlaceMentId(showType, "7", type);
         	map.put("sdk_toutiao_placementId", sdk_toutiao_placementId);
+        	map.put("sdk_toutiao_aid", type+"");
         }else {
         	map.put("sdk_toutiao_displayType", "1");
         	sdk_toutiao_placementId = getPlaceMentId(showType, "7", 1);
         	map.put("sdk_toutiao_placementId", sdk_toutiao_placementId);
+        	map.put("sdk_toutiao_aid", "1");
         }
         
         
@@ -337,10 +341,16 @@ public class JsRule extends AbstractController {
         	int type = Integer.parseInt(sdk_voicead_displayType);
         	sdk_voicead_placementId = getPlaceMentId(showType, "10", type);
         	map.put("sdk_voicead_placementId", sdk_voicead_placementId);
+        	map.put("sdk_voicead_aid", type+"");
+        	map.put("sdk_ifly_aid", type+"");
+        	map.put("sdk_ifly_placementId", sdk_voicead_placementId);
         }else {
         	map.put("sdk_voicead_displayType", "1");
         	sdk_voicead_placementId = getPlaceMentId(showType, "10", 1);
         	map.put("sdk_voicead_placementId", sdk_voicead_placementId);
+        	map.put("sdk_voicead_aid", "1");
+        	map.put("sdk_ifly_aid", "1");
+        	map.put("sdk_ifly_placementId", sdk_voicead_placementId);
         }
         
         // baidu
@@ -350,10 +360,14 @@ public class JsRule extends AbstractController {
         	int type = Integer.parseInt(sdk_baidu_displayType);
         	sdk_baidu_placementId = getPlaceMentId(showType, "5", type);
         	map.put("sdk_baidu_placementId", sdk_baidu_placementId);
+        	
+        	map.put("sdk_baidu_aid", type+"");
         }else {
         	map.put("sdk_baidu_displayType", "1");
         	sdk_baidu_placementId = getPlaceMentId(showType, "5", 1);
         	map.put("sdk_baidu_placementId", sdk_baidu_placementId);
+        	
+        	map.put("sdk_baidu_aid", "1");
         }
         
         try {
