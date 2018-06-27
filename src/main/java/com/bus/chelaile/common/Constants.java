@@ -37,7 +37,7 @@ public class Constants {
 			PropertiesName.PUBLIC.getValue(), "isCacheKoubei", "false"));
     
     // position属性未设定。
-    public static final int NULL_POSITION = -99;
+    public static final int NULL_POSITION = 0;
     
     // redirect参数名称
     public static final String PARAM_AD_ID = "advId";

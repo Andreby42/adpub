@@ -50,7 +50,7 @@ public abstract class BaseAdEntity {
 	@JSONField(serialize=false)
 	private TasksGroup tasksGroup; // 任务单 
 	
-	private int displayType = 2;// 左⽂右图⼤ 2 左⽂右图小 3 三图 4 单图， 5 右侧单图（跳转信息流，没有‘广告’字样） ,2018-06-19 增加，满足三图片要求
+	private int displayType = 2;// 1左⽂右图⼤ 2 左⽂右图小 3 三图 4 单图， 5 右侧单图（跳转信息流，没有‘广告’字样） ,2018-06-19 增加，满足三图片要求
 
 	private List<String> picsList;
 	
