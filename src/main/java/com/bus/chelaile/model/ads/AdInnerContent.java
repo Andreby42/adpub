@@ -18,7 +18,7 @@ public abstract class AdInnerContent {
     private static final String DEFAULT_PIC_URL_PREFIX = "http://pic1.chelaile.net.cn/adv/%1$s";
     protected String jsonContent;
     
-    protected int displayType = 2;//    1 左⽂右图⼤，运营叫单图大图 2 左⽂右图小，运营叫单图 3 三图 4 通栏广告， 5 右侧单图（跳转信息流，没有‘广告’字样） ,2018-06-19 增加，满足三图片要求 ,2018-06-19 增加，满足三图片要求
+    protected int displayType = 1;//    1 左⽂右图⼤，运营叫单图大图 2 左⽂右图小，运营叫单图 3 三图 4 通栏广告， 5 右侧单图（跳转信息流，没有‘广告’字样） ,2018-06-19 增加，满足三图片要求 ,2018-06-19 增加，满足三图片要求
 
     protected List<String> picsList;
     
