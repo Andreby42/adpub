@@ -2,12 +2,17 @@ package com.bus.chelaile.model.ads;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.util.New;
 
 /**
@@ -17,6 +22,10 @@ import com.bus.chelaile.util.New;
  * 
  */
 public class AdStationlInnerContent extends AdInnerContent {
+	
+
+    protected static final Logger logger = LoggerFactory.getLogger(AdStationlInnerContent.class);
+	
     private String pic; // 广告图片的URL
     private AdCard adCard;
     private BannerInfo bannerInfo;
@@ -65,9 +74,14 @@ public class AdStationlInnerContent extends AdInnerContent {
             if( ad.getAdProducer() != null ) {
             	this.adProducer = ad.getAdProducer();
             }
+            logger.info("adProducer={}",this.adProducer);
 
             this.setTasksJ(ad.getTasksJ());
             List<List<String>> tasksG = New.arrayList();
+            
+         
+            
+            
             if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
                 Set<Integer> prioritys = New.hashSet();
@@ -86,6 +100,7 @@ public class AdStationlInnerContent extends AdInnerContent {
                 TasksGroup tasksGroups = new TasksGroup();
                 tasksGroups.setTasks(tasksG);
                 tasksGroups.setTimeouts(ad.timeouts);
+             
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
                 this.tasksGroup = createOwnAdTask();

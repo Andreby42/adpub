@@ -9,6 +9,7 @@ public class TaskModel {
     //private Long timeout;
     private String apiName;
     private int priority;
+    private int displayType = 1;
 
     /**
      * @return the apiName
@@ -37,8 +38,18 @@ public class TaskModel {
     public void setPriority(int priority) {
         this.priority = priority;
     }
+    
+    
 
-    public static void main(String[] args) {
+    public int getDisplayType() {
+		return displayType;
+	}
+
+	public void setDisplayType(int displayType) {
+		this.displayType = displayType;
+	}
+
+	public static void main(String[] args) {
         List<TaskModel> tasks = New.arrayList();
 
         TaskModel t = new TaskModel();

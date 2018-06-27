@@ -2,6 +2,7 @@ package com.bus.chelaile.model.ads.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.util.New;
@@ -10,6 +11,8 @@ public class TasksGroup {
 
     private List<List<String>> tasks;
     private List<Long> timeouts;
+    // 参数名字,参数值
+    private Map<String,String> map;
     
     public static void main(String[] args) {
         
@@ -43,10 +46,11 @@ public class TasksGroup {
     }
 
 
-    public TasksGroup(List<List<String>> tasks, List<Long> timeouts) {
+    public TasksGroup(List<List<String>> tasks, List<Long> timeouts,Map<String,String> map) {
         super();
         this.tasks = tasks;
         this.timeouts = timeouts;
+        this.map = map;
     }
 
     /**
@@ -83,6 +87,18 @@ public class TasksGroup {
     public void setTimeouts(List<Long> timeouts) {
         this.timeouts = timeouts;
     }
+
+	public Map<String, String> getMap() {
+		return map;
+	}
+
+	public void setMap(Map<String, String> map) {
+		this.map = map;
+	}
+
+
+
+    
 
 
 }

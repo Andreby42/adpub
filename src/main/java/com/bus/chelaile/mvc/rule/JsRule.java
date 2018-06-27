@@ -1,6 +1,7 @@
 package com.bus.chelaile.mvc.rule;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,8 @@ import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.JSService;
 import com.bus.chelaile.service.StaticAds;
+import com.bus.chelaile.util.JsonBinder;
+import com.bus.chelaile.util.New;
 
 @Controller
 @RequestMapping("/js/android/js/rule")
@@ -264,6 +267,47 @@ public class JsRule extends AbstractController {
                 }
             }
         }
+        // 这里要替换placementid,displayType 也要替换成默认值
+        String sdk_gdt_placementId = null;
+        String sdk_toutiao_placementId = null;
+        String sdk_voicead_placementId =null;
+        String sdk_baidu_placementId = null;
+        
+        String sdk_gdt_displayType = null;
+        String sdk_toutiao_displayType = null;
+        String sdk_voicead_displayType =null;
+        String sdk_baidu_displayType = null;
+        
+        Map<String,String> map = null;
+        if( tgs.getTaskGroups().getMap() != null ) {
+        	map = tgs.getTaskGroups().getMap();
+        }else {
+        	map = New.hashMap();
+        }
+        
+        sdk_gdt_displayType = map.get("sdk_gdt_displayType");
+        if( sdk_gdt_displayType != null ) {
+        	map.put("sdk_gdt_displayType", sdk_gdt_displayType);
+        	int type = Integer.parseInt(sdk_gdt_displayType);
+        	//if( type )
+        }
+        
+     
+        
+        try {
+			logger.info("json={}",JsonBinder.toJson(tgs.getTaskGroups().getMap(), JsonBinder.always));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+        
+        if( tgs.getTaskGroups().getMap() != null ) {
+        	for (Map.Entry<String, String> entry : tgs.getTaskGroups().getMap().entrySet()) {
+            	splashJS = splashJS.replace("${"+entry.getKey()+"}", entry.getValue());
+            }
+        }
+        
+        logger.info(splashJS);
+        
         return splashJS;
     }
 

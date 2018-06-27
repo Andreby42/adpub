@@ -191,6 +191,7 @@ public class StationAdsManager extends AbstractManager {
         
         
         AdStationlInnerContent stationInner = (AdStationlInnerContent) inner;
+        logger.info("adProducer={}",stationInner.getAdProducer());
         if( stationInner.getAdProducer() != null && stationInner.getAdProducer().equals("meituan") ) {
         	MeituanData data = MeiTuanService.getContext(advParam);
         	if( data != null ) {

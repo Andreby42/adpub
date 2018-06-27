@@ -8,6 +8,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.model.ads.AdCommonContent;
+import com.bus.chelaile.model.ads.AdStationlInnerContent;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.StartService;
 import com.bus.chelaile.service.impl.OtherManager;
@@ -17,6 +19,15 @@ import com.bus.chelaile.util.New;
 
 public class Test {
 	public static void main(String[] args) throws Exception {
+		
+		String js = "{\"displayType\":1,\"adWeight\":2,\"autoInterval\":1500,\"backup\":0,\"barColor\":\"\",\"brandIcon\":\"\",\"brandName\":\"\",\"buttonColor\":\"\",\"buttonIcon\":\"\",\"buttonTitle\":\"\",\"buttonType\":0,\"clickDown\":0,\"feedId\":\"\",\"head\":\"\",\"lat\":0,\"lng\":0,\"mixInterval\":1500,\"pic\":\"\",\"position\":0,\"promoteTitle\":\"\",\"provider_id\":5,\"showDistance\":0,\"subhead\":\"\",\"tag\":\"\",\"tagId\":\"\",\"timeout\":0}";
+		
+		
+		AdCommonContent adc = new AdCommonContent();
+		adc.setAndParseJson(js);
+		
+		AdStationlInnerContent ad1 = new AdStationlInnerContent();
+		ad1.setAndParseJson(js);
 		
 		List<String> list = New.arrayList();
 		

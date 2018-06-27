@@ -2,12 +2,18 @@ package com.bus.chelaile.model.ads;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.service.ServiceManager;
+import com.bus.chelaile.util.JsonBinder;
 import com.bus.chelaile.util.New;
 
 /**
@@ -37,7 +43,7 @@ public class AdCommonContent extends AdInnerContent{
     private TasksGroup tasksGroup;
     
 
-	
+    protected static final Logger logger = LoggerFactory.getLogger(AdCommonContent.class);
 	
 
     @Override
@@ -57,7 +63,7 @@ public class AdCommonContent extends AdInnerContent{
             this.pic = ad.pic;
             this.clickDown = ad.clickDown;
           
-            
+            Map<String,String> map = New.hashMap();
 
             this.setTasksJ(ad.getTasksJ());
             List<List<String>> tasksG = New.arrayList();
@@ -65,6 +71,10 @@ public class AdCommonContent extends AdInnerContent{
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
                 Set<Integer> prioritys = New.hashSet();
                 for (TaskModel t : getTasksJ()) {
+                	
+                	map.put(t.getApiName()+"_displayType",t.getDisplayType()+"");
+                	
+                	
                     if (!prioritys.contains(t.getPriority())) {
                         List<String> ts = New.arrayList();
                         ts.add(t.getApiName());
@@ -79,11 +89,16 @@ public class AdCommonContent extends AdInnerContent{
                 TasksGroup tasksGroups = new TasksGroup();
                 tasksGroups.setTasks(tasksG);
                 tasksGroups.setTimeouts(ad.timeouts);
+                tasksGroups.setMap(map);
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
                 this.tasksGroup = createOwnAdTask();
             }
-            
+            try {
+				logger.info("json={}",JsonBinder.toJson(this.tasksGroup, JsonBinder.always));
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
             setCommentContext(ad, this.pic);
         }
     }

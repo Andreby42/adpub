@@ -3660,3 +3660,31 @@ Caused by: java.net.UnknownHostException: nkfk1
 [2018-06-23 17:39:02] [ERROR] - Error occur in Redis.set, key=AD_PROPERTY_TITLE_10013264 value=[广告]·百度-新版, error message: Could not get a resource from the pool
 [2018-06-23 17:39:04] [ERROR] - Error occur in Redis.set, key=AD_PROPERTY_BACKUP_10013264 value=0, error message: Could not get a resource from the pool
 [2018-06-23 17:39:06] [ERROR] - Error occur in Redis.set, key=AD_PROPERTY_TITLE_10013265 value=[广告]·头条-新版, error message: Could not get a resource from the pool
+[2018-06-26 21:44:17] [ERROR] - maxIdle is deprecated
+[2018-06-26 21:44:17] [ERROR] - testWhileIdle is true, validationQuery not set
+[2018-06-26 21:44:24] [ERROR] - 读取js文件到缓存出错！ 
+java.lang.NullPointerException
+	at com.bus.chelaile.service.StaticAds.readJSFILESTR(StaticAds.java:155)
+	at com.bus.chelaile.service.StaticAds.init(StaticAds.java:147)
+	at com.bus.chelaile.service.StartService.init(StartService.java:60)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeCustomInitMethod(AbstractAutowireCapableBeanFactory.java:1640)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1581)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1511)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:519)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:456)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:293)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:223)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:290)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:191)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:638)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:942)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:482)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:139)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:83)
+	at Test.main(Test.java:40)
+[2018-06-26 21:44:25] [ERROR] - 处理分钟投放文件出错
+[2018-06-26 21:44:28] [ERROR] - Error occur in Redis.set, key=AD_PROPERTY_TITLE_12758 value=下拉刷新全屏, error message: Could not get a resource from the pool
