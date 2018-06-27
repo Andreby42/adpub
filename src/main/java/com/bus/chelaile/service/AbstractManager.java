@@ -1605,6 +1605,8 @@ public abstract class AbstractManager {
     	if( provider_id.equals("3") && ( placeMentId == null || placeMentId.equals("") ) ) {
     		placeMentId = "1526909972727";
     	}
+    	
+    	
 
 	return placeMentId;
 }
