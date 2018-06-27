@@ -19,7 +19,7 @@ public class MeiTuanService {
 
 	public static MeituanData getContext(AdvParam ap) {
 		
-		String key = getCachekey(ap.getLineId(), ap.getStnOrder());
+		String key = getCachekey(ap.getLineId(), ap.getStnOrder(),ap.getS());
 		
 		mtContext mc = null;
 		
@@ -67,8 +67,14 @@ public class MeiTuanService {
 	}
 
 	private static mtContext getMtContext(AdvParam ap) {
-		String queryUrl = url + "&pos=" + ap.getLat() + "," + ap.getLng();
+		String queryUrl = url + "&pos=" + ap.getLat() + "," + ap.getLng()+"&devicetype=";
 
+		if( ap.getS().equalsIgnoreCase("ios") ) {
+			queryUrl += "ios";
+		}else {
+			queryUrl += "android";
+		}
+		
 		String entity = null;
 
 		try {
@@ -105,7 +111,7 @@ public class MeiTuanService {
 		
 		try {
 			String value = JsonBinder.toJson(mc, JsonBinder.nonNull);
-			String key = getCachekey(ap.getLineId(), ap.getStnOrder());
+			String key = getCachekey(ap.getLineId(), ap.getStnOrder(),ap.getS());
 			if( key == null ) {
 				return mc;
 			}
@@ -117,11 +123,11 @@ public class MeiTuanService {
 		return mc;
 	}
 
-	private static String getCachekey(String lineId, int stnOrder) {
+	private static String getCachekey(String lineId, int stnOrder,String s) {
 		if( lineId == null ) {
 			return null;
 		}
-		return "stationMTKey:" + lineId + "," + stnOrder;
+		return "stationMTKey:" + lineId + "," + stnOrder + ",";
 	}
 
 	public static void main(String[] args) {

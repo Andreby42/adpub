@@ -48,6 +48,9 @@ public class CacheUtil {
 	private static ICache cacheApiTokenClient;
 //	支付信息
 	private static ICache cachePayInfoClient;
+	
+    // 用户traceInfo信息
+	private static ICache traceInfoClient;
 //	//  专为活动[屈臣氏]所设,放置有效用户，以及领取过
 //	private static ICache cacheActivitiesClient;
 	
@@ -59,6 +62,13 @@ public class CacheUtil {
     private static final int DEFAULT_EXPIRE = 60 * 60;
     
     private static String cacheType = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "cacheType","ocs");
+    
+    
+    private static final String TRACE_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.tracehost");
+    private static final String TRACE_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.traceport");
+    private static final String TRACE_OCS_USERNAME =  PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.traceusername");
+    private static final String TRACE_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.tracepassword");
+    
     /**
      * 推送的时候读取token
      */
@@ -124,6 +134,8 @@ public class CacheUtil {
     	   
     	   cacheApiTokenClient = new OCSCacheUtil(API_PROP_OCS_HOST,API_PROP_OCS_PORT,API_PROP_OCS_USERNAME,API_PROP_OCS_PASSWORD);
     	   cachePayInfoClient = new OCSCacheUtil(PAY_PROP_OCS_HOST,PAY_PROP_OCS_PORT,PAY_PROP_OCS_USERNAME,PAY_PROP_OCS_PASSWORD);
+    	   
+    	   traceInfoClient = new OCSCacheUtil(TRACE_OCS_HOST,TRACE_OCS_PORT,TRACE_OCS_USERNAME,TRACE_OCS_PASSWORD);
 //    	   cacheActivitiesClient = new OCSCacheUtil(ACTIVE_PROP_OCS_HOST,ACTIVE_PROP_OCS_PORT,ACTIVE_PROP_OCS_USERNAME,ACTIVE_PROP_OCS_PASSWORD);
     	   logger.info("ocs cache");
        }else{
@@ -289,11 +301,17 @@ public class CacheUtil {
  
     // 将traceInfo保存到redis中, 永久
     public static void setToAtrace(String key, String value) {
-        redisAtrace.set(key, -1, value);
+    	if( traceInfoClient != null ) {
+    		traceInfoClient.set(key, -1, value);
+    	}
+        //redisAtrace.set(key, -1, value);
     }
     // 同上
     public static void setToAtrace(String key, String value, int exp) {
-        redisAtrace.set(key, exp, value);
+    	if( traceInfoClient != null ) {
+    		traceInfoClient.set(key, exp, value);
+    	}
+        //redisAtrace.set(key, exp, value);
     }
     
 //	public static Object getActiveOcs(String key) {

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
@@ -76,7 +77,7 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
         TaskEntity tgs = jSService.getTask(p, "splash");
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request);
+        String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request,ShowType.OPEN_SCREEN);
 
         
         response.setHeader("traceId", p.getTraceid());
@@ -100,7 +101,7 @@ public class JsRule extends AbstractController {
         TaskEntity tgs = jSService.getTask(p, "home");
 //        setMaidianParams(p, );
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "home_", request);
+        String splashJS = produceJS(p, splashOrigin, tgs, "home_", request,ShowType.DOUBLE_COLUMN);
         
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
@@ -124,8 +125,11 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
         TaskEntity tgs = jSService.getTask(p, "rightTop");
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "right_", request);
+        String splashJS = produceJS(p, splashOrigin, tgs, "right_", request,ShowType.LINE_RIGHT_ADV);
 
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
         return splashJS;
     }
     
@@ -145,8 +149,11 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
         TaskEntity tgs = jSService.getTask(p, "station");
 
-        String splashJS = produceJS(p, splashOrigin, tgs, "station_", request);
+        String splashJS = produceJS(p, splashOrigin, tgs, "station_", request,ShowType.STATION_ADV);
 
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
         return splashJS;
     }
     
@@ -166,8 +173,10 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
         TaskEntity tgs = jSService.getTask(p, "bottom");
         
-        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request);
-
+        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request,ShowType.LINE_FEED_ADV);
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
         return splashJS;
     }
     
@@ -187,8 +196,10 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("transfer_origin");
         TaskEntity tgs = jSService.getTask(p, "transfer");
         
-        String splashJS = produceJS(p, splashOrigin, tgs, "route_", request);
-
+        String splashJS = produceJS(p, splashOrigin, tgs, "route_", request,ShowType.TRANSFER_ADV);
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
         return splashJS;
     }
 //    
@@ -207,8 +218,10 @@ public class JsRule extends AbstractController {
         String splashOrigin = StaticAds.JS_FILE_STR.get("stationDetail_origin");
         TaskEntity tgs = jSService.getTask(p, "stationDetail");
         
-        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request);
-
+        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request,ShowType.CAR_ALL_LINE_ADV);
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
         return splashJS;
     }
 //    
@@ -225,14 +238,19 @@ public class JsRule extends AbstractController {
 
         // 模板 
         String splashOrigin = StaticAds.JS_FILE_STR.get("allCars_origin");
+        
+       // logger.info("splashOrigin={}",splashOrigin);
+        
         TaskEntity tgs = jSService.getTask(p, "allCars");
         
-        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request);
-
+        String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request,ShowType.ALL_CAR_ADV);
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
         return splashJS;
     }
     
-    private String produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request) {
+    private String produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request,ShowType showType) {
         if(StringUtils.isBlank(originJs)) {
             return "┭┮﹏┭┮ 原始js文件为空 ";
         }
@@ -284,18 +302,62 @@ public class JsRule extends AbstractController {
         }else {
         	map = New.hashMap();
         }
-        
+        // 广点通
         sdk_gdt_displayType = map.get("sdk_gdt_displayType");
         if( sdk_gdt_displayType != null ) {
         	map.put("sdk_gdt_displayType", sdk_gdt_displayType);
         	int type = Integer.parseInt(sdk_gdt_displayType);
-        	//if( type )
+        	sdk_gdt_placementId = getPlaceMentId(showType, "2", type);
+        	map.put("sdk_gdt_placementId", sdk_gdt_placementId);
+        }else {
+        	map.put("sdk_gdt_displayType", "1");
+        	sdk_gdt_placementId = getPlaceMentId(showType, "2", 1);
+        	map.put("sdk_gdt_placementId", sdk_gdt_placementId);
         }
         
-     
+        // 头条
+        sdk_toutiao_displayType = map.get("sdk_toutiao_displayType");
+        if( sdk_toutiao_displayType != null ) {
+        	map.put("sdk_toutiao_displayType", sdk_toutiao_displayType);
+        	int type = Integer.parseInt(sdk_toutiao_displayType);
+        	sdk_toutiao_placementId = getPlaceMentId(showType, "7", type);
+        	map.put("sdk_toutiao_placementId", sdk_toutiao_placementId);
+        }else {
+        	map.put("sdk_toutiao_displayType", "1");
+        	sdk_toutiao_placementId = getPlaceMentId(showType, "7", 1);
+        	map.put("sdk_toutiao_placementId", sdk_toutiao_placementId);
+        }
+        
+        
+        
+     // 科大讯飞
+        sdk_voicead_displayType = map.get("sdk_voicead_displayType");
+        if( sdk_voicead_displayType != null ) {
+        	map.put("sdk_voicead_displayType", sdk_voicead_displayType);
+        	int type = Integer.parseInt(sdk_voicead_displayType);
+        	sdk_voicead_placementId = getPlaceMentId(showType, "10", type);
+        	map.put("sdk_voicead_placementId", sdk_voicead_placementId);
+        }else {
+        	map.put("sdk_voicead_displayType", "1");
+        	sdk_voicead_placementId = getPlaceMentId(showType, "10", 1);
+        	map.put("sdk_voicead_placementId", sdk_voicead_placementId);
+        }
+        
+        // baidu
+        sdk_baidu_displayType = map.get("sdk_baidu_displayType");
+        if( sdk_baidu_displayType != null ) {
+        	map.put("sdk_baidu_displayType", sdk_baidu_displayType);
+        	int type = Integer.parseInt(sdk_baidu_displayType);
+        	sdk_baidu_placementId = getPlaceMentId(showType, "5", type);
+        	map.put("sdk_baidu_placementId", sdk_baidu_placementId);
+        }else {
+        	map.put("sdk_baidu_displayType", "1");
+        	sdk_baidu_placementId = getPlaceMentId(showType, "5", 1);
+        	map.put("sdk_baidu_placementId", sdk_baidu_placementId);
+        }
         
         try {
-			logger.info("json={}",JsonBinder.toJson(tgs.getTaskGroups().getMap(), JsonBinder.always));
+			logger.info("json={}",JsonBinder.toJson(map, JsonBinder.always));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -306,9 +368,327 @@ public class JsRule extends AbstractController {
             }
         }
         
-        logger.info(splashJS);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+        	splashJS = splashJS.replace("${"+entry.getKey()+"}", entry.getValue());
+        }
+        
+       // logger.info(splashJS);
         
         return splashJS;
     }
+    
+    private String getPlaceMentId(ShowType showType,String provider_id,int displayType) {
+    	
+    	String placeMentId = "111";
+    	
+    	// 开屏
+    	if( showType.getValue() == ShowType.OPEN_SCREEN.getValue() ) {
+    			//	广点通
+    			if( provider_id.equals("2") ) {
+    				placeMentId = "7030038393106222";
+    			}
+    			// innobe
+    			else	if( provider_id.equals("3") ) {
+    				placeMentId = "";
+    			}
+    			// 今日头条
+    			else	if( provider_id.equals("7") ) {
+    				placeMentId = "800673832";
+    			}
+    			// 科大讯飞
+    			else	if( provider_id.equals("10") ) {
+    				placeMentId = "D028C0ADDDBC38952DA01241B4939E64";
+    			}
+    			// 网易
+    			else	if( provider_id.equals("11") ) {
+    				placeMentId = "";
+    			}
+    		
+    	}
+    	// 双栏
+    	else	if( showType.getValue() == ShowType.DOUBLE_COLUMN.getValue() ) {
+    			//	广点通
+    			if( provider_id.equals("2") ) {
+    				placeMentId = "2030539481050032";
+    			}
+    			// innobe
+    			else	if( provider_id.equals("3") ) {
+    				placeMentId = "";
+    			}
+    			// 今日头条
+    			else	if( provider_id.equals("7") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "900673292";
+    				}else{
+    					placeMentId = "900673519";
+    				}
+    			}
+    			// 科大讯飞
+    			else	if( provider_id.equals("10") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "ACB0BED305BBA908DEA75B0036E51ECE";
+    				}else{
+    					placeMentId = "C23BFCFFE1F3D8D5C06D7E1AEEA83812";
+    				}
+    			}
+    			// 网易
+    			else	if( provider_id.equals("11") ) {
+    				placeMentId = "";
+    			}
+    			// 百度
+    			else	if( provider_id.equals("5") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "5847843";
+    				}else{
+    					placeMentId = "5826167";
+    				}
+    			}
+    		
+    	}
+    	// 站点
+    	else	if( showType.getValue() == ShowType.STATION_ADV.getValue() ) {
+    			//	广点通
+    			if( provider_id.equals("2") ) {
+    				placeMentId = "6000631364333392";
+    			}
+    			// innobe
+    			else	if( provider_id.equals("3") ) {
+    				placeMentId = "";
+    			}
+    			// 今日头条
+    			else	if( provider_id.equals("7") ) {
+    				placeMentId = "900673616";
+    			}
+    			// 科大讯飞
+    			else	if( provider_id.equals("10") ) {
+    				
+    			}
+    			// 网易
+    			else	if( provider_id.equals("11") ) {
+    				placeMentId = "";
+    			}
+    		
+    		
+    	}
+    	// 详情页底部
+    	else	if( showType.getValue() == ShowType.LINE_FEED_ADV.getValue() ) {
+    			//	广点通
+    			if( provider_id.equals("2") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "3E4C06551E3CC1FB40E83E18A6523BAD";
+    				}else{
+    					placeMentId = "957963E3D7047F783BE1CBFC450BF458";
+    				}
+    			}
+    			// innobe
+    			else	if( provider_id.equals("3") ) {
+    				placeMentId = "";
+    			}
+    			// 今日头条
+    			else	if( provider_id.equals("7") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "901451382";
+    				}else{
+    					placeMentId = "901451382";
+    				}
+    			}
+    			// 科大讯飞
+    			else	if( provider_id.equals("10") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "FD95828C09A32D712082DC08D36CC15D";
+    				}else{
+    					placeMentId = "FD95828C09A32D712082DC08D36CC15D";
+    				}
+    			}
+    			// 网易
+    			else	if( provider_id.equals("11") ) {
+    				placeMentId = "";
+    			}
+    			// 百度
+    			else	if( provider_id.equals("5") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "5847849";
+    				}else{
+    					placeMentId = "5847849";
+    				}
+    			}
+    		
+    	}
+    	
+    	// 右上角
+    	else	if( showType.getValue() == ShowType.LINE_RIGHT_ADV.getValue() ) {
+    			//	广点通
+    			if( provider_id.equals("2") ) {
+    				placeMentId = "4060239431859044";
+    			}
+    			// innobe
+    			else	if( provider_id.equals("3") ) {
+    				placeMentId = "";
+    			}
+    			// 今日头条
+    			else	if( provider_id.equals("7") ) {
+    				placeMentId = "901451875";
+    			}
+    			// 科大讯飞
+    			else	if( provider_id.equals("10") ) {
+    				placeMentId = "2EC979D4F845F81DD899B62F497E3F67";
+    			}
+    			// 网易
+    			else	if( provider_id.equals("11") ) {
+    				placeMentId = "";
+    			}
+    		
+    	}
+    	
+    	
+    	
+    	// 换乘
+    	else	if( showType.getValue() == ShowType.TRANSFER_ADV.getValue() ) {
+    			//	广点通
+    			if( provider_id.equals("2") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "7090134575505819";
+    				}else{
+    					placeMentId = "3010534505808848";
+    				}
+    			}
+    			// innobe
+    			else	if( provider_id.equals("3") ) {
+    				placeMentId = "";
+    			}
+    			// 今日头条
+    			else	if( provider_id.equals("7") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "900673492";
+    				}else{
+    					placeMentId = "900673424";
+    				}
+    			}
+    			// 科大讯飞
+    			else	if( provider_id.equals("10") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "AE9A21B49A87F9B6C67EC7548FB5DE48";
+    				}else{
+    					placeMentId = "A7ABF4CFA257C79F064A8A162266D924";
+    				}
+    			}
+    			// 网易
+    			else	if( provider_id.equals("11") ) {
+    				placeMentId = "";
+    			}
+    			
+    			// 百度
+    			else	if( provider_id.equals("5") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "5847855";
+    				}else	if( displayType == 4 ){
+    					placeMentId = "5847852";
+    				}else {
+    					placeMentId = "5847852";
+    				}
+    			}
+    		
+    	}
+    	
+    	// 车辆所有线路
+    	else	if( showType.getValue() == ShowType.CAR_ALL_LINE_ADV.getValue() ) {
+    			//	广点通
+    			if( provider_id.equals("2") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "2080634575306901";
+    				}else{
+    					placeMentId = "5030836525008930";
+    				}
+    			}
+    			// innobe
+    			else	if( provider_id.equals("3") ) {
+    				placeMentId = "";
+    			}
+    			// 今日头条
+    			else	if( provider_id.equals("7") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "900673492";
+    				}else{
+    					placeMentId = "900673424";
+    				}
+    			}
+    			// 科大讯飞
+    			else	if( provider_id.equals("10") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "67842F384D42AE16958A2ADDC8080BA0";
+    				}else{
+    					placeMentId = "3D7818F4980FB323DAEA8B544B567B7C";
+    				}
+    			}
+    			// 网易
+    			else	if( provider_id.equals("11") ) {
+    				placeMentId = "";
+    			}
+    			
+    			// 百度
+    			else	if( provider_id.equals("5") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "5847859";
+    				}else	if( displayType == 4 ){
+    					placeMentId = "5847856";
+    				}else {
+    					placeMentId = "5847856";
+    				}
+    			}
+    		
+    	}
+    	// 更多车辆
+    	else	if( showType.getValue() == ShowType.ALL_CAR_ADV.getValue() ) {
+    			//	广点通
+    			if( provider_id.equals("2") ) {
+    				if( displayType == 3 ) {
+    				placeMentId = "4070030575903993";
+    				}else {
+    					placeMentId = "7000631515604932";
+    				}
+    			}
+    			// innobe
+    			else	if( provider_id.equals("3") ) {
+    				placeMentId = "";
+    			}
+    			// 今日头条
+    			else	if( provider_id.equals("7") ) {
+    				if( displayType == 3 ) {
+        				placeMentId = "901451822";
+        				}else {
+        					placeMentId = "901451388";
+        				}
+    			}
+    			// 科大讯飞
+    			else	if( provider_id.equals("10") ) {
+    				if( displayType == 3 ) {
+    					placeMentId = "9B3FF3E3654C83C5063DB8A55A857304";
+    				}else	 if( displayType == 4 ) {
+    					placeMentId = "160204CA31459D67D525260102F3017D";
+    				}
+    				else{
+    					placeMentId = "759CA12FB9C31CB04382C9ADDC208A2E";
+    				}
+    			}
+    			
+    			// 网易
+    			else	if( provider_id.equals("11") ) {
+    				placeMentId = "";
+    			}
+    			// 百度
+    			else	if( provider_id.equals("5") ) {
+    			if( displayType == 3 ) {
+					placeMentId = "5847867";
+				}else	if( displayType == 4 ){
+					placeMentId = "5847862";
+				}else {
+					placeMentId = "5847862";
+				}
+    			}
+    		
+    	}
+
+	return placeMentId;
+}
 
 }
