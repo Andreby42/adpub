@@ -80,12 +80,15 @@ public class AdStationlInnerContent extends AdInnerContent {
             List<List<String>> tasksG = New.arrayList();
             
          
-            
+            Map<String,String> map = New.hashMap();
             
             if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
                 Set<Integer> prioritys = New.hashSet();
                 for (TaskModel t : getTasksJ()) {
+                	
+                	map.put(t.getApiName()+"_displayType",t.getDisplayType()+"");
+                	
                     if (!prioritys.contains(t.getPriority())) {
                         List<String> ts = New.arrayList();
                         ts.add(t.getApiName());
@@ -100,7 +103,7 @@ public class AdStationlInnerContent extends AdInnerContent {
                 TasksGroup tasksGroups = new TasksGroup();
                 tasksGroups.setTasks(tasksG);
                 tasksGroups.setTimeouts(ad.timeouts);
-             
+                tasksGroups.setMap(map);
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
                 this.tasksGroup = createOwnAdTask();

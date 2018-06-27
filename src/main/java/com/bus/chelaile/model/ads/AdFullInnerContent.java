@@ -2,6 +2,7 @@ package com.bus.chelaile.model.ads;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,7 @@ public class AdFullInnerContent extends AdInnerContent {
             this.AdWeight = ad.AdWeight;
             this.clickDown = ad.clickDown;
             this.setTasksJ(ad.getTasksJ());
+            Map<String,String> map = New.hashMap();
             List<List<String>> tasksG = New.arrayList();
             if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
 //                Set<Integer> prioritys = New.hashSet();
@@ -79,7 +81,11 @@ public class AdFullInnerContent extends AdInnerContent {
 //                }
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
                 Set<Integer> prioritys = New.hashSet();
+                
                 for (TaskModel t : getTasksJ()) {
+                	
+                	map.put(t.getApiName()+"_displayType",t.getDisplayType()+"");
+                	
                     if (!prioritys.contains(t.getPriority())) {
                         List<String> ts = New.arrayList();
                         ts.add(t.getApiName());
@@ -95,6 +101,7 @@ public class AdFullInnerContent extends AdInnerContent {
                 TasksGroup tasksGroups = new TasksGroup();
                 tasksGroups.setTasks(tasksG);
                 tasksGroups.setTimeouts(ad.timeouts);
+                tasksGroups.setMap(map);
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
                 this.tasksGroup = createOwnAdTask();
