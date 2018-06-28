@@ -259,7 +259,8 @@ public class JsRule extends AbstractController {
             logger.info("traceId is null -- , udid={},s={}, v={}", p.getUdid(), p.getS(), p.getV());
             originJs = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
             originJs = originJs.replace("${TIMEOUTS}", tgs.getTaskGroups().getTasks().toString());
-            return originJs;
+            return replaceJs(originJs, showType, tgs, tag);
+          //  return originJs;
         }
         
         String splashJS = "";
@@ -285,7 +286,13 @@ public class JsRule extends AbstractController {
                 }
             }
         }
-        // 这里要替换placementid,displayType 也要替换成默认值
+        
+        return replaceJs(splashJS, showType, tgs, tag);
+       
+    }
+    
+    private String replaceJs(String splashJS,ShowType showType,TaskEntity tgs, String tag) {
+    	 // 这里要替换placementid,displayType 也要替换成默认值
         String sdk_gdt_placementId = null;
         String sdk_toutiao_placementId = null;
         String sdk_voicead_placementId =null;
@@ -297,7 +304,7 @@ public class JsRule extends AbstractController {
         String sdk_baidu_displayType = null;
         
         Map<String,String> map = null;
-        if( tgs.getTaskGroups().getMap() != null ) {
+        if( tgs != null && tgs.getTaskGroups() != null && tgs.getTaskGroups().getMap() != null ) {
         	map = tgs.getTaskGroups().getMap();
         }else {
         	map = New.hashMap();
@@ -371,7 +378,7 @@ public class JsRule extends AbstractController {
         }
         
         try {
-			logger.info("json={}",JsonBinder.toJson(map, JsonBinder.always));
+			logger.info("json1={}",JsonBinder.toJson(map, JsonBinder.always));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
