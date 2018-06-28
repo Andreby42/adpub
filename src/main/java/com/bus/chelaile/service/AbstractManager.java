@@ -1257,7 +1257,7 @@ public abstract class AbstractManager {
     				if( displayType == 3 ) {
     					placeMentId = "FD95828C09A32D712082DC08D36CC15D";
     				}else{
-    					placeMentId = "FD95828C09A32D712082DC08D36CC15D";
+    					placeMentId = "5CBF4E804C06EBF6EEAF93DC5EA6BBCF";
     				}
     			}
     			// 网易
