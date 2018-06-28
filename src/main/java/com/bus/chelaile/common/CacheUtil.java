@@ -304,14 +304,14 @@ public class CacheUtil {
     	if( traceInfoClient != null ) {
     		traceInfoClient.set(key, -1, value);
     	}
-        //redisAtrace.set(key, -1, value);
+        redisAtrace.set(key, -1, value);
     }
     // 同上
     public static void setToAtrace(String key, String value, int exp) {
     	if( traceInfoClient != null ) {
     		traceInfoClient.set(key, exp, value);
     	}
-        //redisAtrace.set(key, exp, value);
+        redisAtrace.set(key, exp, value);
     }
     
 //	public static Object getActiveOcs(String key) {
