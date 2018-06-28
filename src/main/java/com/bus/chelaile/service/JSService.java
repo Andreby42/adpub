@@ -156,6 +156,7 @@ public class JSService {
     }
 
     public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
+        String a = "ddfs" + "_" + System.currentTimeMillis();
+        System.out.println(a);
     }
 }
