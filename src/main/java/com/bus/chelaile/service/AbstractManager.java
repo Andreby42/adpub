@@ -1099,7 +1099,7 @@ public abstract class AbstractManager {
     				if( displayType == 3 ) {
     					placeMentId = "5846498";
     				}else{
-    					placeMentId = "5846499";
+    					placeMentId = "5826167";
     				}
     			}
     		}else {
@@ -1165,6 +1165,10 @@ public abstract class AbstractManager {
     			else	if( provider_id.equals("11") ) {
     				placeMentId = "0fe897890119007664cfd009556ce283";
     			}
+    			// 百度
+    			else	if( provider_id.equals("5") ) {
+    				placeMentId = "5826171";
+    			}
     			
     		}else {
     			//	广点通
@@ -1227,7 +1231,7 @@ public abstract class AbstractManager {
     				if( displayType == 3 ) {
     					placeMentId = "5846500";
     				}else{
-    					placeMentId = "5846501";
+    					placeMentId = "5826170";
     				}
     			}
     			
@@ -1462,7 +1466,7 @@ public abstract class AbstractManager {
     				}else	if( displayType == 4 ){
     					placeMentId = "5846497";
     				}else {
-    					placeMentId = "5846481";
+    					placeMentId = "5846492";
     				}
     			}
     			
