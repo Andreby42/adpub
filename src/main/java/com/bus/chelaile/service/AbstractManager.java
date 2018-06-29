@@ -1089,7 +1089,7 @@ public abstract class AbstractManager {
     				if( displayType == 3 ) {
     					placeMentId = "901451895";
     				}else{
-    					placeMentId = "901451895";
+    					placeMentId = "901451521";
     				}
     			}
     			// 科大讯飞
