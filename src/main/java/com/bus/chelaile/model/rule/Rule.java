@@ -80,6 +80,10 @@ public class Rule {
 	private int canPubMIUI; // 开屏是否给MIUI投放， 0 不投MIUI， 1 只投MIUI， 2 没有限制
 	private int startMode; // 冷热启动模式控制. 1 只投冷启动， 2 只投热启动。  0 没有限制
 	private int projectClick; // 项目点击次数
+	private int projectTotalClick;
+	private int projectDayClick;
+	private int projectTotalSend;
+	private int projectDaySend;
 
 	protected static final Logger logger = LoggerFactory.getLogger(Rule.class);
 
@@ -1077,21 +1081,47 @@ public class Rule {
         this.startMode = startMode;
     }
 
-    /**
-     * @return the projectClick
-     */
     public int getProjectClick() {
         return projectClick;
     }
 
-    /**
-     * @param projectClick the projectClick to set
-     */
     public void setProjectClick(int projectClick) {
         this.projectClick = projectClick;
     }
+    
+    public int getProjectTotalClick() {
+        return projectTotalClick;
+    }
 
-    // 判断项目点击次数是否达到了
+    public void setProjectTotalClick(int projectTotalClick) {
+        this.projectTotalClick = projectTotalClick;
+    }
+
+    public int getProjectDayClick() {
+        return projectDayClick;
+    }
+
+    public void setProjectDayClick(int projectDayClick) {
+        this.projectDayClick = projectDayClick;
+    }
+
+    public int getProjectTotalSend() {
+        return projectTotalSend;
+    }
+
+    public void setProjectTotalSend(int projectTotalSend) {
+        this.projectTotalSend = projectTotalSend;
+    }
+
+    public int getProjectDaySend() {
+        return projectDaySend;
+    }
+
+    public void setProjectDaySend(int projectDaySend) {
+        this.projectDaySend = projectDaySend;
+    }
+
+    // 判断 单人的项目点击次数是否达到了
     public boolean projectClickOut(String udid, String projectId) {
         if(StringUtils.isEmpty(projectId)) {
             return false;
@@ -1106,4 +1136,33 @@ public class Rule {
         }
         return false;
     }
+    
+    public boolean projectTotalClickOut(String projectId) {
+        int value = CacheUtil.getProjectTotalClick(projectId);
+        if(value >= projectTotalClick)
+            return true;
+        return false;
+    }
+    
+    public boolean projectTotalSendOut(String projectId) {
+        int value = CacheUtil.getProjectTotalSend(projectId);
+        if(value >= projectTotalSend)
+            return true;
+        return false;
+    }
+    
+    public boolean projectDayClickOut(String projectId) {
+        int value = CacheUtil.getProjectDayClick(projectId);
+        if(value >= projectDayClick)
+            return true;
+        return false;
+    }
+    
+    public boolean projectDaySendOut(String projectId) {
+        int value = CacheUtil.getProjectDaySend(projectId);
+        if(value >= projectDaySend)
+            return true;
+        return false;
+    }
+
 }

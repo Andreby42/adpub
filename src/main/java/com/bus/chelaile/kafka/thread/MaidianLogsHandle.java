@@ -106,21 +106,26 @@ public class MaidianLogsHandle {
             }
             //            logger.info("点击埋点得到点击日志： udid={}, advId={}", udid, advId);
 
-            // 存储广告点击次数到redis
-            QueueObject queueobj = new QueueObject();
-            queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
-            Queue.set(queueobj);
+            recordClick(udid, advId);
 
-            // 存储用户点击广告到ocs中
-            InfoStreamHelp.setClickToRecord(advId, udid);
-            
-            // 存储项目点击
-            String projectId = StaticAds.allAds.get(advId).getProjectId();
-            if(StringUtils.isNotBlank(projectId)) {
-                String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
-                CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
-            }
+        }
+    }
 
+    public static void recordClick(String udid, String advId) {
+        // 存储广告点击次数到redis
+        QueueObject queueobj = new QueueObject();
+        queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
+        Queue.set(queueobj);
+
+        // 存储用户点击广告到ocs中
+        InfoStreamHelp.setClickToRecord(advId, udid);
+        
+        // 存储项目点击
+        String projectId = StaticAds.allAds.get(advId).getProjectId();
+        if(StringUtils.isNotBlank(projectId)) {
+            String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
+            CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
+            CacheUtil.incrProjectClick(projectId, 1);
         }
     }
 

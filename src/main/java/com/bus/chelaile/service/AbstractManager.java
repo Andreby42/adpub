@@ -271,6 +271,10 @@ public abstract class AbstractManager {
 
 			// 每分钟发送量
 			adTimeCounts(cacheRecord, advParam.getUdid(), adMap.get(adId));
+			
+			AdContent advContent = StaticAds.allAds.get(adId);
+			if(StringUtils.isNoneBlank(advContent.getProjectId()))
+			    CacheUtil.incrProjectSend(advContent.getProjectId(), 1);
 		}
 	}
 
@@ -383,10 +387,6 @@ public abstract class AbstractManager {
 			return false;
 		}
 		if (rule.hasPlatforms() && !rule.isPlatformMatch(advParam.getS(), advParam.getH5Src())) {
-			// logger.info("isPlatformMatch return
-			// false,ruleId={},s={},src={},udid={},userId={}", rule.getRuleId(),
-			// advParam.getS(),
-			// advParam.getH5Src(), advParam.getUdid(), advParam.getUserId());
 			return false;
 		}
 		// 开屏和浮层的老接口preloadAds需要返回两天的数据
@@ -394,29 +394,19 @@ public abstract class AbstractManager {
 		if (queryParam.isOldMany()) {
 			// 当前日期大于结束日期
 			if (rule.isEndDateOverdue()) {
-				// logger.info("isEndDateOverdue return false,ruleId={},udid={}",
-				// rule.getRuleId(), advParam.getUdid());
 				return false;
 			}
 		} else {
 			// 是否过期
 			if (rule.isOverdue()) {
-				// logger.info("isOverdue return false,ruleId={},udid={}", rule.getRuleId(),
-				// advParam.getUdid());
 				return false;
 			}
 		}
 
 		if (rule.hasCities() && !rule.isCityMatch(advParam.getCityId())) {
-			// logger.info("isCityMatch return false,ruleId={},cityId={},udid={}",
-			// rule.getRuleId(), advParam.getCityId(),
-			// advParam.getUdid());
 			return false;
 		}
 		if (rule.hasVersions() && !rule.isVersionMatch(advParam.getV())) {
-			// logger.info("isVersionMatch return false,ruleId={},version={},udid={}",
-			// rule.getRuleId(), advParam.getV(),
-			// advParam.getUdid());
 			return false;
 		}
 		// 开屏是否投给MIUI，投且只投
@@ -434,19 +424,9 @@ public abstract class AbstractManager {
 		}
 
 		if (rule.hasNetStatus() && !rule.isNetStatusMatch(advParam.getNw())) {
-			// logger.info("hasNetStatus return false,ruleId={},nw={},udid={}",
-			// rule.getRuleId(), advParam.getNw(),
-			// advParam.getUdid());
 			return false;
 		}
 		if (!rule.isUserTypeMatch(advParam)) {
-			// logger.info("isUserTypeMatch return false,ruleId={},udid={}",
-			// rule.getRuleId(), advParam.getUdid());
-			return false;
-		}
-
-		if (rule.getProjectClick() > 0 && rule.projectClickOut(advParam.getUdid(), ad.getProjectId())) {
-			logger.info("projectClick return false, udid={}, ruleId={}", advParam.getUdid(), rule.getRuleId());
 			return false;
 		}
 
@@ -466,9 +446,6 @@ public abstract class AbstractManager {
 
 		// 站点名匹配
 		if (!rule.isStationMatch(advParam.getStnName())) {
-			// logger.info("isStationMatch return false,ruleId={},stnName={},udid={}",
-			// rule.getRuleId(),
-			// advParam.getStnName(), advParam.getUdid());
 			return false;
 		}
 
@@ -487,17 +464,47 @@ public abstract class AbstractManager {
 
 		// 每个人点击次数判断
 		if (rule.getIsClickEndPush() > 0 && cacheRecord.hasClicked(ad.getId())) { // 点击后不再投放
-			logger.info("hasClicked ad return false, ruleId={}, udid={}", rule.getRuleId(), advParam.getUdid());
+			logger.info("hasClicked ad return false, ruleId={},advId={}, udid={}", rule.getRuleId(), ad.getId(), advParam.getUdid());
 			return false;
 		}
 
 		if (rule.isOverUvCount(advParam.getUdid())) {
 			// 如果uvlimit次数已经饱和,查看该用户是否投放过,没投放过就返回了
 			if (!cacheRecord.isSendUv(ad.getId())) {
-				logger.info("isOverUvCount return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
+				logger.info("isOverUvCount return false,ruleId={},advId={}, udid={}", rule.getRuleId(), ad.getId(), advParam.getUdid());
 				return false;
 			}
 		}
+		
+		// 项目控制
+        if (StringUtils.isNoneBlank(ad.getProjectId())) {
+            if (rule.getProjectClick() > 0 && rule.projectClickOut(advParam.getUdid(), ad.getProjectId())) {
+                logger.info("projectClick return false, udid={}, advId={}, ruleId={}", advParam.getUdid(), ad.getId(), rule.getRuleId());
+                return false;
+            }
+
+            if (rule.getProjectTotalClick() > 0 && rule.projectTotalClickOut(ad.getProjectId())) {
+                logger.info("ProjectTotalClick return false, udid={}, advId={},  ruleId={}", advParam.getUdid(), ad.getId(), rule.getRuleId());
+                return false;
+            }
+
+            if (rule.getProjectDayClick() > 0 && rule.projectDayClickOut(ad.getProjectId())) {
+                logger.info("ProjectDayClick return false, udid={}, advId={},  ruleId={}", advParam.getUdid(), ad.getId(), rule.getRuleId());
+                return false;
+            }
+
+            if (rule.getProjectTotalSend() > 0 && rule.projectTotalSendOut(ad.getProjectId())) {
+                logger.info("ProjectTotalSend return false, udid={}, advId={},  ruleId={}", advParam.getUdid(), ad.getId(), rule.getRuleId());
+                return false;
+            }
+
+            if (rule.getProjectDaySend() > 0 && rule.projectDaySendOut(ad.getProjectId())) {
+                logger.info("ProjectDaySend return false, udid={}, advId={},  ruleId={}", advParam.getUdid(), ad.getId(), rule.getRuleId());
+                return false;
+            }
+        }
+		
+		
 
 		// 判断自动黑名单
 		if (rule.getUvLimit() > 0 && cacheRecord.isDisplayUv(ad.getId(), rule.getAutoBlackList())) {
@@ -681,6 +688,9 @@ public abstract class AbstractManager {
 					cacheRecord.setAdToUvMap(adId);
 				}
 			}
+			AdContent advContent = StaticAds.allAds.get(adId);
+			if(StringUtils.isNoneBlank(advContent.getProjectId()))
+			    CacheUtil.incrProjectSend(advContent.getProjectId(), 1);
 		}
 
 		if (showType == ShowType.LINE_DETAIL) {

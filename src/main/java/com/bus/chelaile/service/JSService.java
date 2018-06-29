@@ -112,7 +112,8 @@ public class JSService {
                 if (entity.getTasksGroup() != null) {
                     ids += entity.getId() + ",";
                     tasks.addAll(entity.getTasksGroup().getTasks());
-                    times = entity.getTasksGroup().getTimeouts();
+                    if(times.size() == 0)
+                        times = entity.getTasksGroup().getTimeouts();
                     
                     if( entity.getTasksGroup() != null && entity.getTasksGroup().getMap() != null ) {
                     	for (Map.Entry<String, String> entry : entity.getTasksGroup().getMap().entrySet()) {

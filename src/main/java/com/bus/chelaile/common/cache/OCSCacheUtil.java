@@ -231,4 +231,22 @@ public class OCSCacheUtil implements ICache{
     public Set<String> allKeys(String pattern) {
         return null;
     }
+
+    @Override
+    public Long setHashSetValue(String key, String field, String value) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getHashSetValue(String key, String field) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void addHashSetValue(String yJkey, String field, int j) {
+        // TODO Auto-generated method stub
+        
+    }
 }

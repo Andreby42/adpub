@@ -529,6 +529,9 @@ public class RedisCacheImplUtil implements ICache{
 		}
 		return i;
 	}
+	
+	
+	
 	public static long DecValue(String key) {
 		JedisPool pool = null;
 		Jedis conn = null;
@@ -646,53 +649,6 @@ public class RedisCacheImplUtil implements ICache{
         return ret;
     }
 
-    public  String getHashSetValue(String key, String field) {
-        JedisPool pool = null;
-        Jedis conn = null;
-        String result = null;
-        try {
-            pool = getPool();
-            conn = pool.getResource();
-            result = conn.hget(key, field);
-
-            log.debug("Redis-Hget: Key={}, field={}, value={}", key, field, result);
-        } catch (Exception e) {
-            log.error("Error occur in Redis.Hget, key={}, error message: {}", key, e.getMessage());
-            if (pool!=null && conn!=null) {
-                pool.returnResource(conn);
-                pool = null;
-                conn = null;
-            }
-        } finally {
-            if (pool!=null && conn!=null)
-                pool.returnResource(conn);
-        }
-        return result;
-    }
-
-    public  Long setHashSetValue(String key, String field, String value) {
-        JedisPool pool = null;
-        Jedis conn = null;
-        Long result = null;
-        try {
-            pool = getPool();
-            conn = pool.getResource();
-            result = conn.hset(key, field, value);
-
-            log.debug("Redis-Hset: Key={}, field={}, value={}", key, field, result);
-        } catch (Exception e) {
-            log.error("Error occur in Redis.Hset, key={}, error message: {}", key, e.getMessage());
-            if (pool!=null && conn!=null) {
-                pool.returnResource(conn);
-                pool = null;
-                conn = null;
-            }
-        } finally {
-            if (pool!=null && conn!=null)
-                pool.returnResource(conn);
-        }
-        return result;
-    }
 
 	@Override
 	public void set(String key, int exp, Object obj) {
@@ -838,6 +794,79 @@ public class RedisCacheImplUtil implements ICache{
         }
         return result;
     }
+	
+	 public  String getHashSetValue(String key, String field) {
+	        JedisPool pool = null;
+	        Jedis conn = null;
+	        String result = null;
+	        try {
+	            pool = getPool();
+	            conn = pool.getResource();
+	            result = conn.hget(key, field);
+
+	            log.debug("Redis-Hget: Key={}, field={}, value={}", key, field, result);
+	        } catch (Exception e) {
+	            log.error("Error occur in Redis.Hget, key={}, error message: {}", key, e.getMessage());
+	            if (pool!=null && conn!=null) {
+	                pool.returnResource(conn);
+	                pool = null;
+	                conn = null;
+	            }
+	        } finally {
+	            if (pool!=null && conn!=null)
+	                pool.returnResource(conn);
+	        }
+	        return result;
+	    }
+
+	    public  Long setHashSetValue(String key, String field, String value) {
+	        JedisPool pool = null;
+	        Jedis conn = null;
+	        Long result = null;
+	        try {
+	            pool = getPool();
+	            conn = pool.getResource();
+	            result = conn.hset(key, field, value);
+
+	            log.debug("Redis-Hset: Key={}, field={}, value={}", key, field, result);
+	        } catch (Exception e) {
+	            log.error("Error occur in Redis.Hset, key={}, error message: {}", key, e.getMessage());
+	            if (pool!=null && conn!=null) {
+	                pool.returnResource(conn);
+	                pool = null;
+	                conn = null;
+	            }
+	        } finally {
+	            if (pool!=null && conn!=null)
+	                pool.returnResource(conn);
+	        }
+	        return result;
+	    }
+	
+	public void addHashSetValue(String key, String field, int value) {
+        JedisPool pool = null;
+        Jedis conn = null;
+        Long result = null;
+        try {
+            pool = getPool();
+            conn = pool.getResource();
+            result = conn.hincrBy(key, field, value);
+            
+            log.debug("Redis-Hset: Key={}, field={}, value={}", key, field, result);
+        } catch (Exception e) {
+            log.error("Error occur in Redis.Hset, key={}, error message: {}", key, e.getMessage());
+            if (pool != null && conn != null) {
+                pool.returnResource(conn);
+                pool = null;
+                conn = null;
+            }
+        } finally {
+            if (pool != null && conn != null)
+                pool.returnResource(conn);
+        }
+        return;
+    }
+	
 	
 	public static void main(String[] args) {
 	    JedisPoolConfig config = new JedisPoolConfig();

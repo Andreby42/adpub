@@ -10,20 +10,16 @@ package com.bus.chelaile.kafka;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.AdvCache;
-import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.service.RecordManager;
 import com.bus.chelaile.service.StaticAds;
-import com.bus.chelaile.service.UserHelper;
-import com.bus.chelaile.thread.Queue;
-import com.bus.chelaile.thread.model.QueueObject;
 import com.bus.chelaile.util.New;
 
 public class InfoStreamHelp {
@@ -69,20 +65,23 @@ public class InfoStreamHelp {
 				return;
 			}
 			
-			// 广告总点击次数
-			QueueObject queueobj = new QueueObject();
-			queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
-			Queue.set(queueobj);
+			MaidianLogsHandle.recordClick(udid, advId);
 			
-			// 存储用户点击广告到ocs中
-			setClickToRecord(advId, udid);
-			
-			// 存储项目点击
-            String projectId = StaticAds.allAds.get(advId).getProjectId();
-            if(StringUtils.isNotBlank(projectId)) {
-                String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
-                CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
-            }
+//			// 广告总点击次数
+//			QueueObject queueobj = new QueueObject();
+//			queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
+//			Queue.set(queueobj);
+//			
+//			// 存储用户点击广告到ocs中
+//			setClickToRecord(advId, udid);
+//			
+//			// 存储项目点击
+//            String projectId = StaticAds.allAds.get(advId).getProjectId();
+//            if(StringUtils.isNotBlank(projectId)) {
+//                String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
+//                CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
+//                CacheUtil.incrProjectClick(projectId, 1);
+//            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,29 +119,29 @@ public class InfoStreamHelp {
 		}
 	}
 	
-	/*
-	 * 解析车辆详情页信息
-	 */
-	private static void analysisLineDetail(String line) {
-		String udid = null;
-		int beginIndex = line.indexOf("udid=");
-		if(beginIndex == -1) {
-			return;
-		}
-		int endIndex = line.substring(beginIndex + 5).indexOf("&");
-		if(endIndex == -1) {
-			udid = line.substring(beginIndex + 5).split(" ")[0];
-		} else {
-			udid = line.substring(beginIndex + 5).substring(0, endIndex);
-		}
-		
-		if(UserHelper.isNewUser(udid, null, null)) {		// 7天内新增用户的访问详情页记录
-			String key = AdvCache.getBusesDetailKey(udid);
-			if(CacheUtil.get(key) == null) {
-				CacheUtil.setToCommonOcs(key, Constants.SEVEN_DAY_TIME, System.currentTimeMillis());
-			}
-		}
-	}
+//	/*
+//	 * 解析车辆详情页信息
+//	 */
+//	private static void analysisLineDetail(String line) {
+//		String udid = null;
+//		int beginIndex = line.indexOf("udid=");
+//		if(beginIndex == -1) {
+//			return;
+//		}
+//		int endIndex = line.substring(beginIndex + 5).indexOf("&");
+//		if(endIndex == -1) {
+//			udid = line.substring(beginIndex + 5).split(" ")[0];
+//		} else {
+//			udid = line.substring(beginIndex + 5).substring(0, endIndex);
+//		}
+//		
+//		if(UserHelper.isNewUser(udid, null, null)) {		// 7天内新增用户的访问详情页记录
+//			String key = AdvCache.getBusesDetailKey(udid);
+//			if(CacheUtil.get(key) == null) {
+//				CacheUtil.setToCommonOcs(key, Constants.SEVEN_DAY_TIME, System.currentTimeMillis());
+//			}
+//		}
+//	}
 
 	
 	/*
@@ -171,7 +170,7 @@ public class InfoStreamHelp {
 	}
 	
 	public static void main(String[] args){
-		String line = "<134>Jul  5 19:22:51 web1 nginx: 106.91.185.21 |# - |# 2017-07-05 19:22:51 |# GET /bus/line!lineDetail.action?idfa=99501C17-3547-494E-BF7C-5E58E1DCB2E2&geo_type=wgs&language=1&geo_lat=29.633844&geo_lng=106.572242&sv=9.1&s=IOS&deviceType=iPhone6s&stats_referer=searchHistory&lchsrc=icon&lineName=153&screenHeight=1334&stats_order=1-9&lng=106.572242&pushkey=&v=5.32.1&udid=d41d8cd98f00b204e9800998ecf8427ec991ae25&stats_act=enter&sign=mXfNZaM0IoKXzJFiCK18tQ==&userAgent=Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%209_1%20like%20Mac%20OS%20X)%20AppleWebKit/601.1.46%20(KHTML,%20like%20Gecko)%20Mobile/13B143&cityState=0&nw=4G&mac=&lineNo=153&wifi_open=1&geo_lac=30.000000&lat=29.633844&gpstype=wgs&cityId=003&push_open=0&vc=10371&userId= HTTP/1.1 |# 200 |# 0.108 |# 1760 |# - |# lite/5.32.1 (iPhone; iOS 9.1; Scale/2.00) |# - |# api.chelaile.net.cn |# 10.168.197.211:6080 |# 200 |# 1499253771438f8f0082366e4ace5223 |# 0.108 |# https";
+//		String line = "<134>Jul  5 19:22:51 web1 nginx: 106.91.185.21 |# - |# 2017-07-05 19:22:51 |# GET /bus/line!lineDetail.action?idfa=99501C17-3547-494E-BF7C-5E58E1DCB2E2&geo_type=wgs&language=1&geo_lat=29.633844&geo_lng=106.572242&sv=9.1&s=IOS&deviceType=iPhone6s&stats_referer=searchHistory&lchsrc=icon&lineName=153&screenHeight=1334&stats_order=1-9&lng=106.572242&pushkey=&v=5.32.1&udid=d41d8cd98f00b204e9800998ecf8427ec991ae25&stats_act=enter&sign=mXfNZaM0IoKXzJFiCK18tQ==&userAgent=Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%209_1%20like%20Mac%20OS%20X)%20AppleWebKit/601.1.46%20(KHTML,%20like%20Gecko)%20Mobile/13B143&cityState=0&nw=4G&mac=&lineNo=153&wifi_open=1&geo_lac=30.000000&lat=29.633844&gpstype=wgs&cityId=003&push_open=0&vc=10371&userId= HTTP/1.1 |# 200 |# 0.108 |# 1760 |# - |# lite/5.32.1 (iPhone; iOS 9.1; Scale/2.00) |# - |# api.chelaile.net.cn |# 10.168.197.211:6080 |# 200 |# 1499253771438f8f0082366e4ace5223 |# 0.108 |# https";
 		
 //		analysisLineDetail(line);
 		

@@ -19,7 +19,19 @@ public class AdvCache {
 	private static final String CSHOW_KEY = "bus#cshow#";
 	private static final String SEND_LINE_FEED = "SEND_LINEFEED_LOG_";
 	private static final String PROJECT_CLICK_KEY = "PROJECT_CLICK_KEY_";
-
+	
+	//项目总次数key。以及各自的field
+    // 类似：PROJECT_2006S1 
+    //             TOTAL_SEND : 1000
+    //             TOTAL_CLICK: 100
+    //             2018-06-28_DAY_SEND: 900
+	//             2018-06-28_DAY_CLICK: 900
+    private static final String PROJECT_KEY = "PROJECT";
+    private static final String TOTAL_SEND = "TOTAL_SEND";
+    private static final String TOTAL_CLICK = "TOTAL_CLICK";
+    private static final String DAY_SEND = "_DAY_SEND";
+    private static final String DAY_CLICK = "_DAY_CLICK";
+    
 	protected static final Logger logger = LoggerFactory
 			.getLogger(AdvCache.class);
 
@@ -382,5 +394,21 @@ public class AdvCache {
     public static String getProjectClickKey(String udid, String projectId) {
         return PROJECT_CLICK_KEY + projectId + "_" + udid;
     }
-	
+    
+    // 总项目key
+    public static String getProjectKey(String projectId) {
+        return PROJECT_KEY + projectId;
+    }
+    public static String getProjectTotalSendKey() {
+        return TOTAL_SEND;
+    }
+    public static String getProjectDaySendKey() {
+        return DateUtil.getTodayStr("yyyy-MM-dd") + DAY_SEND;
+    }
+    public static String getProjectTotalClickKey() {
+        return TOTAL_CLICK;
+    }
+    public static String getProjectDayClickKey() {
+        return DateUtil.getTodayStr("yyyy-MM-dd") + DAY_CLICK;
+    }
 }
