@@ -452,7 +452,7 @@ var sdk_ifly = {
         return {}
     },
 
-    filter: function(ad) {
+    filter: function(list) {
 		var ad = list && list[0];
         if (!ad) return null;
         
