@@ -303,6 +303,12 @@ public class JsRule extends AbstractController {
 		} else {
 			map = New.hashMap();
 		}
+		
+		try {
+			logger.info("map={}", JsonBinder.toJson(map, JsonBinder.always));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 		// 广点通
 		sdk_gdt_displayType = map.get("sdk_gdt_displayType");
 		if (sdk_gdt_displayType != null) {
