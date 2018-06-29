@@ -204,6 +204,9 @@ public class StationAdsManager extends AbstractManager {
         		res.getBannerInfo().setName(data.getName());
         		res.setH5Url( data.getH5Url() );
         		
+        	}else {
+        		logger.info("获取美团数据为空");
+        		return null;
         	}
         }
       

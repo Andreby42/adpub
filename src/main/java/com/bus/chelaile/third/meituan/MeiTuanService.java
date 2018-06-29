@@ -77,10 +77,11 @@ public class MeiTuanService {
 		
 		dealsMt value = mt.getDeals().get(result);
 
-		logger.info("美团,res.title={},res.link={},h5Url={}", data.getName(), data.getDeepLink(), data.getH5Url());
+		
 
 		data.setName(value.getDescription());
 
+		logger.info("美团,res.title={},res.link={},h5Url={}", data.getName(), data.getDeepLink(), data.getH5Url());
 		return data;
 
 	}
@@ -115,7 +116,7 @@ public class MeiTuanService {
 
 		if (mc.getPoi() == null || mc.getPoi().size() == 0) {
 			logger.error("queryUrl={}",queryUrl);
-			logger.error("udid=" + ap.getUdid() + ",获取内容为空,code={}", mc.getCode());
+			logger.error("udid=" + ap.getUdid() + ",获取内容为空={}", entity);
 			return null;
 		}
 
