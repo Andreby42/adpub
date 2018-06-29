@@ -351,6 +351,25 @@ public class JsRule extends AbstractController {
 			map.put("sdk_ifly_aid", "1");
 			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
 		}
+		
+		
+		String sdk_ifly_displayType = map.get("sdk_ifly_displayType");
+		if (sdk_ifly_displayType != null) {
+			map.put("sdk_voicead_displayType", sdk_ifly_displayType);
+			int type = Integer.parseInt(sdk_ifly_displayType);
+			sdk_voicead_placementId = getPlaceMentId(showType, "10", type);
+			map.put("sdk_voicead_placementId", sdk_voicead_placementId);
+			map.put("sdk_voicead_aid", type + "");
+			map.put("sdk_ifly_aid", type + "");
+			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
+		} else {
+			map.put("sdk_voicead_displayType", "1");
+			sdk_voicead_placementId = getPlaceMentId(showType, "10", 1);
+			map.put("sdk_voicead_placementId", sdk_voicead_placementId);
+			map.put("sdk_voicead_aid", "1");
+			map.put("sdk_ifly_aid", "1");
+			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
+		}
 
 		// baidu
 		sdk_baidu_displayType = map.get("sdk_baidu_displayType");
@@ -640,7 +659,7 @@ public class JsRule extends AbstractController {
 				if (displayType == 3) {
 					placeMentId = "5847849";
 				} else {
-					placeMentId = "5847849";
+					placeMentId = "5826174";
 				}
 			}
 
