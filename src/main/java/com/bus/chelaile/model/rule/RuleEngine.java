@@ -199,7 +199,11 @@ public class RuleEngine {
             rule.setScreenHeight(getChildAsInt(rInfo, "screenHeight"));
             rule.setCanPubMIUI(getChildAsInt(rInfo, "canPubMIUI")); // 开屏是否开启MIUI
             rule.setStartMode(getChildAsInt(rInfo, "startMode")); // 冷热启动模式控制
-            rule.setProjectClick(getChildAsInt(rInfo, "projectClick")); // 项目点击次数控制
+            rule.setProjectClick(getChildAsInt(rInfo, "projectClick")); // 项目 次数控制
+            rule.setProjectTotalClick(getChildAsInt(rInfo, "projectTotalClick")); // 
+            rule.setProjectTotalSend(getChildAsInt(rInfo, "projectTotalSend")); // 
+            rule.setProjectDaySend(getChildAsInt(rInfo, "projectDaySend")); //
+            rule.setProjectDayClick(getChildAsInt(rInfo, "projectDayClick")); //
             List<Position> positions = parseGpsList(rInfo);
             if (positions != null && positions.size() > 0) {
             	rule.setGpsList(positions);

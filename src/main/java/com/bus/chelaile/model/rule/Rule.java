@@ -1130,6 +1130,7 @@ public class Rule {
         String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
         String value = (String) CacheUtil.getFromRedis(projectClickKey);
         if (value != null) {
+            logger.info("projectNumControl, projectId={}, projectClick={}, realProjectClick={}", projectId, projectClick, value);
             if (Integer.parseInt(value) >= projectClick) {
                 return true;
             }
@@ -1139,6 +1140,7 @@ public class Rule {
     
     public boolean projectTotalClickOut(String projectId) {
         int value = CacheUtil.getProjectTotalClick(projectId);
+        logger.info("projectNumControl, projectId={}, projectTotalClick={}, realprojectTotalClick={}", projectId, projectTotalClick, value);
         if(value >= projectTotalClick)
             return true;
         return false;
@@ -1146,6 +1148,7 @@ public class Rule {
     
     public boolean projectTotalSendOut(String projectId) {
         int value = CacheUtil.getProjectTotalSend(projectId);
+        logger.info("projectNumControl, projectId={}, projectTotalSend={}, realprojectTotalSend={}", projectId, projectTotalSend, value);
         if(value >= projectTotalSend)
             return true;
         return false;
@@ -1153,6 +1156,7 @@ public class Rule {
     
     public boolean projectDayClickOut(String projectId) {
         int value = CacheUtil.getProjectDayClick(projectId);
+        logger.info("projectNumControl, projectId={}, projectDayClick={}, realprojectDayClick={}", projectId, projectDayClick, value);
         if(value >= projectDayClick)
             return true;
         return false;
@@ -1160,6 +1164,7 @@ public class Rule {
     
     public boolean projectDaySendOut(String projectId) {
         int value = CacheUtil.getProjectDaySend(projectId);
+        logger.info("projectNumControl, projectId={}, projectDaySend={}, realprojectDaySend={}", projectId, projectDaySend, value);
         if(value >= projectDaySend)
             return true;
         return false;
