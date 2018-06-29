@@ -272,8 +272,8 @@ public abstract class AbstractManager {
 			// 每分钟发送量
 			adTimeCounts(cacheRecord, advParam.getUdid(), adMap.get(adId));
 			
-			AdContent advContent = StaticAds.allAds.get(adId);
-			if(StringUtils.isNoneBlank(advContent.getProjectId()))
+			AdContent advContent = StaticAds.allAds.get(String.valueOf(adId));
+			if(advContent != null && StringUtils.isNoneBlank(advContent.getProjectId()))
 			    CacheUtil.incrProjectSend(advContent.getProjectId(), 1);
 		}
 	}
@@ -688,8 +688,8 @@ public abstract class AbstractManager {
 					cacheRecord.setAdToUvMap(adId);
 				}
 			}
-			AdContent advContent = StaticAds.allAds.get(adId);
-			if(StringUtils.isNoneBlank(advContent.getProjectId()))
+			AdContent advContent = StaticAds.allAds.get(String.valueOf(adId));
+			if(advContent != null && StringUtils.isNoneBlank(advContent.getProjectId()))
 			    CacheUtil.incrProjectSend(advContent.getProjectId(), 1);
 		}
 
