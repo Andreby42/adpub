@@ -167,13 +167,13 @@ public class BusAdvActionV2 extends AbstractController {
         AdvParam advParam = getActionParam(request);
 //        String sitePlace = request.getParameter("sitePlace");
 //        
-        ThirdAdData data = YoudaoService.getYouDaoData(advParam, ShowType.OPEN_SCREEN, "");
-        ThirdAdData data1 = KDXFService.getKDXF(advParam, ShowType.OPEN_SCREEN);
-        
-        logger.info("有道：data={}", JSONObject.toJSONString(data));
-        logger.info("科大讯飞, data1={}", JSONObject.toJSONString(data1));
-        
-        logger.info("js_str={}", JSONObject.toJSONString(StaticAds.JS_FILE_STR));
+//        ThirdAdData data = YoudaoService.getYouDaoData(advParam, ShowType.OPEN_SCREEN, "");
+//        ThirdAdData data1 = KDXFService.getKDXF(advParam, ShowType.OPEN_SCREEN);
+//        
+//        logger.info("有道：data={}", JSONObject.toJSONString(data));
+//        logger.info("科大讯飞, data1={}", JSONObject.toJSONString(data1));
+//        
+//        logger.info("js_str={}", JSONObject.toJSONString(StaticAds.JS_FILE_STR));
         
 //        String s ="";
 //        if(sitePlace.equals("banner")) {

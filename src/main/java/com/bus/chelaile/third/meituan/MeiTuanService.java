@@ -13,40 +13,50 @@ import org.slf4j.LoggerFactory;
 
 public class MeiTuanService {
 
-	private static final String url = "http://openapi.meituan.com/poi/search?appkey=139244d8feda47288c25c57746a32ed2550&limit=30&dist=1000&orderby=rating:desc&offset=0&query=美食&deal=true";
+	private static final String url = "http://openapi.meituan.com/poi/search?appkey=139244d8feda47288c25c57746a32ed2550&limit=10&dist=1000&orderby=rating:desc&offset=0&query=美食&deal=true";
 
 	private static final Logger logger = LoggerFactory.getLogger(MeiTuanService.class);
 
 	public static MeituanData getContext(AdvParam ap) {
-		
-		String key = getCachekey(ap.getLineId(), ap.getStnOrder(),ap.getS());
-		
+
+		String key = getCachekey(ap.getLineId(), ap.getStnOrder(), ap.getS());
+
 		mtContext mc = null;
-		
-		if( key != null ) {
+
+		if (key != null) {
 			Object obj = CacheUtil.get(key);
-			if( obj != null ) {
-				logger.info("cache={}",(String)obj);
+			if (obj != null) {
+				logger.info("cache={}", (String) obj);
 				try {
-					mc = JsonBinder.fromJson((String)obj, mtContext.class, JsonBinder.nonNull);
-				}catch( Exception e ) {
-					logger.error("key=" + key +",value=" + (String)obj + "e:" + e.getMessage(), e);
+					mc = JsonBinder.fromJson((String) obj, mtContext.class, JsonBinder.nonNull);
+				} catch (Exception e) {
+					logger.error("key=" + key + ",value=" + (String) obj + "e:" + e.getMessage(), e);
 				}
-				
+
 			}
 		}
-		
-		if( mc == null ) {
+
+		if (mc == null) {
 			mc = getMtContext(ap);
 		}
-		
-		if( mc == null ) {
+
+		if (mc == null) {
 			return null;
 		}
 		MeituanData data = new MeituanData();
 
 		java.util.Random random = new java.util.Random();// 定义随机类
-		int result = random.nextInt(mc.getPoi().size());// 返回[0,10)集合中的整数，注意不包括10
+		int result = 0;
+		int size = mc.getPoi().size();
+		if( size == 0 ) {
+			return null;
+		}
+		try {
+			result = random.nextInt(size);// 返回[0,10)集合中的整数，注意不包括10
+		} catch (Exception e) {
+			logger.error("size={}", size);
+			logger.error(e.getMessage(), e);
+		}
 
 		poiMt mt = mc.getPoi().get(result);
 		data.setDeepLink(mt.getDeeplinkurl());
@@ -55,11 +65,20 @@ public class MeiTuanService {
 		if (mt == null || mt.getDeals() == null || mt.getDeals().size() == 0) {
 			return null;
 		}
-		result = random.nextInt(mt.getDeals().size());
+		random = new java.util.Random();
+		size = mt.getDeals().size();
+		try {
+			result = random.nextInt(size);
+		} catch (Exception e) {
+			logger.error("size={}", size);
+			logger.error(e.getMessage(), e);
+		}
+		
+		
 		dealsMt value = mt.getDeals().get(result);
 
-		logger.info("美团,res.title={},res.link={},h5Url={}",data.getName(),data.getDeepLink(),data.getH5Url());
-		
+		logger.info("美团,res.title={},res.link={},h5Url={}", data.getName(), data.getDeepLink(), data.getH5Url());
+
 		data.setName(value.getDescription());
 
 		return data;
@@ -67,14 +86,14 @@ public class MeiTuanService {
 	}
 
 	private static mtContext getMtContext(AdvParam ap) {
-		String queryUrl = url + "&pos=" + ap.getLat() + "," + ap.getLng()+"&devicetype=";
+		String queryUrl = url + "&pos=" + ap.getLat() + "," + ap.getLng() + "&devicetype=";
 
-		if( ap.getS().equalsIgnoreCase("ios") ) {
+		if (ap.getS().equalsIgnoreCase("ios")) {
 			queryUrl += "ios";
-		}else {
+		} else {
 			queryUrl += "android";
 		}
-		
+
 		String entity = null;
 
 		try {
@@ -95,24 +114,25 @@ public class MeiTuanService {
 		}
 
 		if (mc.getPoi() == null || mc.getPoi().size() == 0) {
+			logger.error("queryUrl={}",queryUrl);
 			logger.error("udid=" + ap.getUdid() + ",获取内容为空,code={}", mc.getCode());
 			return null;
 		}
-		
+
 		List<poiMt> pois = New.arrayList();
-		
-		for( poiMt mt : mc.getPoi() ) {
-			if( mt.getDeals() != null && mt.getDeals().size() > 0 ) {
+
+		for (poiMt mt : mc.getPoi()) {
+			if (mt.getDeals() != null && mt.getDeals().size() > 0) {
 				pois.add(mt);
 			}
 		}
-		
+
 		mc.setPoi(pois);
-		
+
 		try {
 			String value = JsonBinder.toJson(mc, JsonBinder.nonNull);
-			String key = getCachekey(ap.getLineId(), ap.getStnOrder(),ap.getS());
-			if( key == null ) {
+			String key = getCachekey(ap.getLineId(), ap.getStnOrder(), ap.getS());
+			if (key == null) {
 				return mc;
 			}
 			CacheUtil.setToRedis(key, 3600, value);
@@ -123,8 +143,8 @@ public class MeiTuanService {
 		return mc;
 	}
 
-	private static String getCachekey(String lineId, int stnOrder,String s) {
-		if( lineId == null ) {
+	private static String getCachekey(String lineId, int stnOrder, String s) {
+		if (lineId == null) {
 			return null;
 		}
 		return "stationMTKey:" + lineId + "," + stnOrder + ",";
@@ -132,13 +152,20 @@ public class MeiTuanService {
 
 	public static void main(String[] args) {
 		MeiTuanService mt = new MeiTuanService();
-		   CacheUtil.initClient();
+		CacheUtil.initClient();
 		AdvParam ap = new AdvParam();
 		ap.setLng(116.43323);
 		ap.setLat(39.994337);
 		ap.setLineId("2");
 		ap.setStnOrder(1);
-		mt.getContext(ap);
+		//mt.getContext(ap);
+		
+		java.util.Random random = new java.util.Random();
+		for( int i = 0;i < 100;i++ ) {
+			
+			System.out.println(random.nextInt(3));	
+		}
+		
 		// entity =
 		// HttpUtils.get("http://openapi.meituan.com/poi/search?appkey=139244d8feda47288c25c57746a32ed2550&limit=30&dist=1000&orderby=rating:desc&offset=0&query=美食&deal=true&pos=39.994337,116.43323",
 		// "utf-8");
@@ -172,6 +199,7 @@ class poiMt {
 	List<dealsMt> deals;
 	String deeplinkurl;
 	String iurl;
+
 	public List<dealsMt> getDeals() {
 		return deals;
 	}
@@ -195,7 +223,7 @@ class poiMt {
 	public void setIurl(String iurl) {
 		this.iurl = iurl;
 	}
-	
+
 }
 
 class dealsMt {

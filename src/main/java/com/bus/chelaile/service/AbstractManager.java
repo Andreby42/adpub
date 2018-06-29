@@ -1047,7 +1047,7 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "faf49b07805cca0a38097a732f388462";
     			}
     			
     		}else {
@@ -1069,7 +1069,7 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "31b89bd78e296d43ca0b1128779613cc";
     			}
     		}
     	}
@@ -1102,14 +1102,14 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "05de0f72d83e44de913534cecda03451";
     			}
     			// 百度
     			else	if( provider_id.equals("5") ) {
     				if( displayType == 3 ) {
     					placeMentId = "5846498";
     				}else{
-    					placeMentId = "5846499";
+    					placeMentId = "5826167";
     				}
     			}
     		}else {
@@ -1139,7 +1139,7 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "7a7b059ca39624f1c1ec24fa2ad375f6";
     			}
     			// 百度
     			else	if( provider_id.equals("5") ) {
@@ -1173,7 +1173,11 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "0fe897890119007664cfd009556ce283";
+    			}
+    			// 百度
+    			else	if( provider_id.equals("5") ) {
+    				placeMentId = "5826171";
     			}
     			
     		}else {
@@ -1195,7 +1199,7 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "59856e17db1d73fb3dbcb5af6c1ab10f";
     			}
     		}
     		
@@ -1229,7 +1233,7 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "e3f49841bbd3ceb0c6a531ca32f4a754";
     			}
     			
     			// 百度
@@ -1237,7 +1241,7 @@ public abstract class AbstractManager {
     				if( displayType == 3 ) {
     					placeMentId = "5846500";
     				}else{
-    					placeMentId = "5846501";
+    					placeMentId = "5826170";
     				}
     			}
     			
@@ -1267,12 +1271,12 @@ public abstract class AbstractManager {
     				if( displayType == 3 ) {
     					placeMentId = "FD95828C09A32D712082DC08D36CC15D";
     				}else{
-    					placeMentId = "FD95828C09A32D712082DC08D36CC15D";
+    					placeMentId = "5CBF4E804C06EBF6EEAF93DC5EA6BBCF";
     				}
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "aae3f1e9fd3c10be479138b6b1288530";
     			}
     			// 百度
     			else	if( provider_id.equals("5") ) {
@@ -1370,7 +1374,7 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "982c92cba64fc11a80d27e02d8755895";
     			}
     			
     			// 百度
@@ -1462,7 +1466,7 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "cefe7e180a76c3d4c32b9fdb4f4e083b";
     			}
     			
     			// 百度
@@ -1472,7 +1476,7 @@ public abstract class AbstractManager {
     				}else	if( displayType == 4 ){
     					placeMentId = "5846497";
     				}else {
-    					placeMentId = "5846481";
+    					placeMentId = "5846492";
     				}
     			}
     			
@@ -1550,7 +1554,7 @@ public abstract class AbstractManager {
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
-    				placeMentId = "";
+    				placeMentId = "64c668c5c769d2235209cbd9f6208b33";
     			}
     			// 百度
     			else	if( provider_id.equals("5") ) {

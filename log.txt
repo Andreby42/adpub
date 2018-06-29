@@ -3688,3 +3688,4 @@ java.lang.NullPointerException
 	at Test.main(Test.java:40)
 [2018-06-26 21:44:25] [ERROR] - 处理分钟投放文件出错
 [2018-06-26 21:44:28] [ERROR] - Error occur in Redis.set, key=AD_PROPERTY_TITLE_12758 value=下拉刷新全屏, error message: Could not get a resource from the pool
+[2018-06-28 16:22:10] [ERROR] - Error occur in Redis.set, key=stationMTKey:2,1,, error message: Could not get a resource from the pool
