@@ -314,6 +314,53 @@ public class CacheUtil {
         redisAtrace.set(key, exp, value);
     }
     
+    // 记录项目总次数
+    public static void incrProjectSend(String projectId, int inc) {
+        String key = AdvCache.getProjectKey(projectId);
+        String filedTotal = AdvCache.getProjectTotalSendKey();
+        String fieldDay = AdvCache.getProjectDaySendKey();
+        
+        redisClient.addHashSetValue(key, filedTotal, inc);
+        redisClient.addHashSetValue(key, fieldDay, inc);
+    }
+    
+    public static void incrProjectClick(String projectId, int inc) {
+        String key = AdvCache.getProjectKey(projectId);
+        String filedTotal = AdvCache.getProjectTotalClickKey();
+        String fieldDay = AdvCache.getProjectDayClickKey();
+        
+        redisClient.addHashSetValue(key, filedTotal, inc);
+        redisClient.addHashSetValue(key, fieldDay, inc);
+    }
+    
+    public static int getProjectTotalSend(String projectId) {
+        String field = AdvCache.getProjectTotalSendKey();
+        return getIntValueFromRedis(redisClient, AdvCache.getProjectKey(projectId), field);
+    }
+    
+    public static int getProjectDaySend(String projectId) {
+        String field = AdvCache.getProjectDaySendKey();
+        return getIntValueFromRedis(redisClient,  AdvCache.getProjectKey(projectId), field);
+    }
+
+    public static int getProjectTotalClick(String projectId) {
+        String field = AdvCache.getProjectTotalClickKey();
+        return getIntValueFromRedis(redisClient,  AdvCache.getProjectKey(projectId), field);
+    }
+
+    public static int getProjectDayClick(String projectId) {
+        String field = AdvCache.getProjectDayClickKey();
+        return getIntValueFromRedis(redisClient,  AdvCache.getProjectKey(projectId), field);
+    }
+    
+    private static int getIntValueFromRedis(ICache redisClientParam, String key, String field) {
+        String value = (String)redisClientParam.getHashSetValue(key, field);
+        if(value != null) {
+            return Integer.parseInt(value);
+        }
+        return 0;
+    }
+    
 //	public static Object getActiveOcs(String key) {
 //		return cacheActivitiesClient.get(key);
 //	}
