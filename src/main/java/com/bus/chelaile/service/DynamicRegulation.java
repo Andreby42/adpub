@@ -59,10 +59,10 @@ public class DynamicRegulation {
 //				
 //			}
 			// 缓存口碑券
-			if(Constants.IS_CACHE_KOUBEI) {
-				Runnable koubeiThread = new KoubeiThread(couponService);
-				service.scheduleWithFixedDelay(koubeiThread, 600, 7200, TimeUnit.SECONDS);
-			}
+//			if(Constants.IS_CACHE_KOUBEI) {
+//				Runnable koubeiThread = new KoubeiThread(couponService);
+//				service.scheduleWithFixedDelay(koubeiThread, 600, 7200, TimeUnit.SECONDS);
+//			}
 			// 更新口碑券状态
 			if(Constants.IS_CACHE_KOUBEI) {
 				Runnable kBUpdateCouponStatusThread = new KBUpdateCouponStatusThread(couponService);
