@@ -659,7 +659,7 @@ public class JsRule extends AbstractController {
 				if (displayType == 3) {
 					placeMentId = "5847849";
 				} else {
-					placeMentId = "5847849";
+					placeMentId = "5826174";
 				}
 			}
 
