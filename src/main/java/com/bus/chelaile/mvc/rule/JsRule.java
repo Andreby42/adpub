@@ -389,7 +389,7 @@ public class JsRule extends AbstractController {
 		}
 
 		// 科大讯飞api
-		String api_voicead_displayType = map.get("api_voicead");
+		String api_voicead_displayType = map.get("api_voicead_displayType");
 		if (api_voicead_displayType != null) {
 			map.put("api_voicead_displayType", api_voicead_displayType);
 			int type = Integer.parseInt(api_voicead_displayType);
@@ -407,7 +407,7 @@ public class JsRule extends AbstractController {
 		
 		
 		// 有道api
-		String api_yd_displayType = map.get("api_yd");
+		String api_yd_displayType = map.get("api_yd_displayType");
 		if (api_yd_displayType != null) {
 			map.put("api_yd_displayType", api_yd_displayType);
 			int type = Integer.parseInt(api_yd_displayType);
