@@ -191,6 +191,9 @@ public class LineFeedAdsManager extends AbstractManager {
                     entity.setAutoInterval(inner.getAutoInterval());
                     entity.setMixInterval(inner.getMixInterval());
                     entity.setPic(thumbnails.get(0).getUrl());
+                    List<String> picsList = New.arrayList();
+                    picsList.add(thumbnails.get(0).getUrl());
+                    entity.setPicsList(picsList);
                     entity.setAction(action);
                     entity.setTargetType(ad.getTargetType());
                     
