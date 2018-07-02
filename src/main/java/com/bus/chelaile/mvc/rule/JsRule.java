@@ -567,9 +567,9 @@ public class JsRule extends AbstractController {
 			// 广点通
 			if (provider_id.equals("2")) {
 				if (displayType == 3) {
-				placeMentId = "2030539481050032";
+				placeMentId = "6020731595504836";
 				}else {
-					placeMentId = "6020731595504836";
+					placeMentId = "2030539481050032";
 				}
 			}
 			// innobe
