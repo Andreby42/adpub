@@ -566,7 +566,11 @@ public class JsRule extends AbstractController {
 		else if (showType.getValue() == ShowType.DOUBLE_COLUMN.getValue()) {
 			// 广点通
 			if (provider_id.equals("2")) {
+				if (displayType == 3) {
 				placeMentId = "2030539481050032";
+				}else {
+					placeMentId = "6020731595504836";
+				}
 			}
 			// innobe
 			else if (provider_id.equals("3")) {
@@ -597,7 +601,7 @@ public class JsRule extends AbstractController {
 				if (displayType == 3) {
 					placeMentId = "5847843";
 				} else {
-					placeMentId = "5826167";
+					placeMentId = "5826173";
 				}
 			}
 
