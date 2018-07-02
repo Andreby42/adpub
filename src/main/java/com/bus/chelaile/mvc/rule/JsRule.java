@@ -635,9 +635,9 @@ public class JsRule extends AbstractController {
 			// 广点通
 			if (provider_id.equals("2")) {
 				if (displayType == 3) {
-					placeMentId = "3E4C06551E3CC1FB40E83E18A6523BAD";
+					placeMentId = "9080635585600817";
 				} else {
-					placeMentId = "957963E3D7047F783BE1CBFC450BF458";
+					placeMentId = "3040333351258521";
 				}
 			}
 			// innobe
