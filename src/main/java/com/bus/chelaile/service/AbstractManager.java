@@ -1097,7 +1097,7 @@ public abstract class AbstractManager {
     				if( displayType == 3 ) {
     					placeMentId = "3E4C06551E3CC1FB40E83E18A6523BAD";
     				}else{
-    					placeMentId = "957963E3D7047F783BE1CBFC450BF458";
+    					placeMentId = "5F7EDBCCC6C116C07DBB40EB9A937F4E";
     				}
     			}
     			// 网易
@@ -1169,7 +1169,7 @@ public abstract class AbstractManager {
     			}
     			// 科大讯飞
     			else	if( provider_id.equals("10") ) {
-    			
+    				placeMentId = "70EB266B2C8429B0B6C10D9B6F9BFA93";
     			}
     			// 网易
     			else	if( provider_id.equals("11") ) {
@@ -1228,7 +1228,7 @@ public abstract class AbstractManager {
     				if( displayType == 3 ) {
     					placeMentId = "2FC6D42CC5E5536AA8B3EA1ACC530A4C";
     				}else{
-    					placeMentId = "59B186D57B918B6B4BF48790BAAEAAE7";
+    					placeMentId = "2D8857EE0D286E80203F7334F8356B1C";
     				}
     			}
     			// 网易
@@ -1366,8 +1366,6 @@ public abstract class AbstractManager {
     			else	if( provider_id.equals("10") ) {
     				if( displayType == 3 ) {
     					placeMentId = "94734C0A46CCBAE8E51C5CAEEE4327D2";
-    				}else	if( displayType == 4 ){
-    					placeMentId = "38C22BCDC4362049A0BBE2833BC4174D";
     				}else {
     					placeMentId = "18F4307EE781076E5FCB43DB0413C6FD";
     				}
@@ -1458,8 +1456,6 @@ public abstract class AbstractManager {
     			else	if( provider_id.equals("10") ) {
     				if( displayType == 3 ) {
     					placeMentId = "6B109FC78051FB15D006975B2200F36B";
-    				}else	if( displayType == 4 ){
-    					placeMentId = "1A3AFF2C97A22A174C6C75978C55B67D";
     				}else {
     					placeMentId = "45E5548B890B23A05132960D1DD9E2A0";
     				}
@@ -1545,8 +1541,6 @@ public abstract class AbstractManager {
     			else	if( provider_id.equals("10") ) {
     				if( displayType == 3 ) {
     					placeMentId = "9B3FF3E3654C83C5063DB8A55A857304";
-    				}else	 if( displayType == 4 ) {
-    					placeMentId = "160204CA31459D67D525260102F3017D";
     				}
     				else{
     					placeMentId = "759CA12FB9C31CB04382C9ADDC208A2E";
