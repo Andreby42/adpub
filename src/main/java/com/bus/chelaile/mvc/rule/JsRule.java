@@ -647,9 +647,9 @@ public class JsRule extends AbstractController {
 			// 今日头条
 			else if (provider_id.equals("7")) {
 				if (displayType == 3) {
-					placeMentId = "901451382";
+					placeMentId = "900673814";
 				} else {
-					placeMentId = "901451382";
+					placeMentId = "900673326";
 				}
 			}
 			// 科大讯飞
@@ -687,7 +687,7 @@ public class JsRule extends AbstractController {
 			}
 			// 今日头条
 			else if (provider_id.equals("7")) {
-				placeMentId = "901451875";
+				placeMentId = "900673291";
 			}
 			// 科大讯飞
 			else if (provider_id.equals("10")) {
@@ -717,9 +717,9 @@ public class JsRule extends AbstractController {
 			// 今日头条
 			else if (provider_id.equals("7")) {
 				if (displayType == 3) {
-					placeMentId = "900673492";
+					placeMentId = "900673297";
 				} else {
-					placeMentId = "900673424";
+					placeMentId = "900673966";
 				}
 			}
 			// 科大讯飞
@@ -812,9 +812,9 @@ public class JsRule extends AbstractController {
 			// 今日头条
 			else if (provider_id.equals("7")) {
 				if (displayType == 3) {
-					placeMentId = "901451822";
+					placeMentId = "900673101";
 				} else {
-					placeMentId = "901451388";
+					placeMentId = "900673512";
 				}
 			}
 			// 科大讯飞
