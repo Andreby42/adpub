@@ -298,7 +298,12 @@ function tryNthTaskGroup(rule, nth, callback) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
 
                 try {
-                  entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
+		if (sdkInfo.task.sdkname() == 'api_chelaile' && rule.tasks.length > 1) {
+                  //entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
+		  	entity.is_backup = 1;
+		  } else {
+		  	entity.is_backup = 0;
+		  }
                   // ad_order != null
                   if (nullOrUndefined(entity.ad_order)) entity.ad_order = 0;
                 } catch(error) {
