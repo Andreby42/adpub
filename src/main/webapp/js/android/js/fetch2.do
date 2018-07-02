@@ -287,24 +287,28 @@ function tryNthTaskGroup(rule, nth, callback) {
             traceInfo: rule.traceInfo
         }, function(resp) {
             console.log('resp comes ' + resp);
-
+            
             var used = now() - stamp1;
             MdLogger.addPar('req_time', used);
             MdLogger.addPar('code', resp.data ? 200 : 500);
-            MdLogger.addPar('is_backup', nth == rule.tasks.length - 1 ? 1 : 0);
+            var is_backup_temp = 0;
+            if (sdkInfo.task.sdkname() == 'api_chelaile' && rule.tasks.length > 1) {
+                is_backup_temp = 1;
+            }
+            MdLogger.addPar('is_backup', is_backup_temp);
 
             sdkInfo._result = resp;
             if (resp.ad) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
 
                 try {
-		if (sdkInfo.task.sdkname() == 'api_chelaile' && rule.tasks.length > 1) {
-                  //entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
-		  	entity.is_backup = 1;
-		  } else {
-		  	entity.is_backup = 0;
-		  }
-                  // ad_order != null
+                    if (sdkInfo.task.sdkname() == 'api_chelaile' && rule.tasks.length > 1) {
+                        //entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
+                        entity.is_backup = 1;
+                    } else {
+                        entity.is_backup = 0;
+                    }
+                    // ad_order != null
                   if (nullOrUndefined(entity.ad_order)) entity.ad_order = 0;
                 } catch(error) {
 
