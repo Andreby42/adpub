@@ -21,12 +21,12 @@ public class AdvCache {
 	private static final String PROJECT_CLICK_KEY = "PROJECT_CLICK_KEY_";
 	
 	//项目总次数key。以及各自的field
-    // 类似：PROJECT_2006S1 
+    // 类似：PROJECT_TOTAL_2006S1 
     //             TOTAL_SEND : 1000
     //             TOTAL_CLICK: 100
     //             2018-06-28_DAY_SEND: 900
 	//             2018-06-28_DAY_CLICK: 900
-    private static final String PROJECT_KEY = "PROJECT";
+    private static final String PROJECT_KEY = "PROJECT_TOTAL_";  
     private static final String TOTAL_SEND = "TOTAL_SEND";
     private static final String TOTAL_CLICK = "TOTAL_CLICK";
     private static final String DAY_SEND = "_DAY_SEND";
