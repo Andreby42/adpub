@@ -75,7 +75,14 @@ function ourUrls(traceInfo, entity, urls) {
             }
         }
     })
+    
+    var config = JsFixedConfig.getJsFixedConfig();
+    var svadded = '&v=' + config.get('v').split('_')[0] + '&s=' + config.get('s');
+    for (var k in urls) {
+        ret[k] += svadded;
+    }
 
+    
     console.log('exposeUrl: ' + ret.exposeUrl)
     return ret;
 }
