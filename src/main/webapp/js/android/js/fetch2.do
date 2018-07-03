@@ -326,8 +326,8 @@ function tryNthTaskGroup(rule, nth, callback) {
                 resp.urls = urls;
                 console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
                 resp.aid = sdkInfo.task.aid();
-                resp.refreshTime = 25000;
-                resp.mixRefreshAdInterval = 15000;
+                resp.refreshTime = 15000;
+                resp.mixRefreshAdInterval = 5000;
 
                 if (sdkInfo.task.adStyle) {
                   resp.adStyle = sdkInfo.task.adStyle();
