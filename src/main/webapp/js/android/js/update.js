@@ -1,4 +1,4 @@
-var version = 60;
+var version = 61;
 var tag_version = 'js_engine_version';
 
 var localVersion = (function() {

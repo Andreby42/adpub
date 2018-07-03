@@ -75,14 +75,14 @@ function ourUrls(traceInfo, entity, urls) {
             }
         }
     })
-    
+
     var config = JsFixedConfig.getJsFixedConfig();
     var svadded = '&v=' + config.get('v').split('_')[0] + '&s=' + config.get('s');
     for (var k in urls) {
         ret[k] += svadded;
     }
 
-    
+
     console.log('exposeUrl: ' + ret.exposeUrl)
     return ret;
 }
@@ -294,7 +294,7 @@ function tryNthTaskGroup(rule, nth, callback) {
             traceInfo: rule.traceInfo
         }, function(resp) {
             console.log('resp comes ' + resp);
-            
+
             var used = now() - stamp1;
             MdLogger.addPar('req_time', used);
             MdLogger.addPar('code', resp.data ? 200 : 500);
@@ -304,7 +304,6 @@ function tryNthTaskGroup(rule, nth, callback) {
             }
             MdLogger.addPar('is_backup', is_backup_temp);
 
-            sdkInfo._result = resp;
             if (resp.ad) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
 
@@ -340,8 +339,9 @@ function tryNthTaskGroup(rule, nth, callback) {
                 } catch(error) {
 
                 }
-
             }
+
+            sdkInfo._result = resp; // 
             MdLogger.sendThirdParty(resp.data);
         });
     });
