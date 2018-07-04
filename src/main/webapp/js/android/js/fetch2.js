@@ -298,27 +298,16 @@ function tryNthTaskGroup(rule, nth, callback) {
             var used = now() - stamp1;
             MdLogger.addPar('req_time', used);
             MdLogger.addPar('code', resp.data ? 200 : 500);
-            var is_backup_temp = 0;
-            if (sdkInfo.task.sdkname() == 'api_chelaile' && rule.tasks.length > 1) {
-                is_backup_temp = 1;
-            }
+
+            var is_backup_temp = sdkInfo.task.sdkname() == 'api_chelaile' && rule.tasks.length > 1 ? 1 : 0;
             MdLogger.addPar('is_backup', is_backup_temp);
 
             if (resp.ad) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
+                entity.is_backup = is_backup_temp;
 
-                try {
-                    if (sdkInfo.task.sdkname() == 'api_chelaile' && rule.tasks.length > 1) {
-                        //entity.is_backup = nth == rule.tasks.length - 1 ? 1 : 0
-                        entity.is_backup = 1;
-                    } else {
-                        entity.is_backup = 0;
-                    }
-                    // ad_order != null
-                  if (nullOrUndefined(entity.ad_order)) entity.ad_order = 0;
-                } catch(error) {
-
-                }
+                if (nullOrUndefined(entity.ad_order))
+                    entity.ad_order = 0;
 
                 var urls = ourUrls(rule.traceInfo, entity, rule.urls);
                 console.log('ourUrls: ' + JSON.stringify(urls));
@@ -329,19 +318,20 @@ function tryNthTaskGroup(rule, nth, callback) {
                 resp.mixRefreshAdInterval = 5000;
 
                 if (sdkInfo.task.adStyle) {
-                  resp.adStyle = sdkInfo.task.adStyle();
+                    resp.adStyle = sdkInfo.task.adStyle();
                 } else if (sdkInfo.task.sdkname() == 'api_chelaile') {
-                  resp.adStyle = resp.ad.adStyle;
+                    resp.adStyle = resp.ad.adStyle;
                 }
 
                 try {
-                  MdLogger.addPar('ad_order', entity.ad_order || 0);
-                } catch(error) {
-
+                    MdLogger.addPar('ad_order', entity.ad_order || 0);
+                } catch (error) {
                 }
             }
 
-            sdkInfo._result = resp; // 
+            MdLogger.addPar('ad_status', resp.ad ? 1 : 0);
+
+            sdkInfo._result = resp; //
             MdLogger.sendThirdParty(resp.data);
         });
     });
@@ -353,7 +343,7 @@ function tryNthTaskGroup(rule, nth, callback) {
 function buildMdLogger() {
     return {
         pars: {},
-        sendSimple : function () {
+        sendSimple: function() {
             var url = 'http://atrace.chelaile.net.cn/thirdSimple?';
             for (var k in this.pars) {
                 url += '&' + k + '=' + this.pars[k];
