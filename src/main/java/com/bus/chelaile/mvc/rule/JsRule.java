@@ -318,10 +318,10 @@ public class JsRule extends AbstractController {
 			map.put("sdk_gdt_placementId", sdk_gdt_placementId);
 			map.put("sdk_gdt_aid", type + "");
 		} else {
-			map.put("sdk_gdt_displayType", "1");
-			sdk_gdt_placementId = getPlaceMentId(showType, "2", 1);
+			map.put("sdk_gdt_displayType", "2");
+			sdk_gdt_placementId = getPlaceMentId(showType, "2", 2);
 			map.put("sdk_gdt_placementId", sdk_gdt_placementId);
-			map.put("sdk_gdt_aid", "1");
+			map.put("sdk_gdt_aid", "2");
 		}
 
 		// 头条
@@ -333,10 +333,10 @@ public class JsRule extends AbstractController {
 			map.put("sdk_toutiao_placementId", sdk_toutiao_placementId);
 			map.put("sdk_toutiao_aid", type + "");
 		} else {
-			map.put("sdk_toutiao_displayType", "1");
-			sdk_toutiao_placementId = getPlaceMentId(showType, "7", 1);
+			map.put("sdk_toutiao_displayType", "2");
+			sdk_toutiao_placementId = getPlaceMentId(showType, "7", 2);
 			map.put("sdk_toutiao_placementId", sdk_toutiao_placementId);
-			map.put("sdk_toutiao_aid", "1");
+			map.put("sdk_toutiao_aid", "2");
 		}
 
 		// 科大讯飞
@@ -350,11 +350,11 @@ public class JsRule extends AbstractController {
 			map.put("sdk_ifly_aid", type + "");
 			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
 		} else {
-			map.put("sdk_voicead_displayType", "1");
-			sdk_voicead_placementId = getPlaceMentId(showType, "10", 1);
+			map.put("sdk_voicead_displayType", "2");
+			sdk_voicead_placementId = getPlaceMentId(showType, "10", 2);
 			map.put("sdk_voicead_placementId", sdk_voicead_placementId);
-			map.put("sdk_voicead_aid", "1");
-			map.put("sdk_ifly_aid", "1");
+			map.put("sdk_voicead_aid", "2");
+			map.put("sdk_ifly_aid", "2");
 			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
 		}
 		
@@ -369,11 +369,11 @@ public class JsRule extends AbstractController {
 			map.put("sdk_ifly_aid", type + "");
 			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
 		} else {
-			map.put("sdk_voicead_displayType", "1");
-			sdk_voicead_placementId = getPlaceMentId(showType, "10", 1);
+			map.put("sdk_voicead_displayType", "2");
+			sdk_voicead_placementId = getPlaceMentId(showType, "10", 2);
 			map.put("sdk_voicead_placementId", sdk_voicead_placementId);
-			map.put("sdk_voicead_aid", "1");
-			map.put("sdk_ifly_aid", "1");
+			map.put("sdk_voicead_aid", "2");
+			map.put("sdk_ifly_aid", "2");
 			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
 		}
 
@@ -387,11 +387,11 @@ public class JsRule extends AbstractController {
 
 			map.put("sdk_baidu_aid", type + "");
 		} else {
-			map.put("sdk_baidu_displayType", "1");
-			sdk_baidu_placementId = getPlaceMentId(showType, "5", 1);
+			map.put("sdk_baidu_displayType", "2");
+			sdk_baidu_placementId = getPlaceMentId(showType, "5", 2);
 			map.put("sdk_baidu_placementId", sdk_baidu_placementId);
 
-			map.put("sdk_baidu_aid", "1");
+			map.put("sdk_baidu_aid", "2");
 		}
 
 		// 科大讯飞api
@@ -404,11 +404,11 @@ public class JsRule extends AbstractController {
 
 			map.put("api_voicead_aid", type + "");
 		} else {
-			map.put("api_voicead_displayType", "1");
-			String api_voicead_placementId = getApiPlaceMentId(showType, 1, "api_voicead");
+			map.put("api_voicead_displayType", "2");
+			String api_voicead_placementId = getApiPlaceMentId(showType, 2, "api_voicead");
 			map.put("api_voicead_placementId", api_voicead_placementId);
 
-			map.put("api_voicead_aid", "1");
+			map.put("api_voicead_aid", "2");
 		}
 		
 		
@@ -419,8 +419,8 @@ public class JsRule extends AbstractController {
 			int type = Integer.parseInt(api_yd_displayType);
 			map.put("api_yd_aid", type + "");
 		} else {
-			map.put("api_yd_displayType", "1");
-			map.put("api_yd_aid", "1");
+			map.put("api_yd_displayType", "2");
+			map.put("api_yd_aid", "2");
 		}
 
 		try {
