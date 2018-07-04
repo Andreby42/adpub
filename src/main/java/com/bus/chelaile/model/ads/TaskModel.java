@@ -9,7 +9,7 @@ public class TaskModel {
     //private Long timeout;
     private String apiName;
     private int priority;
-    private int displayType = 1;
+    private int displayType = 2;
 
     /**
      * @return the apiName
