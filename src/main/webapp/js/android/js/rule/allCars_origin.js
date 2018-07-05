@@ -12,7 +12,7 @@ var api_chelaile = {
 
     adurl: function() {
         return {
-            url: 'https://stage.chelaile.net.cn/adpub/adv!getAllCar.action?${QUERY_STRING}'
+            url: 'https://api.chelaile.net.cn/adpub/adv!getAllCar.action?${QUERY_STRING}'
         }
     },
 
