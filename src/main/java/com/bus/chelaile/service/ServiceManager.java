@@ -453,7 +453,7 @@ public class ServiceManager {
         resultMap.put("unfoldFeed", 1);
         // 读取配置的‘是否打开debug埋点，默认0不打开，1打开’
         settings(resultMap, Constants.BOTTOM_DEBUGLOG_KEY, "debugLogOpen");
-        if (!resultMap.containsKey("hotOpenTimeout")) {
+        if (!resultMap.containsKey("debugLogOpen")) {
             resultMap.put("debugLogOpen", 0);
         }
 
@@ -488,7 +488,7 @@ public class ServiceManager {
             }
             // 读取配置的‘是否打开debug埋点，默认0不打开，1打开’
             settings(resultMap, Constants.STATION_DEBUGLOG_KEY, "debugLogOpen");
-            if (!resultMap.containsKey("hotOpenTimeout")) {
+            if (!resultMap.containsKey("debugLogOpen")) {
                 resultMap.put("debugLogOpen", 0);
             }
         }
@@ -545,7 +545,7 @@ public class ServiceManager {
             
             // 读取配置的‘是否打开debug埋点，默认0不打开，1打开’
             settings(resultMap, Constants.HOME_DEBUGLOG_KEY, "debugLogOpen");
-            if (!resultMap.containsKey("hotOpenTimeout")) {
+            if (!resultMap.containsKey("debugLogOpen")) {
                 resultMap.put("debugLogOpen", 0);
             }
         }
@@ -580,7 +580,7 @@ public class ServiceManager {
             configKey = Constants.STATIONDETAIL_DEBUGLOG_KEY;
             
         settings(resultMap, configKey, "debugLogOpen");
-        if (!resultMap.containsKey("hotOpenTimeout")) {
+        if (!resultMap.containsKey("debugLogOpen")) {
             resultMap.put("debugLogOpen", 0);
         }
         return resultMap;
