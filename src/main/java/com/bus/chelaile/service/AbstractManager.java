@@ -162,7 +162,7 @@ public abstract class AbstractManager {
 	 * @return boolean
 	 */
 	protected boolean checkSendLog(AdvParam advParam, List<BaseAdEntity> entities, String showType) {
-		if (entities == null || entities.size() == 0) {
+		if (entities == null || entities.size() == 0 || entities.size() == 1) {
 			return true;
 		}
 		String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(advParam.getUdid(), showType);
@@ -193,7 +193,7 @@ public abstract class AbstractManager {
 		// 获取所有符合规则的广告
 		// logger.info("投放记录超时： udid={}, list={}", advParam.getUdid(),
 		// JSONObject.toJSONString(lineFeedAds));
-		if (entities != null && entities.size() > 0) {
+		if (entities != null && entities.size() > 1) {
 			int totalWeight = 0;
 			for (BaseAdEntity entity : entities) {
 				totalWeight += entity.getAdWeight();
