@@ -14,7 +14,7 @@ var api_chelaile = {
 
     adurl: function() {
         return {
-            url: 'https://stage.chelaile.net.cn/adpub/adv!geColumntAds.action?${QUERY_STRING}'
+            url: 'https://api.chelaile.net.cn/adpub/adv!geColumntAds.action?${QUERY_STRING}'
         }
     },
 
@@ -168,8 +168,8 @@ var api_voicead = {
             data: {
                 "tramaterialtype": "json",
                 "api_ver": "1.3.8",
-                "is_support_deeplink": 1, // optional 0不支持(默认值)，1直接触发 2 进入落地页再触发，不能用
-                "secure": 3, // 1 只支持http 2 只支持https 3 都支持
+                "is_support_deeplink": "1", // optional 0不支持(默认值)，1直接触发 2 进入落地页再触发，不能用
+                "secure": "3", // 1 只支持http 2 只支持https 3 都支持
                 "devicetype": "0",
                 "os": "Android",
                 "osv": config.get('sv'),
@@ -184,27 +184,27 @@ var api_voicead = {
                 "ts": config.get('ts'),
                 "dvw": config.get('screenWidth'),
                 "dvh": config.get('screenHeight'),
-                "orientation": 0, // 屏幕方向，强制竖屏
+                "orientation": "0", // 屏幕方向，强制竖屏
                 "vendor": config.get('vendor'),
                 "model": config.get('model'),
                 "lan": config.get('lan'),
               //  "geo": config.get('geo_lng') + ',' + config.get('geo_lat'), // optional，用了还报错
-                "batch_cnt": 1, // 广告数量，只支持1
+                "batch_cnt": "1", // 广告数量，只支持1
                 "appid": "5add7ce1",
                 "appname": "车来了",
                 "appver": config.get('v').split('_')[0],
                 "pkgname": "com.ygkj.chelaile.standard",
                 "debug": { // optional
                     /* 用于指定下发广告的交互类型，取值范围：0，不限制；1，跳转类； 2，下载类；3，特殊下载类。默认0。当前下载类广告暂不支持 deep link，为2 时下个值不能为1*/
-                    "action_type": 0,
+                    "action_type": "0",
                     /* 用于指定下发广告的落地页类型，取值范围：0，不限制；1，包含 landing_url 和 deep_link； 2，仅包含 landing_url。不指定 的话，按值为 0 处理。*/
-                    "landing_type": 0
+                    "landing_type": "0"
                 },
                 // 不同位置需要更改
                 "adunitid": "${api_voicead_placementId}", // 广告位
-                "adw": 359, // 广告图宽，看后台申请广告位的尺寸
-                "adh": 92,
-                "isboot": 0, //1表示开屏；0表示非开屏
+                "adw": "359", // 广告图宽，看后台申请广告位的尺寸
+                "adh": "92",
+                "isboot": "0", //1表示开屏；0表示非开屏
             }
         };
     },

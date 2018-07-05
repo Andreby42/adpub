@@ -439,6 +439,11 @@ public class OpenManager extends AbstractManager {
 
                 if (entity != null) {
                     entities.add(entity);
+                 // 如果是js版本的记录，那么不需要多条记录
+                    // 原因： js每条广告记录可以包含多家sdk，并且可调顺序，估无需再获取多条进行整合
+                    if(entity.getProvider_id().equals("100")) {
+                        break;
+                    }
                 }
             }
             // 重新排序
