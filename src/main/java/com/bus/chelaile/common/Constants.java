@@ -140,6 +140,13 @@ public class Constants {
     public static final String OPENTIMEOUT_KEY = "AD_SETTING_openTimeout";  // 开屏最长时间
     public static final String OPENTIMEOUT_HOT_KEY = "AD_SETTING_hotOpenTimeout"; //热启动开屏最长时间
     
+    public static final String HOME_DEBUGLOG_KEY = "AD_SETTING_ios_debug_home";
+    public static final String STATION_DEBUGLOG_KEY = "AD_SETTING_ios_debug_station";
+    public static final String STATIONDETAIL_DEBUGLOG_KEY = "AD_SETTING_ios_debug_stationDetail";
+    public static final String BOTTOM_DEBUGLOG_KEY = "AD_SETTING_ios_debug_bottom";
+    public static final String TRANSFER_DEBUGLOG_KEY = "AD_SETTING_ios_debug_transfer";
+    public static final String ALLCARS_DEBUGLOG_KEY = "AD_SETTING_ios_debug_allcars";
+    
     // 版本控制号
     public static final int PLATFORM_LOG_ANDROID_0118 = 96; // 3.45.0
 	public static final int PLATFORM_LOG_IOS_0117 = 10480; // 5.43.0

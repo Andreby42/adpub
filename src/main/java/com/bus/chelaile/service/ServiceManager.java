@@ -400,7 +400,6 @@ public class ServiceManager {
             logger.error("配置项，hotOpenTimeout 丢失 ！ ");
             resultMap.put("hotOpenTimeout", 4001);
         }
-        
     }
 
     private void settings(JSONObject resultMap, String key, String value) {
@@ -452,6 +451,11 @@ public class ServiceManager {
             }
         }
         resultMap.put("unfoldFeed", 1);
+        // 读取配置的‘是否打开debug埋点，默认0不打开，1打开’
+        settings(resultMap, Constants.BOTTOM_DEBUGLOG_KEY, "debugLogOpen");
+        if (!resultMap.containsKey("hotOpenTimeout")) {
+            resultMap.put("debugLogOpen", 0);
+        }
 
 
         return resultMap;
@@ -481,6 +485,11 @@ public class ServiceManager {
             } else {
                 resultMap.put("autoInterval", ((StationAdEntity) entities.get(0)).getAutoInterval());
                 resultMap.put("mixInterval", ((StationAdEntity) entities.get(0)).getMixInterval());
+            }
+            // 读取配置的‘是否打开debug埋点，默认0不打开，1打开’
+            settings(resultMap, Constants.STATION_DEBUGLOG_KEY, "debugLogOpen");
+            if (!resultMap.containsKey("hotOpenTimeout")) {
+                resultMap.put("debugLogOpen", 0);
             }
         }
         return resultMap;
@@ -533,6 +542,12 @@ public class ServiceManager {
                 resultMap.put("autoInterval", ((AdEntity) entities.get(0)).getAutoInterval());
                 resultMap.put("mixInterval", ((AdEntity) entities.get(0)).getMixInterval());
             }
+            
+            // 读取配置的‘是否打开debug埋点，默认0不打开，1打开’
+            settings(resultMap, Constants.HOME_DEBUGLOG_KEY, "debugLogOpen");
+            if (!resultMap.containsKey("hotOpenTimeout")) {
+                resultMap.put("debugLogOpen", 0);
+            }
         }
         return resultMap;
 
@@ -556,6 +571,17 @@ public class ServiceManager {
                 resultMap.put("autoInterval", entity.getAutoInterval());
                 resultMap.put("mixInterval", entity.getMixInterval());
             }
+        }
+        // 读取配置的‘是否打开debug埋点，默认0不打开，1打开’
+        String configKey = Constants.TRANSFER_DEBUGLOG_KEY;
+        if(showType == showType.ALL_CAR_ADV)
+            configKey = Constants.ALLCARS_DEBUGLOG_KEY;
+        else if(showType == showType.CAR_ALL_LINE_ADV)
+            configKey = Constants.STATIONDETAIL_DEBUGLOG_KEY;
+            
+        settings(resultMap, configKey, "debugLogOpen");
+        if (!resultMap.containsKey("hotOpenTimeout")) {
+            resultMap.put("debugLogOpen", 0);
         }
         return resultMap;
 
