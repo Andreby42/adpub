@@ -419,7 +419,7 @@ public abstract class AbstractManager {
 		// 冷热启动模式测试
 		if (showType == ShowType.OPEN_SCREEN && rule.getStartMode() != 0
 				&& !rule.checkStartMode(advParam.getStartMode())) {
-			logger.info("startMode return false, startMode={}, udid={}", advParam.getStartMode(), advParam.getUdid());
+			logger.info("startMode return false, advId={}, ruleId={}, startMode={}, udid={}", ad.getId(), rule.getRuleId(), advParam.getStartMode(), advParam.getUdid());
 			return false;
 		}
 
@@ -515,7 +515,7 @@ public abstract class AbstractManager {
 		// 次数判断
 		// 包括，每人点击次数限制、每人投放次数上限、每人days天内总投放次数上限
 		if (cacheRecord != null && !cacheRecord.todayCanPub(ad, rule)) {
-			logger.info("todayCanPub return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
+			logger.info("todayCanPub return false,advId={},ruleId={},udid={}", ad.getId(), rule.getRuleId(), advParam.getUdid());
 			return false;
 		}
 
@@ -792,12 +792,12 @@ public abstract class AbstractManager {
 			}
 			adIdStr += ";";
 		}
-		logger.info(
-				"[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
-						+ "cityId={}, v={}, vc={}, li={}, sn={}, startMode={}, H5Src={}, wxs={}",
-				advParam.getUdid(), showType, isNeedApid, advParam.getType(), adIdStr, advParam.getAccountId(),
-				advParam.getS(), advParam.getCityId(), advParam.getV(), advParam.getVc(), advParam.getLineId(),
-				advParam.getStnName(), advParam.getStartMode(), advParam.getH5Src(), advParam.getWxs());
+//		logger.info(
+//				"[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
+//						+ "cityId={}, v={}, vc={}, li={}, sn={}, startMode={}, H5Src={}, wxs={}",
+//				advParam.getUdid(), showType, isNeedApid, advParam.getType(), adIdStr, advParam.getAccountId(),
+//				advParam.getS(), advParam.getCityId(), advParam.getV(), advParam.getVc(), advParam.getLineId(),
+//				advParam.getStnName(), advParam.getStartMode(), advParam.getH5Src(), advParam.getWxs());
 		return adsList;
 	}
 

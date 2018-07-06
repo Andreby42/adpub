@@ -423,11 +423,11 @@ public class JsRule extends AbstractController {
 			map.put("api_yd_aid", "2");
 		}
 
-		try {
-			logger.info("json1={}", JsonBinder.toJson(map, JsonBinder.always));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
+//		try {
+//			logger.info("json1={}", JsonBinder.toJson(map, JsonBinder.always));
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//		}
 
 		if (tgs.getTaskGroups().getMap() != null) {
 			for (Map.Entry<String, String> entry : tgs.getTaskGroups().getMap().entrySet()) {
