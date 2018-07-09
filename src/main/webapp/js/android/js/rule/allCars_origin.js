@@ -72,7 +72,7 @@ var api_yd = {
           "ct" : config.get('ct'),
           "dct" : config.get('dct'),
           "udid" : config.get('udid').toUpperCase(),
-		  //"udid":'BA8C0E13-F99A-4294-BABA-1489C33E9B6D',
+		  // "udid":'BA8C0E13-F99A-4294-BABA-1489C33E9B6D',
           "ll" : config.get('geo_lng') + ',' + config.get('geo_lat'),
           "lla" : config.get('geo_lac'),
           "llt" : config.get('llt'),
@@ -89,7 +89,8 @@ var api_yd = {
         }
         str = str.substring(0, str.length - 1);
         return {
-            // url: 'http://gorgon.youdao.com/gorgon/request.s?id=e3f49841bbd3ceb0c6a531ca32f4a754&udid=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&imei=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&lla=73.0&llp=p&wifi=&rip=10.168.0.10&imeimd5=305612168A059FC9CCDAC8D95D99E485&ct=2&dct=0&ll=116.403538,39.994026&auidmd5=305612168A059FC9CCDAC8D95D99E485&av=5.50.0&llt=1'
+            // url:
+			// 'http://gorgon.youdao.com/gorgon/request.s?id=e3f49841bbd3ceb0c6a531ca32f4a754&udid=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&imei=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&lla=73.0&llp=p&wifi=&rip=10.168.0.10&imeimd5=305612168A059FC9CCDAC8D95D99E485&ct=2&dct=0&ll=116.403538,39.994026&auidmd5=305612168A059FC9CCDAC8D95D99E485&av=5.50.0&llt=1'
             url: str
         }
     },
@@ -138,6 +139,136 @@ var api_yd = {
 
 }
 
+
+
+var api_shunfei = {
+
+	    sdkname: function() {
+	        return "api_shunfei";
+	    },
+
+	    adurl: function() {
+	        var config = JsFixedConfig.getJsFixedConfig();
+
+	        var net = parseInt(config.get('dct')); // 有道用dct
+	        if (net >= 11 && net <= 13) {
+	          net = net - 7;
+	        } else {
+	          net = config.get('ct');
+	        }
+	        var geolng = config.get('geo_lng') ;
+	        var geolat = config.get('geo_lat');
+	        var ts = config.get('ts');
+	        ts = ts / 1000;
+	        var sv = config.get('sv').split('.');
+	        var micro = 0;
+	        
+	        if( sv.length == 3 ){
+	        	micro = sv[2];
+	        }
+
+	        var net = parseInt(config.get('dct')); // 有道用dct
+	        if (net >= 11 && net <= 13) {
+	          net = net - 7;
+	        } else {
+	          net = config.get('ct');
+	        }
+	        
+	        
+	        return {
+	            url: 'http://hostname:port/api/v1/bid',
+	            data: {
+	            	 "ip": config.get('ip'),
+	            	 "user_agent": config.get('ua'),
+	            	 "detected_time": ts,
+	            	 "time_zone": "+0800",
+	            	 "geo": {
+	            		 "latitude": geolng, 
+	            		 "longitude": geolat  
+	            		 },
+	            	 
+	            	 "mobile": {
+	            		 "device_id":config.get('mac'),
+	            		 "device_type":1,
+	            		 "platform":2,
+	            		 "os_version": {
+	            			 "os_version_major": sv[0],
+	            			 "os_version_minor": sv[1],
+                             "os_version_micro": micro	 
+	            			 },
+	            		 "brand": config.get('vendor'),
+	        	         "model": config.get('model'),	
+	        	         "screen_width":config.get('screenWidth'),
+	        	         "screen_height": config.get('screenHeight'),
+	        	         "wireless_network_type":net,
+	        	         "for_advertising_id":config.get('imei'),
+	        	         "android_id":config.get('AndroidID'),
+	        	         "mobile_app": {
+	        	        	 "app_id":,
+	        	        	 "sign":,
+	        	        	 "app_bundle_id":
+	        	         }
+	            	 },
+	            		 
+	            	"adslot":[
+	            			 {
+	            				 "ad_block_key":
+	            				 "adslot_type":
+	            				 "width":179,
+	            			     "height":88
+	            			 }
+	            	],
+	            	 
+	            	 "api_version":"1.6.1",
+	            	 "is_test":true,
+	          
+	            }
+	        };
+	    },
+	    filter: function(data) {
+	        if (typeof data == 'string')
+	            data = eval("a=" + data);
+
+	        var rows = data.batch_ma;
+	        if (!rows || rows.length === 0)
+	            return null;
+
+	        for (var i = 0; i < rows.length; i++) {
+	            var row = rows[i];
+
+	            var ad = {
+	                provider_id: '12',
+	                ad_order: i,
+	                adType: row.adType,
+	                downloadType: row.download_type,
+	                packageName: row.package_name,
+	                head: row.title,
+	                subhead: row.sub_title,
+	                pic: row.image,
+	                brandIcon: row.icon,
+	                link: row.landing_url,
+	                deepLink: row.deep_link,
+	                unfoldMonitorLink: row.impr_url.join(";"),
+	                clickMonitorLink: row.click_url.join(";"),
+					picsList: row.img_urls
+	            }
+	            return ad;
+	        }
+	        return null;
+	    },
+
+	  aid : function () {
+	        return 'api_shunfei_${api_voicead_displayType}';
+	    },
+		
+		adStyle : function() {
+	      return ${api_shunfei_aid};
+	    }
+	}
+
+
+
+
 var api_voicead = {
 
     sdkname: function() {
@@ -160,7 +291,8 @@ var api_voicead = {
             data: {
                 "tramaterialtype": "json",
                 "api_ver": "1.3.8",
-                "is_support_deeplink": "1", // optional 0不支持(默认值)，1直接触发 2 进入落地页再触发，不能用
+                "is_support_deeplink": "1", // optional 0不支持(默认值)，1直接触发 2
+											// 进入落地页再触发，不能用
                 "secure": "3", // 1 只支持http 2 只支持https 3 都支持
                 "devicetype": "0",
                 "os": "Android",
@@ -180,23 +312,30 @@ var api_voicead = {
                 "vendor": config.get('vendor'),
                 "model": config.get('model'),
                 "lan": config.get('lan'),
-              //  "geo": config.get('geo_lng') + ',' + config.get('geo_lat'), // optional，用了还报错
+              // "geo": config.get('geo_lng') + ',' + config.get('geo_lat'),
+				// // optional，用了还报错
                 "batch_cnt": "1", // 广告数量，只支持1
                 "appid": "5add7ce1",
                 "appname": "车来了",
                 "appver": config.get('v').split('_')[0],
                 "pkgname": "com.ygkj.chelaile.standard",
                 "debug": { // optional
-                    /* 用于指定下发广告的交互类型，取值范围：0，不限制；1，跳转类； 2，下载类；3，特殊下载类。默认0。当前下载类广告暂不支持 deep link，为2 时下个值不能为1*/
+                    /*
+					 * 用于指定下发广告的交互类型，取值范围：0，不限制；1，跳转类；
+					 * 2，下载类；3，特殊下载类。默认0。当前下载类广告暂不支持 deep link，为2 时下个值不能为1
+					 */
                     "action_type": "0",
-                    /* 用于指定下发广告的落地页类型，取值范围：0，不限制；1，包含 landing_url 和 deep_link； 2，仅包含 landing_url。不指定 的话，按值为 0 处理。*/
+                    /*
+					 * 用于指定下发广告的落地页类型，取值范围：0，不限制；1，包含 landing_url 和 deep_link；
+					 * 2，仅包含 landing_url。不指定 的话，按值为 0 处理。
+					 */
                     "landing_type": "0"
                 },
                 // 不同位置需要更改
                  "adunitid": "${api_voicead_placementId}", // 广告位
                  "adw": config.get('screenWidth'), // 广告图宽，看后台申请广告位的尺寸
                 "adh": "92",
-                "isboot": "0", //1表示开屏；0表示非开屏
+                "isboot": "0", // 1表示开屏；0表示非开屏
             }
         };
     },
@@ -329,7 +468,7 @@ var sdk_baidu = {
         for (var i = 0; i < list.length; i++) {
             var ad = list[i];
             var entity = this.asEntity(ad);
-            //if (!testRepeat(entity, 'home-ad', 'baidu'))
+            // if (!testRepeat(entity, 'home-ad', 'baidu'))
             if (this.adCheck(ad)) {
               return ad;
             } else {
