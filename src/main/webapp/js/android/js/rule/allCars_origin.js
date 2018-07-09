@@ -258,7 +258,7 @@ var api_shunfei = {
 	    },
 
 	  aid : function () {
-	        return 'api_shunfei_${api_voicead_displayType}';
+	        return 'api_shunfei_${api_shunfei_displayType}';
 	    },
 		
 		adStyle : function() {

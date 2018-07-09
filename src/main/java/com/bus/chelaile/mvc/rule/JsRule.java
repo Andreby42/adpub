@@ -303,7 +303,7 @@ public class JsRule extends AbstractController {
 		} else {
 			map = New.hashMap();
 		}
-		
+
 		try {
 			logger.info("map={}", JsonBinder.toJson(map, JsonBinder.always));
 		} catch (Exception e) {
@@ -357,8 +357,7 @@ public class JsRule extends AbstractController {
 			map.put("sdk_ifly_aid", "2");
 			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
 		}
-		
-		
+
 		String sdk_ifly_displayType = map.get("sdk_ifly_displayType");
 		if (sdk_ifly_displayType != null) {
 			map.put("sdk_voicead_displayType", sdk_ifly_displayType);
@@ -410,8 +409,7 @@ public class JsRule extends AbstractController {
 
 			map.put("api_voicead_aid", "2");
 		}
-		
-		
+
 		// 有道api
 		String api_yd_displayType = map.get("api_yd_displayType");
 		if (api_yd_displayType != null) {
@@ -423,11 +421,32 @@ public class JsRule extends AbstractController {
 			map.put("api_yd_aid", "2");
 		}
 
-//		try {
-//			logger.info("json1={}", JsonBinder.toJson(map, JsonBinder.always));
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//		}
+		// 舜飞api
+		String api_shunfei_displayType = map.get("api_shunfei_displayType");
+		if (api_shunfei_displayType != null) {
+			map.put("api_shunfei_displayType", api_shunfei_displayType);
+			int type = Integer.parseInt(api_shunfei_displayType);
+			map.put("api_shunfei_aid", type + "");
+		} else {
+			map.put("api_shunfei_displayType", "2");
+			map.put("api_shunfei_aid", "2");
+		}
+
+		// 众盟api
+		String api_zm_displayType = map.get("api_zm_displayType");
+		if (api_zm_displayType != null) {
+			map.put("api_zm_displayType", api_zm_displayType);
+			int type = Integer.parseInt(api_zm_displayType);
+			map.put("api_zm_aid", type + "");
+		} else {
+			map.put("api_zm_displayType", "2");
+			map.put("api_zm_aid", "2");
+		}
+		// try {
+		// logger.info("json1={}", JsonBinder.toJson(map, JsonBinder.always));
+		// } catch (Exception e) {
+		// logger.error(e.getMessage());
+		// }
 
 		if (tgs.getTaskGroups().getMap() != null) {
 			for (Map.Entry<String, String> entry : tgs.getTaskGroups().getMap().entrySet()) {
@@ -567,8 +586,8 @@ public class JsRule extends AbstractController {
 			// 广点通
 			if (provider_id.equals("2")) {
 				if (displayType == 3) {
-				placeMentId = "6020731595504836";
-				}else {
+					placeMentId = "6020731595504836";
+				} else {
 					placeMentId = "2030539481050032";
 				}
 			}
