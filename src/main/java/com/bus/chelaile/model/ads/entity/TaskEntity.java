@@ -4,7 +4,7 @@ public class TaskEntity {
 
     private TasksGroup taskGroups;
     private String traceid;
-    
+    private String adDataString;
     
     
     /**
@@ -30,6 +30,12 @@ public class TaskEntity {
      */
     public void setTaskGroups(TasksGroup taskGroups) {
         this.taskGroups = taskGroups;
+    }
+    public String getAdDataString() {
+        return adDataString;
+    }
+    public void setAdDataString(String adDataString) {
+        this.adDataString = adDataString;
     }
     
 }
