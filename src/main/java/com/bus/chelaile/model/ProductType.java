@@ -13,8 +13,8 @@ public enum ProductType {
     ECOOOK("9", 9), // Ecoook
     KEDAXUNFEI("10", 10), //科大讯飞
     WANGYI("11",11), //网易
-    SHUNFEI("12",12), //舜飞
-    ZHONGMENG("13",13); //众盟
+    SHUNFEI("13",13), //舜飞
+    ZHONGMENG("14",14); //众盟
     
     private String type;
     private String val;
