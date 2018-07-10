@@ -410,7 +410,7 @@ public abstract class AbstractManager {
 			return false;
 		}
 		
-		if (rule.isVersionNoLessThan(advParam.getV(), advParam.getS())) {
+		if (! rule.isVersionNoLessThan(advParam.getV(), advParam.getS())) {
 		    logger.info("version no less return false, udid={},advId={},ruleId={}, v={}, s={}", advParam.getUdid(), ad.getId(),
 		            rule.getRuleId(), advParam.getV(), advParam.getS());
 		    return false;
