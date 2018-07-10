@@ -215,6 +215,11 @@ public class RuleEngine {
             if (versionCmps != null && versionCmps.size() > 0) {
             	rule.setVersions(versionCmps);
             }
+            // android的最低版本和ios的最低版本
+            VersionEntity vsAndroid = parseNoLessVersion(rInfo, "noLessThanVersionsAndroid");
+            VersionEntity vsIos = parseNoLessVersion(rInfo, "noLessThanVersionsAndroid");
+            rule.setNoLessThanVersionsAndroid(vsAndroid);
+            rule.setNoLessThanVersionsIos(vsIos);
             
             rule.setChatOrRide(getChildAsInt(rInfo, "chatOrRide"));
             rule.setIsClickEndPush(getChildAsInt(rInfo, "isClickEndPush"));
@@ -374,6 +379,16 @@ public class RuleEngine {
             return null;
         }
         return vMap;
+    }
+    
+    private static VersionEntity parseNoLessVersion(JsonNode rInfo, String propName) {
+        VersionEntity vs = null;
+        String verStr = getChildAsText(rInfo, propName);
+        VersionEntity ver = VersionEntity.parseVersionStr(verStr);
+        if (ver != null) {
+            return ver;
+        }
+        return vs;
     }
     
     private static List<Position> parseGpsList(JsonNode rInfo) {

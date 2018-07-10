@@ -37,7 +37,8 @@ public class Rule {
 	private List<Position> gpsList;
 	private List<String> channels;
 	private List<String> platforms;
-	// private List<VersionEntity> versions;
+	private VersionEntity noLessThanVersionsAndroid;
+	private VersionEntity noLessThanVersionsIos;
 	private Map<VersionEntity, String> versions;
 	private List<String> lines; // 线路详情的投放规则
 	private LocationKDTree kdTree;
@@ -452,24 +453,30 @@ public class Rule {
 		return false;
 	}
 
-	// public boolean isVersionNoLessThan(VersionEntity tgtVersion) {
-	// if (versions == null || versions.isEmpty()) {
-	// return false;
-	// }
-	//
-	// if (tgtVersion == null) {
-	// return true;
-	// }
-	//
-	// for (IVersionCmp v : versions) {
-	// // 只要一个不满足，就返回false
-	// if (!v.isNoLessThan(tgtVersion)) {
-	// return false;
-	// }
-	// }
-	//
-	// return true;
-	// }
+    public boolean isVersionNoLessThan(String tgtVersion, String s) {
+        if(noLessThanVersionsAndroid == null && noLessThanVersionsIos == null) {
+            return true;
+        }
+        if(StringUtils.isBlank(s)) {
+            return false;
+        }
+        
+        if(noLessThanVersionsAndroid != null && s.equalsIgnoreCase("android")) {
+            VersionEntity queryVersion = VersionEntity.parseVersionStr(tgtVersion);
+            if(queryVersion.compareTo(noLessThanVersionsAndroid) < 0) {
+                return false;
+            }
+        }
+        
+        if(noLessThanVersionsIos != null && s.equalsIgnoreCase("ios")) {
+            VersionEntity queryVersion = VersionEntity.parseVersionStr(tgtVersion);
+            if(queryVersion.compareTo(noLessThanVersionsIos) < 0) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 
 	// public boolean isVersionMatch(RuleParam param) {
 	// if (versions == null || versions.isEmpty()) {
@@ -1168,6 +1175,22 @@ public class Rule {
         if(value >= projectDaySend)
             return true;
         return false;
+    }
+
+    public VersionEntity getNoLessThanVersionsAndroid() {
+        return noLessThanVersionsAndroid;
+    }
+
+    public void setNoLessThanVersionsAndroid(VersionEntity noLessThanVersionsAndroid) {
+        this.noLessThanVersionsAndroid = noLessThanVersionsAndroid;
+    }
+
+    public VersionEntity getNoLessThanVersionsIos() {
+        return noLessThanVersionsIos;
+    }
+
+    public void setNoLessThanVersionsIos(VersionEntity noLessThanVersionsIos) {
+        this.noLessThanVersionsIos = noLessThanVersionsIos;
     }
 
 }

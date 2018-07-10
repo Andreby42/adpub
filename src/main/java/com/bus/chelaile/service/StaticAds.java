@@ -48,8 +48,10 @@ public class StaticAds {
 	// key=advId, value=tbkTitle存储到redis中的key
 	public static Map<Integer, String> advTBKTitleKey = New.hashMap();
 	
+	// 配置项的缓存
 	public static Map<String, String> SETTINGSMAP = New.hashMap();
 	private static String settingKeys = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "setting_keys", "AD_SETTING_linefeed_screenHeight;");
+	// js原始文件的缓存
 	public static Map<String, String> JS_FILE_STR = New.hashMap();
 	
 	public static boolean hasSendEmailhalf = false;

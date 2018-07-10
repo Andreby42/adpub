@@ -29,7 +29,8 @@ public enum ShowType {
     LINE_RIGHT_ADV("23"),   // 详情页右上角广告位
 	TRANSFER_ADV("24"),		//路线换乘
 	CAR_ALL_LINE_ADV("25"),	//同站线路
-	ALL_CAR_ADV("26");		//更多车辆
+	ALL_CAR_ADV("26"),		//更多车辆
+	GUIDE_ADV("27");         //导流位广告
     
     private String type;
     private int val;

@@ -304,11 +304,14 @@ function tryNthTaskGroup(rule, nth, callback) {
 
             if (resp.ad) {
                 var entity = sdkInfo.task.asEntity ? sdkInfo.task.asEntity(resp.ad) : resp.ad;
-                entity.is_backup = is_backup_temp;
+                try{
+                    entity.is_backup = is_backup_temp;
 
-                if (nullOrUndefined(entity.ad_order))
-                    entity.ad_order = 0;
-
+                    if (nullOrUndefined(entity.ad_order))
+                        entity.ad_order = 0;
+                } catch (error) {
+                    // donot delete this try catch
+                }
                 var urls = ourUrls(rule.traceInfo, entity, rule.urls);
                 console.log('ourUrls: ' + JSON.stringify(urls));
                 resp.urls = urls;

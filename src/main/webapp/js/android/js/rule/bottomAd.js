@@ -298,14 +298,6 @@ var sdk_toutiao = {
         return list && list[0];
     },
 
-    asEntity: function(ad) {
-        if (ad == null) return null;
-
-        var ret = {};
-        ret.head = ad.getTitle();
-        ret.subhead = ad.getDescription();
-        return ret;
-    },
 
     aid: function() {
         return 'sdk_toutiao';

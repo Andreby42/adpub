@@ -46,6 +46,7 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.impl.ActiveManager;
 import com.bus.chelaile.service.impl.DoubleAndSingleManager;
 import com.bus.chelaile.service.impl.FeedAdsManager;
+import com.bus.chelaile.service.impl.GuideManager;
 import com.bus.chelaile.service.impl.LineDetailsManager;
 import com.bus.chelaile.service.impl.LineFeedAdsManager;
 import com.bus.chelaile.service.impl.LineRightManager;
@@ -94,6 +95,8 @@ public class ServiceManager {
     
     @Autowired
     private OtherManager otherManager;
+    @Autowired
+    private GuideManager guideManager;
 
     @Autowired
     private SelfManager selfManager;
@@ -787,6 +790,24 @@ public class ServiceManager {
         List<BaseAdEntity> wxBannerAds = wXBannerManager.doServiceList(advParam, ShowType.WECHATAPP_BANNER_ADV, new QueryParam());
         return wxBannerAds;
     }
+    
+    /*
+     * 获取导流入口位置的广告
+     */
+    public Object getGuideAds(AdvParam advParam) {
+        List<BaseAdEntity> guideAds = guideManager.doServiceList(advParam, ShowType.GUIDE_ADV, new QueryParam());
+        if (advParam.getMoreCities() == 1) { // 所有城市
+            List<String> cityNames = New.arrayList();
+            cityNames.add("北京");cityNames.add("天津");
+            for(String cityName : cityNames) {
+                
+            }
+        } else {
+
+        }
+
+        return guideAds;
+    }
 
     /*
      * 小程序 浮层 广告
@@ -1197,4 +1218,5 @@ public class ServiceManager {
         System.exit(0);
 
     }
+
 }
