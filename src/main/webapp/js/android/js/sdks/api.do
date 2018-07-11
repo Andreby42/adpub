@@ -41,20 +41,22 @@ function load(task, userdata, callback) {
 
     if (task.ad_data) {
         console.log('A direct AD comes.');
-        wrappedFn(task.ad_data);
+        wrappedFn(task.ad_data());
         return;
+    } else { 
+        var requestInfo = task.adurl();
+        console.log('API for ' + requestInfo.url);
+        if (requestInfo.data) {
+            Http.post(requestInfo.url, {
+                "Accept-Encoding": "gzip"
+            }, requestInfo.data, 10000, wrappedFn);
+        }
+        else {
+            Http.get(requestInfo.url, {
+                "Accept-Encoding": "gzip"
+            }, 10000, wrappedFn)
+        }
     }
-
-    var requestInfo = task.adurl();
-    console.log('API for ' + requestInfo.url);
-    else if (requestInfo.data)
-        Http.post(requestInfo.url, {
-            "Accept-Encoding": "gzip"
-        }, requestInfo.data, 10000, wrappedFn);
-    else
-        Http.get(requestInfo.url, {
-            "Accept-Encoding": "gzip"
-        }, 10000, wrappedFn)
 }
 
 function stop2() {
