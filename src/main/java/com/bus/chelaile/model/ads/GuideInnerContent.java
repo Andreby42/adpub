@@ -36,6 +36,10 @@ public class GuideInnerContent extends AdInnerContent {
 			
 			this.wx_miniPro_id = ad.getWx_miniPro_id();
 			this.wx_miniPro_path = ad.getWx_miniPro_path();
+			if(this.wx_miniPro_id != null)
+                this.wx_miniPro_id = this.wx_miniPro_id.trim();
+            if(this.wx_miniPro_path != null)
+                this.wx_miniPro_path = this.wx_miniPro_path.trim();
 			this.site = ad.site;
 			this.adPosition = ad.adPosition;
 			this.adType = ad.adType;

@@ -796,17 +796,6 @@ public class ServiceManager {
      */
     public Object getGuideAds(AdvParam advParam) {
         List<BaseAdEntity> guideAds = guideManager.doServiceList(advParam, ShowType.GUIDE_ADV, new QueryParam());
-        List<BaseAdEntity> homeAds = New.arrayList();
-        List<BaseAdEntity> ownAds = New.arrayList();
-        if (advParam.getMoreCities() == 1) { // 所有城市
-            List<String> cityNames = New.arrayList();
-            cityNames.add("北京");cityNames.add("天津");
-            for(String cityName : cityNames) {
-                
-            }
-        } else {
-
-        }
 
         return guideAds;
     }

@@ -230,6 +230,7 @@ public class BusAdvActionV2 extends AbstractController {
           return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
     }
     
+    @ResponseBody
     @RequestMapping(value = "adv!getGuideAds.action", produces = "text/plain;charset=UTF-8")
     public String getGuideAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         AdvParam advParam = getActionParam(request);

@@ -1,8 +1,6 @@
 var status = 0;
 
 function load(task, userdata, callback) {
-    var requestInfo = task.adurl();
-    console.log('API for ' + requestInfo.url);
 
     function wrappedFn(data) {
         console.log("api data=" + data);
@@ -41,7 +39,15 @@ function load(task, userdata, callback) {
         callback(ret);
     }
 
-    if (requestInfo.data)
+    if (task.ad_data) {
+        console.log('A direct AD comes.');
+        wrappedFn(task.ad_data);
+        return;
+    }
+
+    var requestInfo = task.adurl();
+    console.log('API for ' + requestInfo.url);
+    else if (requestInfo.data)
         Http.post(requestInfo.url, {
             "Accept-Encoding": "gzip"
         }, requestInfo.data, 10000, wrappedFn);
