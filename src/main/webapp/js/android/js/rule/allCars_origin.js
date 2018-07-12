@@ -56,6 +56,10 @@ var api_chelaile = {
 
     aid : function () {
         return 'api_chelaile';
+    },
+
+    ad_data : function () {
+        return '${API_CHELAILE_DATA}'
     }
 }
 
@@ -204,16 +208,11 @@ var api_shunfei = {
 	        	         "for_advertising_id":config.get('imei'),
 	        	         "android_id":config.get('AndroidID'),
 	        	         "mobile_app": {
-	        	        	 "app_id":,
-	        	        	 "sign":,
-	        	        	 "app_bundle_id":
 	        	         }
 	            	 },
 	            		 
 	            	"adslot":[
 	            			 {
-	            				 "ad_block_key":
-	            				 "adslot_type":
 	            				 "width":179,
 	            			     "height":88
 	            			 }
@@ -291,8 +290,7 @@ var api_voicead = {
             data: {
                 "tramaterialtype": "json",
                 "api_ver": "1.3.8",
-                "is_support_deeplink": "1", // optional 0不支持(默认值)，1直接触发 2
-											// 进入落地页再触发，不能用
+                "is_support_deeplink": "1", // optional 0不支持(默认值)，1直接触发 2 进入落地页再触发，不能用
                 "secure": "3", // 1 只支持http 2 只支持https 3 都支持
                 "devicetype": "0",
                 "os": "Android",

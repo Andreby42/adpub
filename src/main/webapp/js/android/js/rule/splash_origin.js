@@ -50,6 +50,10 @@ var api_chelaile = {
 
     aid : function () {
         return 'chelaile';
+    },
+
+    ad_data : function () {
+        return '${API_CHELAILE_DATA}'
     }
 }
 
@@ -248,6 +252,13 @@ var sdk_gdt = {
     filter: function(list) {
         return list;
     },
+    
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        return ret;
+    },
 
     aid : function () {
         return 'sdk_gdt';
@@ -275,6 +286,13 @@ var sdk_baidu = {
     filter: function(msg) {
         return msg;
     },
+    
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        return ret;
+    },
 
     aid : function () {
         return 'sdk_baidu';
@@ -301,6 +319,13 @@ var sdk_toutiao = {
     filter: function(ad) {
         return ad;
     },
+    
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        return ret;
+    },
 
     aid : function () {
         return 'sdk_toutiao';
@@ -326,6 +351,13 @@ var sdk_voicead = {
 
     filter: function(ad) {
         return ad;
+    },
+    
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        return ret;
     },
 
     aid : function () {

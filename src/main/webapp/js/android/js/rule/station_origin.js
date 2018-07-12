@@ -38,48 +38,48 @@ var api_chelaile = {
 		}
         var ad = {
             provider_id: '1',
-			id: row.id,
-			adid: row.id,
-			targetType: row.targetType,
+            id: row.id,
+            adid: row.id,
+            targetType: row.targetType,
             link: row.link,
-			h5Url: row.h5Url,
+            h5Url: row.h5Url,
             unfoldMonitorLink: row.unfoldMonitorLink,
             clickMonitorLink: row.clickMonitorLink,
-			monitorType: row.monitorType,
+            monitorType: row.monitorType,
             openType: row.openType,
             ad_order: 0,
-			action: row.action,
-			bannerInfo: {
-				bannerType:row.bannerInfo.bannerType,
-				color: row.bannerInfo.color,
-				name: row.bannerInfo.name,
-				slogan: row.bannerInfo.slogan,
-				sloganColor: row.bannerInfo.sloganColor,
-				button:{
-					buttonBG: row.bannerInfo.button.buttonBG,
-					buttonColor: row.bannerInfo.button.buttonColor,
-					buttonPic: row.bannerInfo.button.buttonPic,
-					buttonRim: row.bannerInfo.button.buttonRim,
-					buttonText: row.bannerInfo.button.buttonText
-				},
-				tag:{
-					tagBG: row.bannerInfo.tag.tagBG,
-					tagPic: row.bannerInfo.tag.tagPic,
-					tagText: row.bannerInfo.tag.tagText
-				}
-			},
-			adCard: {
-					address:row.adCard.address,
-					cardType: row.adCard.cardType,
-					gpsType: row.adCard.gpsType,
-					lat: row.adCard.lat,
-					lng: row.adCard.lng,
-					logo: row.adCard.logo,
-					name: row.adCard.name,
-					phoneNum: row.adCard.phoneNum,
-					tagPic: row.adCard.tagPic,
-					topPic: row.adCard.topPic
-			},
+            action: row.action,
+            bannerInfo: {
+                bannerType:row.bannerInfo.bannerType,
+                color: row.bannerInfo.color,
+                name: row.bannerInfo.name,
+                slogan: row.bannerInfo.slogan,
+                sloganColor: row.bannerInfo.sloganColor,
+                button:{
+                    buttonBG: row.bannerInfo.button.buttonBG,
+                    buttonColor: row.bannerInfo.button.buttonColor,
+                    buttonPic: row.bannerInfo.button.buttonPic,
+                    buttonRim: row.bannerInfo.button.buttonRim,
+                    buttonText: row.bannerInfo.button.buttonText
+                },
+                tag:{
+                    tagBG: row.bannerInfo.tag.tagBG,
+                    tagPic: row.bannerInfo.tag.tagPic,
+                    tagText: row.bannerInfo.tag.tagText
+                }
+            },
+            adCard: {
+                    address:row.adCard.address,
+                    cardType: row.adCard.cardType,
+                    gpsType: row.adCard.gpsType,
+                    lat: row.adCard.lat,
+                    lng: row.adCard.lng,
+                    logo: row.adCard.logo,
+                    name: row.adCard.name,
+                    phoneNum: row.adCard.phoneNum,
+                    tagPic: row.adCard.tagPic,
+                    topPic: row.adCard.topPic
+            },
             pic: row.pic
         }
 
@@ -88,6 +88,10 @@ var api_chelaile = {
 
     aid : function () {
         return 'api_chelaile';
+    },
+
+    ad_data : function () {
+        return '${API_CHELAILE_DATA}'
     }
 }
 

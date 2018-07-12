@@ -46,6 +46,10 @@
 	<!-- feed流广告 -->
 	<bean id="feedAdsManager" class="com.bus.chelaile.service.impl.FeedAdsManager" parent="abstractService">
 	</bean>
+    <!-- 引流位广告 -->
+    <!-- feed流广告 -->
+    <bean id="guideManager" class="com.bus.chelaile.service.impl.GuideManager" parent="abstractService">
+    </bean>
 	
 	
 	

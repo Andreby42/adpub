@@ -65,6 +65,10 @@ public class AdStationlInnerContent extends AdInnerContent {
             this.buyOut = ad.getBuyOut();
             this.wx_miniPro_id = ad.getWx_miniPro_id();
             this.wx_miniPro_path = ad.getWx_miniPro_path();
+            if(this.wx_miniPro_id != null)
+                this.wx_miniPro_id = this.wx_miniPro_id.trim();
+            if(this.wx_miniPro_path != null)
+                this.wx_miniPro_path = this.wx_miniPro_path.trim();
             this.apiType = ad.apiType;
             this.provider_id = ad.getProvider_id();
             this.autoInterval = ad.autoInterval * 1000;

@@ -33,22 +33,22 @@ var api_chelaile = {
         var row = rows[rows.length - 1];
         var ad = {
             provider_id: '1',
-			id: row.id,
-			adid: row.id,
-			head: row.head,
-			subhead: row.subhead,
-			imgsType: row.imgsType,
-			targetType: row.targetType,
+            id: row.id,
+            adid: row.id,
+            head: row.head,
+            subhead: row.subhead,
+            imgsType: row.imgsType,
+            targetType: row.targetType,
             link: row.link,
             unfoldMonitorLink: row.unfoldMonitorLink,
             clickMonitorLink: row.clickMonitorLink,
-			monitorType: row.monitorType,
+            monitorType: row.monitorType,
             openType: row.openType,
             ad_order: 0,
-			action: row.action,
+            action: row.action,
             pic: row.pic,
-			picsList: row.picsList,
-			adStyle: row.displayType
+            picsList: row.picsList,
+            adStyle: row.displayType
         }
 
         return ad;
@@ -56,6 +56,10 @@ var api_chelaile = {
 
     aid : function () {
         return 'api_chelaile';
+    },
+
+    ad_data : function () {
+        return '${API_CHELAILE_DATA}'
     }
 }
 

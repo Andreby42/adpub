@@ -409,6 +409,13 @@ public abstract class AbstractManager {
 		if (rule.hasVersions() && !rule.isVersionMatch(advParam.getV())) {
 			return false;
 		}
+		
+		if (! rule.isVersionNoLessThan(advParam.getV(), advParam.getS())) {
+		    logger.info("version no less return false, udid={},advId={},ruleId={}, v={}, s={}", advParam.getUdid(), ad.getId(),
+		            rule.getRuleId(), advParam.getV(), advParam.getS());
+		    return false;
+		}
+		
 		// 开屏是否投给MIUI，投且只投
 		if (showType == ShowType.OPEN_SCREEN
 				&& !rule.devicePub(advParam.getUdid(), advParam.getDeviceType(), advParam.getStartMode())) {

@@ -1,8 +1,6 @@
 var status = 0;
 
 function load(task, userdata, callback) {
-    var requestInfo = task.adurl();
-    console.log('API for ' + requestInfo.url);
 
     function wrappedFn(data) {
         console.log("api data=" + data);
@@ -41,14 +39,24 @@ function load(task, userdata, callback) {
         callback(ret);
     }
 
-    if (requestInfo.data)
-        Http.post(requestInfo.url, {
-            "Content-Type":"application/json"
-        }, requestInfo.data, 10000, wrappedFn);
-    else
-        Http.get(requestInfo.url, {
-            "Accept-Encoding": "gzip"
-        }, 10000, wrappedFn)
+    if (task.ad_data) {
+        console.log('A direct AD comes.');
+        wrappedFn(task.ad_data());
+        return;
+    } else { 
+        var requestInfo = task.adurl();
+        console.log('API for ' + requestInfo.url);
+        if (requestInfo.data) {
+            Http.post(requestInfo.url, {
+            	 "Content-Type":"application/json"
+            }, requestInfo.data, 10000, wrappedFn);
+        }
+        else {
+            Http.get(requestInfo.url, {
+                "Accept-Encoding": "gzip"
+            }, 10000, wrappedFn)
+        }
+    }
 }
 
 function stop2() {

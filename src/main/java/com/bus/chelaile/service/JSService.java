@@ -3,6 +3,8 @@ package com.bus.chelaile.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +42,8 @@ public class JSService {
     private DoubleAndSingleManager doubleAndSingleManager;
     @Autowired
     private LineRightManager lineRightManager;
-    
+    @Resource
+    private ServiceManager serviceManager;
     @Autowired
     private OtherManager otherManager;
 
@@ -150,9 +153,11 @@ public class JSService {
         }
         taskEntity.setTaskGroups(new TasksGroup(tasks, times,map));
         taskEntity.setTraceid(param.getTraceid());
-        logger.info("js方式，获取到的有效广告id列表是：traceid={}, udid={}, cityId={}, s={}, v={}, vc={}, ids={}", param.getTraceid(), 
+        logger.info("JS, get useful ads ：traceid={}, udid={}, cityId={}, s={}, v={}, vc={}, ids={}", param.getTraceid(), 
                 param.getUdid(), param.getCityId(), param.getS(), param.getV(), param.getVc(), ids);
-
+        JSONObject resultMap = new JSONObject();
+        resultMap.put("ads", entities);
+        taskEntity.setAdDataString(JSONObject.toJSONString(serviceManager.getClienSucMap(resultMap, Constants.STATUS_REQUEST_SUCCESS)));
         return taskEntity;
     }
 

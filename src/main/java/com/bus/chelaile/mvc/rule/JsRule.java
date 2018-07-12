@@ -267,6 +267,9 @@ public class JsRule extends AbstractController {
 				for (String task : tasks) {
 					if (task.contains("api_chelaile")) {
 						splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
+						splashJS = splashJS.replace("${API_CHELAILE_DATA}", tgs.getAdDataString());
+						// 自采买广告，将api_chelaile这个task改成json串
+//						task = ;
 					}
 					// else if (task.contains("sdk")) {
 					// if(StaticAds.JS_FILE_STR.containsKey(tag + task)) {

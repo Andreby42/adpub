@@ -97,6 +97,8 @@ public class AdvParam {
      private String wifissid; //wifi 的 ssid 和 mac;
      
      private int site; // 标注小程序广告banner广告的位置， 0或者没有是首页， 1 是详情页
+     
+     private int moreCities; //获取所有城市的信息
      /**
       * 存入的s都会被转换为小写。
       *
@@ -737,6 +739,16 @@ public class AdvParam {
      */
     public void setTraceid(String traceid) {
         this.traceid = traceid;
+    }
+
+
+    public int getMoreCities() {
+        return moreCities;
+    }
+
+
+    public void setMoreCities(int moreCities) {
+        this.moreCities = moreCities;
     }
 
 
