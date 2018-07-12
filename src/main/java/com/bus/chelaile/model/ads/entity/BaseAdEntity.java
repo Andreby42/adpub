@@ -276,8 +276,8 @@ public abstract class BaseAdEntity {
 					url = url.replace("__IDFA__", idfa);
 				}
 //				url = url.replace("__OpenUDID__", udid);
-				url = url.replace("__UDID__", udid);
 			}
+			url = url.replace("__UDID__", udid);
 
 			if (mac != null) {
 				mac = DigestUtils.md5Hex(mac.replace(":", "").toUpperCase());

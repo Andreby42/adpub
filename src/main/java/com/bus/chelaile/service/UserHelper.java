@@ -31,22 +31,26 @@ public class UserHelper {
         if (StringUtils.isEmpty(udid)) {
             return false;
         }
-        
+
         String key = "CREATEUSERTIME#" + udid;
+        String createTimeStr = CacheUtil.getFromCommonOcs(key);
         try {
-             // 获取用户的创建时间。
-            Long createTime = Long.parseLong(CacheUtil.getFromCommonOcs(key));
-             if (createTime == null) {
-                 /**
-                  * 由于目前OCS之中用户的创建时间信息只保存了15天，因此当CREATETIME时，默认该用户是老用户。
-                  */
-//                 logger.info("OCS中无用户创建时间: udid={}, accountId={}, userId={}", udid, accountId, userId);
-                 return false;
-             }
-             int newUserPeriod =  Constants.DEFAULT_NEW_USER_PERIOD;
-             return createTime + newUserPeriod > System.currentTimeMillis();
-        } catch(Exception ex) {
-           logger.error("[NEWUSER_EXCEPTION] 判断是否新用户异常， errMsg={}, udid={}, accountId={}", new Object[]{ex.getMessage(), udid, accountId});
+            // 获取用户的创建时间。
+            if (createTimeStr == null) {
+                /**
+                 * 由于目前OCS之中用户的创建时间信息只保存了15天，因此当CREATETIME时，默认该用户是老用户。
+                 */
+                //                 logger.info("OCS中无用户创建时间: udid={}, accountId={}, userId={}", udid, accountId, userId);
+                return false;
+            }
+            Long createTime = Long.parseLong(createTimeStr);
+            int newUserPeriod = Constants.DEFAULT_NEW_USER_PERIOD;
+            return createTime + newUserPeriod > System.currentTimeMillis();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error("key={}, createTimeStr={}", key, createTimeStr);
+            logger.error("[NEWUSER_EXCEPTION] 判断是否新用户异常， errMsg={}, udid={}, accountId={}",
+                    new Object[] {ex.getMessage(), udid, accountId});
         }
         return false;
     }
