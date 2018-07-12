@@ -63,6 +63,10 @@ var api_chelaile = {
 
     aid : function () {
         return 'api_chelaile';
+    },
+
+    ad_data : function () {
+        return '${API_CHELAILE_DATA}'
     }
 }
 

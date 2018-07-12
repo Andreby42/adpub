@@ -51,6 +51,10 @@ var api_chelaile = {
 
     aid : function () {
         return 'api_chelaile';
+    },
+
+    ad_data : function () {
+        return '${API_CHELAILE_DATA}'
     }
 }
 
@@ -239,7 +243,7 @@ var sdk_gdt = {
             pos: "banner",
             data: {
                 appId: "1106616441",
-                placementId: "9040714184494018"
+                placementId: "4060239431859044"
             }
         }
     },
@@ -274,7 +278,7 @@ var sdk_baidu = {
             pos: "banner",
             data: {
                 appId: "",
-                placementId: "5826174"
+                placementId: "5826196"
             }
         }
     },
@@ -318,7 +322,7 @@ var sdk_toutiao = {
             pos: "banner",
             data: {
                 appId: "",
-                placementId: "900673326"
+                placementId: "900673291"
             }
         }
     },
@@ -354,7 +358,7 @@ var sdk_ifly = {
             pos:"banner",
             data:{
                 appId:"1106616441",
-                placementId:"5CBF4E804C06EBF6EEAF93DC5EA6BBCF"
+                placementId:"10BE44800806378732740DB5B955800C"
                 // placementId:"9040714184494018"
             }
         }

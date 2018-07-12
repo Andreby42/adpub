@@ -33,22 +33,22 @@ var api_chelaile = {
         var row = rows[rows.length - 1];
         var ad = {
             provider_id: '1',
-			id: row.id,
-			adid: row.id,
-			head: row.head,
-			subhead: row.subhead,
-			imgsType: row.imgsType,
-			targetType: row.targetType,
+            id: row.id,
+            adid: row.id,
+            head: row.head,
+            subhead: row.subhead,
+            imgsType: row.imgsType,
+            targetType: row.targetType,
             link: row.link,
             unfoldMonitorLink: row.unfoldMonitorLink,
             clickMonitorLink: row.clickMonitorLink,
-			monitorType: row.monitorType,
+            monitorType: row.monitorType,
             openType: row.openType,
             ad_order: 0,
-			action: row.action,
+            action: row.action,
             pic: row.pic,
-			picsList: row.picsList,
-			adStyle: row.displayType
+            picsList: row.picsList,
+            adStyle: row.displayType
         }
 
         return ad;
@@ -56,6 +56,10 @@ var api_chelaile = {
 
     aid : function () {
         return 'api_chelaile';
+    },
+
+    ad_data : function () {
+        return '${API_CHELAILE_DATA}'
     }
 }
 
@@ -241,6 +245,272 @@ var api_voicead = {
       return ${api_voicead_aid};
     }
 }
+
+
+
+
+
+var api_shunfei = {
+
+	    sdkname: function() {
+	        return "api_shunfei";
+	    },
+
+	    adurl: function() {
+	        var config = JsFixedConfig.getJsFixedConfig();
+
+	        
+	        var geolng = config.get('geo_lng') ;
+	        var geolat = config.get('geo_lat');
+	        var ts = config.get('ts');
+	        ts = ts / 1000;
+	        var sv = config.get('sv').split('.');
+	        var micro = 0;
+	        
+	        if( sv.length == 3 ){
+	        	micro = sv[2];
+	        }
+
+	        var net = parseInt(config.get('dct')); // 有道用dct
+	        if (net >= 11 && net <= 13) {
+	          net = net - 9;
+	        } else {
+	          net = 1;
+	        }
+	        
+			
+			var sign = JsEncryptUtil.md5('177'+'g@^6*1n@E7IX#)SuJ6SE$#BQ8rV*)O8y'+ts);
+	        
+	        return {
+	            url: 'http://hostname:port/api/v1/bid',
+	            data: {
+	            	 "ip": config.get('ip'),
+	            	 "user_agent": config.get('ua'),
+	            	 "detected_time": ts,
+	            	 "time_zone": "+0800",
+	            	 "geo": {
+	            		 "latitude": geolng, 
+	            		 "longitude": geolat  
+	            		 },
+	            	 
+	            	 "mobile": {
+	            		 "device_id":config.get('mac'),
+	            		 "device_type":'1',
+	            		 "platform":'2',
+	            		 "os_version": {
+	            			 "os_version_major": sv[0],
+	            			 "os_version_minor": sv[1],
+                             "os_version_micro": micro	 
+	            			 },
+	            		 "brand": config.get('vendor'),
+	        	         "model": config.get('model'),	
+	        	         "screen_width":config.get('screenWidth'),
+	        	         "screen_height": config.get('screenHeight'),
+	        	         "wireless_network_type":net,
+	        	         "for_advertising_id":config.get('imei'),
+	        	         "android_id":config.get('AndroidID'),
+	        	         "mobile_app": {
+	        	        	 "app_id":'969',
+	        	        	 "sign":sign,
+	        	        	 "app_bundle_id":'com.ygkj.chelaile.standard',
+							 "first_launch":config.get('firstLaunch')
+	        	         }
+	            	 },
+	            		 
+	            	"adslot":[
+	            			 {
+	            				 "ad_block_key":'1985',
+	            				 "adslot_type":'17',
+	            				 "width":config.get('screenWidth'),
+	            			     "height":'92'
+	            			 }
+	            	],
+	            	 
+	            	 "api_version":"1.6.1",
+	            	 "is_test":true,
+	          
+	            }
+	        };
+	    },
+	    filter: function(data) {
+	        if (typeof data == 'string')
+	            data = eval("a=" + data);
+
+	        var rows = data.ads;
+	        if (!rows || rows.length === 0)
+	            return null;
+
+	        for (var i = 0; i < rows.length; i++) {
+	            var row = rows[i];
+
+				var click_type = parseInt(row.click_type);
+				 
+				if( click_type == 2 ){
+					click_type = 0;	
+				}else{
+					click_type = 1;	
+				}
+				
+	            var ad = {
+	                provider_id: '13',
+	                ad_order: row.ad_id,
+	                adType: click_type,
+	                head: row.title,
+	                subhead: row.desc,
+	                pic: row.imgs[0],
+	                brandIcon: row.logo_url,
+	                link: row.click_url.join(";"),
+	                deepLink: row.deep_url,
+	                unfoldMonitorLink: row.exposure.join(";"),
+					actionMonitorLink: row.action_url.join(";"),
+	                clickMonitorLink: row.click.join(";"),
+					picsList: row.imgs
+	            }
+	            return ad;
+	        }
+	        return null;
+	    },
+
+	  aid : function () {
+	        return 'api_shunfei_${api_shunfei_displayType}';
+	    },
+		
+		adStyle : function() {
+	      return ${api_shunfei_aid};
+	    }
+	}
+
+
+	
+	var api_zm = {
+
+	    sdkname: function() {
+	        return "api_zm";
+	    },
+
+	    adurl: function() {
+	        var config = JsFixedConfig.getJsFixedConfig();
+
+	        var net = parseInt(config.get('dct')); // 有道用dct
+	        if (net >= 11 && net <= 13) {
+	          net = net - 9;
+	        } else {
+	          net = 1;
+	        }
+	        
+	        return {
+	            url: 'http://123.56.176.83:10091/durer/zmtmobads/v4/getAd.do',
+	            data: {
+					"reqInfo": {
+						"adSlotId": "multi_05",
+						"accessToken": "dHlwZTphY2Nlc3NfdG9rZW4gYWxnOkFFUyA=.YXBwX2lkOlJlemFyMDAwMDIg.3dj1iAlb0nnCmxIv3Opj41etWfzSY2Bnd4ICsBCgt6HG2UTmnRhnOxEvpxe73wfBqK8nUO6xuHHazmuft204fg"
+					},
+					"adSlotInfo": {
+						"mimes": "jpg,gif,icon,png,",
+						"slotWidth": config.get('screenWidth'),
+						"slotHeight": '92'
+					},
+					"mobileInfo": {
+						"osVersion": config.get('sv'),
+						"appVersion": config.get('v'),
+						"mobileModel": config.get('deviceType'),
+						"vendor": config.get('vendor'),
+						"connectionType": net,
+						"operatorType": '0',
+						"imei": config.get('imei'),
+						"imsi": "",
+						"androidId": config.get('AndroidID'),
+						"mac": config.get('mac'),
+						"deviceType": '1',
+						"osType": '0'
+					},
+					"networkInfo": {
+						"ua": config.get('ua'),
+						"ip": config.get('ip'),
+						"ipType": '0',
+						"httpType": '0'
+					},
+					"coordinateInfo": {
+						"coordinateType": '3',
+						"lng": config.get('geo_lng'),
+						"lat": config.get('geo_lat'),
+						"timestamp": config.get('ts')
+					}
+				}
+	        };
+	    },
+	    filter: function(data) {
+	        if (typeof data == 'string')
+	            data = eval("a=" + data);
+
+	        var rows = data.ads;
+	        if (!rows || rows.length === 0)
+	            return null;
+
+	        for (var i = 0; i < rows.length; i++) {
+	            var row = rows[i];
+				
+				var creativeType = parseInt(row.materialMetas.creativeType);
+				// 只要图文广告,右上角和站点有区别
+				if( creativeType != 3  ){
+					continue;
+				}
+				
+				var interactionType = parseInt(row.materialMetas.interactionType);
+				
+				if( interactionType == 3 || interactionType == 4 || interactionType == 5 || interactionType == 100  ){
+					continue;
+				}
+				
+				var index = row.materialMetas.index;
+				
+				var traceArgs = row.adTracking;
+				
+				var unfoldMonitorLink = '';
+				var clickMonitorLink = '';
+				
+				for(  var j = 0; j < traceArgs.length;j++ ){
+					var tarceInfo = traceArgs[j];
+					if( tarceInfo.materialMetaIndex == index ){
+						if( tarceInfo.trackingEventType == 1 ){
+							 unfoldMonitorLink = tarceInfo.trackingUrls.join(";");
+						}else if( tarceInfo.trackingEventType == 0 ){
+							 clickMonitorLink = tarceInfo.trackingUrls.join(";");
+						}else if( tarceInfo.trackingEventType == 10000 ){
+							 dptrackers = tarceInfo.trackingUrls.join(";");
+						}
+						
+					}
+				}
+
+	            var ad = {
+	                provider_id: '14',
+	                ad_order: index,
+	                adType: interactionType,				//这两个不知道是否有问题	
+	                packageName: row.materialMetas.packageName,
+	                head: row.materialMetas.title,
+	                subhead: row.materialMetas.summary,
+	                pic: row.materialMetas.imageSrcs[0],
+	                brandIcon: row.materialMetas.iconSrcs[0],
+	                link: row.materialMetas.landingUrl,
+	                deepLink: row.materialMetas.dpUrl,
+	                unfoldMonitorLink: unfoldMonitorLink,
+	                clickMonitorLink: clickMonitorLink,
+					picsList: row.img_urls
+	            }
+	            return ad;
+	        }
+	        return null;
+	    },
+
+	  aid : function () {
+	        return 'api_zm_${api_zm_displayType}';
+	    },
+		
+		adStyle : function() {
+	      return ${api_zm_aid};
+	    }
+	}
 
 // sdk taks ===================
 // 手机调用sdk

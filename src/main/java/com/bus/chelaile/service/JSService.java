@@ -153,7 +153,7 @@ public class JSService {
         }
         taskEntity.setTaskGroups(new TasksGroup(tasks, times,map));
         taskEntity.setTraceid(param.getTraceid());
-        logger.info("js方式，获取到的有效广告id列表是：traceid={}, udid={}, cityId={}, s={}, v={}, vc={}, ids={}", param.getTraceid(), 
+        logger.info("JS, get useful ads ：traceid={}, udid={}, cityId={}, s={}, v={}, vc={}, ids={}", param.getTraceid(), 
                 param.getUdid(), param.getCityId(), param.getS(), param.getV(), param.getVc(), ids);
         JSONObject resultMap = new JSONObject();
         resultMap.put("ads", entities);
