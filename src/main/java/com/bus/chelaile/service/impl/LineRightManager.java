@@ -105,10 +105,10 @@ public class LineRightManager extends AbstractManager {
         }
 
         if (entities != null && entities.size() > 0) {
-            if (!(queryParam.isJS() && entities.get(0).getProvider_id().equals("1"))) {
+//            if (!(queryParam.isJS() && entities.get(0).getProvider_id().equals("1"))) {
                 cacheRecord.setNoAdHistoryMap(ids, showType.getType());
                 recordSend(advParam, cacheRecord, adMap, showType, entities);
-            }
+//            }
         }
 
         return entities;

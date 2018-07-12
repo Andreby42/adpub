@@ -208,16 +208,11 @@ var api_shunfei = {
 	        	         "for_advertising_id":config.get('imei'),
 	        	         "android_id":config.get('AndroidID'),
 	        	         "mobile_app": {
-	        	        	 "app_id":,
-	        	        	 "sign":,
-	        	        	 "app_bundle_id":
 	        	         }
 	            	 },
 	            		 
 	            	"adslot":[
 	            			 {
-	            				 "ad_block_key":
-	            				 "adslot_type":
 	            				 "width":179,
 	            			     "height":88
 	            			 }
