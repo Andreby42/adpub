@@ -43,7 +43,7 @@ function load(task, userdata, callback) {
 
     if (requestInfo.data)
         Http.post(requestInfo.url, {
-            "Accept-Encoding": "gzip"
+            "Content-Type":"application/json"
         }, requestInfo.data, 10000, wrappedFn);
     else
         Http.get(requestInfo.url, {
