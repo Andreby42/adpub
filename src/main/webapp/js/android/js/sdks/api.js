@@ -54,7 +54,7 @@ function load(task, userdata, callback) {
         }
         else {
             Http.get(requestInfo.url, {
-                "Accept-Encoding": "gzip"
+            	"Content-Type":"application/json"
             }, 10000, wrappedFn)
         }
     }
