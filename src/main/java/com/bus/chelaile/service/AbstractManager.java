@@ -251,9 +251,10 @@ public abstract class AbstractManager {
 		if (entities != null) {
 			BaseAdEntity entity = entities.get(0);
 			writeSendLog(advParam, adMap.get(entity.getId()).getAds(), entity);
-			if (!entity.getProvider_id().equals("1")) {
-				setSendLog(entity, advParam.getUdid(), showType.getType());
-			}
+			// 某个版本用于设定‘每次下发必换第一条’的环境
+//			if (!entity.getProvider_id().equals("1")) {
+//				setSendLog(entity, advParam.getUdid(), showType.getType());
+//			}
 
 			// 记录缓存
 			int adId = entity.getId();

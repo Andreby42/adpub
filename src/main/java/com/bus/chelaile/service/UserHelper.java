@@ -33,8 +33,10 @@ public class UserHelper {
         }
 
         String key = "CREATEUSERTIME#" + udid;
-        String createTimeStr = CacheUtil.getFromCommonOcs(key);
         try {
+//            String.valueOf(null);
+            String createTimeStr = CacheUtil.getFromCommonOcs(key);
+            logger.info("getcreate time : key={}, createTimeStr={}", key, createTimeStr);
             // 获取用户的创建时间。
             if (createTimeStr == null) {
                 /**
@@ -48,7 +50,6 @@ public class UserHelper {
             return createTime + newUserPeriod > System.currentTimeMillis();
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("key={}, createTimeStr={}", key, createTimeStr);
             logger.error("[NEWUSER_EXCEPTION] 判断是否新用户异常， errMsg={}, udid={}, accountId={}",
                     new Object[] {ex.getMessage(), udid, accountId});
         }

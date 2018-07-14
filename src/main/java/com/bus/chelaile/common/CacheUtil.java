@@ -251,7 +251,11 @@ public class CacheUtil {
     
     // ocs查询
     public static String getFromCommonOcs(String key) {
-    	return (String) cachePayInfoClient.get(key);
+    	Object j = cachePayInfoClient.get(key);
+    	if(j == null)
+    	    return null;
+    	else
+    	    return String.valueOf(j);
     }
     
     // ocs设置值
