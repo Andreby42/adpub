@@ -246,6 +246,177 @@ var api_voicead = {
     }
 }
 
+
+var api_zm = {
+
+	    sdkname: function() {
+	        return "api_zm";
+	    },
+
+	    adurl: function() {
+	        var config = JsFixedConfig.getJsFixedConfig();
+
+	        var net = parseInt(config.get('dct')); // 有道用dct
+	        if (net >= 11 && net <= 13) {
+	          net = net - 9;
+	        } else {
+	          net = 1;
+	        }
+	        
+	        return {
+	            url: 'http://123.56.176.83:10091/durer/zmtmobads/v4/getAd.do',
+	            data: {
+					"reqInfo": {
+						"adSlotId": "multi_05",
+						"accessToken": "dHlwZTphY2Nlc3NfdG9rZW4gYWxnOkFFUyA=.YXBwX2lkOlJlemFyMDAwMDIg.3dj1iAlb0nnCmxIv3Opj41etWfzSY2Bnd4ICsBCgt6HG2UTmnRhnOxEvpxe73wfBqK8nUO6xuHHazmuft204fg"
+					},
+					"adSlotInfo": {
+						"mimes": "jpg,gif,icon,png,",
+						"slotWidth": config.get('screenWidth'),
+						"slotHeight": '92'
+					},
+					"mobileInfo": {
+						"osVersion": config.get('sv'),
+						"appVersion": config.get('v'),
+						"mobileModel": config.get('deviceType'),
+						"vendor": config.get('vendor'),
+						"connectionType": net,
+						"operatorType": '0',
+						"imei": config.get('imei'),
+						"imsi": "",
+						"androidId": config.get('AndroidID'),
+						"mac": config.get('mac'),
+						"deviceType": '1',
+						"osType": '0'
+					},
+					"networkInfo": {
+						"ua": config.get('ua'),
+						"ip": config.get('ip'),
+						"ipType": '0',
+						"httpType": '0'
+					},
+					"coordinateInfo": {
+						"coordinateType": '3',
+						"lng": config.get('geo_lng'),
+						"lat": config.get('geo_lat'),
+						"timestamp": config.get('ts')
+					}
+				}
+	        };
+	    },
+	      filter: function(data) {
+			
+			if( typeof data != 'Object'  ){
+				console.log("object=111");	
+			}
+			
+	        if (typeof data == 'string')
+	            data = eval("a=" + data);
+           
+	        var rows = data.ads;
+			
+	        if (!rows || rows.length === 0)
+	            return null;
+
+	        for (var i = 0; i < rows.length; i++) {
+	            var row = rows[i];
+				
+				
+				
+				var creativeType = row.materialMetas[0].creativeType;
+				// 只要图文广告,右上角和站点有区别
+				if( creativeType != 3   ){
+				//	continue;
+				}
+				
+				var interactionType = row.materialMetas[0].interactionType;
+				
+				if( interactionType == 3 || interactionType == 4 || interactionType == 5 || interactionType == 100  ){
+					continue;
+				}
+				
+				var index = row.materialMetas[0].index;
+				
+				var traceArgs = row.adTracking;
+				
+				var unfoldMonitorLink = '';
+				var clickMonitorLink = '';
+				
+				for(  var j = 0; j < traceArgs.length;j++ ){
+					var tarceInfo = traceArgs[j];
+					if( tarceInfo.materialMetaIndex == index ){
+						if( tarceInfo.trackingEventType == 1 ){
+							 unfoldMonitorLink = tarceInfo.trackingUrls.join(";");
+						}else if( tarceInfo.trackingEventType == 0 ){
+							 clickMonitorLink = tarceInfo.trackingUrls.join(";");
+						}else if( tarceInfo.trackingEventType == 10000 ){
+							 dptrackers = tarceInfo.trackingUrls.join(";");
+						}
+						
+					}
+				}
+				
+				var title = row.materialMetas[0].title;
+				
+				console.log("title1=" + title);
+				
+				if( row.materialMetas[0].title === '' ){
+					title = row.materialMetas[0].desc;
+				}
+				
+				console.log("title2=" + title);
+				
+				if( title === '' ){
+					continue;
+				}
+				
+				
+				var desc = row.materialMetas[0].desc;
+				
+				if( desc == title ){
+				
+					desc = '';
+				}
+					
+
+	            var ad = {
+	                provider_id: '14',
+	                ad_order: index,
+	                adType: interactionType,				//这两个不知道是否有问题	
+	                packageName: row.materialMetas[0].packageName,
+	                head: title,
+	                subhead: desc,
+	                pic: row.materialMetas[0].imageSrcs[0],
+	                brandIcon: row.materialMetas[0].iconSrcs[0],
+	                link: row.materialMetas[0].landingUrl,
+	                deepLink: row.materialMetas[0].dpUrl,
+	                unfoldMonitorLink: unfoldMonitorLink,
+	                clickMonitorLink: clickMonitorLink
+	            }
+				
+			
+				
+	            return ad;
+	        }
+			
+			var url = 'http://atrace.chelaile.net.cn/thirdNodata?aid=api_zm&pid=24';
+            
+			 Http.get(url, {}, 5000, function() {
+                console.log('成功发送过滤掉数据上报埋点:' + url);
+             });
+			
+	        return null;
+	    },
+
+	  aid : function () {
+	        return 'api_zm_${api_zm_displayType}';
+	    },
+		
+		adStyle : function() {
+	      return ${api_zm_aid};
+	    }
+	}
+
 // sdk taks ===================
 // 手机调用sdk
 

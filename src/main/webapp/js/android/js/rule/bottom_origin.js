@@ -33,22 +33,22 @@ var api_chelaile = {
         var row = rows[rows.length - 1];
         var ad = {
             provider_id: '1',
-            id: row.id,
-            adid: row.id,
-            head: row.head,
-            subhead: row.subhead,
-            imgsType: row.imgsType,
-            targetType: row.targetType,
+			id: row.id,
+			adid: row.id,
+			head: row.head,
+			subhead: row.subhead,
+			imgsType: row.imgsType,
+			targetType: row.targetType,
             link: row.link,
             unfoldMonitorLink: row.unfoldMonitorLink,
             clickMonitorLink: row.clickMonitorLink,
-            monitorType: row.monitorType,
+			monitorType: row.monitorType,
             openType: row.openType,
             ad_order: 0,
-            action: row.action,
+			action: row.action,
             pic: row.pic,
-            picsList: row.picsList,
-            adStyle: row.displayType
+			picsList: row.picsList,
+			adStyle: row.displayType
         }
 
         return ad;
@@ -58,9 +58,9 @@ var api_chelaile = {
         return 'api_chelaile';
     },
 
-    ad_data : function () {
-        return '${API_CHELAILE_DATA}'
-    }
+	ad_data : function () {
+	  return '${API_CHELAILE_DATA}'
+	 }
 }
 
 var api_yd = {
@@ -259,17 +259,28 @@ var api_shunfei = {
 	    adurl: function() {
 	        var config = JsFixedConfig.getJsFixedConfig();
 
-	        
+			
+			console.log("parseInt(config.get('dct'))=" + parseInt(config.get('dct')));
 	        var geolng = config.get('geo_lng') ;
 	        var geolat = config.get('geo_lat');
 	        var ts = config.get('ts');
-	        ts = ts / 1000;
-	        var sv = config.get('sv').split('.');
+	    
+		
+			ts = String(ts).slice(0,-3);
+			 
+			 console.log("ts=" + ts);
+				
+			
+	        var sv1 = config.get('sv') + "";
+			var sv = sv1.split(".");
+		
+			
 	        var micro = 0;
 	        
 	        if( sv.length == 3 ){
 	        	micro = sv[2];
 	        }
+			
 
 	        var net = parseInt(config.get('dct')); // 有道用dct
 	        if (net >= 11 && net <= 13) {
@@ -277,21 +288,25 @@ var api_shunfei = {
 	        } else {
 	          net = 1;
 	        }
+			
+			
 	        
 			
 			var sign = JsEncryptUtil.md5('177'+'g@^6*1n@E7IX#)SuJ6SE$#BQ8rV*)O8y'+ts);
 	        
 	        return {
-	            url: 'http://hostname:port/api/v1/bid',
+	            url: 'http://i-mbv.biddingx.com/api/v1/bid',
 	            data: {
 	            	 "ip": config.get('ip'),
 	            	 "user_agent": config.get('ua'),
 	            	 "detected_time": ts,
 	            	 "time_zone": "+0800",
-	            	 "geo": {
-	            		 "latitude": geolng, 
-	            		 "longitude": geolat  
-	            		 },
+					 "detected_language": "en_",
+					 
+					 "geo": {
+						"latitude": config.get('geo_lat'), 
+						"longitude": config.get('geo_lng') 
+						},
 	            	 
 	            	 "mobile": {
 	            		 "device_id":config.get('mac'),
@@ -302,11 +317,13 @@ var api_shunfei = {
 	            			 "os_version_minor": sv[1],
                              "os_version_micro": micro	 
 	            			 },
-	            		 "brand": config.get('vendor'),
-	        	         "model": config.get('model'),	
+	            		 
+						 "brand":config.get('vendor'),
+						 "model":config.get('deviceType'),
+						 
 	        	         "screen_width":config.get('screenWidth'),
 	        	         "screen_height": config.get('screenHeight'),
-	        	         "wireless_network_type":net,
+	        	         "wireless_network_type":String(net),
 	        	         "for_advertising_id":config.get('imei'),
 	        	         "android_id":config.get('AndroidID'),
 	        	         "mobile_app": {
@@ -319,14 +336,14 @@ var api_shunfei = {
 	            		 
 	            	"adslot":[
 	            			 {
-	            				 "ad_block_key":'1985',
-	            				 "adslot_type":'17',
-	            				 "width":config.get('screenWidth'),
-	            			     "height":'92'
+	            				 "ad_block_key":1985,
+	            				 "adslot_type":17,
+	            				 "width":179,
+	            			     "height":88
 	            			 }
 	            	],
 	            	 
-	            	 "api_version":"1.6.1",
+	            	 "api_version":"1.6",
 	            	 "is_test":true,
 	          
 	            }
@@ -440,29 +457,42 @@ var api_shunfei = {
 	        };
 	    },
 	    filter: function(data) {
+			
+			console.log("bottom=" + data);	
+			
+			if( typeof data != 'Object'  ){
+				console.log("object=111");	
+			}
+			
+		
+				
 	        if (typeof data == 'string')
 	            data = eval("a=" + data);
-
+           
 	        var rows = data.ads;
+			
+			
 	        if (!rows || rows.length === 0)
 	            return null;
 
 	        for (var i = 0; i < rows.length; i++) {
 	            var row = rows[i];
 				
-				var creativeType = parseInt(row.materialMetas.creativeType);
+				
+				
+				var creativeType = row.materialMetas[0].creativeType;
 				// 只要图文广告,右上角和站点有区别
-				if( creativeType != 3  ){
-					continue;
+				if( creativeType != 3   ){
+				//	continue;
 				}
 				
-				var interactionType = parseInt(row.materialMetas.interactionType);
+				var interactionType = row.materialMetas[0].interactionType;
 				
 				if( interactionType == 3 || interactionType == 4 || interactionType == 5 || interactionType == 100  ){
 					continue;
 				}
 				
-				var index = row.materialMetas.index;
+				var index = row.materialMetas[0].index;
 				
 				var traceArgs = row.adTracking;
 				
@@ -482,24 +512,56 @@ var api_shunfei = {
 						
 					}
 				}
+				
+				var title = row.materialMetas[0].title;
+				
+				console.log("title1=" + title);
+				
+				if( row.materialMetas[0].title === '' ){
+					title = row.materialMetas[0].desc;
+				}
+				
+				console.log("title2=" + title);
+				
+				if( title === '' ){
+					continue;
+				}
+				
+				
+				var desc = row.materialMetas[0].desc;
+				
+				if( desc == title ){
+				
+					desc = '';
+				}
+					
 
 	            var ad = {
 	                provider_id: '14',
 	                ad_order: index,
 	                adType: interactionType,				//这两个不知道是否有问题	
-	                packageName: row.materialMetas.packageName,
-	                head: row.materialMetas.title,
-	                subhead: row.materialMetas.summary,
-	                pic: row.materialMetas.imageSrcs[0],
-	                brandIcon: row.materialMetas.iconSrcs[0],
-	                link: row.materialMetas.landingUrl,
-	                deepLink: row.materialMetas.dpUrl,
+	                packageName: row.materialMetas[0].packageName,
+	                head: title,
+	                subhead: desc,
+	                pic: row.materialMetas[0].imageSrcs[0],
+	                brandIcon: row.materialMetas[0].iconSrcs[0],
+	                link: row.materialMetas[0].landingUrl,
+	                deepLink: row.materialMetas[0].dpUrl,
 	                unfoldMonitorLink: unfoldMonitorLink,
-	                clickMonitorLink: clickMonitorLink,
-					picsList: row.img_urls
+	                clickMonitorLink: clickMonitorLink
 	            }
+				
+			
+				
 	            return ad;
 	        }
+			
+			var url = 'http://atrace.chelaile.net.cn/thirdNodata?aid=api_zm&pid=22';
+            
+			 Http.get(url, {}, 5000, function() {
+                console.log('成功发送过滤掉数据上报埋点:' + url);
+             });
+			
 	        return null;
 	    },
 
