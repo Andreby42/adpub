@@ -690,18 +690,18 @@ public class ServiceManager {
         QueryParam queryParam = new QueryParam();
 
         // 从缓存获cshow
-        if (StringUtils.isNoneBlank(advParam.getUdid())
-                && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
-            String cshowKey = AdvCache.getCshowKey(advParam.getUdid());
-            String cshow = (String) CacheUtil.getFromBUSRedis(cshowKey);
-            if (cshow != null) {
-                if (!cshow.equals(Constants.CSHOW_LINEDETAIL)) {
-                    logger.info("cshow not return ads, udid={}, cshow={}", advParam.getUdid(), cshow);
-                    return null;
-                }
-            }
-
-        }
+//        if (StringUtils.isNoneBlank(advParam.getUdid())
+//                && (advParam.getS().equalsIgnoreCase("android") || (advParam.getS().equalsIgnoreCase("ios")))) {
+//            String cshowKey = AdvCache.getCshowKey(advParam.getUdid());
+//            String cshow = (String) CacheUtil.getFromBUSRedis(cshowKey);
+//            if (cshow != null) {
+//                if (!cshow.equals(Constants.CSHOW_LINEDETAIL)) {
+//                    logger.info("cshow not return ads, udid={}, cshow={}", advParam.getUdid(), cshow);
+//                    return null;
+//                }
+//            }
+//
+//        }
         List<BaseAdEntity> entities = feedAdsManager.doServiceList(advParam, ShowType.FEED_ADV, queryParam);
         // 如果返回为空，那么需要记录 ‘未投放记录’ ,id 记录为 -1
         if (entities == null || entities.size() == 0) {
