@@ -317,7 +317,7 @@ public class RedisBUSCacheImplUtil implements ICache {
                 pool.returnResource(conn);
         }
         if(System.currentTimeMillis() - startTime > 50) {
-            log.info("TBK redis.get cost time :{}", System.currentTimeMillis() - startTime);
+            log.info("BUS redis.get cost time :{}", System.currentTimeMillis() - startTime);
         }
         
         return ret;
