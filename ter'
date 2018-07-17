@@ -1,65 +1,0 @@
-[33mcommit b386c7efb0eb3f16f23864389c0bebb34df12182[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m, [m[1;31mche_origin/dev[m[33m)[m
-Author: qiekkdegit <daiding106@126.com>
-Date:   Sat Jul 14 21:24:23 2018 +0800
-
-    修复ocs get 到Long型转换string的bug
-
-[1mdiff --git a/src/main/java/com/bus/chelaile/common/CacheUtil.java b/src/main/java/com/bus/chelaile/common/CacheUtil.java[m
-[1mindex d3eb3dc..6794a47 100644[m
-[1m--- a/src/main/java/com/bus/chelaile/common/CacheUtil.java[m
-[1m+++ b/src/main/java/com/bus/chelaile/common/CacheUtil.java[m
-[36m@@ -251,7 +251,11 @@[m [mpublic class CacheUtil {[m
-     [m
-     // ocs查询[m
-     public static String getFromCommonOcs(String key) {[m
-[31m-    	return (String) cachePayInfoClient.get(key);[m
-[32m+[m[41m    [m	[32mObject j = cachePayInfoClient.get(key);[m[41m[m
-[32m+[m[41m    [m	[32mif(j == null)[m[41m[m
-[32m+[m[41m    [m	[32m    return null;[m[41m[m
-[32m+[m[41m    [m	[32melse[m[41m[m
-[32m+[m[41m    [m	[32m    return String.valueOf(j);[m[41m[m
-     }[m
-     [m
-     // ocs设置值[m
-[1mdiff --git a/src/main/java/com/bus/chelaile/service/AbstractManager.java b/src/main/java/com/bus/chelaile/service/AbstractManager.java[m
-[1mindex 4f1880c..fb07fe9 100644[m
-[1m--- a/src/main/java/com/bus/chelaile/service/AbstractManager.java[m
-[1m+++ b/src/main/java/com/bus/chelaile/service/AbstractManager.java[m
-[36m@@ -251,9 +251,10 @@[m [mpublic abstract class AbstractManager {[m
- 		if (entities != null) {[m
- 			BaseAdEntity entity = entities.get(0);[m
- 			writeSendLog(advParam, adMap.get(entity.getId()).getAds(), entity);[m
-[31m-			if (!entity.getProvider_id().equals("1")) {[m
-[31m-				setSendLog(entity, advParam.getUdid(), showType.getType());[m
-[31m-			}[m
-[32m+[m			[32m// 某个版本用于设定‘每次下发必换第一条’的环境[m[41m[m
-[32m+[m[32m//			if (!entity.getProvider_id().equals("1")) {[m[41m[m
-[32m+[m[32m//				setSendLog(entity, advParam.getUdid(), showType.getType());[m[41m[m
-[32m+[m[32m//			}[m[41m[m
- [m
- 			// 记录缓存[m
- 			int adId = entity.getId();[m
-[1mdiff --git a/src/main/java/com/bus/chelaile/service/UserHelper.java b/src/main/java/com/bus/chelaile/service/UserHelper.java[m
-[1mindex 450e243..5e5fe17 100644[m
-[1m--- a/src/main/java/com/bus/chelaile/service/UserHelper.java[m
-[1m+++ b/src/main/java/com/bus/chelaile/service/UserHelper.java[m
-[36m@@ -33,8 +33,10 @@[m [mpublic class UserHelper {[m
-         }[m
- [m
-         String key = "CREATEUSERTIME#" + udid;[m
-[31m-        String createTimeStr = CacheUtil.getFromCommonOcs(key);[m
-         try {[m
-[32m+[m[32m//            String.valueOf(null);[m
-[32m+[m[32m            String createTimeStr = CacheUtil.getFromCommonOcs(key);[m
-[32m+[m[32m            logger.info("getcreate time : key={}, createTimeStr={}", key, createTimeStr);[m
-             // 获取用户的创建时间。[m
-             if (createTimeStr == null) {[m
-                 /**[m
-[36m@@ -48,7 +50,6 @@[m [mpublic class UserHelper {[m
-             return createTime + newUserPeriod > System.currentTimeMillis();[m
-         } catch (Exception ex) {[m
-             ex.printStackTrace();[m
-[31m-            logger.error("key={}, createTimeStr={}", key, createTimeStr);[m
-             logger.error("[NEWUSER_EXCEPTION] 判断是否新用户异常， errMsg={}, udid={}, accountId={}",[m
-                     new Object[] {ex.getMessage(), udid, accountId});[m
-         }[m
