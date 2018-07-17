@@ -309,7 +309,7 @@ var api_zm = {
 	        }
 	        
 	        return {
-	            url: 'http://123.56.176.83:10091/durer/zmtmobads/v4/getAd.do',
+	            url: 'http://adalliance.zmeng123.com/zmtmobads/v4/getAd.do',
 	            data: {
 					"reqInfo": {
 						"adSlotId": "multi_05",
@@ -413,9 +413,7 @@ var api_zm = {
 				
 				console.log("title2station=" + title);
 				
-				if( title === '' ){
-					continue;
-				}
+				title = '';
 				
 				
 				console.log("titlestation=" + title);
