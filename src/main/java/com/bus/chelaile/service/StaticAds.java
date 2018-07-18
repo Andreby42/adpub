@@ -189,7 +189,7 @@ public class StaticAds {
             }
             
             for (int i = 0; i < tempList1.length; i++) {
-                reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
+                reader = new InputStreamReader(new FileInputStream(tempList1[i]), "UTF-8");
                 int tempchar;
                 StringBuilder jsStr = new StringBuilder();
                 while ((tempchar = reader.read()) != -1) {
@@ -197,7 +197,7 @@ public class StaticAds {
                         jsStr.append((char)tempchar);
                     }
                 }
-                JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
+                JS_FILE_STR.put(tempList1[i].getName().split("\\.")[0], jsStr.toString());
                 reader.close();
             }
         } catch (Exception e) {

@@ -69,7 +69,6 @@ public class StartService {
         logger.info("****AllAdsinfosize*****   {}", allAds.size());
         // 获取所有的placementId
         List<PlacementInfo> allPlacements = advContent.listAllPlacementId();
-        logger.info("****AllPlacements***  {}", allPlacements);
         readyPlacementCache(allPlacements);
         logger.info("****android Placements***  {}", JSONObject.toJSONString(StaticAds.androidPlacementMap));
         logger.info("****ios Placements***  {}", JSONObject.toJSONString(StaticAds.iosPlacementMap));
