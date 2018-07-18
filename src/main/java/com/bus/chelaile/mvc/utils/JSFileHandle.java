@@ -54,6 +54,9 @@ public class JSFileHandle {
 
     // 新的获取placementId的方式
     private static String getPlaceMentId(String platform, ShowType showType, String aid, String displayType) {
+        // 目前 除了3以外，其他的都一样
+        if (!displayType.equals("3"))
+            displayType = "2";
         StringBuilder key = new StringBuilder(showType.getType()).append("_").append(aid).append("_").append(displayType);
         if (platform.equals("android")) {
             return StaticAds.androidPlacementMap.get(key.toString());
