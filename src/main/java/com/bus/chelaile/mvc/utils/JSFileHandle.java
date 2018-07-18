@@ -3,6 +3,7 @@ package com.bus.chelaile.mvc.utils;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,12 @@ public class JSFileHandle {
             String displayTypeReplaceKey = "\"${" + aid + "_displayType}\"";
             String aidReplaceKey = "${" + aid + "}";
 
-            splashJS = splashJS.replace(placementReplaceKey, placementId);
+            if(StringUtils.isNoneBlank(placementId)) {
+                splashJS = splashJS.replace(placementReplaceKey, placementId);
+            } else {
+                logger.info("error occured when replace placementId, placementid is null , platform={}, showType={}, aid={}, displayType={}", 
+                        platform, showType, aid, displayType);
+            }
             splashJS = splashJS.replace(displayTypeReplaceKey, displayType);
             splashJS = splashJS.replace(aidReplaceKey, displayType);
         }
