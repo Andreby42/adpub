@@ -292,45 +292,45 @@ var api_shunfei = {
 			
 	        
 			
-			var sign = JsEncryptUtil.md5('177'+'g@^6*1n@E7IX#)SuJ6SE$#BQ8rV*)O8y'+ts);
+			var sign = JsEncryptUtil.md5('177'+'g@^6*1n@E7IX#)SuJ6SE$#BQ8rV*)O8y'+ts)+'';
 	        
-	        return {
+	        var ret = {
 	            url: 'http://i-mbv.biddingx.com/api/v1/bid',
 	            data: {
-	            	 "ip": config.get('ip'),
-	            	 "user_agent": config.get('ua'),
-	            	 "detected_time": ts,
+	            	 "ip": config.get('ip')+'',
+	            	 "user_agent": config.get('ua')+'',
+	            	 "detected_time": parseInt(ts),
 	            	 "time_zone": "+0800",
 					 "detected_language": "en_",
 					 
 					 "geo": {
-						"latitude": config.get('geo_lat'), 
-						"longitude": config.get('geo_lng') 
+						"latitude":parseFloat(config.get('geo_lat')+''), 
+						"longitude":parseFloat(config.get('geo_lng')+'') 
 						},
 	            	 
 	            	 "mobile": {
-	            		 "device_id":config.get('mac'),
-	            		 "device_type":'1',
-	            		 "platform":'2',
+	            		 "device_id":config.get('mac')+'',
+	            		 "device_type":1,
+	            		 "platform":2,
 	            		 "os_version": {
-	            			 "os_version_major": sv[0],
-	            			 "os_version_minor": sv[1],
-                             "os_version_micro": micro	 
+	            			 "os_version_major": parseInt(sv[0]),
+	            			 "os_version_minor": parseInt(sv[1]),
+                             "os_version_micro": parseInt(micro)	 
 	            			 },
 	            		 
-						 "brand":config.get('vendor'),
-						 "model":config.get('deviceType'),
+						 "brand":config.get('vendor')+'',
+						 "model":config.get('deviceType')+'',
 						 
-	        	         "screen_width":config.get('screenWidth'),
-	        	         "screen_height": config.get('screenHeight'),
-	        	         "wireless_network_type":String(net),
-	        	         "for_advertising_id":config.get('imei'),
-	        	         "android_id":config.get('AndroidID'),
+	        	         "screen_width":parseInt(config.get('screenWidth')+''),
+	        	         "screen_height": parseInt(config.get('screenHeight')+''),
+	        	         "wireless_network_type":parseInt(net),
+	        	         "for_advertising_id":config.get('imei')+'',
+	        	         "android_id":config.get('AndroidID')+'',
 	        	         "mobile_app": {
-	        	        	 "app_id":'969',
+	        	        	 "app_id":969,
 	        	        	 "sign":sign,
 	        	        	 "app_bundle_id":'com.ygkj.chelaile.standard',
-							 "first_launch":config.get('firstLaunch')
+							 "first_launch":eval(config.get('firstLaunch')+'')
 	        	         }
 	            	 },
 	            		 
@@ -344,10 +344,17 @@ var api_shunfei = {
 	            	],
 	            	 
 	            	 "api_version":"1.6",
-	            	 "is_test":true,
+	            	 "is_test":false,
 	          
 	            }
 	        };
+			
+			var s = JSON.stringify(ret);
+            var j = JSON.parse(s);
+            //console.log("******** str " + s)
+            //console.log("******** json " + j)
+            return j;
+			
 	    },
 	    filter: function(data) {
 	        if (typeof data == 'string')
@@ -370,7 +377,7 @@ var api_shunfei = {
 				
 	            var ad = {
 	                provider_id: '13',
-	                ad_order: row.ad_id,
+	                ad_order: i,
 	                adType: click_type,
 	                head: row.title,
 	                subhead: row.desc,
