@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.model.PlacementCache;
+import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -55,8 +57,8 @@ public class StaticAds {
 	public static Map<String, String> JS_FILE_STR = New.hashMap();
 	
 	// 存储placementId的缓存
-	public static Map<String, Map<Integer, String>> androidPlacementMap = New.hashMap();
-	public static Map<String, Map<Integer, String>> iosPlacementMap = New.hashMap();
+	public static Map<String, String> androidPlacementMap = New.hashMap();
+	public static Map<String, String> iosPlacementMap = New.hashMap();
 	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;

@@ -465,5 +465,17 @@ public class StartService {
 			}
 			i++;
 		}
+		
+		Map<String, Map<Integer, String>> a = New.hashMap();
+		
+		Map<Integer, String> temp = New.hashMap();
+		temp.put(1, "2");
+		a.put("dd", temp);
+		
+		System.out.println(JSONObject.toJSONString(a));
+		
+		
+		
+		
 	}
 }

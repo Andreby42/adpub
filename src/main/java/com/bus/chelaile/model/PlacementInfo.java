@@ -2,8 +2,6 @@ package com.bus.chelaile.model;
 
 import java.util.Map;
 
-import com.bus.chelaile.util.New;
-
 import lombok.Data;
 
 @Data
@@ -17,26 +15,15 @@ public class PlacementInfo {
     private String pidName;
     private String aidName;
 
-    public void redayPlacementCache(Map<String, Map<Integer, String>> androidPlacementMap,
-            Map<String, Map<Integer, String>> iosPlacementMap) {
+    public void redayPlacementCache(Map<String, String> androidPlacementMap, Map<String, String> iosPlacementMap) {
+
+        String key = pid + "_" + aid + "_" + displayType + "_";
+        String value = placementId;
 
         if (platform != null && platform.equalsIgnoreCase("ios")) {
-            if (iosPlacementMap.containsKey(aid)) {
-                iosPlacementMap.get(aid).put(displayType, placementId);
-            } else {
-                Map<Integer, String> playM = New.hashMap();
-                playM.put(displayType, placementId);
-                iosPlacementMap.put(aid, playM);
-            }
+            iosPlacementMap.put(key, value);
         } else {
-
-            if (androidPlacementMap.containsKey(aid)) {
-                androidPlacementMap.get(aid).put(displayType, placementId);
-            } else {
-                Map<Integer, String> playM = New.hashMap();
-                playM.put(displayType, placementId);
-                androidPlacementMap.put(aid, playM);
-            }
+            iosPlacementMap.put(key, value);
         }
     }
 
