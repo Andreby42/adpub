@@ -168,7 +168,27 @@ public class StaticAds {
                 fileStr = "/data/advConfig/test/js/";
             File file = new File(fileStr);
             File[] tempList = file.listFiles();
+            
+            fileStr = "/data/advConfig/iosjs/";
+            if(Constants.ISTEST)
+                fileStr = "/data/advConfig/test/iosjs/";
+            file = new File(fileStr);
+            File[] tempList1 = file.listFiles();
+            
             for (int i = 0; i < tempList.length; i++) {
+                reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
+                int tempchar;
+                StringBuilder jsStr = new StringBuilder();
+                while ((tempchar = reader.read()) != -1) {
+                    if(((char)tempchar) != '\r') {
+                        jsStr.append((char)tempchar);
+                    }
+                }
+                JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
+//                reader.close();
+            }
+            
+            for (int i = 0; i < tempList1.length; i++) {
                 reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
                 int tempchar;
                 StringBuilder jsStr = new StringBuilder();

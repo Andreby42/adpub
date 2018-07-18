@@ -53,7 +53,12 @@ public class JsRule extends AbstractController {
 		String traceInfo = JSONObject.toJSONString(p);
 
 		// 模板
-		String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
+		String splashOrigin = "";
+		if(p.getS().equals("android")) { 
+		    splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin"); 
+		} else {
+		    splashOrigin = StaticAds.JS_FILE_STR.get("ios_splash_origin");
+		}
 		TaskEntity tgs = jSService.getTask(p, "splash");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request, ShowType.OPEN_SCREEN);
@@ -74,7 +79,12 @@ public class JsRule extends AbstractController {
 		String traceInfo = JSONObject.toJSONString(p);
 
 		// 模板
-		String splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
+		String splashOrigin = "";
+        if(p.getS().equals("android")) { 
+            splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
+        } else {
+            splashOrigin = StaticAds.JS_FILE_STR.get("ios_home_origin");
+        }
 		TaskEntity tgs = jSService.getTask(p, "home");
 		// setMaidianParams(p, );
 
@@ -98,7 +108,12 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
+		String splashOrigin = "";
+        if(p.getS().equals("android")) { 
+            splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
+        } else {
+            splashOrigin = StaticAds.JS_FILE_STR.get("ios_right_origin");
+        }
 		TaskEntity tgs = jSService.getTask(p, "rightTop");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "right_", request, ShowType.LINE_RIGHT_ADV);
@@ -121,7 +136,12 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
+		String splashOrigin = "";
+        if(p.getS().equals("android")) {
+            splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
+        } else {
+            splashOrigin = StaticAds.JS_FILE_STR.get("ios_station_origin");
+        }
 		TaskEntity tgs = jSService.getTask(p, "station");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "station_", request, ShowType.STATION_ADV);
@@ -144,7 +164,12 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
+		String splashOrigin = "";
+        if(p.getS().equals("android")) {
+            splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
+        } else {
+            splashOrigin = StaticAds.JS_FILE_STR.get("ios_bottom_origin");
+        }
 		TaskEntity tgs = jSService.getTask(p, "bottom");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request, ShowType.LINE_FEED_ADV);
@@ -166,7 +191,12 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = StaticAds.JS_FILE_STR.get("transfer_origin");
+		String splashOrigin = "";
+        if(p.getS().equals("android")) {
+            splashOrigin = StaticAds.JS_FILE_STR.get("transfer_origin");
+        } else {
+            splashOrigin = StaticAds.JS_FILE_STR.get("ios_transfer_origin");
+        }
 		TaskEntity tgs = jSService.getTask(p, "transfer");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "route_", request, ShowType.TRANSFER_ADV);
@@ -189,7 +219,13 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = StaticAds.JS_FILE_STR.get("stationDetail_origin");
+		String splashOrigin = "";
+        if(p.getS().equals("android")) {
+            splashOrigin = StaticAds.JS_FILE_STR.get("stationDetail_origin");
+        } else {
+            splashOrigin = StaticAds.JS_FILE_STR.get("ios_stationDetail_origin");
+        }
+		
 		TaskEntity tgs = jSService.getTask(p, "stationDetail");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request, ShowType.CAR_ALL_LINE_ADV);
@@ -212,7 +248,12 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = StaticAds.JS_FILE_STR.get("allCars_origin");
+		String splashOrigin = "";
+        if(p.getS().equals("android")) {
+            splashOrigin = StaticAds.JS_FILE_STR.get("allCars_origin");
+        } else {
+            splashOrigin = StaticAds.JS_FILE_STR.get("ios_allCars_origin");
+        }
 
 		// logger.info("splashOrigin={}",splashOrigin);
 
@@ -253,6 +294,7 @@ public class JsRule extends AbstractController {
             for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
                 for (String task : tasks) {
                     if (task.contains("api_chelaile")) {
+                        splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
                         splashJS = splashJS.replace("${API_CHELAILE_DATA}", tgs.getAdDataString());
                     }
                 }
