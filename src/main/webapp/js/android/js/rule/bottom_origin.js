@@ -689,7 +689,7 @@ var sdk_baidu = {
     },
 
     aid : function () {
-        return 'sdk_baidu_${sdk_baidu_displayType}';
+        return 'sdk_baidu_${sdk_baidu_aid}';
     },
 	
 	adStyle : function() {

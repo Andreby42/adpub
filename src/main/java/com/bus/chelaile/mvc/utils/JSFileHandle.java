@@ -35,7 +35,7 @@ public class JSFileHandle {
             String placementId = getPlaceMentId(platform, showType, aid, displayType);
             String placementReplaceKey = "${" + aid + "_placementId}";
             String displayTypeReplaceKey = "\"${" + aid + "_displayType}\"";
-            String aidReplaceKey = "${" + aid + "}";
+            String aidReplaceKey = "${" + aid + "_aid}";
 
             if(StringUtils.isNoneBlank(placementId)) {
                 splashJS = splashJS.replace(placementReplaceKey, placementId);
