@@ -137,7 +137,7 @@ var api_yd = {
     },
 	
 	adStyle : function() {
-      return ${api_yd_displayType};
+      return '${api_yd_displayType}';
     }
 
 }

@@ -63,7 +63,7 @@ var sdk_gdt = {
             pos: "banner",
             data: {
                 "appId":"1105595946",
-                "placementId":"3080736383701333"z
+                "placementId":"3080736383701333"
             }
         }
     },
@@ -191,7 +191,7 @@ var sdk_inmobi = {
     },
     
     adStyle : function() {
-        return 2;
+        return zz2;
     }
 }
 

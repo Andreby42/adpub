@@ -1,7 +1,6 @@
 package com.bus.chelaile.mvc.rule;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,10 +19,9 @@ import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.mvc.utils.JSFileHandle;
 import com.bus.chelaile.service.JSService;
 import com.bus.chelaile.service.StaticAds;
-import com.bus.chelaile.util.JsonBinder;
-import com.bus.chelaile.util.New;
 
 @Controller
 @RequestMapping("/js/android/js/rule")
@@ -34,21 +32,6 @@ public class JsRule extends AbstractController {
 
 	private static final Logger logger = LoggerFactory.getLogger(JsRule.class);
 
-	// for test
-	@ResponseBody
-	@RequestMapping(value = "/splash.do", produces = "text/plain;charset=UTF-8")
-	public String splash(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-		return "hello_1111111111你好 啊";
-	}
-
-	// for test
-	@ResponseBody
-	@RequestMapping(value = "/splash1.js", produces = "text/plain;charset=UTF-8")
-	public String splash1(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-		return "hello_1111111111你好 啊";
-	}
 
 	// for test
 	@ResponseBody
@@ -243,51 +226,44 @@ public class JsRule extends AbstractController {
 	}
 
 	private String produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request,
-			ShowType showType) {
-		if (StringUtils.isBlank(originJs)) {
-			return "┭┮﹏┭┮ 原始js文件为空 ";
-		}
+            ShowType showType) {
+        if (StringUtils.isBlank(originJs)) {
+            return "┭┮﹏┭┮ 原始js文件为空 ";
+        }
+        
+        if(tgs == null || tgs.getTaskGroups() == null || tgs.getTaskGroups().getTasks().size() == 0) {
+            // TODO 
+        }
 
-		if (StringUtils.isBlank(tgs.getTraceid())) {
-			logger.info("traceId is null -- , udid={},s={}, v={}", p.getUdid(), p.getS(), p.getV());
-			originJs = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
-			originJs = originJs.replace("${TIMEOUTS}", tgs.getTaskGroups().getTasks().toString());
-			return replaceJs(originJs, showType, tgs, tag);
-			// return originJs;
-		}
+//        if (StringUtils.isBlank(tgs.getTraceid())) {
+//            logger.info("traceId is null -- , udid={},s={}, v={}", p.getUdid(), p.getS(), p.getV());
+//            originJs = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
+//            originJs = originJs.replace("${TIMEOUTS}", tgs.getTaskGroups().getTasks().toString());
+//            return JSFileHandle.replaceJs(p.getS(), originJs, showType, tgs, tag);
+//        }
 
-		String splashJS = "";
-		if (tgs != null) {
-			splashJS = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
-			splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTaskGroups().getTimeouts().toString());
-			splashJS = splashJS.replace("${TRACEID}", tgs.getTraceid());
-			// splashJS = splashJS.replaceAll("${MAIDIAN_PARAM}", );
+        String splashJS = "";
+        if (tgs != null) {
+            splashJS = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
+            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTaskGroups().getTimeouts().toString());
+            if (StringUtils.isNoneBlank(tgs.getTraceid())) {
+                splashJS = splashJS.replace("${TRACEID}", tgs.getTraceid());
+            }
 
-			for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
-				for (String task : tasks) {
-					if (task.contains("api_chelaile")) {
-						splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
-						splashJS = splashJS.replace("${API_CHELAILE_DATA}", tgs.getAdDataString());
-						// 自采买广告，将api_chelaile这个task改成json串
-//						task = ;
-					}
-					// else if (task.contains("sdk")) {
-					// if(StaticAds.JS_FILE_STR.containsKey(tag + task)) {
-					// splashJS += StaticAds.JS_FILE_STR.get(tag + task);
-					// }
-					// else {
-					// logger.error("没有配置文件的 sdk|api，task={}, udid={}, JS_FILE_STR.keys={}", tag +
-					// task, p.getUdid(), StaticAds.JS_FILE_STR.keySet());
-					// }
-					// }
-				}
-			}
-		}
+            for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
+                for (String task : tasks) {
+                    if (task.contains("api_chelaile")) {
+                        splashJS = splashJS.replace("${API_CHELAILE_DATA}", tgs.getAdDataString());
+                    }
+                }
+            }
+        }
 
-		return replaceJs(splashJS, showType, tgs, tag);
+        //		return replaceJs(splashJS, showType, tgs, tag);
+        return JSFileHandle.replaceJs(p.getS(), splashJS, showType, tgs, tag);
 
-	}
-
+    }
+/*
 	private String replaceJs(String splashJS, ShowType showType, TaskEntity tgs, String tag) {
 		// 这里要替换placementid,displayType 也要替换成默认值
 		String sdk_gdt_placementId = null;
@@ -555,7 +531,9 @@ public class JsRule extends AbstractController {
 
 		return placeMentId;
 	}
-
+	*/
+	
+	/*
 	private String getPlaceMentId(ShowType showType, String provider_id, int displayType) {
 
 		String placeMentId = "111";
@@ -866,6 +844,6 @@ public class JsRule extends AbstractController {
 		}
 
 		return placeMentId;
-	}
+	}*/
 
 }

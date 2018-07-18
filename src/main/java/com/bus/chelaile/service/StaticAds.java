@@ -150,6 +150,8 @@ public class StaticAds {
 		advTBKTitleKey.clear();
 		JS_FILE_STR.clear();
 		SETTINGSMAP.clear();
+		androidPlacementMap.clear();
+		iosPlacementMap.clear();
 		
 		readSettings();
 		readJSFILESTR();

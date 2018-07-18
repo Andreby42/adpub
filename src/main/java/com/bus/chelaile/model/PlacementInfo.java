@@ -17,13 +17,13 @@ public class PlacementInfo {
 
     public void redayPlacementCache(Map<String, String> androidPlacementMap, Map<String, String> iosPlacementMap) {
 
-        String key = pid + "_" + aid + "_" + displayType + "_";
+        String key = pid + "_" + aid + "_" + displayType;
         String value = placementId;
 
         if (platform != null && platform.equalsIgnoreCase("ios")) {
             iosPlacementMap.put(key, value);
         } else {
-            iosPlacementMap.put(key, value);
+            androidPlacementMap.put(key, value);
         }
     }
 

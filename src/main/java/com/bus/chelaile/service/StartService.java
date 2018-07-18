@@ -475,7 +475,9 @@ public class StartService {
 		System.out.println(JSONObject.toJSONString(a));
 		
 		
-		
+		Map<String, String> b = New.hashMap();
+		b.put("da", null);
+		System.out.println(JSONObject.toJSONString(b));
 		
 	}
 }
