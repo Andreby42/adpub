@@ -117,7 +117,6 @@ public abstract class AbstractManager {
 		// 需要排序 先打乱次序 ，再按照优先级排序
 		Collections.shuffle(adsList);
 		Collections.sort(adsList, AD_CONTENT_COMPARATOR);
-		logger.info("atfer sort, adList={}", JSONObject.toJSONString(adsList));
 		LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
 		// 把所有符合规则的广告放到map中
 		handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);

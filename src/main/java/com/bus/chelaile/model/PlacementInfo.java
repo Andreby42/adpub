@@ -20,17 +20,23 @@ public class PlacementInfo {
     public void redayPlacementCache(Map<String, Map<Integer, String>> androidPlacementMap,
             Map<String, Map<Integer, String>> iosPlacementMap) {
 
-        Map<String, Map<Integer, String>> temp = androidPlacementMap;
         if (platform != null && platform.equalsIgnoreCase("ios")) {
-            temp = iosPlacementMap;
-        }
-
-        if (temp.containsKey(aid)) {
-            temp.get(aid).put(displayType, placementId);
+            if (iosPlacementMap.containsKey(aid)) {
+                iosPlacementMap.get(aid).put(displayType, placementId);
+            } else {
+                Map<Integer, String> playM = New.hashMap();
+                playM.put(displayType, placementId);
+                iosPlacementMap.put(aid, playM);
+            }
         } else {
-            Map<Integer, String> playM = New.hashMap();
-            playM.put(displayType, placementId);
-            temp.put(aid, playM);
+
+            if (androidPlacementMap.containsKey(aid)) {
+                androidPlacementMap.get(aid).put(displayType, placementId);
+            } else {
+                Map<Integer, String> playM = New.hashMap();
+                playM.put(displayType, placementId);
+                androidPlacementMap.put(aid, playM);
+            }
         }
     }
 
