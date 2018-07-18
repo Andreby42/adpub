@@ -15,11 +15,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.kafka.InfoStreamForAdvClick;
+import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -65,10 +67,17 @@ public class StartService {
         // 获取当前所有的可以使用的ADS
         List<AdContent> allAds = advContent.listValidAds();
         logger.info("****AllAdsinfosize*****   {}", allAds.size());
+        // 获取所有的placementId
+        List<PlacementInfo> allPlacements = advContent.listAllPlacementId();
+        logger.info("****AllPlacements***  {}", allPlacements);
+        readyPlacementCache(allPlacements);
+        logger.info("****android Placements***  {}", JSONObject.toJSONString(StaticAds.androidPlacementMap));
+        logger.info("****ios Placements***  {}", JSONObject.toJSONString(StaticAds.iosPlacementMap));
         // 保存已生效的广告id
-        List<String> advIds = New.arrayList();
         // 1的话就取全部的,0就只读取线路详情,2除线路详情\站点广告外的其它内容
-        String isLineDetails = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "isLineDetails", "1");
+        // 2018-07不再使用了
+//        String isLineDetails = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "isLineDetails", "1");
+        List<String> advIds = New.arrayList();
 
         for (AdContent ad : allAds) {
             // 详情页浮层
@@ -166,7 +175,14 @@ public class StartService {
         return advIds;
     }
 
-	private void startThread() {
+    // 将placementInfo放入缓存中
+	private void readyPlacementCache(List<PlacementInfo> allPlacements) {
+	    for(PlacementInfo p : allPlacements) {
+	        p.redayPlacementCache(StaticAds.androidPlacementMap, StaticAds.iosPlacementMap);
+	    }
+    }
+
+    private void startThread() {
 
 		int userCacheThreadNum = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 				"userCacheThreadNum", "5"));

@@ -101,11 +101,11 @@ public class JSService {
         //        List<BaseAdEntity> entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, new QueryParam());
         Map<String,String> map = New.hashMap();
         
-        try {
-			logger.info("entities={}",JsonBinder.toJson(entities, JsonBinder.always));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
+//        try {
+//			logger.info("entities={}",JsonBinder.toJson(entities, JsonBinder.always));
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//		}
         
         List<List<String>> tasks = New.arrayList();
         List<Long> times = New.arrayList();

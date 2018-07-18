@@ -54,6 +54,10 @@ public class StaticAds {
 	// js原始文件的缓存
 	public static Map<String, String> JS_FILE_STR = New.hashMap();
 	
+	// 存储placementId的缓存
+	public static Map<String, Map<Integer, String>> androidPlacementMap = New.hashMap();
+	public static Map<String, Map<Integer, String>> iosPlacementMap = New.hashMap();
+	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;
 

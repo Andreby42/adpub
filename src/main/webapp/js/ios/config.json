@@ -1,0 +1,11 @@
+
+{
+    "rootDir":"./js",
+    "outputDir":"./js",
+    "outputName":"app.do",
+    "filelist":[
+        "event",
+        "fetch",
+        "sdks/sdk"
+    ]
+}

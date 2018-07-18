@@ -12,5 +12,12 @@
         SELECT id,showType,title,link,openType,content,status,createTime,modifyTime,targetType,unfoldMonitorLink,clickMonitorLink,monitorType,priority,is_fullScreen,link_extra FROM APP_ADV_CONTENT WHERE (status='1' or status='2')
         AND id=#{id,jdbcType=NUMERIC}
     </select>    
+    
+    
+    <select id="listAllPlacementId" resultType="com.bus.chelaile.model.PlacementInfo">
+        SELECT  
+        pid, platform, aid, displayType, placementId, pidName, aidName 
+        FROM APP_ADV_PLACEMENT
+    </select>
        
 </mapper>

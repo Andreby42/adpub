@@ -117,12 +117,13 @@ public abstract class AbstractManager {
 		// 需要排序 先打乱次序 ，再按照优先级排序
 		Collections.shuffle(adsList);
 		Collections.sort(adsList, AD_CONTENT_COMPARATOR);
+		logger.info("atfer sort, adList={}", JSONObject.toJSONString(adsList));
 		LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
 		// 把所有符合规则的广告放到map中
 		handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
 
 		if (adMap.size() == 0) {
-			// 此处，经过规则判断不返回广告，如果是feedAd，需要记录'不投放'的次数
+			// 此处，经过规则判断不返回广告，需要记录'不投放'的次数
 			List<Integer> adIds = New.arrayList();
 			adIds.add(-1);
 			cacheRecord.setNoAdHistoryMap(adIds, showType.getType());
@@ -439,7 +440,7 @@ public abstract class AbstractManager {
 		}
 
 		if (rule.getScreenHeight() > 0 && advParam.getScreenHeight() < rule.getScreenHeight()) {
-			logger.info("screenHeithg return false. rule={}, s={}, udid={}, height={}", rule.getRuleId(),
+			logger.info("screenHeithg return false.advId={}, rule={}, s={}, udid={}, height={}", ad.getId(), rule.getRuleId(),
 					advParam.getS(), advParam.getUdid(), advParam.getScreenHeight());
 			return false;
 		}
