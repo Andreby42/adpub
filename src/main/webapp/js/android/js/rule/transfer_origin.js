@@ -656,7 +656,7 @@ var sdk_ifly = {
     },
 	
 	adStyle : function() {
-      return ${sdk_voicead_displayType};
+      return ${sdk_ifly_displayType};
     }
 }
 

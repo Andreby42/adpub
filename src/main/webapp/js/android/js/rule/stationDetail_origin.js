@@ -597,7 +597,7 @@ var sdk_ifly = {
             pos:"banner",
             data:{
                 appId:"1106616441",
-               placementId:"${sdk_voicead_placementId}"
+               placementId:"${sdk_ifly_placementId}"
                 // placementId:"9040714184494018"
             }
         }
@@ -654,7 +654,7 @@ var sdk_ifly = {
     },
 	
 	adStyle : function() {
-      return ${sdk_voicead_displayType};
+      return ${sdk_ifly_displayType};
     }
 }
 

@@ -11,6 +11,8 @@ import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.util.New;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 
 public class JSFileHandle {
 
@@ -31,7 +33,7 @@ public class JSFileHandle {
 
             String placementId = getPlaceMentId(platform, showType, aid, displayType);
             String placementReplaceKey = "${" + aid + "_placementId}";
-            String displayTypeReplaceKey = "'${" + aid + "_displayType}'";
+            String displayTypeReplaceKey = "\"${" + aid + "_displayType}\"";
             String aidReplaceKey = "${" + aid + "}";
 
             splashJS = splashJS.replace(placementReplaceKey, placementId);
@@ -55,7 +57,12 @@ public class JSFileHandle {
     }
     
     public static void main(String[] args) {
-        String a = "aaa'${sdk_toutiao_displayType}'aaaa";
+        String a = "return \"${sdk_toutiao_displayType}\"";
         System.out.println(a.replace("'${sdk_toutiao_displayType}'", "1111"));
+        
+        String aid = "sdk_toutiao";
+        String displayTypeReplaceKey = "\"${" + aid + "_displayType}\"";
+        System.out.println(displayTypeReplaceKey);
+        System.out.println(a.replace("\"${sdk_toutiao_displayType}\"", "1111"));
     }
 }

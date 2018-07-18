@@ -382,11 +382,11 @@ var api_zm = {
 	    },
 
 	  aid : function () {
-	        return 'api_zm_${api_zm_displayType}';
+	        return 'api_zm';
 	    },
 		
 		adStyle : function() {
-	      return ${api_zm_aid};
+	      return 2;
 	    }
 	}
 

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.PlacementCache;
 import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
@@ -19,6 +20,8 @@ import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
+
+import scala.reflect.generic.Constants.Constant;
 
 /**
  * 保存静态的广告数据
@@ -160,7 +163,10 @@ public class StaticAds {
     private static void readJSFILESTR() {
         Reader reader = null;
         try {
-            File file = new File("/data/advConfig/js/");
+            String fileStr = "/data/advConfig/js/";
+            if(Constants.ISTEST)
+                fileStr = "/data/advConfig/test/js/";
+            File file = new File(fileStr);
             File[] tempList = file.listFiles();
             for (int i = 0; i < tempList.length; i++) {
                 reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
