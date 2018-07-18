@@ -84,7 +84,7 @@ public class AdFullInnerContent extends AdInnerContent {
                 
                 for (TaskModel t : getTasksJ()) {
                 	
-                	map.put(t.getApiName()+"_displayType",t.getDisplayType()+"");
+                	map.put(t.getApiName(), t.getDisplayType()+"");
                 	
                     if (!prioritys.contains(t.getPriority())) {
                         List<String> ts = New.arrayList();
