@@ -137,7 +137,7 @@ var api_yd = {
     },
 	
 	adStyle : function() {
-      return ${api_yd_displayType};
+      return "${api_yd_displayType}";
     }
 
 }
@@ -238,11 +238,11 @@ var api_voicead = {
     },
 
     aid : function () {
-        return 'api_voicead_${api_voicead_displayType}';
+        return 'api_voicead_${api_voicead_aid}';
     },
 	
 	adStyle : function() {
-      return ${api_voicead_aid};
+      return "${api_voicead_displayType}";
     }
 }
 
@@ -409,11 +409,11 @@ var api_zm = {
 	    },
 
 	  aid : function () {
-	        return 'api_zm_${api_zm_displayType}';
+	        return 'api_zm_${api_zm_aid}';
 	    },
 		
 		adStyle : function() {
-	      return ${api_zm_aid};
+	      return "${api_zm_displayType}";
 	    }
 	}
 
@@ -469,7 +469,7 @@ var sdk_gdt = {
     },
 	
 	adStyle : function() {
-      return ${sdk_gdt_displayType};
+      return "${sdk_gdt_displayType}";
     }
 }
 
@@ -530,7 +530,7 @@ var sdk_baidu = {
     },
 	
 	adStyle : function() {
-      return ${sdk_baidu_displayType};
+      return "${sdk_baidu_displayType}";
     }
 }
 
@@ -584,7 +584,7 @@ var sdk_toutiao = {
     },
 	
 	adStyle : function() {
-      return ${sdk_toutiao_displayType};
+      return "${sdk_toutiao_displayType}";
     }
 }
 
@@ -656,7 +656,7 @@ var sdk_ifly = {
     },
 	
 	adStyle : function() {
-      return ${sdk_ifly_displayType};
+      return "${sdk_ifly_displayType}";
     }
 }
 

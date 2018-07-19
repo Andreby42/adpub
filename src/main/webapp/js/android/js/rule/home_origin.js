@@ -145,7 +145,7 @@ var api_yd = {
     },
 	
 	adStyle : function() {
-      return ${api_yd_displayType};
+      return "${api_yd_displayType}";
     }
 
 }
@@ -246,11 +246,11 @@ var api_voicead = {
     },
 
     aid : function () {
-        return 'api_voicead_${api_voicead_displayType}';
+        return 'api_voicead_${api_voicead_aid}';
     },
 	
 	adStyle : function() {
-      return ${api_voicead_aid};
+      return "${api_voicead_displayType}";
     }
 }
 
@@ -348,7 +348,7 @@ var api_shunfei = {
 	            				 "ad_block_key":1984,
 	            				 "adslot_type":17,
 	            				 "width":179,
-	            			     "height":92
+	            			     "height":88
 	            			 }
 	            	],
 	            	 
@@ -405,11 +405,11 @@ var api_shunfei = {
 	    },
 
 	  aid : function () {
-	        return 'api_shunfei_${api_shunfei_displayType}';
+	        return 'api_shunfei_${api_shunfei_aid}';
 	    },
 		
 		adStyle : function() {
-	      return ${api_shunfei_aid};
+	      return "${api_shunfei_displayType}";
 	    }
 	}
 
@@ -579,15 +579,15 @@ var api_zm = {
 	        return null;
 	    },
 
-	  aid : function () {
-	        return 'api_zm_${api_zm_displayType}';
+
+	    aid : function () {
+	        return 'api_zm_${api_zm_aid}';
 	    },
 		
 		adStyle : function() {
-	      return ${api_zm_aid};
+	      return "${api_zm_displayType}";
 	    }
 	}
-
 // sdk taks ===================
 // 手机调用sdk
 
@@ -639,7 +639,7 @@ var sdk_gdt = {
     },
 	
 	adStyle : function() {
-     return ${sdk_gdt_displayType};
+     return "${sdk_gdt_displayType}";
     }
 }
 
@@ -700,7 +700,7 @@ var sdk_baidu = {
     },
 	
 	adStyle : function() {
-     return ${sdk_baidu_displayType};
+     return "${sdk_baidu_displayType}";
     }
 }
 
@@ -753,7 +753,7 @@ var sdk_toutiao = {
     },
 	
 	adStyle : function() {
-     return ${sdk_toutiao_displayType};
+     return "${sdk_toutiao_displayType}";
     }
 }
 
@@ -823,7 +823,7 @@ var sdk_ifly = {
     },
 	
 	adStyle : function() {
-      return ${sdk_ifly_displayType};
+      return "${sdk_ifly_displayType}";
     }
 }
 

@@ -127,6 +127,14 @@ function compress(writeJSString) {
     return writeJSString;
 }
 
+function appendMain(writeJSString) {
+    const string = fs.readFileSync( config.rootDir+"/main.do",'utf8');
+    writeJSString = string + "\n" + writeJSString;
+    return writeJSString;
+}
+
+writeJSString = appendMain(writeJSString);
+
 if(process.argv.includes('compress')) {
     writeJSString = compress(writeJSString);
 }
