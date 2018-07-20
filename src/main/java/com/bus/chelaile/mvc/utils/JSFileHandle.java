@@ -12,9 +12,11 @@ import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.util.New;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-
-
+/**
+ * js文件处理
+ * @author linzi
+ *
+ */
 public class JSFileHandle {
 
     private static final Logger logger = LoggerFactory.getLogger(JSFileHandle.class);

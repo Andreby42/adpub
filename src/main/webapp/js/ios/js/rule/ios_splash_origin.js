@@ -42,7 +42,6 @@ var api_chelaile = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.duration = 3;
             info.adid = "api_chelaile_test";
             list[0].info = info;
             return [list[0]];
@@ -77,6 +76,9 @@ var sdk_gdt = {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
             info.adid = "sdk_gdt_test";
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 5;
             list[0].info = info;
             return [list[0]];
         }
@@ -110,9 +112,9 @@ var sdk_baidu = {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
             info.adid = "sdk_baidu_test";
-            info.isDisplay = 1,
-            info.isSkip = 1,
-            info.duration = 9,
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 5;
             list[0].info = info;
             return [list[0]];
         }
@@ -145,8 +147,9 @@ var sdk_toutiao = {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
             info.adid = "sdk_toutiao_test";
-            info.isDisplay = 1;
-            info.duration = 10;
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 5;
             list[0].info = info;
             return [list[0]];
         }
@@ -179,8 +182,9 @@ var sdk_inmobi = {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
             info.adid = "sdk_inmobi_test";
-            info.isSkip = 1;
-            info.duration = 3;
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 5;
             list[0].info = info;
             return [list[0]];
         }
@@ -216,8 +220,10 @@ var sdk_voicead = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.duration = 3;
             info.adid = "sdk_ifly_test";
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 5;
             list[0].info = info;
             return [list[0]];
         }

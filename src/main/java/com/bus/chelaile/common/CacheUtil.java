@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
 import com.bus.chelaile.common.cache.RedisAtraceCacheImplUtil;
-import com.bus.chelaile.common.cache.RedisBUSCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTBKCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTokenCacheImplUtil;
@@ -39,15 +38,15 @@ public class CacheUtil {
     // 存储 traceInfo的redis
     private static ICache redisAtrace;
     // 存储bus后台设置的cshow值的redis
-    private static ICache redisBUS;
-	//  用来获取用户头像的redis
+//    private static ICache redisBUS;
+//	//  用来获取用户头像的redis
 //	private static ICache redisWow;
 	//	保存用户访问量等信息
 	private static ICache cacheNewClient;
 	//	获取access_token的 
 	private static ICache cacheApiTokenClient;
 //	支付信息
-	private static ICache cachePayInfoClient;
+	private static ICache cacheCommonClient;
 	
     // 用户traceInfo信息
 	private static ICache traceInfoClient;
@@ -70,13 +69,6 @@ public class CacheUtil {
     private static final String TRACE_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.tracepassword");
     
     /**
-     * 推送的时候读取token
-     */
-    private static final String PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.host");
-    private static final String PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.port");
-    private static final String PROP_OCS_USERNAME =  PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.username");
-    private static final String PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.password");
-    /**
      * 存储用户信息
      */
     private static final String CC_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.host");
@@ -94,22 +86,17 @@ public class CacheUtil {
     
     /**
      *基础数据获取‘线路是否支持支付’
+     *推送的时候读取token
+     *获取app用户的创建时间
      */
-    private static final String PAY_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.host");
-    private static final String PAY_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.port");
-    private static final String PAY_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.username");
-    private static final String PAY_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.pay.password");
+    private static final String COMMON_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.host");
+    private static final String COMMON_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.port");
+    private static final String COMMON_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.username");
+    private static final String COMMON_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.password");
     //private static String cacheType = PropertiesReaderWrapper.read("cacheType", "ocs");
     
     private static final String defauleTBKTitle = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "default.tbk.title");
     
-//    /**
-//     * 屈臣氏活动专用
-//     */
-//    private static final String ACTIVE_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.activities.host");
-//    private static final String ACTIVE_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.activities.port");
-//    private static final String ACTIVE_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.activities.username");
-//    private static final String ACTIVE_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.activities.password");
 
 //    static {
 //        initClient();
@@ -129,11 +116,11 @@ public class CacheUtil {
 //    	   cacheActivitiesClient = new RedisCacheImplUtil();
     	   logger.info("redis cache");
        }else	if( cacheType.equals("ocs") ){
-    	   client = new OCSCacheUtil(PROP_OCS_HOST,PROP_OCS_PORT,PROP_OCS_USERNAME,PROP_OCS_PASSWORD);
+    	   client = new OCSCacheUtil(COMMON_PROP_OCS_HOST,COMMON_PROP_OCS_PORT,COMMON_PROP_OCS_USERNAME,COMMON_PROP_OCS_PASSWORD);
     	   cacheNewClient = new OCSCacheUtil(CC_PROP_OCS_HOST,CC_PROP_OCS_PORT,CC_PROP_OCS_USERNAME,CC_PROP_OCS_PASSWORD);
     	   
     	   cacheApiTokenClient = new OCSCacheUtil(API_PROP_OCS_HOST,API_PROP_OCS_PORT,API_PROP_OCS_USERNAME,API_PROP_OCS_PASSWORD);
-    	   cachePayInfoClient = new OCSCacheUtil(PAY_PROP_OCS_HOST,PAY_PROP_OCS_PORT,PAY_PROP_OCS_USERNAME,PAY_PROP_OCS_PASSWORD);
+    	   cacheCommonClient = new OCSCacheUtil(COMMON_PROP_OCS_HOST,COMMON_PROP_OCS_PORT,COMMON_PROP_OCS_USERNAME,COMMON_PROP_OCS_PASSWORD);
     	   
     	   traceInfoClient = new OCSCacheUtil(TRACE_OCS_HOST,TRACE_OCS_PORT,TRACE_OCS_USERNAME,TRACE_OCS_PASSWORD);
 //    	   cacheActivitiesClient = new OCSCacheUtil(ACTIVE_PROP_OCS_HOST,ACTIVE_PROP_OCS_PORT,ACTIVE_PROP_OCS_USERNAME,ACTIVE_PROP_OCS_PASSWORD);
@@ -144,7 +131,7 @@ public class CacheUtil {
        redisClient = new RedisCacheImplUtil();
        redisToken = new RedisTokenCacheImplUtil();
        redisTBK = new RedisTBKCacheImplUtil();
-       redisBUS = new RedisBUSCacheImplUtil();
+//       redisBUS = new RedisBUSCacheImplUtil();
        redisAtrace = new RedisAtraceCacheImplUtil();
        isInitSuccess = true;
     }
@@ -238,7 +225,7 @@ public class CacheUtil {
     }
 
     public static Map<String, Object> getByList(List<String> list) {
-    	return cachePayInfoClient.getByList(list);
+    	return cacheCommonClient.getByList(list);
     }
     
     public static Object getApiInfo(String key){
@@ -251,7 +238,7 @@ public class CacheUtil {
     
     // ocs查询
     public static String getFromCommonOcs(String key) {
-    	Object j = cachePayInfoClient.get(key);
+    	Object j = cacheCommonClient.get(key);
     	if(j == null)
     	    return null;
     	else
@@ -260,7 +247,7 @@ public class CacheUtil {
     
     // ocs设置值
     public static void setToCommonOcs(String key, int exp, Object obj) {
-    	cachePayInfoClient.set(key, exp, obj);
+    	cacheCommonClient.set(key, exp, obj);
     }
     
     // token存储升级，在这一步做一些处理，保证输出跟老版本一致 2018-04-02
@@ -293,10 +280,10 @@ public class CacheUtil {
         return defauleTBKTitle;
     }
     
-    // 从BUS redis中获取数据
-    public static Object getFromBUSRedis(String key){
-        return redisBUS.get(key);
-    }
+//    // 从BUS redis中获取数据
+//    public static Object getFromBUSRedis(String key){
+//        return redisBUS.get(key);
+//    }
     
     // 从redis中获取所有的keys，慎用！ 
     public static Set<String> allKeys(String pattern) {

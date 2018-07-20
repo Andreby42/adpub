@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +28,7 @@ public class JsRule extends AbstractController {
 	@Autowired
 	private JSService jSService;
 
-	private static final Logger logger = LoggerFactory.getLogger(JsRule.class);
+//	private static final Logger logger = LoggerFactory.getLogger(JsRule.class);
 
 
 	// for test
@@ -53,12 +51,7 @@ public class JsRule extends AbstractController {
 		String traceInfo = JSONObject.toJSONString(p);
 
 		// 模板
-		String splashOrigin = "";
-		if(p.getS().equals("android")) { 
-		    splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin"); 
-		} else {
-		    splashOrigin = StaticAds.JS_FILE_STR.get("ios_splash_origin");
-		}
+		String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin"); 
 		TaskEntity tgs = jSService.getTask(p, "splash");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request, ShowType.OPEN_SCREEN);
@@ -79,12 +72,7 @@ public class JsRule extends AbstractController {
 		String traceInfo = JSONObject.toJSONString(p);
 
 		// 模板
-		String splashOrigin = "";
-        if(p.getS().equals("android")) { 
-            splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
-        } else {
-            splashOrigin = StaticAds.JS_FILE_STR.get("ios_home_origin");
-        }
+		String splashOrigin = StaticAds.JS_FILE_STR.get("home_origin");
 		TaskEntity tgs = jSService.getTask(p, "home");
 		// setMaidianParams(p, );
 
@@ -108,12 +96,7 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = "";
-        if(p.getS().equals("android")) { 
-            splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
-        } else {
-            splashOrigin = StaticAds.JS_FILE_STR.get("ios_right_origin");
-        }
+		String splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
 		TaskEntity tgs = jSService.getTask(p, "rightTop");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "right_", request, ShowType.LINE_RIGHT_ADV);
@@ -136,12 +119,7 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = "";
-        if(p.getS().equals("android")) {
-            splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
-        } else {
-            splashOrigin = StaticAds.JS_FILE_STR.get("ios_station_origin");
-        }
+		String splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
 		TaskEntity tgs = jSService.getTask(p, "station");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "station_", request, ShowType.STATION_ADV);
@@ -164,12 +142,7 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = "";
-        if(p.getS().equals("android")) {
-            splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
-        } else {
-            splashOrigin = StaticAds.JS_FILE_STR.get("ios_bottom_origin");
-        }
+		String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
 		TaskEntity tgs = jSService.getTask(p, "bottom");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request, ShowType.LINE_FEED_ADV);
@@ -191,12 +164,7 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = "";
-        if(p.getS().equals("android")) {
-            splashOrigin = StaticAds.JS_FILE_STR.get("transfer_origin");
-        } else {
-            splashOrigin = StaticAds.JS_FILE_STR.get("ios_transfer_origin");
-        }
+		String splashOrigin = StaticAds.JS_FILE_STR.get("transfer_origin");
 		TaskEntity tgs = jSService.getTask(p, "transfer");
 
 		String splashJS = produceJS(p, splashOrigin, tgs, "route_", request, ShowType.TRANSFER_ADV);
@@ -219,12 +187,7 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = "";
-        if(p.getS().equals("android")) {
-            splashOrigin = StaticAds.JS_FILE_STR.get("stationDetail_origin");
-        } else {
-            splashOrigin = StaticAds.JS_FILE_STR.get("ios_stationDetail_origin");
-        }
+		String splashOrigin = StaticAds.JS_FILE_STR.get("stationDetail_origin");
 		
 		TaskEntity tgs = jSService.getTask(p, "stationDetail");
 
@@ -248,12 +211,7 @@ public class JsRule extends AbstractController {
 			p.setStnName(request.getParameter("stationName"));
 
 		// 模板
-		String splashOrigin = "";
-        if(p.getS().equals("android")) {
-            splashOrigin = StaticAds.JS_FILE_STR.get("allCars_origin");
-        } else {
-            splashOrigin = StaticAds.JS_FILE_STR.get("ios_allCars_origin");
-        }
+		String splashOrigin = StaticAds.JS_FILE_STR.get("allCars_origin");
 
 		// logger.info("splashOrigin={}",splashOrigin);
 

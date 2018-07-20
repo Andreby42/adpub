@@ -63,7 +63,7 @@ var sdk_gdt = {
             pos: "banner",
             data: {
                 "appId":"1105595946",
-                "placementId":"3080736383701333"
+                "placementId":"6040730401958055"
             }
         }
     },
@@ -119,7 +119,7 @@ var sdk_toutiao = {
             pos: "banner",
             data: {
                 "appId":"5001451",
-                "placementId":"901451521"
+                "placementId":"900673291"
             }
         }
     },
@@ -153,7 +153,7 @@ var sdk_ifly = {
             pos:"banner",
             data:{
                 "appId":"5acf1d60",
-                "placementId":"5F7EDBCCC6C116C07DBB40EB9A937F4E"
+                "placementId":"957963E3D7047F783BE1CBFC450BF458"
             }
         }
     },

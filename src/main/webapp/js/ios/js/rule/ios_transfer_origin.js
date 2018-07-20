@@ -189,7 +189,7 @@ var sdk_inmobi = {
             pos:"homecell",
             data:{
                 "appId":"f83af5e921de42cf813dc475c362aaf0",
-                "placementId":"{sdk_inmobi_placementId}"
+                "placementId":"${sdk_inmobi_placementId}"
             }
         }
     },

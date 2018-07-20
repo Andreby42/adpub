@@ -63,7 +63,7 @@ var sdk_gdt = {
             pos: "banner",
             data: {
                 "appId":"1105595946",
-                "placementId":"3080736383701333"
+                "placementId":"9060637344635371"
             }
         }
     },
@@ -93,7 +93,7 @@ var sdk_baidu = {
             pos: "banner",
             data: {
                 "appId":"bbf9b3b5",
-                "placementId":"5827199"
+                "placementId":"5826171"
             }
         }
     },
@@ -159,7 +159,7 @@ var sdk_ifly = {
             pos:"banner",
             data:{
                 "appId":"5acf1d60",
-                "placementId":"5F7EDBCCC6C116C07DBB40EB9A937F4E"
+                "placementId":"70EB266B2C8429B0B6C10D9B6F9BFA93"
             }
         }
     },
