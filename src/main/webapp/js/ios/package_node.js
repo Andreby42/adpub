@@ -16,11 +16,7 @@ function joinJSFiles() {
 
     let contentList = [];
     config.filelist.map( filename => {
-        
-        if(!filename.endsWith(".do")){
-            filename += ".do";
-        }
-    
+
         const string = fs.readFileSync( config.rootDir+"/"+filename,'utf8');
         if(!string) {
             console.error("["+filename +"] is error file");
@@ -40,21 +36,22 @@ function joinJSFiles() {
                 "",
                 ""
             ].join('\n');
-    
+
             let name = filename;
             if(name.startsWith("./")) {
                 name = name.slice(2);
             }
+            name = name.replace(/\.js$/, ".do");
             contentList.push({name, packer});
         }
     });
-    
+
     let writeJSString = "";
 
     contentList.forEach( item => {
         writeJSString += `global.AddModule('${item.name}', ${item.packer});\n`;;
     });
-    
+
     writeJSString += "require('./event');\n"
 
     return writeJSString;
@@ -67,58 +64,13 @@ function md5String(needMd5) {
     return md5Str;
 }
 
-function writeFile(writeJSString, md5Str) {
+function writeFile(writeJSString) {
     let outputFileName = config.outputDir+'/'+config.outputName;
     console.log(outputFileName)
     fs.writeFileSync(outputFileName, writeJSString, 'utf8');
 }
 
-let writeJSString = joinJSFiles()
-
-const md5Str = md5String(writeJSString);
-
-function setLocalVersion(version) {
-    writeJSString += `LocalStorage.set('js_engine_version', '${version}');`;
-}
-//setLocalVersion(md5Str);
-
-function replaceRequireInRule(md5Str, dir) {
-
-    const filelist = fs.readdirSync(dir);
-
-    filelist.forEach( filename => {
-        const filedir = path.join(dir,filename);
-        const stats = fs.statSync(filedir);
-        const isFile = stats.isFile();
-        if(isFile) {
-            let content = fs.readFileSync(filedir, 'utf8');
-            content = content.replace(/app\.([0-9a-zA-Z]{32})/g,'app.'+md5Str);
-            fs.writeFileSync(filedir, content, 'utf8');
-        }
-    })
-}
-
-function removeOldOutput(dir) {
-
-    const filelist = fs.readdirSync(dir);
-
-    filelist.forEach( filename => {
-        const filedir = path.join(dir,filename);
-        const stats = fs.statSync(filedir);
-        const isFile = stats.isFile();
-        if(isFile) {
-            let matchs = filedir.match(/app\.[0-9a-zA-Z]{32}\.do/)
-            if(matchs && matchs.length) {
-                fs.unlinkSync(filedir);
-            }
-        }
-    });
-}
-
-
-// if(process.argv.includes('clean')) {
-//     removeOldOutput(config.outputDir);
-// }
+let writeJSString = joinJSFiles();
 
 function compress(writeJSString) {
     const babelCode = babel.transform(writeJSString, {"presets": ["es2015"]}).code;
@@ -128,7 +80,7 @@ function compress(writeJSString) {
 }
 
 function appendMain(writeJSString) {
-    const string = fs.readFileSync( config.rootDir+"/main.do",'utf8');
+    const string = fs.readFileSync( config.rootDir+"/main.js",'utf8');
     writeJSString = string + "\n" + writeJSString;
     return writeJSString;
 }
@@ -139,19 +91,4 @@ if(process.argv.includes('compress')) {
     writeJSString = compress(writeJSString);
 }
 
-function writeVersionFile(md5Str) {
-    let content = fs.readFileSync(config.rootDir + "/" + "update.do.tpl", 'utf8');
-    content = content.replace(/var version = __CURENTVERSION__;/g,`var version = '${md5Str};'`);
-    fs.writeFileSync(config.rootDir + "/" + "update.do", content, 'utf8');
-     
-}
-
-writeFile(writeJSString, md5Str);
-//writeVersionFile(md5Str);
-
-// if(process.argv.includes('autorule')) {
-//     replaceRequireInRule(md5Str, config.rootDir + '/rule');
-// }
-
-
-
+writeFile(writeJSString);

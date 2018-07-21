@@ -281,6 +281,8 @@ function tryNthTaskGroup(rule, nth, callback) {
     sdkInfos.forEach(function(sdkInfo) {
         var req = sdkInfo.task.adurl();
         console.log('try sdk: ' + req.url);
+        console.log('try sdk aid: ' + sdkInfo.task.aid());
+        JsAnchorConfig.name = sdkInfo.task.aid();
         var MdLogger = buildMdLogger();
 
         var stamp1 = now();
@@ -330,6 +332,7 @@ function tryNthTaskGroup(rule, nth, callback) {
                     MdLogger.addPar('ad_order', entity.ad_order || 0);
                 } catch (error) {
                 }
+                JsAnchorConfig.ma = 'ab';
             }
 
             MdLogger.addPar('ad_status', resp.ad ? 1 : 0);

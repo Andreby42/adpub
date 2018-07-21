@@ -100,7 +100,7 @@ public class UserHelper {
      * 老用户，投放
      * 新增当天，不投放任何广告。第二天到第七天之间，如果完成过首次查询，那么立即投放广告。
      */
-	public static boolean isReturnAds(String udid) {
+	public static boolean isReturnAds(String s, String src, String udid) {
 		if (StringUtils.isEmpty(udid)) {
             return false;
         }

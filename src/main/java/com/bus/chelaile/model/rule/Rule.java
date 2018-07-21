@@ -542,7 +542,7 @@ public class Rule {
 //	}
 	
 	private boolean isReturnAds(AdvParam param) {
-		return UserHelper.isReturnAds(param.getUdid());
+		return UserHelper.isReturnAds(param.getS(), param.getSrc(), param.getUdid());
 	}
 
 	public boolean hasCities() {

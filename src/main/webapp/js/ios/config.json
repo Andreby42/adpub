@@ -4,8 +4,8 @@
     "outputDir":"./js",
     "outputName":"app.do",
     "filelist":[
-        "event",
-        "fetch",
-        "sdks/sdk"
+        "event.js",
+        "fetch.js",
+        "sdks/sdk.js"
     ]
 }

@@ -558,29 +558,29 @@ public abstract class AbstractManager {
 		}
 
 		// 乘车页广告和聊天室广告
-		if (showType == ShowType.RIDE_DETAIL) {
-			// 0 显示乘车页 1 显示聊天室 2 均显示 3 均不显示
-			if (rule.getChatOrRide() == 3) {
-				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
-				// rule.getRuleId(),
-				// advParam.getType(), advParam.getUdid());
-				return false;
-			}
-			// 聊天室的请求
-			else if (advParam.getType() == 2 && rule.getChatOrRide() != 1 && rule.getChatOrRide() != 2) {
-				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
-				// rule.getRuleId(),
-				// advParam.getType(), advParam.getUdid());
-				return false;
-			}
-			// 乘车页的请求
-			else if (advParam.getType() == 1 && rule.getChatOrRide() != 0 && rule.getChatOrRide() != 2) {
-				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
-				// rule.getRuleId(),
-				// advParam.getType(), advParam.getUdid());
-				return false;
-			}
-		}
+//		if (showType == ShowType.RIDE_DETAIL) {
+//			// 0 显示乘车页 1 显示聊天室 2 均显示 3 均不显示
+//			if (rule.getChatOrRide() == 3) {
+//				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
+//				// rule.getRuleId(),
+//				// advParam.getType(), advParam.getUdid());
+//				return false;
+//			}
+//			// 聊天室的请求
+//			else if (advParam.getType() == 2 && rule.getChatOrRide() != 1 && rule.getChatOrRide() != 2) {
+//				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
+//				// rule.getRuleId(),
+//				// advParam.getType(), advParam.getUdid());
+//				return false;
+//			}
+//			// 乘车页的请求
+//			else if (advParam.getType() == 1 && rule.getChatOrRide() != 0 && rule.getChatOrRide() != 2) {
+//				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
+//				// rule.getRuleId(),
+//				// advParam.getType(), advParam.getUdid());
+//				return false;
+//			}
+//		}
 		// udid 模糊匹配
 		if (StringUtils.isNoneBlank(rule.getUdidPattern()) && advParam.getUdid() != null) {
 			if (!advParam.getUdid().matches(rule.getUdidPattern())) {

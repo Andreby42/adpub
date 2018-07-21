@@ -4,9 +4,10 @@ function sdkfile(sdkname) {
 }
 
 var mapSdks = {};
- 
+
 function getExistSdks(taskGroup) {
     var existSdks = [];
+    taskGroup = taskGroup || []
     taskGroup.forEach(function(task) {
                       var sdk = getSdk(task.sdkname());
                       if (sdk) existSdks.push({
@@ -39,7 +40,7 @@ function getSdk(sdkname) {
         }
     }
     return sdk;
-    
+
 }
 
 // config.
@@ -48,27 +49,27 @@ var secondTime = 2000;
 
 function getAds(rule, userdata, callback) {
     console.log('2fetchRule', rule, userdata, callback);
-    
+
     if (!rule) return callback(null);
-    
+
     if (Array.isArray(rule.timeouts)) {
         console.log('adjust timeouts:' + rule.timeouts);
         firstTime = rule.timeouts[0] || firstTime;
         secondTime = rule.timeouts[1] || secondTime;
     }
-    
+
     var hookCallback = function(data){
                     console.log("typeof data == 'object' = "+ (typeof data));
                     if(data && typeof data == 'object' && data.sdk){
                         console.log(" tryNthTaskGroup data:")
                         console.log(data)
-                        
+
                         data.sdk.refreshTime = 25000;
                         data.sdk.traceInfo = rule.traceInfo;
                         data.sdk.mixRefreshAdInterval = 15000;
                         data.sdk.maxSplashTimeout = 8000;
                         data.sdk.warmSplashIntervalTime = 2*60*1000;
-                        
+
                     }
                     console.log("before hookCallback = "+data);
                     callback(data);
@@ -76,32 +77,34 @@ function getAds(rule, userdata, callback) {
                 }
     hookCallback.userdata = userdata;
     console.log("rule.tasks="+rule.tasks);
-    tryNthTaskGroup(rule.tasks, 0, hookCallback);
+    tryNthTaskGroup(rule, 0, hookCallback);
 }
 
 
 /**
  * 尝试第n个taskGroup
  */
-function tryNthTaskGroup(taskGroups, nth, callback) {
+function tryNthTaskGroup(rule, nth, callback) {
+    var taskGroups = rule.tasks;
+
     console.log("tryNthTaskGroup nth="+nth);
     function wrappedFn(data) {
         if (data) {
             console.log('Get data, callback directly.');
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.FetchedAd, {data});
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.FetchedAd, {data, rule, userdata:callback.userdata});
             return callback(data);
         }
-        
+
         if (nth == taskGroups.length - 1) {
             console.log('Non data, and is the last group. Fail at last.');
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.NoDataLastGroup, {});
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.NoDataLastGroup, {rule, userdata:callback.userdata});
             return callback(null);
         }
-        
+
         console.log('try next group.')
-        tryNthTaskGroup(taskGroups, nth + 1, callback);
+        tryNthTaskGroup(rule, nth + 1, callback);
     }
-    
+
     /**
      * 停止除noStopTaskNth之外的task
      * @param noStopTaskNth Int 继续执行的task，可以为null，停止全部的task
@@ -112,7 +115,7 @@ function tryNthTaskGroup(taskGroups, nth, callback) {
             console.log('stop interval ' + checker);
             clearInterval(checker);
         }
-        
+
         console.log('stop all tasks ' + (typeof noStopTaskNth == 'number' ? ('except for ' + noStopTaskNth) : ''));
         // TODO
         sdkInfos.forEach(function(sdkInfo, idx) {
@@ -122,36 +125,36 @@ function tryNthTaskGroup(taskGroups, nth, callback) {
                             sdkInfo.sdk.stop2(sdkInfo.task);
                          });
     }
-    
+
     function checkResults() {
 
         var used = now() - stamp1;
         if (used > firstTime + secondTime) {
             console.log('All timeout. fails');
-            
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.AllAdTimeout, {used});
-            
+
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.AllAdTimeout, {used, rule, userdata:callback.userdata});
+
             stopCheckerAndTasks();
             wrappedFn(null);
             return;
         }
-        
+
         var finishCount = 0,
         succeedCount = 0;
         var sdkInfo, result;
         for (var i = 0; i < sdkInfos.length; i++) {
             sdkInfo = sdkInfos[i],
             result = sdkInfo._result;
-            
+
             if (result == undefined) continue;
-            
+
             finishCount++; // increase finish counter
-            
+
             // skip if NO_RESULT
             if (!result[0]) continue;
-            
+
             succeedCount++; // increase succeed counter
-            
+
             // success
             if (used > firstTime || // for data on greedy mode.
                 i == 0 // if it is the first slot
@@ -162,7 +165,7 @@ function tryNthTaskGroup(taskGroups, nth, callback) {
                 return;
             }
         }
-        
+
         console.log('after checking loop')
         if (finishCount >= sdkInfos.length) {
             if (succeedCount == 0) {
@@ -175,7 +178,7 @@ function tryNthTaskGroup(taskGroups, nth, callback) {
         }
     }
     checkResults._count = 0;
-    
+
     console.log('try taskGroup  ' + nth);
     var stamp1 = now(),
     interval = 50;
@@ -183,12 +186,12 @@ function tryNthTaskGroup(taskGroups, nth, callback) {
     sdkInfos.forEach(function(sdkInfo) {
                      var req = sdkInfo.task.adurl_ios();
                      console.log('try sdk: ' + req.url);
-                     sdkInfo.sdk.load(sdkInfo.task, callback.userdata, (firstTime + secondTime), function(data) {
+                     sdkInfo.sdk.load(sdkInfo.task, rule, callback.userdata, (firstTime + secondTime), function(data) {
                                       console.log('uniReqId='+callback.userdata.uniReqId + ' data comes ' + data);
                                       sdkInfo._result = [data];
                                       });
                      });
-    
+
     var checker = setInterval(checkResults, interval);
 }
 

@@ -38,4 +38,3 @@ global.AddModule = function(name, code) {
 
 console.log('run main.do');
 })(this);
-
