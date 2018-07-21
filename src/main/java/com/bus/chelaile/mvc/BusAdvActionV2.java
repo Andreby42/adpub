@@ -257,7 +257,8 @@ public class BusAdvActionV2 extends AbstractController {
     public String getIsNew(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         
-        Object object = serviceManager.getIsNew(param, "h5BannerAds");
+        Object object = null;
+//                serviceManager.getIsNew(param, "h5BannerAds");
         if (object == null) {
             return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);
         } else {
