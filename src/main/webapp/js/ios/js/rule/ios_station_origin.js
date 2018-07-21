@@ -35,12 +35,15 @@ var api_chelaile = {
         }
     },
     
-    adStyle : function() {
-        return 2;
-    },
     
-    filter_ios : function(list) {
-        return list;
+    filter_ios: function(list) {
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[list.length - 1].info;
+            info.adid = info.id;
+            list[list.length - 1].info = info;
+            return [list[list.length - 1]];
+        }
+        return [];
     },
     
     aid : function () {
@@ -69,7 +72,13 @@ var sdk_gdt = {
     },
 
     filter_ios : function(list) {
-        return list;
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
     },
 
     aid : function () {
@@ -99,7 +108,13 @@ var sdk_baidu = {
     },
     
     filter_ios : function(list) {
-        return list;
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
     },
 
     aid : function () {
@@ -131,7 +146,7 @@ var sdk_toutiao = {
     filter_ios : function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://www.easyicon.net/api/resizeApi.php?id=1146855&size=64'}};
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
             list[0].info = info;
             return [list[0]];
         }
@@ -165,7 +180,13 @@ var sdk_ifly = {
     },
 
     filter_ios : function(list) {
-        return list;
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
     },
     
     aid : function () {
@@ -194,6 +215,16 @@ var sdk_inmobi = {
                 "placementId":"1526909972727"
             }
         }
+    },
+    
+    filter_ios : function(list) {
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
     },
     
     adStyle : function() {

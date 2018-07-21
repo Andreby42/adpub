@@ -25,7 +25,6 @@ import com.bus.chelaile.service.impl.LineRightManager;
 import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.OtherManager;
 import com.bus.chelaile.service.impl.StationAdsManager;
-import com.bus.chelaile.util.JsonBinder;
 import com.bus.chelaile.util.New;
 
 public class JSService {

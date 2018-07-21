@@ -35,12 +35,15 @@ var api_chelaile = {
         }
     },
     
-    adStyle : function() {
-        return 2;
-    },
     
-    filter_ios : function(list) {
-        return list;
+    filter_ios: function(list) {
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[list.length - 1].info;
+            info.adid = info.id;
+            list[list.length - 1].info = info;
+            return [list[list.length - 1]];
+        }
+        return [];
     },
     
     aid : function () {

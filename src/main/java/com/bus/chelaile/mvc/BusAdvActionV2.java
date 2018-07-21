@@ -251,4 +251,17 @@ public class BusAdvActionV2 extends AbstractController {
         Object result = serviceManager.getCommont(advParam,ShowType.TRANSFER_ADV);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!getIsNew.action", produces = "text/plain;charset=UTF-8")
+    public String getIsNew(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        AdvParam param = getActionParam(request);
+        
+        Object object = serviceManager.getIsNew(param, "h5BannerAds");
+        if (object == null) {
+            return serviceManager.getClientErrMapWithNoHead("", Constants.STATUS_NO_DATA);
+        } else {
+            return serviceManager.getClienSucMapWithNoHead(object, Constants.STATUS_REQUEST_SUCCESS);
+        }
+    }
 }
