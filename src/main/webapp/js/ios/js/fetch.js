@@ -77,7 +77,13 @@ function getAds(rule, userdata, callback) {
                 }
     hookCallback.userdata = userdata;
     console.log("rule.tasks="+rule.tasks);
-    tryNthTaskGroup(rule, 0, hookCallback);
+    if(!rule.tasks || rule.tasks.length <= 0) {
+        callback(null);
+    }
+    else {
+        tryNthTaskGroup(rule, 0, hookCallback);
+    }
+
 }
 
 

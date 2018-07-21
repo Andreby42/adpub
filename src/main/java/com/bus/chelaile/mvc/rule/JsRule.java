@@ -227,19 +227,13 @@ public class JsRule extends AbstractController {
 	private String produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request,
             ShowType showType) {
         if (StringUtils.isBlank(originJs)) {
-            return "┭┮﹏┭┮ 原始js文件为空 ";
+            return "originjs file is null  ";
         }
         
         if(tgs == null || tgs.getTaskGroups() == null || tgs.getTaskGroups().getTasks().size() == 0) {
             // TODO 
         }
 
-//        if (StringUtils.isBlank(tgs.getTraceid())) {
-//            logger.info("traceId is null -- , udid={},s={}, v={}", p.getUdid(), p.getS(), p.getV());
-//            originJs = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
-//            originJs = originJs.replace("${TIMEOUTS}", tgs.getTaskGroups().getTasks().toString());
-//            return JSFileHandle.replaceJs(p.getS(), originJs, showType, tgs, tag);
-//        }
 
         String splashJS = "";
         if (tgs != null) {

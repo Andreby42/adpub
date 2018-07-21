@@ -297,7 +297,7 @@ global.AddModule('fetch.do', (function(global) {
    exports = {};
    module.exports = exports;
    (function(moudle, exports, global) {
-
+       
 function sdkfile(sdkname) {
     return "sdks/" + sdkname;
 }
@@ -376,7 +376,13 @@ function getAds(rule, userdata, callback) {
                 }
     hookCallback.userdata = userdata;
     console.log("rule.tasks="+rule.tasks);
-    tryNthTaskGroup(rule, 0, hookCallback);
+    if(!rule.tasks || rule.tasks.length <= 0) {
+        callback(null);
+    }
+    else {
+        tryNthTaskGroup(rule, 0, hookCallback);
+    }
+
 }
 
 
