@@ -53,6 +53,34 @@ public class JSFileHandle {
         return splashJS;
     }
     
+    public static void replaceNewJs(String platform, ShowType showType, TaskEntity tgs, String tag,Map<String, String> map) {
+
+    	
+    	Map<String, String> retMap = null;
+        if (tgs != null && tgs.getTaskGroups() != null && tgs.getTaskGroups().getMap() != null) {
+        	retMap = tgs.getTaskGroups().getMap(); 	
+        }else {
+        	retMap = New.hashMap();
+        }
+        for (Entry<String, String> entry : retMap.entrySet()) {
+            String displayType = entry.getValue();
+            String aid = entry.getKey();
+
+            String placementId = getPlaceMentId(platform, showType, aid, displayType);
+            String placementReplaceKey = aid + "_placementId";
+            String displayTypeReplaceKey = aid + "_displayType";
+            String aidReplaceKey =  aid + "_aid";
+
+            
+            map.put(placementReplaceKey, placementId);
+            
+            map.put(displayTypeReplaceKey, displayType);
+            map.put(aidReplaceKey, displayType);
+        }
+
+
+    }
+    
     
 
     // 新的获取placementId的方式
