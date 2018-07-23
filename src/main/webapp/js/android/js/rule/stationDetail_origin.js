@@ -137,7 +137,7 @@ var api_yd = {
     },
 	
 	adStyle : function() {
-      return ${api_yd_displayType};
+      return "${api_yd_displayType}";
     }
 
 }
@@ -238,11 +238,11 @@ var api_voicead = {
     },
 
     aid : function () {
-        return 'api_voicead_${api_voicead_displayType}';
+        return 'api_voicead_${api_voicead_aid}';
     },
 	
 	adStyle : function() {
-      return ${api_voicead_aid};
+      return "${api_voicead_displayType}";
     }
 }
 
@@ -264,7 +264,7 @@ var api_zm = {
 	        }
 	        
 	        return {
-	            url: 'http://123.56.176.83:10091/durer/zmtmobads/v4/getAd.do',
+	            url: 'http://adalliance.zmeng123.com/zmtmobads/v4/getAd.do',
 	            data: {
 					"reqInfo": {
 						"adSlotId": "multi_05",
@@ -410,11 +410,11 @@ var api_zm = {
 	    },
 
 	  aid : function () {
-	        return 'api_zm_${api_zm_displayType}';
+	        return 'api_zm_${api_zm_aid}';
 	    },
 		
 		adStyle : function() {
-	      return ${api_zm_aid};
+	      return "${api_zm_displayType}";
 	    }
 	}
 
@@ -469,7 +469,7 @@ var sdk_gdt = {
     },
 	
 	adStyle : function() {
-      return ${sdk_gdt_displayType};
+      return "${sdk_gdt_displayType}";
     }
 }
 
@@ -530,7 +530,7 @@ var sdk_baidu = {
     },
 	
 	adStyle : function() {
-      return ${sdk_baidu_displayType};
+      return "${sdk_baidu_displayType}";
     }
 }
 
@@ -583,7 +583,7 @@ var sdk_toutiao = {
     },
 	
 	adStyle : function() {
-     return ${sdk_toutiao_displayType};
+     return "${sdk_toutiao_displayType}";
     }
 }
 
@@ -597,7 +597,7 @@ var sdk_ifly = {
             pos:"banner",
             data:{
                 appId:"1106616441",
-               placementId:"${sdk_voicead_placementId}"
+               placementId:"${sdk_ifly_placementId}"
                 // placementId:"9040714184494018"
             }
         }
@@ -654,7 +654,7 @@ var sdk_ifly = {
     },
 	
 	adStyle : function() {
-      return ${sdk_voicead_displayType};
+      return "${sdk_ifly_displayType}";
     }
 }
 

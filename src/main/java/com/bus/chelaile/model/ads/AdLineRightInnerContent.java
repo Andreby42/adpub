@@ -56,8 +56,8 @@ public class AdLineRightInnerContent extends AdInnerContent {
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
                 Set<Integer> prioritys = New.hashSet();
                 for (TaskModel t : getTasksJ()) {
-                	
-                	map.put(t.getApiName()+"_displayType",t.getDisplayType()+"");
+                	// TODO map存储修改
+                	map.put(t.getApiName(), t.getDisplayType()+"");
                 	
                     if (!prioritys.contains(t.getPriority())) {
                         List<String> ts = New.arrayList();

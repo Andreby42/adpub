@@ -27,6 +27,7 @@ public class Constants {
             PropertiesName.PUBLIC.getValue(), "sendLineFeedLogEx", "600"));   // 保存详情页feed位广告投放记录。 10 min，单位S
     
     public static final int ONE_DAY_NEW_USER_PERIOD = 1 * 24 * 60 * 60 * 1000;  //一天，单位毫秒，默认新用户的时期。
+    public static final int TOW_DAY_NEW_USER_PERIOD = 2 * 24 * 60 * 60 * 1000;  //二天，单位毫秒，默认新用户的时期。
     public static final int DEFAULT_NEW_USER_PERIOD = 7 * 24 * 60 * 60 * 1000;  //七天，单位毫秒，默认新用户的时期。
     
     public static final boolean ISTEST = Boolean.parseBoolean(PropertiesUtils.getValue(

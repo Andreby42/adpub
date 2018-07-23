@@ -56,6 +56,7 @@ public class AbstractController {
         param.setH5User(request.getParameter("h5_user"));
 
         // 针对h5用户，手动把h5Id赋值给udid吗，用于后续的 udid规则控制
+        // userId复给udid
         if ((StringUtils.isBlank(param.getUdid()) || param.getUdid().equals("null"))
                 && StringUtils.isNotBlank(param.getUserId())) {
             param.setUdid(param.getUserId());

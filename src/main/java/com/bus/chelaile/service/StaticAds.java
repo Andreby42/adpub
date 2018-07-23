@@ -10,6 +10,12 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.common.PositionJs;
+import com.bus.chelaile.common.ReplaceJs;
+import com.bus.chelaile.common.Text;
+import com.bus.chelaile.model.PlacementCache;
+import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -17,6 +23,8 @@ import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
+
+import scala.reflect.generic.Constants.Constant;
 
 /**
  * 保存静态的广告数据
@@ -53,6 +61,12 @@ public class StaticAds {
 	private static String settingKeys = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "setting_keys", "AD_SETTING_linefeed_screenHeight;");
 	// js原始文件的缓存
 	public static Map<String, String> JS_FILE_STR = New.hashMap();
+	// 新的替换
+	public static Map<String,List<Text>> NEW_JS_FILE_STR = New.hashMap();
+	
+	// 存储placementId的缓存
+	public static Map<String, String> androidPlacementMap = New.hashMap();
+	public static Map<String, String> iosPlacementMap = New.hashMap();
 	
 	public static boolean hasSendEmailhalf = false;
 	public static boolean hasSendEmail = false;
@@ -144,6 +158,9 @@ public class StaticAds {
 		advTBKTitleKey.clear();
 		JS_FILE_STR.clear();
 		SETTINGSMAP.clear();
+		androidPlacementMap.clear();
+		iosPlacementMap.clear();
+		NEW_JS_FILE_STR.clear();
 		
 		readSettings();
 		readJSFILESTR();
@@ -152,8 +169,18 @@ public class StaticAds {
     private static void readJSFILESTR() {
         Reader reader = null;
         try {
-            File file = new File("/data/advConfig/js/");
+            String fileStr = "/data/advConfig/js/";
+            if(Constants.ISTEST)
+                fileStr = "/data/advConfig/test/js/";
+            File file = new File(fileStr);
             File[] tempList = file.listFiles();
+            
+            fileStr = "/data/advConfig/iosjs/";
+            if(Constants.ISTEST)
+                fileStr = "/data/advConfig/test/iosjs/";
+            file = new File(fileStr);
+            File[] tempList1 = file.listFiles();
+            
             for (int i = 0; i < tempList.length; i++) {
                 reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
                 int tempchar;
@@ -164,6 +191,21 @@ public class StaticAds {
                     }
                 }
                 JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
+                logger.info(tempList[i].getName().split("\\.")[0]+"="+jsStr.length());
+                NEW_JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], ReplaceJs.parse(jsStr.toString()));
+//                reader.close();
+            }
+            
+            for (int i = 0; i < tempList1.length; i++) {
+                reader = new InputStreamReader(new FileInputStream(tempList1[i]), "UTF-8");
+                int tempchar;
+                StringBuilder jsStr = new StringBuilder();
+                while ((tempchar = reader.read()) != -1) {
+                    if(((char)tempchar) != '\r') {
+                        jsStr.append((char)tempchar);
+                    }
+                }
+                JS_FILE_STR.put(tempList1[i].getName().split("\\.")[0], jsStr.toString());
                 reader.close();
             }
         } catch (Exception e) {

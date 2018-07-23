@@ -145,7 +145,7 @@ var api_yd = {
     },
 	
 	adStyle : function() {
-      return ${api_yd_displayType};
+      return "${api_yd_displayType}";
     }
 
 }
@@ -246,13 +246,174 @@ var api_voicead = {
     },
 
     aid : function () {
-        return 'api_voicead_${api_voicead_displayType}';
+        return 'api_voicead_${api_voicead_aid}';
     },
 	
 	adStyle : function() {
-      return ${api_voicead_aid};
+      return "${api_voicead_displayType}";
     }
 }
+
+
+
+
+
+
+var api_shunfei = {
+
+	    sdkname: function() {
+	        return "api_shunfei";
+	    },
+
+	    adurl: function() {
+	        var config = JsFixedConfig.getJsFixedConfig();
+
+			
+			console.log("parseInt(config.get('dct'))=" + parseInt(config.get('dct')));
+	        var geolng = config.get('geo_lng') ;
+	        var geolat = config.get('geo_lat');
+	        var ts = config.get('ts');
+	    
+		
+			ts = String(ts).slice(0,-3);
+			 
+			 console.log("ts=" + ts);
+				
+			
+	        var sv1 = config.get('sv') + "";
+			var sv = sv1.split(".");
+		
+			
+	        var micro = 0;
+	        
+	        if( sv.length == 3 ){
+	        	micro = sv[2];
+	        }
+			
+
+	        var net = parseInt(config.get('dct')); // 有道用dct
+	        if (net >= 11 && net <= 13) {
+	          net = net - 9;
+	        } else {
+	          net = 1;
+	        }
+			
+			
+	        
+			
+			var sign = JsEncryptUtil.md5('177'+'g@^6*1n@E7IX#)SuJ6SE$#BQ8rV*)O8y'+ts)+'';
+	        
+	        var ret = {
+	            url: 'http://i-mbv.biddingx.com/api/v1/bid',
+	            data: {
+	            	 "ip": config.get('ip')+'',
+	            	 "user_agent": config.get('ua')+'',
+	            	 "detected_time": parseInt(ts),
+	            	 "time_zone": "+0800",
+					 "detected_language": "en_",
+					 
+					 "geo": {
+						"latitude":parseFloat(config.get('geo_lat')+''), 
+						"longitude":parseFloat(config.get('geo_lng')+'') 
+						},
+	            	 
+	            	 "mobile": {
+	            		 "device_id":config.get('mac')+'',
+	            		 "device_type":1,
+	            		 "platform":2,
+	            		 "os_version": {
+	            			 "os_version_major": parseInt(sv[0]),
+	            			 "os_version_minor": parseInt(sv[1]),
+                             "os_version_micro": parseInt(micro)	 
+	            			 },
+	            		 
+						 "brand":config.get('vendor')+'',
+						 "model":config.get('deviceType')+'',
+						 
+	        	         "screen_width":parseInt(config.get('screenWidth')+''),
+	        	         "screen_height": parseInt(config.get('screenHeight')+''),
+	        	         "wireless_network_type":parseInt(net),
+	        	         "for_advertising_id":config.get('imei')+'',
+	        	         "android_id":config.get('AndroidID')+'',
+	        	         "mobile_app": {
+	        	        	 "app_id":969,
+	        	        	 "sign":sign,
+	        	        	 "app_bundle_id":'com.ygkj.chelaile.standard',
+							 "first_launch":eval(config.get('firstLaunch')+'')
+	        	         }
+	            	 },
+	            		 
+	            	"adslot":[
+	            			 {
+	            				 "ad_block_key":1984,
+	            				 "adslot_type":17,
+	            				 "width":179,
+	            			     "height":92
+	            			 }
+	            	],
+	            	 
+	            	 "api_version":"1.6",
+	            	 "is_test":false,
+	          
+	            }
+	        };
+			
+			var s = JSON.stringify(ret);
+            var j = JSON.parse(s);
+            //console.log("******** str " + s)
+            //console.log("******** json " + j)
+            return j;
+			
+	    },
+	    filter: function(data) {
+	        if (typeof data == 'string')
+	            data = eval("a=" + data);
+
+	        var rows = data.ads;
+	        if (!rows || rows.length === 0)
+	            return null;
+
+	        for (var i = 0; i < rows.length; i++) {
+	            var row = rows[i];
+
+				var click_type = parseInt(row.click_type);
+				 
+				if( click_type == 2 ){
+					click_type = 0;	
+				}else{
+					click_type = 1;	
+				}
+				
+	            var ad = {
+	                provider_id: '13',
+	                ad_order: i,
+	                adType: click_type,
+	                head: row.title,
+	                subhead: row.desc,
+	                pic: row.imgs[0],
+	                brandIcon: row.logo_url,
+	                link: row.click_url.join(";"),
+	                deepLink: row.deep_url,
+	                unfoldMonitorLink: row.exposure.join(";"),
+					actionMonitorLink: row.action_url.join(";"),
+	                clickMonitorLink: row.click.join(";"),
+					picsList: row.imgs
+	            }
+	            return ad;
+	        }
+	        return null;
+	    },
+
+	  aid : function () {
+	        return 'api_shunfei_${api_shunfei_aid}';
+	    },
+		
+		adStyle : function() {
+	      return "${api_shunfei_displayType}";
+	    }
+	}
+
+
 
 
 var api_zm = {
@@ -272,11 +433,11 @@ var api_zm = {
 	        }
 	        
 	        return {
-	            url: 'http://123.56.176.83:10091/durer/zmtmobads/v4/getAd.do',
+	            url: 'http://adalliance.zmeng123.com/zmtmobads/v4/getAd.do',
 	            data: {
 					"reqInfo": {
-						"adSlotId": "multi_05",
-						"accessToken": "dHlwZTphY2Nlc3NfdG9rZW4gYWxnOkFFUyA=.YXBwX2lkOlJlemFyMDAwMDIg.3dj1iAlb0nnCmxIv3Opj41etWfzSY2Bnd4ICsBCgt6HG2UTmnRhnOxEvpxe73wfBqK8nUO6xuHHazmuft204fg"
+						"adSlotId": "ZM_AD_4_6231",
+						"accessToken": "YWxnOkFFUyB0eXBlOmFjY2Vzc190b2tlbiA=.YXBwX3BhY2thZ2U6Y29tLnlna2ouY2hlbGFpbGUuc3RhbmRhcmQgaXNfd2ViOiBhcHBfaWQ6em1fYXBwXzYyMzAg.LbRwsYKihx-oESlgpPF2jPXMQ0YwNW5AGbEcMzELZ1snmrzVu5NcKF7p7O6Z4jSAeybVU5jhqT3WARdgRFYz6x6XNtlv_p7J0t4hm3-hAvVOobPqla_8mgY3vd0KqIkw976jFwy_9MmOZSWSnya6QAXybxfaRBN0AZR1o9Uryg4"
 					},
 					"adSlotInfo": {
 						"mimes": "jpg,gif,icon,png,",
@@ -418,15 +579,15 @@ var api_zm = {
 	        return null;
 	    },
 
-	  aid : function () {
-	        return 'api_zm_${api_zm_displayType}';
+
+	    aid : function () {
+	        return 'api_zm_${api_zm_aid}';
 	    },
 		
 		adStyle : function() {
-	      return ${api_zm_aid};
+	      return "${api_zm_displayType}";
 	    }
 	}
-
 // sdk taks ===================
 // 手机调用sdk
 
@@ -478,7 +639,7 @@ var sdk_gdt = {
     },
 	
 	adStyle : function() {
-     return ${sdk_gdt_displayType};
+     return "${sdk_gdt_displayType}";
     }
 }
 
@@ -539,7 +700,7 @@ var sdk_baidu = {
     },
 	
 	adStyle : function() {
-     return ${sdk_baidu_displayType};
+     return "${sdk_baidu_displayType}";
     }
 }
 
@@ -592,7 +753,7 @@ var sdk_toutiao = {
     },
 	
 	adStyle : function() {
-     return ${sdk_toutiao_displayType};
+     return "${sdk_toutiao_displayType}";
     }
 }
 
@@ -605,7 +766,7 @@ var sdk_ifly = {
             pos:"banner",
             data:{
                 appId:"1106616441",
-                placementId:"${sdk_voicead_placementId}"
+                placementId:"${sdk_ifly_placementId}"
                 // placementId:"9040714184494018"
             }
         }
@@ -662,7 +823,7 @@ var sdk_ifly = {
     },
 	
 	adStyle : function() {
-      return ${sdk_voicead_displayType};
+      return "${sdk_ifly_displayType}";
     }
 }
 

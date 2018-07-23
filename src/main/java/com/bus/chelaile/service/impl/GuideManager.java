@@ -10,11 +10,9 @@ import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
-import com.bus.chelaile.model.ads.AdWXBannerInnerContent;
-import com.bus.chelaile.model.ads.GuideInnerContent;
+import com.bus.chelaile.model.ads.AdGuideInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.GuideAdEntity;
-import com.bus.chelaile.model.ads.entity.WXAppBannerAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
@@ -35,15 +33,19 @@ public class GuideManager extends AbstractManager {
 		res.fillBaseInfo(ad.getAds(), advParam, new HashMap<String, String>());
 		res.dealLink(advParam);
 
-		GuideInnerContent inner = (GuideInnerContent) ad.getAds().getAdInnerContent();
-		res.setPic(inner.getPic());
+		AdGuideInnerContent inner = (AdGuideInnerContent) ad.getAds().getAdInnerContent();
+		res.setTitle(inner.getDesc());
 		res.setWxMiniProId(inner.getWx_miniPro_id());
 		res.setWxMiniProPath(inner.getWx_miniPro_path());
 		res.setPriority(ad.getAds().getPriority());
 		res.setAdType(inner.getAdType());
 		res.setIconUrl(inner.getPic());
-		res.setTitle(inner.getDesc());
-//		res.setId();
+		res.setGroupId(inner.getGroupId());
+		res.setAdserving(inner.getAdserving());
+		res.setLeadContent(inner.getDesc());
+		res.setRedPointTime(inner.getRedPointTime());
+		res.setIconUrl(inner.getPic());
+		res.setLinkUrl(res.getLink());
 		
 		return res;
 	}
@@ -56,15 +58,10 @@ public class GuideManager extends AbstractManager {
 		// 遍历所有符合条件的广告体
 		for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
 			AdContentCacheEle ad = entry.getValue();
-			GuideInnerContent inner = (GuideInnerContent) ad.getAds().getAdInnerContent();
-			
-			if( (inner.getSite() == 1 && advParam.getSite() != 1) ||  // 配置详情页，site不是1
-			        (inner.getSite() == 0 && advParam.getSite() == 1)) { // 配置首页， site是1
-			    continue;
-			}
+			AdGuideInnerContent inner = (AdGuideInnerContent) ad.getAds().getAdInnerContent();
 
 			// 广告结构体有对来源的要求
-			if (inner.getServingPlaceList() != null && inner.getServingPlaceList().size() > 0) {
+			if (inner.getServingPlaceList() != null && !inner.getServingPlace().isEmpty()) {
 				if (StringUtils.isEmpty(advParam.getWxs())) {
 					continue;
 				}

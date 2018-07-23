@@ -137,7 +137,7 @@ var api_yd = {
     },
 	
 	adStyle : function() {
-      return ${api_yd_displayType};
+      return "${api_yd_displayType}";
     }
 
 }
@@ -238,11 +238,11 @@ var api_voicead = {
     },
 
     aid : function () {
-        return 'api_voicead_${api_voicead_displayType}';
+        return 'api_voicead_${api_voicead_aid}';
     },
 	
 	adStyle : function() {
-      return ${api_voicead_aid};
+      return "${api_voicead_displayType}";
     }
 }
 
@@ -292,45 +292,45 @@ var api_shunfei = {
 			
 	        
 			
-			var sign = JsEncryptUtil.md5('177'+'g@^6*1n@E7IX#)SuJ6SE$#BQ8rV*)O8y'+ts);
+			var sign = JsEncryptUtil.md5('177'+'g@^6*1n@E7IX#)SuJ6SE$#BQ8rV*)O8y'+ts)+'';
 	        
-	        return {
+	        var ret = {
 	            url: 'http://i-mbv.biddingx.com/api/v1/bid',
 	            data: {
-	            	 "ip": config.get('ip'),
-	            	 "user_agent": config.get('ua'),
-	            	 "detected_time": ts,
+	            	 "ip": config.get('ip')+'',
+	            	 "user_agent": config.get('ua')+'',
+	            	 "detected_time": parseInt(ts),
 	            	 "time_zone": "+0800",
 					 "detected_language": "en_",
 					 
 					 "geo": {
-						"latitude": config.get('geo_lat'), 
-						"longitude": config.get('geo_lng') 
+						"latitude":parseFloat(config.get('geo_lat')+''), 
+						"longitude":parseFloat(config.get('geo_lng')+'') 
 						},
 	            	 
 	            	 "mobile": {
-	            		 "device_id":config.get('mac'),
-	            		 "device_type":'1',
-	            		 "platform":'2',
+	            		 "device_id":config.get('mac')+'',
+	            		 "device_type":1,
+	            		 "platform":2,
 	            		 "os_version": {
-	            			 "os_version_major": sv[0],
-	            			 "os_version_minor": sv[1],
-                             "os_version_micro": micro	 
+	            			 "os_version_major": parseInt(sv[0]),
+	            			 "os_version_minor": parseInt(sv[1]),
+                             "os_version_micro": parseInt(micro)	 
 	            			 },
 	            		 
-						 "brand":config.get('vendor'),
-						 "model":config.get('deviceType'),
+						 "brand":config.get('vendor')+'',
+						 "model":config.get('deviceType')+'',
 						 
-	        	         "screen_width":config.get('screenWidth'),
-	        	         "screen_height": config.get('screenHeight'),
-	        	         "wireless_network_type":String(net),
-	        	         "for_advertising_id":config.get('imei'),
-	        	         "android_id":config.get('AndroidID'),
+	        	         "screen_width":parseInt(config.get('screenWidth')+''),
+	        	         "screen_height": parseInt(config.get('screenHeight')+''),
+	        	         "wireless_network_type":parseInt(net),
+	        	         "for_advertising_id":config.get('imei')+'',
+	        	         "android_id":config.get('AndroidID')+'',
 	        	         "mobile_app": {
-	        	        	 "app_id":'969',
+	        	        	 "app_id":969,
 	        	        	 "sign":sign,
 	        	        	 "app_bundle_id":'com.ygkj.chelaile.standard',
-							 "first_launch":config.get('firstLaunch')
+							 "first_launch":eval(config.get('firstLaunch')+'')
 	        	         }
 	            	 },
 	            		 
@@ -344,10 +344,17 @@ var api_shunfei = {
 	            	],
 	            	 
 	            	 "api_version":"1.6",
-	            	 "is_test":true,
+	            	 "is_test":false,
 	          
 	            }
 	        };
+			
+			var s = JSON.stringify(ret);
+            var j = JSON.parse(s);
+            //console.log("******** str " + s)
+            //console.log("******** json " + j)
+            return j;
+			
 	    },
 	    filter: function(data) {
 	        if (typeof data == 'string')
@@ -370,7 +377,7 @@ var api_shunfei = {
 				
 	            var ad = {
 	                provider_id: '13',
-	                ad_order: row.ad_id,
+	                ad_order: i,
 	                adType: click_type,
 	                head: row.title,
 	                subhead: row.desc,
@@ -389,11 +396,11 @@ var api_shunfei = {
 	    },
 
 	  aid : function () {
-	        return 'api_shunfei_${api_shunfei_displayType}';
+	        return 'api_shunfei_${api_shunfei_aid}';
 	    },
 		
 		adStyle : function() {
-	      return ${api_shunfei_aid};
+	      return "${api_shunfei_displayType";
 	    }
 	}
 
@@ -416,11 +423,11 @@ var api_shunfei = {
 	        }
 	        
 	        return {
-	            url: 'http://123.56.176.83:10091/durer/zmtmobads/v4/getAd.do',
+	            url: 'http://adalliance.zmeng123.com/zmtmobads/v4/getAd.do',
 	            data: {
 					"reqInfo": {
-						"adSlotId": "multi_05",
-						"accessToken": "dHlwZTphY2Nlc3NfdG9rZW4gYWxnOkFFUyA=.YXBwX2lkOlJlemFyMDAwMDIg.3dj1iAlb0nnCmxIv3Opj41etWfzSY2Bnd4ICsBCgt6HG2UTmnRhnOxEvpxe73wfBqK8nUO6xuHHazmuft204fg"
+						"adSlotId": "ZM_AD_4_6233",
+						"accessToken": "YWxnOkFFUyB0eXBlOmFjY2Vzc190b2tlbiA=.YXBwX3BhY2thZ2U6Y29tLnlna2ouY2hlbGFpbGUuc3RhbmRhcmQgaXNfd2ViOiBhcHBfaWQ6em1fYXBwXzYyMzAg.LbRwsYKihx-oESlgpPF2jPXMQ0YwNW5AGbEcMzELZ1snmrzVu5NcKF7p7O6Z4jSAeybVU5jhqT3WARdgRFYz6x6XNtlv_p7J0t4hm3-hAvVOobPqla_8mgY3vd0KqIkw976jFwy_9MmOZSWSnya6QAXybxfaRBN0AZR1o9Uryg4"
 					},
 					"adSlotInfo": {
 						"mimes": "jpg,gif,icon,png,",
@@ -566,11 +573,11 @@ var api_shunfei = {
 	    },
 
 	  aid : function () {
-	        return 'api_zm_${api_zm_displayType}';
+	        return 'api_zm_${api_zm_aid}';
 	    },
 		
 		adStyle : function() {
-	      return ${api_zm_aid};
+	      return "${api_zm_displayType}";
 	    }
 	}
 
@@ -625,7 +632,7 @@ var sdk_gdt = {
     },
 	
 	adStyle : function() {
-      return ${sdk_gdt_displayType};
+      return "${sdk_gdt_displayType}";
     }
 }
 
@@ -682,11 +689,11 @@ var sdk_baidu = {
     },
 
     aid : function () {
-        return 'sdk_baidu_${sdk_baidu_displayType}';
+        return 'sdk_baidu_${sdk_baidu_aid}';
     },
 	
 	adStyle : function() {
-       return ${sdk_baidu_displayType};
+       return "${sdk_baidu_displayType}";
     }
 }
 
@@ -739,7 +746,7 @@ var sdk_toutiao = {
     },
 	
 	adStyle : function() {
-     return ${sdk_toutiao_displayType};
+     return "${sdk_toutiao_displayType}";
     }
 }
 
@@ -754,7 +761,7 @@ var sdk_ifly = {
             pos:"banner",
             data:{
                 appId:"1106616441",
-                placementId:"${sdk_voicead_placementId}"
+                placementId:"${sdk_ifly_placementId}"
                 // placementId:"9040714184494018"
             }
         }
@@ -811,7 +818,7 @@ var sdk_ifly = {
     },
 	
 	adStyle : function() {
-     return ${sdk_voicead_displayType};
+     return "${sdk_ifly_displayType}";
     }
 }
 

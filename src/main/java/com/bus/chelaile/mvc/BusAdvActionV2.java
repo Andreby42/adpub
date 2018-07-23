@@ -21,9 +21,6 @@ import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.service.StaticAds;
-import com.bus.chelaile.third.ThirdAdData;
-import com.bus.chelaile.third.kedaxunfei.KDXFService;
-import com.bus.chelaile.third.youdao.YoudaoService;
 import com.bus.chelaile.thread.Queue;
 import com.bus.chelaile.thread.model.QueueObject;
 
@@ -250,5 +247,18 @@ public class BusAdvActionV2 extends AbstractController {
 
         Object result = serviceManager.getCommont(advParam,ShowType.TRANSFER_ADV);
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!getIsNew.action", produces = "text/plain;charset=UTF-8")
+    public String getIsNew(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        AdvParam param = getActionParam(request);
+
+        boolean object = serviceManager.getIsNew(param);
+        if (object) {
+            return serviceManager.getClienSucMapWithNoHead(1, Constants.STATUS_REQUEST_SUCCESS);
+        } else {
+            return serviceManager.getClienSucMapWithNoHead(0, Constants.STATUS_REQUEST_SUCCESS);
+        }
     }
 }

@@ -371,21 +371,21 @@ public class Rule {
 		return false;
 	}
 
-	public boolean isUserTypeMatch(AdvParam param) {
-		if (userType == 0) {
-			return true;
-		} else if (userType == UserType.NOT_NEW.getType()) {	//默认的情况，不给新用户投放。除非是非当天新增且访问过详情页
-			return isReturnAds(param);
-		} else if (userType == UserType.NEW.getType()) { // 新用户
-			return isNewUser(param);
-		} else if (userType == UserType.ANONYMOUS.getType()) { // 匿名用户
-			return isAnonymousUser(param);
-		} else if (userType == UserType.TODAY_NEW.getType()) { // 今日新增
-			return isTodayNewUser(param);
-		}
+    public boolean isUserTypeMatch(AdvParam param) {
+        if (userType == 0) {
+            return true;
+        } else if (userType == UserType.NOT_NEW.getType()) { //默认的情况，不给新用户投放。除非是非当天新增且访问过详情页
+            return ! isNewUser(param);
+        } else if (userType == UserType.NEW.getType()) { // 新用户
+            return isNewUser(param);
+        } else if (userType == UserType.ANONYMOUS.getType()) { // 匿名用户
+            return isAnonymousUser(param);
+        } else if (userType == UserType.TODAY_NEW.getType()) { // 今日新增
+            return isTodayNewUser(param);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 	public boolean isNetStatusMatch(String nw) {
 
@@ -530,7 +530,7 @@ public class Rule {
 	}
 
 	private boolean isNewUser(AdvParam param) {
-		return UserHelper.isNewUser(param.getUdid(), param.getUserId(), param.getAccountId());
+		return UserHelper.isNewUser(param.getS(), param.getH5Src(), param.getUdid());
 	}
 
 	private boolean isAnonymousUser(AdvParam param) {
@@ -541,9 +541,6 @@ public class Rule {
 //		return !UserHelper.isNewUser(param.getUdid(), param.getUserId(), param.getAccountId());
 //	}
 	
-	private boolean isReturnAds(AdvParam param) {
-		return UserHelper.isReturnAds(param.getUdid());
-	}
 
 	public boolean hasCities() {
 		return isNotEmpty(cities);
