@@ -69,7 +69,7 @@ public class JSFileHandle {
             String placementId = getPlaceMentId(platform, showType, aid, displayType);
             String placementReplaceKey = aid + "_placementId";
             String displayTypeReplaceKey = aid + "_displayType";
-            String aidReplaceKey =  aid + "_aid";
+            String aidReplaceKey = aid + "_aid";
 
             
             map.put(placementReplaceKey, placementId);

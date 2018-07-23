@@ -52,15 +52,14 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                         data.adEntityArray[0].info = info;
                     }
                     TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, {data, userdata, rule, task});
-
-                } catch(e) {
-                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, {error:"jsexception", des:""+e, requestInfo:requestInfo, userdata, rule, task});
-                } finally {
                     callback(data);
+                } catch(e) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, {error:"-91000", des:""+e, requestInfo:requestInfo, userdata, rule, task});
+                    callback(null);
                 }
             },
             function(error) {
-                error = error || "unkown";
+                error = error || "-90000";
                 TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, {error:error, requestInfo:requestInfo, userdata, rule, task});
                 callback(null);
             }
@@ -69,6 +68,19 @@ function load(task, rule, userdata, fetchTimeout, callback) {
 
         TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadBanner, {userdata, rule, task});
 
+        if(task.adStyle){
+            var style = task.adStyle();
+            var sizeObj = {
+                "1" : {showWidth:96,showHeight:64},
+                "2" : {showWidth:180,showHeight:88},
+                "5" : {showWidth:96,showHeight:64},
+            }
+            var showSize = sizeObj[style+""];
+            if(showSize){
+                userdata.showWidth = showSize.showWidth;
+                userdata.showHeight = showSize.showHeight;
+            }
+        }
         sdkIns.loadBanner(requestInfo.data, userdata, fetchTimeout,
             function(data) {
 
@@ -102,15 +114,15 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                     }
 
                     TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedBanner, {userdata, data, rule, task});
-                } catch(e) {
-                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, {error:"jsexception", des:""+e, userdata, rule, task});
-                } finally {
                     callback(data);
+                } catch(e) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, {error:"-91001", des:""+e, userdata, data, rule, task});
+                    callback(null);
                 }
             },
-            function(error) {
-                error = error || "unkown";
-                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, {error:error, requestInfo:requestInfo, userdata, rule, task});
+            function(error, data, extension) {
+                error = error || "-90001";
+                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, {error:error, requestInfo:requestInfo, userdata, data, rule, task});
                 callback(null);
             }
         );

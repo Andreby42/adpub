@@ -32,7 +32,6 @@ function flatUrlParams(url, params) {
 
 function sendTrackRequest(url, params, body) {
 
-
     var reqUrl = flatUrlParams(url, params);
     if(body != null && body != undefined) {
         if(typeof body != 'string') {
@@ -74,6 +73,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "adid", info.adid);
     addParamsIfNotNull(params, "startMode", info.startMode);
     addParamsIfNotNull(params, "stats_act", info.stats_act);
+    addParamsIfNotNull(params, "viewstatus", ad.viewstatus);
 
     return params;
 }
@@ -161,7 +161,11 @@ function trackThirdPartyResponse(params) {
     addParamsIfNotNull(trackParams, "req_time",  (data.sdk && data.sdk.didReqTime||0) - (data.sdk && data.sdk.willReqTime||0));
     addParamsIfNotNull(trackParams, "ad_status", realInfo?1:0);
     addParamsIfNotNull(trackParams, "resp_size", data.contentLength);
-    addParamsIfNotNull(trackParams, "code",      OCValueForKey(data.extensionData, "statusCode"));
+    if(params.error){
+        addParamsIfNotNull(trackParams, "code",  params.error);
+    } else {
+        addParamsIfNotNull(trackParams, "code",  OCValueForKey(data.extensionData, "statusCode"));
+    }
 
     var body = {};
 
@@ -190,6 +194,12 @@ function trackEvent(eventId /*String*/, eventType /*String*/, params /*object*/)
         //{userdata, data, rule, task}
         trackThirdPartyResponse(params);
     }
+    else if(eventType == TrackClass.Type.FailedSplash ||
+        eventType == TrackClass.Type.FailedBanner
+    ) {
+        //params = {error:"code", des:"", requestInfo:requestInfo, userdata,rule}
+        trackThirdPartyResponse(params);
+    }
 }
 
 global.trackEvent = trackEvent;
@@ -215,15 +225,7 @@ global.TrackClass = {
         LoadedSplash: "LoadedSplash", //开屏加载完成
         LoadedBanner: "LoadedBanner", //Banner加载完成
 
-        /*
-            params = {
-                error:"",
-                ?des:"",
-                ?requestInfo:requestInfo,
-                userdata,
-                rule
-            }
-        */
+        //params = {error:"code", des:"", requestInfo:requestInfo, userdata,rule}
         FailedSplash: "FailedSplash", //开屏加载失败
         FailedBanner: "FailedBanner", //Banner加载失败
 
