@@ -11,6 +11,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.common.PositionJs;
+import com.bus.chelaile.common.ReplaceJs;
+import com.bus.chelaile.common.Text;
 import com.bus.chelaile.model.PlacementCache;
 import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
@@ -58,6 +61,8 @@ public class StaticAds {
 	private static String settingKeys = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "setting_keys", "AD_SETTING_linefeed_screenHeight;");
 	// js原始文件的缓存
 	public static Map<String, String> JS_FILE_STR = New.hashMap();
+	// 新的替换
+	public static Map<String,List<Text>> NEW_JS_FILE_STR = New.hashMap();
 	
 	// 存储placementId的缓存
 	public static Map<String, String> androidPlacementMap = New.hashMap();
@@ -155,6 +160,7 @@ public class StaticAds {
 		SETTINGSMAP.clear();
 		androidPlacementMap.clear();
 		iosPlacementMap.clear();
+		NEW_JS_FILE_STR.clear();
 		
 		readSettings();
 		readJSFILESTR();
@@ -185,6 +191,8 @@ public class StaticAds {
                     }
                 }
                 JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
+                logger.info(tempList[i].getName().split("\\.")[0]+"="+jsStr.length());
+                NEW_JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], ReplaceJs.parse(jsStr.toString()));
 //                reader.close();
             }
             

@@ -32,6 +32,8 @@ public class AdContent {
     private int is_fullScreen;		// 是否全屏展示 isFullShow
     private int link_extra =1; //广告链接额外加参数是否保留 0不保留  1保留
     private String projectId; 
+    
+    private int projectIdClickExpireTime = 179 * 24 * 60 * 60 ;
 
     @JsonIgnore
     private AdInnerContent innerContent;
@@ -404,6 +406,22 @@ public class AdContent {
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
+
+
+	public int getProjectIdClickExpireTime() {
+		return projectIdClickExpireTime;
+	}
+
+
+	public void setProjectIdClickExpireTime(int projectIdClickExpireTime) {
+		this.projectIdClickExpireTime = projectIdClickExpireTime;
+	}
+
+
+
+
+
+    
     
     
     
