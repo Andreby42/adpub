@@ -124,8 +124,12 @@ public class MaidianLogsHandle {
         String projectId = StaticAds.allAds.get(advId).getProjectId();
         if(StringUtils.isNotBlank(projectId)) {
             String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
-            logger.info("projectClickKey={},expireTime={}",projectClickKey,StaticAds.allAds.get(advId).getProjectIdClickExpireTime());
-            CacheUtil.incrToCache(projectClickKey,StaticAds.allAds.get(advId).getProjectIdClickExpireTime());
+            int expireTime = StaticAds.allAds.get(advId).getProjectIdClickExpireTime();
+            if( expireTime == 0 ) {
+            	expireTime = Constants.HALF_YEAR_CACHE_TIME;
+            }
+            logger.info("projectClickKey={},expireTime={}",expireTime);
+            CacheUtil.incrToCache(projectClickKey,expireTime);
            // CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
             CacheUtil.incrProjectClick(projectId, 1);
         }
