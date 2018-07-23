@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.http.ParseException;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.bus.chelaile.common.AdvCache;
@@ -32,6 +34,8 @@ import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.GuideAdEntity;
+import com.bus.chelaile.model.ads.entity.GuideResultAd;
 import com.bus.chelaile.model.ads.entity.LineAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.ads.entity.LineRightAdEntity;
@@ -819,12 +823,36 @@ public class ServiceManager {
      */
     public Object getGuideAds(AdvParam advParam) {
         List<BaseAdEntity> guideAds = guideManager.doServiceList(advParam, ShowType.GUIDE_ADV, new QueryParam());
+        if (guideAds == null)
+            return null;
+
+        Map<Integer, GuideResultAd> groupAds = New.hashMap();
+        List<BaseAdEntity> advs = New.arrayList();
+//        List<GuideResultAd> myAdvs = New.arrayList();
+        for (BaseAdEntity ad : guideAds) {
+            GuideAdEntity guideAd = (GuideAdEntity) ad;
+            if (guideAd.getSite() == 0) {
+                advs.add(ad);
+            } else {
+                if(! groupAds.containsKey(guideAd.getGroupId())) {
+                    GuideResultAd myAdv = new GuideResultAd();
+                    myAdv.setGroupId(guideAd.getGroupId());
+                    List<BaseAdEntity> ads = New.arrayList();
+                    ads.add(ad);
+                    
+                    groupAds.put(guideAd.getGroupId(), myAdv);
+                } else {
+                    groupAds.get(guideAd.getGroupId()).getAdvs().add(ad);
+                }
+                
+            }
+        }
+
+        JSONObject resultMap = new JSONObject();
+        resultMap.put("myAdvs", groupAds.values());
+        resultMap.put("advs", advs);
         
-        
-        
-        
-        
-        return guideAds;
+        return resultMap;
     }
 
     /*
