@@ -663,6 +663,29 @@ public class ServiceManager {
         }
         return object;
     }
+    
+    // 判断小程序用户是否新用户
+    public boolean getIsNew(AdvParam param) {
+        String key = "wechat#unionId#2#" + param.getUdid();
+        int newUserPeriod = Constants.TOW_DAY_NEW_USER_PERIOD;
+        //            key
+        //            wechat#unionId#2#openid
+        //            value
+        //            unionId#createTime
+        String createTimeStr = CacheUtil.getFromCommonOcs(key);
+        if (StringUtils.isNotEmpty(createTimeStr)) {
+            String buf[] = createTimeStr.split("#");
+            if (buf.length >= 2) {
+                Long createTime = Long.parseLong(buf[1]);
+                logger.info("getcreate time : key={}, createTimeStr={}", key, createTimeStr);
+
+                return createTime + newUserPeriod > System.currentTimeMillis();
+            }
+        }
+        
+        return false;
+    }
+    
 
     // 0117版本之后，只返回一条广告。 之后，可以多类型广告并存
     private boolean onlyOneAdCheck(AdvParam advParam) {
@@ -796,7 +819,11 @@ public class ServiceManager {
      */
     public Object getGuideAds(AdvParam advParam) {
         List<BaseAdEntity> guideAds = guideManager.doServiceList(advParam, ShowType.GUIDE_ADV, new QueryParam());
-
+        
+        
+        
+        
+        
         return guideAds;
     }
 

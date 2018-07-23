@@ -74,7 +74,8 @@ var sdk_gdt = {
     filter_ios : function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'}};
+            info.pic = '';
             list[0].info = info;
             return [list[0]];
         }
@@ -110,7 +111,8 @@ var sdk_baidu = {
     filter_ios : function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'}};
+            info.pic = '';
             list[0].info = info;
             return [list[0]];
         }
@@ -146,7 +148,8 @@ var sdk_toutiao = {
     filter_ios : function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'}};
+            info.pic = '';
             list[0].info = info;
             return [list[0]];
         }
@@ -182,7 +185,8 @@ var sdk_ifly = {
     filter_ios : function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
+            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'}};
+            info.pic = '';
             list[0].info = info;
             return [list[0]];
         }
@@ -198,39 +202,7 @@ var sdk_ifly = {
     }
 }
 
-// 手机sdk inmobi
-var sdk_inmobi = {
 
-    sdkname : function() {
-        return "sdk_inmobi";
-    },
-
-    adurl_ios : function() {
-        return {
-            url:"InMobiSdk",
-            type:"banner",
-            pos:"homecell",
-            data:{
-                "appId":"f83af5e921de42cf813dc475c362aaf0",
-                "placementId":"1526909972727"
-            }
-        }
-    },
-    
-    filter_ios : function(list) {
-        if(Array.isArray(list) && list.length > 0) {
-            var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn/45d1cdd6bc2c48f28608d8567875c164'}};
-            list[0].info = info;
-            return [list[0]];
-        }
-        return [];
-    },
-    
-    adStyle : function() {
-        return 2;
-    }
-}
 
 function ads() {
 

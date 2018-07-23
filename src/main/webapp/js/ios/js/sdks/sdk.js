@@ -49,7 +49,6 @@ function load(task, rule, userdata, fetchTimeout, callback) {
 
                         var info = data.adEntityArray[0].info;
                         info.startMode = userdata.startMode;
-                        info.stats_act = userata.stats_act;
                         data.adEntityArray[0].info = info;
                     }
                     TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, {data, userdata, rule, task});
@@ -86,6 +85,7 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                                 info.displayType = task.adStyle();
                                 info.head = info.head || "";
                                 info.subhead = info.subhead || "";
+                                info.stats_act = userdata.stats_act;
                                 if(info.head.length > info.subhead.length) {
                                     var tstr = info.subhead;
                                     info.subhead = info.head;
