@@ -105,6 +105,12 @@ public class ReplaceJs {
 			origin.write(buffer, map);
 			
 		}
+		
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+		String key = entry.getKey().toString();
+		String value = entry.getValue().toString();
+		logger.info("key=" + key + " value=" + value);
+	}
 
 	}
 
