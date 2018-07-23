@@ -42,7 +42,7 @@ public class ReplaceJs {
 		@Override
 		public void write(Appendable buf, Map<String, String> ctx) throws IOException {
 			Object obj = ctx.get(name);
-
+		//	logger.info("name={}",name);
 			buf.append(obj == null?"":obj.toString());
 		}
 	}
@@ -98,7 +98,14 @@ public class ReplaceJs {
 	}
 	
 	
+	
 	public static void getNewReplaceStr(List<Text> list, Map<String, String> map,Appendable buffer) throws IOException {
+	
+//		for (Map.Entry<String, String> entry : map.entrySet()) {
+//			String key = entry.getKey().toString();
+//			String value = entry.getValue().toString();
+//			logger.info("key=" + key + " value=" + value);
+//		}
 		
 		for (int i = 0; i < list.size(); i++) {
 			Text origin = list.get(i);
@@ -106,11 +113,7 @@ public class ReplaceJs {
 			
 		}
 		
-		for (Map.Entry<String, String> entry : map.entrySet()) {
-		String key = entry.getKey().toString();
-		String value = entry.getValue().toString();
-		logger.info("key=" + key + " value=" + value);
-	}
+	
 
 	}
 
