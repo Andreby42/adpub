@@ -128,17 +128,13 @@ public class JSFileHandle {
 			sdk_voicead_placementId = getPlaceMentId(showType, "10", 2);
 			map.put("sdk_voicead_placementId", sdk_voicead_placementId);
 			map.put("sdk_voicead_aid", "2");
-			map.put("sdk_ifly_aid", "2");
-			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
 		}
 
 		String sdk_ifly_displayType = map.get("sdk_ifly_displayType");
 		if (sdk_ifly_displayType == null) {
 		
-			map.put("sdk_voicead_displayType", "2");
+			map.put("sdk_ifly_displayType", "2");
 			sdk_voicead_placementId = getPlaceMentId(showType, "10", 2);
-			map.put("sdk_voicead_placementId", sdk_voicead_placementId);
-			map.put("sdk_voicead_aid", "2");
 			map.put("sdk_ifly_aid", "2");
 			map.put("sdk_ifly_placementId", sdk_voicead_placementId);
 		}
