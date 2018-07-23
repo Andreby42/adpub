@@ -1,6 +1,8 @@
 package com.bus.chelaile.mvc.rule;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.common.PositionJs;
+import com.bus.chelaile.common.ReplaceJs;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.mvc.AbstractController;
@@ -20,6 +24,7 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.mvc.utils.JSFileHandle;
 import com.bus.chelaile.service.JSService;
 import com.bus.chelaile.service.StaticAds;
+import com.bus.chelaile.util.New;
 
 @Controller
 @RequestMapping("/js/android/js/rule")
@@ -234,29 +239,57 @@ public class JsRule extends AbstractController {
             // TODO 
         }
 
+        
+      if (tgs != null) {
+    	  
+    	  Map<String,String> map = New.hashMap();
+    	  map.put("${TASKS}", tgs.getTaskGroups().getTasks().toString());
+    	  map.put("${TIMEOUTS}", tgs.getTaskGroups().getTimeouts().toString());
+    	  if (StringUtils.isNoneBlank(tgs.getTraceid())) {
+    		  map.put("${TRACEID}", tgs.getTraceid());
+    	  }
+    	  
+     
 
-        String splashJS = "";
-        if (tgs != null) {
-            splashJS = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
-            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTaskGroups().getTimeouts().toString());
-            if (StringUtils.isNoneBlank(tgs.getTraceid())) {
-                splashJS = splashJS.replace("${TRACEID}", tgs.getTraceid());
-            }
-
-            for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
-                for (String task : tasks) {
-                    if (task.contains("api_chelaile")) {
-                        splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
-                        splashJS = splashJS.replace("${API_CHELAILE_DATA}", tgs.getAdDataString());
-                    }
-                }
-            }
-        }
+      for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
+          for (String task : tasks) {
+              if (task.contains("api_chelaile")) {
+            	  map.put("${QUERY_STRING}", request.getQueryString());
+            	  map.put("${API_CHELAILE_DATA}", tgs.getAdDataString());
+              }
+          }
+      }
+      
+      PositionJs js = StaticAds.NEW_JS_FILE_STR.get("bottom_origin");
+     
+      
+      return ReplaceJs.getReplaceStr(js, map);
+  
+  //      String splashJS = "";
+//        if (tgs != null) {
+//            splashJS = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
+//            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTaskGroups().getTimeouts().toString());
+//            if (StringUtils.isNoneBlank(tgs.getTraceid())) {
+//                splashJS = splashJS.replace("${TRACEID}", tgs.getTraceid());
+//            }
+//
+//            for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
+//                for (String task : tasks) {
+//                    if (task.contains("api_chelaile")) {
+//                        splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
+//                        splashJS = splashJS.replace("${API_CHELAILE_DATA}", tgs.getAdDataString());
+//                    }
+//                }
+//            }
+//        }
 
         //		return replaceJs(splashJS, showType, tgs, tag);
-        return JSFileHandle.replaceJs(p.getS(), splashJS, showType, tgs, tag);
+       // return JSFileHandle.replaceJs(p.getS(), splashJS, showType, tgs, tag);
 
     }
+      
+      
+      
 /*
 	private String replaceJs(String splashJS, ShowType showType, TaskEntity tgs, String tag) {
 		// 这里要替换placementid,displayType 也要替换成默认值
