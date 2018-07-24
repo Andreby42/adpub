@@ -99,7 +99,7 @@ public class JsRule extends AbstractController {
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		logger.info("total cost time: {}", System.currentTimeMillis() - t1);
-		//return "";
+//		return "";
 	}
 
 	/*

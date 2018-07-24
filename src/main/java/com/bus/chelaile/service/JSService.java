@@ -110,13 +110,8 @@ public class JSService {
         //        List<BaseAdEntity> entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, new QueryParam());
         Map<String,String> map = New.hashMap();
         
-//        try {
-//			logger.info("entities={}",JsonBinder.toJson(entities, JsonBinder.always));
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//		}
 
-        List<List<String>> tasks = New.arrayList();
+       /* List<List<String>> tasks = New.arrayList();
         List<Long> times = New.arrayList();
         String ids = "";
         if (entities != null && entities.size() > 0) {
@@ -132,22 +127,6 @@ public class JSService {
                         	map.put(entry.getKey(), entry.getValue());
                         }
                     }
-                    
-//                    if( entity.getPlacementId() != null ) {
-//                    	if( entity.getProvider_id().equals("2") ) {
-//                    		map.put("sdk_gdt_placementId", entity.getPlacementId());
-//                    	}else	if(entity.getProvider_id().equals("3")) {
-//                    		
-//                    	}else	if(entity.getProvider_id().equals("7")) {
-//                    		map.put("sdk_toutiao_placementId", entity.getPlacementId());
-//                    	}else	if(entity.getProvider_id().equals("5")) {
-//                    		map.put("sdk_baidu_placementId", entity.getPlacementId());
-//                    	}else	if(entity.getProvider_id().equals("10")) {
-//                    		map.put("sdk_voicead_placementId", entity.getPlacementId());
-//                    		//map.put("sdk_voicead_placementId", entity.getPlacementId());
-//                    	}	
-//                    }
-                    
                 }
             }
             // 存储atraceInfo到redis中
@@ -156,26 +135,24 @@ public class JSService {
                 param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
             }
             final String traceInfo = JSONObject.toJSONString(param);
-//            fixedThreadPool.execute(new Runnable() {
-//                
-//                @Override
-//                public void run() {
-//                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 24 );
-//                    
-//                }
-//            });
+            fixedThreadPool.execute(new Runnable() {
+                
+                @Override
+                public void run() {
+                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 24 );
+                    
+                }
+            });
             
             
         }
         taskEntity.setTaskGroups(new TasksGroup(tasks, times,map));
         taskEntity.setTraceid(param.getTraceid());
-//        logger.info("JS, get useful ads ：traceid={}, udid={}, cityId={}, s={}, v={}, vc={}, ids={}", param.getTraceid(), 
-//                param.getUdid(), param.getCityId(), param.getS(), param.getV(), param.getVc(), ids);
         JSONObject resultMap = new JSONObject();
         resultMap.put("ads", entities);
         taskEntity.setAdDataString(JSONObject.toJSONString(serviceManager.getClienSucMap(resultMap, Constants.STATUS_REQUEST_SUCCESS)));
         logger.info("getTask cost time: udid={}, showType={}, cost={}", param.getUdid(), site, 
-                System.currentTimeMillis() - tBeginService);
+                System.currentTimeMillis() - tBeginService);*/
         return taskEntity;
     }
 
