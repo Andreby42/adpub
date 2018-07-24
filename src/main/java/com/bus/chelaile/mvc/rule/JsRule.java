@@ -90,11 +90,11 @@ public class JsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "home");
 		// setMaidianParams(p, );
 
-//		try {
-//			produceJS(p, splashOrigin, tgs, "home_origin", request, ShowType.DOUBLE_COLUMN,response.getWriter());
-//		} catch (IOException e) {
-//			logger.error(e.getMessage(), e);
-//		}
+		try {
+			produceJS(p, splashOrigin, tgs, "home_origin", request, ShowType.DOUBLE_COLUMN,response.getWriter());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
 
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
