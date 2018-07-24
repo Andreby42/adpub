@@ -156,14 +156,14 @@ public class JSService {
                 param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
             }
             final String traceInfo = JSONObject.toJSONString(param);
-            fixedThreadPool.execute(new Runnable() {
-                
-                @Override
-                public void run() {
-                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 24 );
-                    
-                }
-            });
+//            fixedThreadPool.execute(new Runnable() {
+//                
+//                @Override
+//                public void run() {
+//                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 24 );
+//                    
+//                }
+//            });
             
             
         }
