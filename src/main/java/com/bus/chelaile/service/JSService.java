@@ -111,7 +111,7 @@ public class JSService {
         Map<String,String> map = New.hashMap();
         
 
-       /* List<List<String>> tasks = New.arrayList();
+       List<List<String>> tasks = New.arrayList();
         List<Long> times = New.arrayList();
         String ids = "";
         if (entities != null && entities.size() > 0) {
@@ -152,7 +152,7 @@ public class JSService {
         resultMap.put("ads", entities);
         taskEntity.setAdDataString(JSONObject.toJSONString(serviceManager.getClienSucMap(resultMap, Constants.STATUS_REQUEST_SUCCESS)));
         logger.info("getTask cost time: udid={}, showType={}, cost={}", param.getUdid(), site, 
-                System.currentTimeMillis() - tBeginService);*/
+                System.currentTimeMillis() - tBeginService);
         return taskEntity;
     }
 
