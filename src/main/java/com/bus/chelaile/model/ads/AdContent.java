@@ -125,8 +125,11 @@ public class AdContent {
         	AdCommonContent inner = new AdCommonContent();
             inner.setAndParseJson(content);
             innerContent = inner;
+        } else if(ShowType.GUIDE_ADV.getType().equals(showType)) {
+            AdGuideInnerContent inner = new AdGuideInnerContent();
+            inner.setAndParseJson(content);
+            innerContent = inner;
         }
-        
         else {
             logger.error("[Unsupport_ShowType] 无法识别的showType: {}", showType);
         }
