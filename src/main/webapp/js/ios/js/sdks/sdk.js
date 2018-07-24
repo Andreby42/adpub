@@ -89,12 +89,14 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                         data.sdk.aid = task.aid();
                     }
 
-                    if(task.adStyle && data.adEntityArray) {
+                    if(data && data.adEntityArray) {
                         for(var i=0; i<data.adEntityArray.length; i++){
                             var adentity = data.adEntityArray[i];
                             var info = adentity.info;
                             if(info) {
-                                info.displayType = task.adStyle();
+                                if(task.adStyle){
+                                    info.displayType = task.adStyle();
+                                }
                                 info.head = info.head || "";
                                 info.subhead = info.subhead || "";
                                 info.stats_act = userdata.stats_act;

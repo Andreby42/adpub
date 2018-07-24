@@ -37,7 +37,7 @@ public class UserHelper {
                 String createTimeStr = CacheUtil.getFromCommonOcs(key);
                 if (StringUtils.isNotEmpty(createTimeStr)) {
                     logger.info("getcreate time : key={}, createTimeStr={}", key, createTimeStr);
-                    Long createTime = Long.parseLong((String) CacheUtil.get(key));
+                    Long createTime = Long.parseLong(createTimeStr);
 
                     return createTime + newUserPeriod > System.currentTimeMillis();
                 }

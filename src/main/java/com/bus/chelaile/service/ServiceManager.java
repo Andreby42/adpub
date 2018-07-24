@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +32,7 @@ import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.TypeNumber;
+import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.AdEntity;
@@ -829,6 +832,16 @@ public class ServiceManager {
         Map<Integer, GuideResultAd> groupAds = New.hashMap();
         List<BaseAdEntity> advs = New.arrayList();
 //        List<GuideResultAd> myAdvs = New.arrayList();
+        Collections.sort(advs, new Comparator<BaseAdEntity>() {
+            @Override
+            public int compare(BaseAdEntity o1, BaseAdEntity o2) {
+                if (o1 == null)
+                    return -1;
+                if (o2 == null)
+                    return 1;
+                return ((GuideAdEntity) o1).getSort() - ((GuideAdEntity) o2).getSort();
+            }
+        });
         for (BaseAdEntity ad : guideAds) {
             GuideAdEntity guideAd = (GuideAdEntity) ad;
             if (guideAd.getSite() == 0) {
@@ -1248,21 +1261,30 @@ public class ServiceManager {
     public static void main(String[] args) throws ParseException, UnsupportedEncodingException, IOException {
         //	    String adStr = "{\"barColor\":\"255,255,255,1\",\"brandIcon\":\"https://pic1.chelaile.net.cn/adv/brandIcon305320170413.png\",\"brandName\":\"车来了\",\"buttonColor\":\"\",\"buttonIcon\":\"https://pic1.chelaile.net.cn/adv/buttonIcon305320170413.png\",\"buttonTitle\":\"\",\"buttonType\":1,\"clickMonitorLink\":\"\",\"distance\":-1,\"head\":\"小车需要你\",\"id\":3053,\"lindex\":0,\"link\":\"https://ad.chelaile.net.cn/?link=https%3A%2F%2Fsojump.com%2Fm%2F13332385.aspx&adtype=00&distance=-1&advId=3053&udid=57f41bf99791d7b3668595bc23eed2b0cae99a2d&storder=1\",\"monitorType\":0,\"openType\":0,\"promoteTitle\":\"调查问卷\",\"provider_id\":\"1\",\"showType\":0,\"sindex\":1,\"subhead\":\"你的意见将直达公路院哦~\",\"targetType\":0,\"type\":1,\"unfoldMonitorLink\":\"\"}";
         //        AdEntity ad = JSON.parseObject(adStr, AdEntity.class);
-        AdEntity ad = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
-        ad.setBarColor("255,255,255,1");
-        ad.setBrandIcon("https://pic1.chelaile.net.cn/adv/brandIcon305320170413.png");
-        ad.setBrandName("车来了");
-        ad.setButtonIcon("https://pic1.chelaile.net.cn/adv/buttonIcon305320170413.png");
-        ad.setButtonType(1);
-        ad.setHead("小车需要你");
-        ad.setLink(
-                "https://ad.chelaile.net.cn/?link=https%3A%2F%2Fsojump.com%2Fm%2F13332385.aspx&adtype=00&distance=-1&advId=3053&udid=57f41bf99791d7b3668595bc23eed2b0cae99a2d&storder=1");
-        ad.setSubhead("你的意见将直达公路院哦~");
-        ad.setId(3053);
-        System.out.println(JSONObject.toJSONString(ad));
-        System.out.println(ad.getBarColor() + "," + ad.getButtonTitle());
-        System.exit(0);
+//        AdEntity ad = new AdEntity(ShowType.DOUBLE_COLUMN.getValue());
+//        ad.setBarColor("255,255,255,1");
+//        ad.setBrandIcon("https://pic1.chelaile.net.cn/adv/brandIcon305320170413.png");
+//        ad.setBrandName("车来了");
+//        ad.setButtonIcon("https://pic1.chelaile.net.cn/adv/buttonIcon305320170413.png");
+//        ad.setButtonType(1);
+//        ad.setHead("小车需要你");
+//        ad.setLink(
+//                "https://ad.chelaile.net.cn/?link=https%3A%2F%2Fsojump.com%2Fm%2F13332385.aspx&adtype=00&distance=-1&advId=3053&udid=57f41bf99791d7b3668595bc23eed2b0cae99a2d&storder=1");
+//        ad.setSubhead("你的意见将直达公路院哦~");
+//        ad.setId(3053);
+//        System.out.println(JSONObject.toJSONString(ad));
+//        System.out.println(ad.getBarColor() + "," + ad.getButtonTitle());
+//        System.exit(0);
 
+        
+        String createTimeStr = "#1532415905317";
+        String buf[] = createTimeStr.split("#");
+        if (buf.length >= 2) {
+            Long createTime = Long.parseLong(buf[1]);
+//            logger.info("getcreate time : key={}, createTimeStr={}", key, createTimeStr);
+
+            System.out.println(createTime + 100 > System.currentTimeMillis());
+        }
     }
 
 }

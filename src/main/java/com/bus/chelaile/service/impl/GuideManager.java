@@ -44,6 +44,10 @@ public class GuideManager extends AbstractManager {
 		res.setAdserving(inner.getAdserving());
 		res.setLeadContent(inner.getDesc());
 		res.setRedPointTime(inner.getRedPointTime());
+		res.setSort(inner.getSort());
+		if(inner.getRedPoint() == 0) {
+		    res.setRedPointTime(-1);  // 不展示红点，这个时间给-1
+		}
 		res.setIconUrl(inner.getPic());
 		res.setLinkUrl(res.getLink());
 		

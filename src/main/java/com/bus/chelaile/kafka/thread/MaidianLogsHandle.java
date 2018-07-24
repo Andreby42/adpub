@@ -128,7 +128,7 @@ public class MaidianLogsHandle {
             if( expireTime == 0 ) {
             	expireTime = Constants.HALF_YEAR_CACHE_TIME;
             }
-            logger.info("projectClickKey={},expireTime={}",expireTime);
+            logger.info("projectClickKey={},expireTime={}",projectClickKey, expireTime);
             CacheUtil.incrToCache(projectClickKey,expireTime);
            // CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
             CacheUtil.incrProjectClick(projectId, 1);

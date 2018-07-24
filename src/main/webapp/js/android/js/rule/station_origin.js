@@ -478,11 +478,11 @@ var api_zm = {
 	    },
 
 	  aid : function () {
-	        return 'api_zm';
+	        return 'api_zm_${api_zm_displayType}';
 	    },
 		
 		adStyle : function() {
-	      return 2;
+	      return ${api_zm_aid};
 	    }
 	}
 

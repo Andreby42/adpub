@@ -21,11 +21,13 @@ public class AdGuideInnerContent extends AdInnerContent {
 	private List<String> servingPlaceList; // 投放的小程序范围，list
 	private int site; // 位置， 0 首页； 2 我的页面
 	
-	private int adserving;
+	private int adserving = 0;
 	private int adType;
+	private int redPoint; // 是否展示红点 , 0 不展示， 1 展示
 	private long redPointTime;
 	private String desc;
 	private int groupId;
+	private int sort; // 排序
 	
 	
 	@Override
@@ -46,10 +48,12 @@ public class AdGuideInnerContent extends AdInnerContent {
                 this.wx_miniPro_path = this.wx_miniPro_path.trim();
 			this.site = ad.site;
 			this.adType = ad.adType;
+			this.redPoint = ad.redPoint;
 			this.redPointTime = ad.redPointTime;
 			this.adserving = ad.adserving;
 			this.desc = ad.desc;
 			this.groupId = ad.groupId;
+			this.sort = ad.sort;
 			if(StringUtils.isNotEmpty(ad.getServingPlace())) {
 				this.servingPlaceList = New.arrayList();
 				for(String s : ad.getServingPlace().split(",")) {

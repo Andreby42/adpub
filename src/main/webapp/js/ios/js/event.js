@@ -39,8 +39,6 @@ function sendTrackRequest(url, params, body) {
         }
     }
 
-    console.log("start send to "+reqUrl + " body="+body);
-
     if(body) {
         Http.post(reqUrl, null, body, 5000, function (string, response, error) {
             console.log("sendTrackRequest ret="+string + " response.header="+JSON.stringify(OCValueForKey(response, "allHeaderFields"))+ " error="+error);
@@ -54,14 +52,12 @@ function sendTrackRequest(url, params, body) {
 }
 
 function addParamsIfNotNull(params, key, value) {
-    console.log("params.set(" + key + "," + value + ")");
     if (value != undefined && value != null) {
         params[key] = value;
     }
 }
 
 function trackBaseParams(sdk, ad) {
-    console.log("sdk=" + sdk + " ad=" + ad);
     var params = {};
     var info = ad.info || {};
     var traceInfo = sdk.traceInfo || {};
