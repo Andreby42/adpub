@@ -36,7 +36,7 @@ public class CacheUtil {
 	// 存储tbk title的redis
     private static ICache redisTBK;
     // 存储 traceInfo的redis
-    private static ICache redisAtrace;
+//    private static ICache redisAtrace;
     // 存储bus后台设置的cshow值的redis
 //    private static ICache redisBUS;
 //	//  用来获取用户头像的redis
@@ -132,7 +132,7 @@ public class CacheUtil {
        redisToken = new RedisTokenCacheImplUtil();
        redisTBK = new RedisTBKCacheImplUtil();
 //       redisBUS = new RedisBUSCacheImplUtil();
-       redisAtrace = new RedisAtraceCacheImplUtil();
+//       redisAtrace = new RedisAtraceCacheImplUtil();
        isInitSuccess = true;
     }
     
@@ -295,14 +295,12 @@ public class CacheUtil {
     	if( traceInfoClient != null ) {
     		traceInfoClient.set(key, -1, value);
     	}
-        redisAtrace.set(key, -1, value);
     }
     // 同上
     public static void setToAtrace(String key, String value, int exp) {
     	if( traceInfoClient != null ) {
     		traceInfoClient.set(key, exp, value);
     	}
-        redisAtrace.set(key, exp, value);
     }
     
     // 记录项目总次数
