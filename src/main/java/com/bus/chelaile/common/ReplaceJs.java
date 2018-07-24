@@ -110,7 +110,6 @@ public class ReplaceJs {
 		for (int i = 0; i < list.size(); i++) {
 			Text origin = list.get(i);
 			origin.write(buffer, map);
-			
 		}
 		
 	
