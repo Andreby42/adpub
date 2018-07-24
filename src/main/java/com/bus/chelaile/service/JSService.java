@@ -153,8 +153,8 @@ public class JSService {
         }
         taskEntity.setTaskGroups(new TasksGroup(tasks, times,map));
         taskEntity.setTraceid(param.getTraceid());
-        logger.info("JS, get useful ads ：traceid={}, udid={}, cityId={}, s={}, v={}, vc={}, ids={}", param.getTraceid(), 
-                param.getUdid(), param.getCityId(), param.getS(), param.getV(), param.getVc(), ids);
+//        logger.info("JS, get useful ads ：traceid={}, udid={}, cityId={}, s={}, v={}, vc={}, ids={}", param.getTraceid(), 
+//                param.getUdid(), param.getCityId(), param.getS(), param.getV(), param.getVc(), ids);
         JSONObject resultMap = new JSONObject();
         resultMap.put("ads", entities);
         taskEntity.setAdDataString(JSONObject.toJSONString(serviceManager.getClienSucMap(resultMap, Constants.STATUS_REQUEST_SUCCESS)));
