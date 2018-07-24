@@ -277,6 +277,7 @@ public class JsRule extends AbstractController {
 
 		if (tgs == null || tgs.getTaskGroups() == null || tgs.getTaskGroups().getTasks().size() == 0) {
 			logger.info("tgs is null");
+			return;
 		}
 		Map<String, String> map = New.hashMap();
 
