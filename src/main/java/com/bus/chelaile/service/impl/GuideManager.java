@@ -34,7 +34,7 @@ public class GuideManager extends AbstractManager {
 		res.dealLink(advParam);
 
 		AdGuideInnerContent inner = (AdGuideInnerContent) ad.getAds().getAdInnerContent();
-		res.setTitle(inner.getDesc());
+		res.setTitle(ad.getAds().getTitle());
 		res.setWxMiniProId(inner.getWx_miniPro_id());
 		res.setWxMiniProPath(inner.getWx_miniPro_path());
 		res.setPriority(ad.getAds().getPriority());
@@ -50,6 +50,7 @@ public class GuideManager extends AbstractManager {
 		}
 		res.setIconUrl(inner.getPic());
 		res.setLinkUrl(res.getLink());
+		res.setSite(inner.getSite());
 		
 		return res;
 	}

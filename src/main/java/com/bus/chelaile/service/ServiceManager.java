@@ -832,7 +832,7 @@ public class ServiceManager {
         Map<Integer, GuideResultAd> groupAds = New.hashMap();
         List<BaseAdEntity> advs = New.arrayList();
 //        List<GuideResultAd> myAdvs = New.arrayList();
-        Collections.sort(advs, new Comparator<BaseAdEntity>() {
+        Collections.sort(guideAds, new Comparator<BaseAdEntity>() {
             @Override
             public int compare(BaseAdEntity o1, BaseAdEntity o2) {
                 if (o1 == null)
