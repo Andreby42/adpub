@@ -2,6 +2,9 @@ package com.bus.chelaile.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import javax.annotation.Resource;
 
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
@@ -26,6 +30,7 @@ import com.bus.chelaile.service.impl.OpenManager;
 import com.bus.chelaile.service.impl.OtherManager;
 import com.bus.chelaile.service.impl.StationAdsManager;
 import com.bus.chelaile.util.New;
+import com.bus.chelaile.util.config.PropertiesUtils;
 
 public class JSService {
     //    @Autowired
@@ -47,8 +52,12 @@ public class JSService {
     private OtherManager otherManager;
 
     protected static final Logger logger = LoggerFactory.getLogger(JSService.class);
+    
+//    private static final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+//            "thread.count", "10")));
+    ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
 
-    public TaskEntity getTask(AdvParam param, String site) {
+    public TaskEntity getTask(final AdvParam param, String site) {
         long tBeginService = System.currentTimeMillis();
         TaskEntity taskEntity = new TaskEntity();
         //        ShowType showType;
@@ -146,8 +155,15 @@ public class JSService {
 //            logger.info("traceid为空 ┭┮﹏┭┮");
                 param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
             }
-            String traceInfo = JSONObject.toJSONString(param);
-            CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 24 );
+            final String traceInfo = JSONObject.toJSONString(param);
+            fixedThreadPool.execute(new Runnable() {
+                
+                @Override
+                public void run() {
+                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 24 );
+                    
+                }
+            });
             
             
         }
