@@ -105,7 +105,7 @@ public class JSService {
 //		} catch (Exception e) {
 //			logger.error(e.getMessage());
 //		}
-        
+        long tBeginService = System.currentTimeMillis();
         List<List<String>> tasks = New.arrayList();
         List<Long> times = New.arrayList();
         String ids = "";
@@ -157,6 +157,8 @@ public class JSService {
         JSONObject resultMap = new JSONObject();
         resultMap.put("ads", entities);
         taskEntity.setAdDataString(JSONObject.toJSONString(serviceManager.getClienSucMap(resultMap, Constants.STATUS_REQUEST_SUCCESS)));
+        logger.info("serviceList cost time: udid={}, showType={}, cost={}", param.getUdid(), site, 
+                System.currentTimeMillis() - tBeginService);
         return taskEntity;
     }
 

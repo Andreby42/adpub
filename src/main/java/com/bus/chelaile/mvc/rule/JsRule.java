@@ -281,6 +281,7 @@ public class JsRule extends AbstractController {
 		}
 		Map<String, String> map = New.hashMap();
 
+		long tBeginService = System.currentTimeMillis();
 		if (tgs != null) {
 			logger.info(tgs.getTaskGroups().getTasks().toString());
 
@@ -310,6 +311,8 @@ public class JsRule extends AbstractController {
 			} catch (IOException e) {
 				logger.error(e.getMessage(), e);
 			}
+			logger.info("serviceList cost time: udid={}, showType={}, cost={}", p.getUdid(), showType.getType(), 
+	                System.currentTimeMillis() - tBeginService);
 			// return ReplaceJs.getReplaceStr(list, map);
 		}
 		// return tag;

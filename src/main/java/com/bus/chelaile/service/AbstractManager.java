@@ -105,6 +105,7 @@ public abstract class AbstractManager {
 	 */
 	public List<BaseAdEntity> doServiceList(AdvParam advParam, ShowType showType, QueryParam queryParam) {
 
+	    long tBeginService = System.currentTimeMillis();
 		if (!beforeCheck(advParam, showType)) {
 			return null;
 		}
@@ -150,6 +151,9 @@ public abstract class AbstractManager {
 				}
 			}
 		}
+		
+        logger.info("serviceList cost time: udid={}, showType={}, cost={}", advParam.getUdid(), showType.getType(), 
+                    System.currentTimeMillis() - tBeginService);
 
 		return entities;
 	}

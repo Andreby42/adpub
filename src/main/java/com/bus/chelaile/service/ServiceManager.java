@@ -852,7 +852,7 @@ public class ServiceManager {
                     myAdv.setGroupId(guideAd.getGroupId());
                     List<BaseAdEntity> ads = New.arrayList();
                     ads.add(ad);
-                    
+                    myAdv.setAdvs(ads);
                     groupAds.put(guideAd.getGroupId(), myAdv);
                 } else {
                     groupAds.get(guideAd.getGroupId()).getAdvs().add(ad);
