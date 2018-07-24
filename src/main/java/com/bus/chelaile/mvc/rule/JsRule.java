@@ -81,7 +81,7 @@ public class JsRule extends AbstractController {
 
 	@RequestMapping(value = "/homeAd.do", produces = "text/plain;charset=UTF-8")
 	public void homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
+	    long t1 = System.currentTimeMillis();
 		AdvParam p = getActionParam(request);
 		String traceInfo = JSONObject.toJSONString(p);
 
@@ -98,7 +98,7 @@ public class JsRule extends AbstractController {
 
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
-
+		logger.info("total cost time: {}", System.currentTimeMillis() - t1);
 		//return "";
 	}
 
@@ -246,7 +246,6 @@ public class JsRule extends AbstractController {
 	//@ResponseBody
 	@RequestMapping(value = "/allCars.do", produces = "text/plain;charset=UTF-8")
 	public void allCars(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
 		AdvParam p = getActionParam(request);
 		if (StringUtils.isBlank(p.getStnName()))
 			p.setStnName(request.getParameter("stationName"));
