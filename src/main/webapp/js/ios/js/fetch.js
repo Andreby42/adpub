@@ -1,3 +1,6 @@
+"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function sdkfile(sdkname) {
     return "sdks/" + sdkname;
@@ -7,18 +10,16 @@ var mapSdks = {};
 
 function getExistSdks(taskGroup) {
     var existSdks = [];
-    taskGroup = taskGroup || []
-    taskGroup.forEach(function(task) {
-                      var sdk = getSdk(task.sdkname());
-                      if (sdk) existSdks.push({
-                                              task: task,
-                                              sdk: sdk
-                                              });
-                      });
+    taskGroup = taskGroup || [];
+    taskGroup.forEach(function (task) {
+        var sdk = getSdk(task.sdkname());
+        if (sdk) existSdks.push({
+            task: task,
+            sdk: sdk
+        });
+    });
     return existSdks;
 }
-
-
 
 /**
  * @param {string!} sdkname
@@ -39,7 +40,6 @@ function getSdk(sdkname) {
         }
     }
     return sdk;
-
 }
 
 // config.
@@ -55,28 +55,24 @@ function getAds(rule, userdata, callback) {
         secondTime = rule.timeouts[1] || secondTime;
     }
 
-    var hookCallback = function(data){
-                    if(data && typeof data == 'object' && data.sdk){
+    var hookCallback = function hookCallback(data) {
+        if (data && (typeof data === "undefined" ? "undefined" : _typeof(data)) == 'object' && data.sdk) {
 
-                        data.sdk.refreshTime = 25000;
-                        data.sdk.traceInfo = rule.traceInfo;
-                        data.sdk.mixRefreshAdInterval = 15000;
-                        data.sdk.maxSplashTimeout = 8000;
-                        data.sdk.warmSplashIntervalTime = 2*60*1000;
-
-                    }
-                    callback(data);
-                }
+            data.sdk.refreshTime = 25000;
+            data.sdk.traceInfo = rule.traceInfo;
+            data.sdk.mixRefreshAdInterval = 15000;
+            data.sdk.maxSplashTimeout = 8000;
+            data.sdk.warmSplashIntervalTime = 2 * 60 * 1000;
+        }
+        callback(data);
+    };
     hookCallback.userdata = userdata;
-    if(!rule.tasks || rule.tasks.length <= 0) {
+    if (!rule.tasks || rule.tasks.length <= 0) {
         callback(null);
-    }
-    else {
+    } else {
         tryNthTaskGroup(rule, 0, hookCallback);
     }
-
 }
-
 
 /**
  * 尝试第n个taskGroup
@@ -86,12 +82,12 @@ function tryNthTaskGroup(rule, nth, callback) {
 
     function wrappedFn(data) {
         if (data) {
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.FetchedAd, {data, rule, userdata:callback.userdata});
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.FetchedAd, { data: data, rule: rule, userdata: callback.userdata });
             return callback(data);
         }
 
         if (nth == taskGroups.length - 1) {
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.NoDataLastGroup, {rule, userdata:callback.userdata});
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.NoDataLastGroup, { rule: rule, userdata: callback.userdata });
             return callback(null);
         }
 
@@ -107,11 +103,10 @@ function tryNthTaskGroup(rule, nth, callback) {
             clearInterval(checker);
         }
         // TODO
-        sdkInfos.forEach(function(sdkInfo, idx) {
-                         if (idx === noStopTaskNth) return;
-                         if (sdkInfo.sdk.stop2)
-                            sdkInfo.sdk.stop2(sdkInfo.task);
-                         });
+        sdkInfos.forEach(function (sdkInfo, idx) {
+            if (idx === noStopTaskNth) return;
+            if (sdkInfo.sdk.stop2) sdkInfo.sdk.stop2(sdkInfo.task);
+        });
     }
 
     function checkResults() {
@@ -119,7 +114,7 @@ function tryNthTaskGroup(rule, nth, callback) {
         var used = now() - stamp1;
         if (used > firstTime + secondTime) {
 
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.AllAdTimeout, {used, rule, userdata:callback.userdata});
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.AllAdTimeout, { used: used, rule: rule, userdata: callback.userdata });
 
             stopCheckerAndTasks();
             wrappedFn(null);
@@ -127,11 +122,10 @@ function tryNthTaskGroup(rule, nth, callback) {
         }
 
         var finishCount = 0,
-        succeedCount = 0;
+            succeedCount = 0;
         var sdkInfo, result;
         for (var i = 0; i < sdkInfos.length; i++) {
-            sdkInfo = sdkInfos[i],
-            result = sdkInfo._result;
+            sdkInfo = sdkInfos[i], result = sdkInfo._result;
 
             if (result == undefined) continue;
 
@@ -144,37 +138,42 @@ function tryNthTaskGroup(rule, nth, callback) {
 
             // success
             if (used > firstTime || // for data on greedy mode.
-                i == 0 // if it is the first slot
-                ) {
-                stopCheckerAndTasks(i);
-                wrappedFn(result[0]);
-                return;
-            }
+            i == 0 // if it is the first slot
+            ) {
+                    stopCheckerAndTasks(i);
+                    wrappedFn(result[0]);
+                    return;
+                }
         }
 
         if (finishCount >= sdkInfos.length) {
             if (succeedCount == 0) {
-                console.log('All finish without any succeed.')
+                console.log('All finish without any succeed.');
                 stopCheckerAndTasks();
                 wrappedFn(null);
             } else {
-                console.log('??? How can it be???');
+                stopCheckerAndTasks();
+                if (minIndex > 0 && minIndex < sdkInfos.length - 1) {
+                    sdkInfo = sdkInfos[minIndex];
+                    result = sdkInfo._result;
+                    wrappedFn(result[0]);
+                }
             }
         }
     }
     checkResults._count = 0;
 
     var stamp1 = now(),
-    interval = 50;
+        interval = 50;
     var sdkInfos = getExistSdks(taskGroups[nth]);
-    sdkInfos.forEach(function(sdkInfo) {
-                     var req = sdkInfo.task.adurl_ios();
-                     console.log('try sdk: ' + req.url);
-                     sdkInfo.sdk.load(sdkInfo.task, rule, callback.userdata, (firstTime + secondTime), function(data) {
-                                      console.log('uniReqId='+callback.userdata.uniReqId + ' data comes ' + data);
-                                      sdkInfo._result = [data];
-                                      });
-                     });
+    sdkInfos.forEach(function (sdkInfo) {
+        var req = sdkInfo.task.adurl_ios();
+        console.log('try sdk: ' + req.url);
+        sdkInfo.sdk.load(sdkInfo.task, rule, callback.userdata, firstTime + secondTime, function (data) {
+            console.log('uniReqId=' + callback.userdata.uniReqId + ' data comes ' + data);
+            sdkInfo._result = [data];
+        });
+    });
 
     var checker = setInterval(checkResults, interval);
 }

@@ -1,41 +1,53 @@
-(function(global){
-var moduleCaches = {};
-var systemRequire = global.require;
-global.require = function(filename, noCache, forceUpdate) {
-    try {
-        var name = filename;
-        if(name.startsWith('./')) {
-            name = name.slice(2);
-        }
-        if(!name.endsWith('.do')){
-            name += '.do';
-        }
+'use strict';
 
-        var ret;
-        if(noCache || forceUpdate) {
-            ret = systemRequire.apply(this, arguments);
-        }
-        else {
-            ret = moduleCaches[name];
-            if(!(typeof ret === 'function')) {
-                ret = systemRequire.apply(this, arguments);
-                moduleCaches[name] = ret;
+String.prototype.contains = String.prototype.contains || function(str) {
+	return this.indexOf(str) >= 0;
+};
+
+String.prototype.startsWith = String.prototype.startsWith || function(prefix) {
+	return this.indexOf(prefix) === 0;
+};
+
+String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
+	return this.indexOf(suffix, this.length - suffix.length) >= 0;
+};
+
+(function (global) {
+    var moduleCaches = {};
+    var systemRequire = global.require;
+    global.require = function (filename, noCache, forceUpdate) {
+        try {
+            var name = filename;
+            if (name.startsWith('./')) {
+                name = name.slice(2);
             }
+            if (!name.endsWith('.do')) {
+                name += '.do';
+            }
+
+            var ret;
+            if (noCache || forceUpdate) {
+                ret = systemRequire.apply(this, arguments);
+            } else {
+                ret = moduleCaches[name];
+                if (!(typeof ret === 'function')) {
+                    ret = systemRequire.apply(this, arguments);
+                    moduleCaches[name] = ret;
+                }
+            }
+
+            return ret ? ret(global) : function () {};
+        } catch (e) {
+            console.log('e=' + e);
+            delete moduleCaches[name];
+            throw e;
         }
+    };
 
-        return ret ? ret(global) : function(){};
-    } catch(e) {
-        console.log('e='+e);
-        delete moduleCaches[name];
-        throw e;
-    }
-}
-
-global.AddModule = function(name, code) {
-    moduleCaches[name] = code;
-}
-
-})(this);
+    global.AddModule = function (name, code) {
+        moduleCaches[name] = code;
+    };
+})(global);
 
 global.AddModule('event.do', (function(global) {
    var module = {};
@@ -293,7 +305,10 @@ global.AddModule('fetch.do', (function(global) {
    exports = {};
    module.exports = exports;
    (function(moudle, exports, global) {
-       
+       "use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 function sdkfile(sdkname) {
     return "sdks/" + sdkname;
 }
@@ -302,18 +317,16 @@ var mapSdks = {};
 
 function getExistSdks(taskGroup) {
     var existSdks = [];
-    taskGroup = taskGroup || []
-    taskGroup.forEach(function(task) {
-                      var sdk = getSdk(task.sdkname());
-                      if (sdk) existSdks.push({
-                                              task: task,
-                                              sdk: sdk
-                                              });
-                      });
+    taskGroup = taskGroup || [];
+    taskGroup.forEach(function (task) {
+        var sdk = getSdk(task.sdkname());
+        if (sdk) existSdks.push({
+            task: task,
+            sdk: sdk
+        });
+    });
     return existSdks;
 }
-
-
 
 /**
  * @param {string!} sdkname
@@ -334,7 +347,6 @@ function getSdk(sdkname) {
         }
     }
     return sdk;
-
 }
 
 // config.
@@ -350,28 +362,24 @@ function getAds(rule, userdata, callback) {
         secondTime = rule.timeouts[1] || secondTime;
     }
 
-    var hookCallback = function(data){
-                    if(data && typeof data == 'object' && data.sdk){
+    var hookCallback = function hookCallback(data) {
+        if (data && (typeof data === "undefined" ? "undefined" : _typeof(data)) == 'object' && data.sdk) {
 
-                        data.sdk.refreshTime = 25000;
-                        data.sdk.traceInfo = rule.traceInfo;
-                        data.sdk.mixRefreshAdInterval = 15000;
-                        data.sdk.maxSplashTimeout = 8000;
-                        data.sdk.warmSplashIntervalTime = 2*60*1000;
-
-                    }
-                    callback(data);
-                }
+            data.sdk.refreshTime = 25000;
+            data.sdk.traceInfo = rule.traceInfo;
+            data.sdk.mixRefreshAdInterval = 15000;
+            data.sdk.maxSplashTimeout = 8000;
+            data.sdk.warmSplashIntervalTime = 2 * 60 * 1000;
+        }
+        callback(data);
+    };
     hookCallback.userdata = userdata;
-    if(!rule.tasks || rule.tasks.length <= 0) {
+    if (!rule.tasks || rule.tasks.length <= 0) {
         callback(null);
-    }
-    else {
+    } else {
         tryNthTaskGroup(rule, 0, hookCallback);
     }
-
 }
-
 
 /**
  * 尝试第n个taskGroup
@@ -381,12 +389,12 @@ function tryNthTaskGroup(rule, nth, callback) {
 
     function wrappedFn(data) {
         if (data) {
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.FetchedAd, {data, rule, userdata:callback.userdata});
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.FetchedAd, { data: data, rule: rule, userdata: callback.userdata });
             return callback(data);
         }
 
         if (nth == taskGroups.length - 1) {
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.NoDataLastGroup, {rule, userdata:callback.userdata});
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.NoDataLastGroup, { rule: rule, userdata: callback.userdata });
             return callback(null);
         }
 
@@ -402,11 +410,10 @@ function tryNthTaskGroup(rule, nth, callback) {
             clearInterval(checker);
         }
         // TODO
-        sdkInfos.forEach(function(sdkInfo, idx) {
-                         if (idx === noStopTaskNth) return;
-                         if (sdkInfo.sdk.stop2)
-                            sdkInfo.sdk.stop2(sdkInfo.task);
-                         });
+        sdkInfos.forEach(function (sdkInfo, idx) {
+            if (idx === noStopTaskNth) return;
+            if (sdkInfo.sdk.stop2) sdkInfo.sdk.stop2(sdkInfo.task);
+        });
     }
 
     function checkResults() {
@@ -414,7 +421,7 @@ function tryNthTaskGroup(rule, nth, callback) {
         var used = now() - stamp1;
         if (used > firstTime + secondTime) {
 
-            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.AllAdTimeout, {used, rule, userdata:callback.userdata});
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.AllAdTimeout, { used: used, rule: rule, userdata: callback.userdata });
 
             stopCheckerAndTasks();
             wrappedFn(null);
@@ -422,11 +429,10 @@ function tryNthTaskGroup(rule, nth, callback) {
         }
 
         var finishCount = 0,
-        succeedCount = 0;
+            succeedCount = 0;
         var sdkInfo, result;
         for (var i = 0; i < sdkInfos.length; i++) {
-            sdkInfo = sdkInfos[i],
-            result = sdkInfo._result;
+            sdkInfo = sdkInfos[i], result = sdkInfo._result;
 
             if (result == undefined) continue;
 
@@ -439,37 +445,42 @@ function tryNthTaskGroup(rule, nth, callback) {
 
             // success
             if (used > firstTime || // for data on greedy mode.
-                i == 0 // if it is the first slot
-                ) {
-                stopCheckerAndTasks(i);
-                wrappedFn(result[0]);
-                return;
-            }
+            i == 0 // if it is the first slot
+            ) {
+                    stopCheckerAndTasks(i);
+                    wrappedFn(result[0]);
+                    return;
+                }
         }
 
         if (finishCount >= sdkInfos.length) {
             if (succeedCount == 0) {
-                console.log('All finish without any succeed.')
+                console.log('All finish without any succeed.');
                 stopCheckerAndTasks();
                 wrappedFn(null);
             } else {
-                console.log('??? How can it be???');
+                stopCheckerAndTasks();
+                if (minIndex > 0 && minIndex < sdkInfos.length - 1) {
+                    sdkInfo = sdkInfos[minIndex];
+                    result = sdkInfo._result;
+                    wrappedFn(result[0]);
+                }
             }
         }
     }
     checkResults._count = 0;
 
     var stamp1 = now(),
-    interval = 50;
+        interval = 50;
     var sdkInfos = getExistSdks(taskGroups[nth]);
-    sdkInfos.forEach(function(sdkInfo) {
-                     var req = sdkInfo.task.adurl_ios();
-                     console.log('try sdk: ' + req.url);
-                     sdkInfo.sdk.load(sdkInfo.task, rule, callback.userdata, (firstTime + secondTime), function(data) {
-                                      console.log('uniReqId='+callback.userdata.uniReqId + ' data comes ' + data);
-                                      sdkInfo._result = [data];
-                                      });
-                     });
+    sdkInfos.forEach(function (sdkInfo) {
+        var req = sdkInfo.task.adurl_ios();
+        console.log('try sdk: ' + req.url);
+        sdkInfo.sdk.load(sdkInfo.task, rule, callback.userdata, firstTime + secondTime, function (data) {
+            console.log('uniReqId=' + callback.userdata.uniReqId + ' data comes ' + data);
+            sdkInfo._result = [data];
+        });
+    });
 
     var checker = setInterval(checkResults, interval);
 }
@@ -491,25 +502,26 @@ global.AddModule('sdks/sdk.do', (function(global) {
    exports = {};
    module.exports = exports;
    (function(moudle, exports, global) {
-       var RENDER_MSG = 'render_ok';
+       "use strict";
+
+var RENDER_MSG = 'render_ok';
 
 function load(task, rule, userdata, fetchTimeout, callback) {
 
     var sdknameMap = {
-        "GDTSDK":"CLLGdtSdk",
-        "BaiduSDK":"CLLBaiduSdk",
-        "TOUTIAOSDK":"CLLTTSdk",
-        "IFLYSDK":"CLLIflySdk",
-        "InMobiSdk":"CLLInMobiSdk"
-    }
+        "GDTSDK": "CLLGdtSdk",
+        "BaiduSDK": "CLLBaiduSdk",
+        "TOUTIAOSDK": "CLLTTSdk",
+        "IFLYSDK": "CLLIflySdk",
+        "InMobiSdk": "CLLInMobiSdk"
+    };
 
     var requestInfo = task.adurl_ios();
-    if(requestInfo.url && requestInfo.url.toLowerCase().indexOf("http")==0) {
-        requestInfo.data = requestInfo.data || {}
+    if (requestInfo.url && requestInfo.url.toLowerCase().indexOf("http") == 0) {
+        requestInfo.data = requestInfo.data || {};
         requestInfo.data.placementId = requestInfo.url;
         requestInfo.url = "CLLAdApi";
-    }
-    else if(requestInfo.url && sdknameMap[requestInfo.url]) {
+    } else if (requestInfo.url && sdknameMap[requestInfo.url]) {
         requestInfo.url = sdknameMap[requestInfo.url];
     }
 
@@ -522,105 +534,98 @@ function load(task, rule, userdata, fetchTimeout, callback) {
     requestInfo.type = requestInfo.type || requestInfo.pos;
     if (requestInfo.type == "splash") {
 
-        TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadSplash, {userdata, rule, task});
+        TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadSplash, { userdata: userdata, rule: rule, task: task });
 
-        sdkIns.loadSplash(requestInfo.data, userdata, fetchTimeout,
-            function(data) {
+        sdkIns.loadSplash(requestInfo.data, userdata, fetchTimeout, function (data) {
 
-                try {
-                    if(task.aid && data.sdk) {
-                        data.sdk.aid = task.aid();
-                    }
-
-                    var task_filter = task.filter_ios;
-                    if (task_filter && data) {
-                        data.adEntityArray = task_filter(data.adEntityArray);
-                    }
-
-                    if(userdata && userdata.startMode
-                        && data.adEntityArray && data.adEntityArray.length > 0) {
-
-                        var info = data.adEntityArray[0].info;
-                        info.startMode = userdata.startMode;
-                        data.adEntityArray[0].info = info;
-                    }
-                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, {data, userdata, rule, task});
-                    callback(data);
-                } catch(e) {
-                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, {error:"-91000", des:""+e, requestInfo:requestInfo, userdata, rule, task});
-                    callback(null);
+            try {
+                if (task.aid && data.sdk) {
+                    data.sdk.aid = task.aid();
                 }
-            },
-            function(error) {
-                error = error || "-90000";
-                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, {error:error, requestInfo:requestInfo, userdata, rule, task});
+
+                var task_filter = task.filter_ios;
+                if (task_filter && data) {
+                    data.adEntityArray = task_filter(data.adEntityArray);
+                }
+
+                if (userdata && userdata.startMode && data.adEntityArray && data.adEntityArray.length > 0) {
+
+                    var info = data.adEntityArray[0].info;
+                    info.startMode = userdata.startMode;
+                    data.adEntityArray[0].info = info;
+                }
+                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, { data: data, userdata: userdata, rule: rule, task: task });
+                callback(data);
+            } catch (e) {
+                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: "-91000", des: "" + e, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
                 callback(null);
             }
-        );
+        }, function (error) {
+            error = error || "-90000";
+            TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: error, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
+            callback(null);
+        });
     } else if (requestInfo.type == "banner") {
 
-        TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadBanner, {userdata, rule, task});
+        TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadBanner, { userdata: userdata, rule: rule, task: task });
 
-        if(task.adStyle){
+        if (task.adStyle) {
             var style = task.adStyle();
             var sizeObj = {
-                "1" : {showWidth:96,showHeight:64},
-                "2" : {showWidth:180,showHeight:88},
-                "5" : {showWidth:96,showHeight:64},
-            }
-            var showSize = sizeObj[style+""];
-            if(showSize){
+                "1": { showWidth: 180, showHeight: 88 },
+                "2": { showWidth: 96, showHeight: 64 },
+                "5": { showWidth: 96, showHeight: 64 }
+            };
+            var showSize = sizeObj[style + ""];
+            if (showSize) {
                 userdata.showWidth = showSize.showWidth;
                 userdata.showHeight = showSize.showHeight;
             }
         }
-        sdkIns.loadBanner(requestInfo.data, userdata, fetchTimeout,
-            function(data) {
+        sdkIns.loadBanner(requestInfo.data, userdata, fetchTimeout, function (data) {
 
-                try {
-                    if(task.aid && data.sdk) {
-                        data.sdk.aid = task.aid();
-                    }
+            try {
+                if (task.aid && data.sdk) {
+                    data.sdk.aid = task.aid();
+                }
 
-                    if(data && data.adEntityArray) {
-                        for(var i=0; i<data.adEntityArray.length; i++){
-                            var adentity = data.adEntityArray[i];
-                            var info = adentity.info;
-                            if(info) {
-                                if(task.adStyle){
-                                    info.displayType = task.adStyle();
-                                }
-                                info.head = info.head || "";
-                                info.subhead = info.subhead || "";
-                                info.stats_act = userdata.stats_act;
-                                if(info.head.length > info.subhead.length) {
-                                    var tstr = info.subhead;
-                                    info.subhead = info.head;
-                                    info.head = tstr;
-                                }
-                                adentity.info = info;
+                if (data && data.adEntityArray) {
+                    for (var i = 0; i < data.adEntityArray.length; i++) {
+                        var adentity = data.adEntityArray[i];
+                        var info = adentity.info;
+                        if (info) {
+                            if (task.adStyle) {
+                                info.displayType = task.adStyle();
                             }
+                            info.head = info.head || "";
+                            info.subhead = info.subhead || "";
+                            info.stats_act = userdata.stats_act;
+                            if (info.head.length > info.subhead.length) {
+                                var tstr = info.subhead;
+                                info.subhead = info.head;
+                                info.head = tstr;
+                            }
+                            adentity.info = info;
                         }
                     }
-
-                    var task_filter = task.filter_ios;
-                    if(task_filter && data){
-                          data.adEntityArray = task_filter(data.adEntityArray);
-                    }
-
-                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedBanner, {userdata, data, rule, task});
-                    callback(data);
-                } catch(e) {
-                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, {error:"-91001", des:""+e, userdata, data, rule, task});
-                    callback(null);
                 }
-            },
-            function(error, data, extension) {
-                error = error || "-90001";
-                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, {error:error, requestInfo:requestInfo, userdata, data, rule, task});
+
+                var task_filter = task.filter_ios;
+                if (task_filter && data) {
+                    data.adEntityArray = task_filter(data.adEntityArray);
+                }
+
+                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedBanner, { userdata: userdata, data: data, rule: rule, task: task });
+                callback(data);
+            } catch (e) {
+                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: "-91001", des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
                 callback(null);
             }
-        );
+        }, function (error, data, extension) {
+            error = error || "-90001";
+            TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: error, requestInfo: requestInfo, userdata: userdata, data: data, rule: rule, task: task });
+            callback(null);
+        });
     }
 }
 

@@ -832,6 +832,7 @@ public class ServiceManager {
         Map<Integer, GuideResultAd> groupAds = New.hashMap();
         List<BaseAdEntity> advs = New.arrayList();
 //        List<GuideResultAd> myAdvs = New.arrayList();
+        logger.info("*************{}", JSONObject.toJSONString(guideAds));
         Collections.sort(guideAds, new Comparator<BaseAdEntity>() {
             @Override
             public int compare(BaseAdEntity o1, BaseAdEntity o2) {
@@ -842,6 +843,7 @@ public class ServiceManager {
                 return ((GuideAdEntity) o1).getSort() - ((GuideAdEntity) o2).getSort();
             }
         });
+        logger.info("*************{}", JSONObject.toJSONString(guideAds));
         for (BaseAdEntity ad : guideAds) {
             GuideAdEntity guideAd = (GuideAdEntity) ad;
             if (guideAd.getSite() == 0) {
