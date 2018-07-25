@@ -33,6 +33,7 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
 import com.bus.chelaile.thread.CalculatePerMinCount;
+import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
@@ -104,17 +105,21 @@ public abstract class AbstractManager {
 	 * 获取ad List的方法 不涉及到策略
 	 */
 	public List<BaseAdEntity> doServiceList(AdvParam advParam, ShowType showType, QueryParam queryParam) {
-
-	    long tBeginService = System.currentTimeMillis();
+		StaticTimeLog.start(advParam.getUdid() +",show=" +showType.getType());
+	   // long tBeginService = System.currentTimeMillis();
 		if (!beforeCheck(advParam, showType)) {
 			return null;
 		}
+		
+
 		// 所有投放的广告
 		List<AdContentCacheEle> adsList = gainAllValidAds(advParam, showType, false);
 		if (adsList == null || adsList.size() == 0)
 			return null;
 
 		AdPubCacheRecord cacheRecord = gainCacheRecord(advParam, showType);
+		
+	
 		// 需要排序 先打乱次序 ，再按照优先级排序
 		Collections.shuffle(adsList);
 		Collections.sort(adsList, AD_CONTENT_COMPARATOR);
@@ -130,9 +135,14 @@ public abstract class AbstractManager {
 			AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
 			return null;
 		}
+		
+		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"handleAds" );
+
 		// logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(),
 		// advParam.getUdid(), showType);
 		List<BaseAdEntity> entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
+		
+		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"getEntities" );
 
 		// 增加通用内容
 		if (entities != null && entities.size() > 0) {
@@ -152,8 +162,12 @@ public abstract class AbstractManager {
 			}
 		}
 		
-        logger.info("serviceList cost time: udid={}, showType={}, cost={}", advParam.getUdid(), showType.getType(), 
-                    System.currentTimeMillis() - tBeginService);
+		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"getPlaceMentId" );
+		
+		StaticTimeLog.summary(advParam.getUdid() +",show=" +showType.getType());
+		
+       // logger.info("serviceList cost time: udid={}, showType={}, cost={}", advParam.getUdid(), showType.getType(), 
+       //             System.currentTimeMillis() - tBeginService);
 
 		return entities;
 	}
@@ -252,6 +266,8 @@ public abstract class AbstractManager {
 	// 只记录第三方广告的发送log到redis
 	protected void recordSend(AdvParam advParam, AdPubCacheRecord cacheRecord, Map<Integer, AdContentCacheEle> adMap,
 			ShowType showType, List<BaseAdEntity> entities) {
+		
+		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"recordSendStart" );
 		if (entities != null) {
 			BaseAdEntity entity = entities.get(0);
 			writeSendLog(advParam, adMap.get(entity.getId()).getAds(), entity);
@@ -281,6 +297,8 @@ public abstract class AbstractManager {
 			if(advContent != null && StringUtils.isNoneBlank(advContent.getProjectId()))
 			    CacheUtil.incrProjectSend(advContent.getProjectId(), 1);
 		}
+		
+		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"recordSendEnd" );
 	}
 
 	/**
@@ -735,6 +753,9 @@ public abstract class AbstractManager {
 			// if (showType != ShowType.OPEN_SCREEN)
 			RecordManager.recordAdd(advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
 		}
+		
+		
+		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"recordAdd" );
 		return entities;
 	}
 
