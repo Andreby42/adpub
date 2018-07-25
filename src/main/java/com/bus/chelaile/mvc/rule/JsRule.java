@@ -29,6 +29,7 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.mvc.utils.JSFileHandle;
 import com.bus.chelaile.service.JSService;
 import com.bus.chelaile.service.StaticAds;
+import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.New;
 
 @Controller
@@ -254,7 +255,6 @@ public class JsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("allCars_origin");
 
 		// logger.info("splashOrigin={}",splashOrigin);
-
 		TaskEntity tgs = jSService.getTask(p, "allCars");
 
 		try {

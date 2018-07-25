@@ -22,6 +22,7 @@ import com.bus.chelaile.service.model.Ads;
 import com.bus.chelaile.service.model.FeedAdGoto;
 import com.bus.chelaile.service.model.Thumbnails;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
@@ -39,6 +40,8 @@ public class LineFeedAdsManager extends AbstractManager {
         List<BaseAdEntity> entities = New.arrayList();
         List<Integer> ids = New.arrayList();
         boolean hasOwnAd = false;
+        
+        StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"for_one" );
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
 
@@ -56,6 +59,8 @@ public class LineFeedAdsManager extends AbstractManager {
                 }
             }
         }
+        
+        StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"for_two" );
         // 如果没有自采买，那么返回一个列表
         if (!hasOwnAd) {
             AdContentCacheEle backupad = null;
@@ -86,6 +91,8 @@ public class LineFeedAdsManager extends AbstractManager {
                 entities.add(entity);
             }
         }
+        
+        StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"setNoAdHistoryMap" );
         // 记录投放的第一条广告， 记录发送日志
         if (entities != null && entities.size() > 0) {
 //            if (! (queryParam.isJS() && entities.get(0).getProvider_id().equals("1"))) {
