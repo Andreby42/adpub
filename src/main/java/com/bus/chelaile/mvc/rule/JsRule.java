@@ -64,15 +64,15 @@ public class JsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("splash_origin");
 		TaskEntity tgs = jSService.getTask(p, "splash");
 
+		response.setContentType("application/javascript;charset=UTF-8");
+		response.setHeader("traceId", p.getTraceid());
+		response.setHeader("traceIdInfo", traceInfo);
 		try {
 			produceJS(p, splashOrigin, tgs, "splash_origin", request, ShowType.OPEN_SCREEN,response.getWriter());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
 
-		response.setContentType("application/javascript;charset=UTF-8");
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
 		//return "";
 	}
 
@@ -91,15 +91,15 @@ public class JsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "home");
 		// setMaidianParams(p, );
 
+		response.setContentType("application/javascript;charset=UTF-8");
+		response.setHeader("traceId", p.getTraceid());
+		response.setHeader("traceIdInfo", traceInfo);
 		try {
 			produceJS(p, splashOrigin, tgs, "home_origin", request, ShowType.DOUBLE_COLUMN,response.getWriter());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
 
-		response.setContentType("application/javascript;charset=UTF-8");
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
 		logger.info("total cost time: {}", System.currentTimeMillis() - t1);
 //		return "";
 	}
@@ -119,6 +119,10 @@ public class JsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
 		TaskEntity tgs = jSService.getTask(p, "rightTop");
 
+		response.setContentType("application/javascript;charset=UTF-8");
+		String traceInfo = JSONObject.toJSONString(p);
+		response.setHeader("traceId", p.getTraceid());
+		response.setHeader("traceIdInfo", traceInfo);
 		try {
 			produceJS(p, splashOrigin, tgs, "right_origin", request, ShowType.LINE_RIGHT_ADV,response.getWriter());
 		} catch (IOException e) {
@@ -126,10 +130,6 @@ public class JsRule extends AbstractController {
 		}
 
 		// response.getWriter().write(s);
-		response.setContentType("application/javascript;charset=UTF-8");
-		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
 		//return "";
 	}
 
@@ -148,15 +148,16 @@ public class JsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("station_origin");
 		TaskEntity tgs = jSService.getTask(p, "station");
 
+		String traceInfo = JSONObject.toJSONString(p);
+		response.setContentType("application/javascript;charset=UTF-8");
+		response.setHeader("traceId", p.getTraceid());
+		response.setHeader("traceIdInfo", traceInfo);
 		try {
 			produceJS(p, splashOrigin, tgs, "station_origin", request, ShowType.STATION_ADV,response.getWriter());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
 
-		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
 	//	return "";
 	}
 
@@ -175,15 +176,15 @@ public class JsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("bottom_origin");
 		TaskEntity tgs = jSService.getTask(p, "bottom");
 
+		String traceInfo = JSONObject.toJSONString(p);
+		response.setContentType("application/javascript;charset=UTF-8");
+		response.setHeader("traceId", p.getTraceid());
+		response.setHeader("traceIdInfo", traceInfo);
 		try {
 			produceJS(p, splashOrigin, tgs, "bottom_origin", request, ShowType.LINE_FEED_ADV,response.getWriter());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-		String traceInfo = JSONObject.toJSONString(p);
-		response.setContentType("application/javascript;charset=UTF-8");
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
 	//	return "";
 	}
 
@@ -202,15 +203,15 @@ public class JsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("transfer_origin");
 		TaskEntity tgs = jSService.getTask(p, "transfer");
 
+		response.setContentType("application/javascript;charset=UTF-8");
+		String traceInfo = JSONObject.toJSONString(p);
+		response.setHeader("traceId", p.getTraceid());
+		response.setHeader("traceIdInfo", traceInfo);
 		try {
 			produceJS(p, splashOrigin, tgs, "transfer_origin", request, ShowType.TRANSFER_ADV, response.getWriter());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-		response.setContentType("application/javascript;charset=UTF-8");
-		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
 		//return "";
 	}
 
@@ -231,16 +232,16 @@ public class JsRule extends AbstractController {
 
 		TaskEntity tgs = jSService.getTask(p, "stationDetail");
 
+		response.setContentType("application/javascript;charset=UTF-8");
+		String traceInfo = JSONObject.toJSONString(p);
+		response.setHeader("traceId", p.getTraceid());
+		response.setHeader("traceIdInfo", traceInfo);
 		try {
 			produceJS(p, splashOrigin, tgs, "stationDetail_origin", request, ShowType.CAR_ALL_LINE_ADV,
 					response.getWriter());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-		response.setContentType("application/javascript;charset=UTF-8");
-		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
 
 		//return "";
 	}
@@ -263,15 +264,15 @@ public class JsRule extends AbstractController {
 
 		TaskEntity tgs = jSService.getTask(p, "allCars");
 
+		response.setContentType("application/javascript;charset=UTF-8");
+		String traceInfo = JSONObject.toJSONString(p);
+		response.setHeader("traceId", p.getTraceid());
+		response.setHeader("traceIdInfo", traceInfo);
 		try {
 			produceJS(p, splashOrigin, tgs, "allCars_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-		response.setContentType("application/javascript;charset=UTF-8");
-		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
 	//	return "";
 	}
 
