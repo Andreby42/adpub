@@ -164,7 +164,7 @@ public abstract class AbstractManager {
 		
 		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"getPlaceMentId" );
 		
-		StaticTimeLog.summary(advParam.getUdid() +",show=" +showType.getType());
+		logger.info(StaticTimeLog.summary(advParam.getUdid() +",show=" +showType.getType()));
 		
        // logger.info("serviceList cost time: udid={}, showType={}, cost={}", advParam.getUdid(), showType.getType(), 
        //             System.currentTimeMillis() - tBeginService);
