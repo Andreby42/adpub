@@ -105,7 +105,7 @@ public abstract class AbstractManager {
 	 * 获取ad List的方法 不涉及到策略
 	 */
 	public List<BaseAdEntity> doServiceList(AdvParam advParam, ShowType showType, QueryParam queryParam) {
-
+		StaticTimeLog.start(advParam.getUdid() +",show=" +showType.getType());
 	   // long tBeginService = System.currentTimeMillis();
 		if (!beforeCheck(advParam, showType)) {
 			return null;
@@ -163,6 +163,8 @@ public abstract class AbstractManager {
 		}
 		
 		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"getPlaceMentId" );
+		
+		StaticTimeLog.summary(advParam.getUdid() +",show=" +showType.getType());
 		
        // logger.info("serviceList cost time: udid={}, showType={}, cost={}", advParam.getUdid(), showType.getType(), 
        //             System.currentTimeMillis() - tBeginService);
