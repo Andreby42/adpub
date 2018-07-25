@@ -66,6 +66,7 @@ public class JsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "splash");
 
 		response.setContentType("application/javascript;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		try {
@@ -93,6 +94,7 @@ public class JsRule extends AbstractController {
 		// setMaidianParams(p, );
 
 		response.setContentType("application/javascript;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		try {
@@ -121,6 +123,7 @@ public class JsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "rightTop");
 
 		response.setContentType("application/javascript;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -151,6 +154,7 @@ public class JsRule extends AbstractController {
 
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setContentType("application/javascript;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		try {
@@ -179,6 +183,7 @@ public class JsRule extends AbstractController {
 
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setContentType("application/javascript;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		try {
@@ -205,6 +210,7 @@ public class JsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "transfer");
 
 		response.setContentType("application/javascript;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -234,6 +240,8 @@ public class JsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "stationDetail");
 
 		response.setContentType("application/javascript;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -265,6 +273,7 @@ public class JsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "allCars");
 
 		response.setContentType("application/javascript;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
