@@ -53,9 +53,11 @@ public class JSService {
 
     protected static final Logger logger = LoggerFactory.getLogger(JSService.class);
     
-//    private static final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+    private static final ScheduledThreadPoolExecutor fixedThreadPool = new ScheduledThreadPoolExecutor(Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
+            "thread.count", "10")));
+//    ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
+//    private static final ExecutorService fixedThreadPool = Executors.newFixedThreadPool(Integer.parseInt(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(),
 //            "thread.count", "10")));
-    ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
 
     public TaskEntity getTask(final AdvParam param, String site) {
         long tBeginService = System.currentTimeMillis();

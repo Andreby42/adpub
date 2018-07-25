@@ -149,7 +149,7 @@
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="reloadInvalidTaskJobTrigger" />
+				<!-- <ref bean="reloadInvalidTaskJobTrigger" /> -->
 				<ref bean="reloadTaskJobTrigger" />
 			</list>
 		</property>
