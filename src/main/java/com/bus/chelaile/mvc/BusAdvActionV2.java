@@ -231,8 +231,8 @@ public class BusAdvActionV2 extends AbstractController {
     @RequestMapping(value = "adv!getGuideAds.action", produces = "text/plain;charset=UTF-8")
     public String getGuideAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         AdvParam advParam = getActionParam(request);
-        advParam.setMoreCities(getInt(request, "morecities"));
-        
+//        advParam.setMoreCities(getInt(request, "morecities"));
+        advParam.setWxs(request.getParameter("wxs")); // 小程序来源
         Object result = serviceManager.getGuideAds(advParam);
         
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);

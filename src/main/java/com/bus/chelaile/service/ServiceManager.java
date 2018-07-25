@@ -826,6 +826,7 @@ public class ServiceManager {
      */
     public Object getGuideAds(AdvParam advParam) {
         List<BaseAdEntity> guideAds = guideManager.doServiceList(advParam, ShowType.GUIDE_ADV, new QueryParam());
+//        logger.info("** entityes={}", JSONObject.toJSONString(guideAds));
         if (guideAds == null)
             return null;
 

@@ -304,7 +304,6 @@ public class JsRule extends AbstractController {
 
 			List<Text> list = StaticAds.NEW_JS_FILE_STR.get(tag);
 
-			// logger.info("map.size={}",map.size());
 
 			JSFileHandle.replaceNewJs(p.getS(), showType, tgs, tag, map);
 
@@ -315,10 +314,10 @@ public class JsRule extends AbstractController {
 			}
 			logger.info("replaceJs cost time: udid={}, showType={}, cost={}", p.getUdid(), showType.getType(), 
 	                System.currentTimeMillis() - tBeginService);
-			// return ReplaceJs.getReplaceStr(list, map);
 		}
-		// return tag;
 	}
+	
+	
 	// String splashJS = "";
 	// if (tgs != null) {
 	// splashJS = originJs.replace("${TASKS}",

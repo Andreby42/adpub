@@ -75,8 +75,11 @@ public class OCSCacheUtil implements ICache{
             logger.error("[OCS_CLIENT_NULL] OCS Client is NULL: op=set");
             return ;
         }
-        
+        long t1 = System.currentTimeMillis();
         client.set(key, exp, obj);
+        if(System.currentTimeMillis() - t1 > 50) {
+            logger.info("set to ocs cost time:{}", System.currentTimeMillis() - t1);
+        }
         if (isLogCacheDetail()) {
             logger.info("[CACHE_SET] key={}, exp={}, obj={}", key, exp, obj);
         }
