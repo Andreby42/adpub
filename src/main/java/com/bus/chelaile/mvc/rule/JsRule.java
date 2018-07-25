@@ -70,6 +70,7 @@ public class JsRule extends AbstractController {
 			logger.error(e.getMessage(), e);
 		}
 
+		response.setContentType("application/javascript;charset=UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		//return "";
@@ -96,6 +97,7 @@ public class JsRule extends AbstractController {
 			logger.error(e.getMessage(), e);
 		}
 
+		response.setContentType("application/javascript;charset=UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		logger.info("total cost time: {}", System.currentTimeMillis() - t1);
@@ -124,6 +126,7 @@ public class JsRule extends AbstractController {
 		}
 
 		// response.getWriter().write(s);
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -178,6 +181,7 @@ public class JsRule extends AbstractController {
 			logger.error(e.getMessage(), e);
 		}
 		String traceInfo = JSONObject.toJSONString(p);
+		response.setContentType("application/javascript;charset=UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 	//	return "";
@@ -203,6 +207,7 @@ public class JsRule extends AbstractController {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -232,6 +237,7 @@ public class JsRule extends AbstractController {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -262,6 +268,7 @@ public class JsRule extends AbstractController {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
