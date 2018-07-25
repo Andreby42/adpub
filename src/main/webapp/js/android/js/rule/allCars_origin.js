@@ -10,13 +10,6 @@ var api_chelaile = {
         return 'api_chelaile'
     },
 
-    adurl: function() {
-        return {
-            url: 'https://api.chelaile.net.cn/adpub/adv!getAllCar.action?${QUERY_STRING}'
-        }
-    },
-
-
     filter: function(data) {
         var array = data.split("YGKJ");
         if (array.length < 2) {

@@ -66,7 +66,7 @@ public class GuideManager extends AbstractManager {
 			AdGuideInnerContent inner = (AdGuideInnerContent) ad.getAds().getAdInnerContent();
 
 			// 广告结构体有对来源的要求
-			if (inner.getServingPlaceList() != null && !inner.getServingPlace().isEmpty()) {
+			if (inner.getServingPlaceList() != null && !inner.getServingPlaceList().isEmpty()) {
 				if (StringUtils.isEmpty(advParam.getWxs())) {
 					continue;
 				}

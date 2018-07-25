@@ -36,14 +36,14 @@ public class FlowServiceManager {
 	private ActivityContentMapper activityContentMapper;
 //	@Autowired
 //	private PayService payService;
-	@Autowired
-	private ToutiaoHelp toutiaoHelp;
-	@Autowired
-	private WangYiYunHelp wangYiYunHelp;
+//	@Autowired
+//	private ToutiaoHelp toutiaoHelp;
+//	@Autowired
+//	private WangYiYunHelp wangYiYunHelp;
 	@Autowired
 	private ActivityService activityService;
-	@Autowired
-	private WuliToutiaoHelp wuliToutiaoHelp;
+//	@Autowired
+//	private WuliToutiaoHelp wuliToutiaoHelp;
 	@Resource
 	private FlowService flowService;
 	

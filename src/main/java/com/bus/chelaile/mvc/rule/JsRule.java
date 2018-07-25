@@ -44,7 +44,7 @@ public class JsRule extends AbstractController {
 
 	// for test
 	@ResponseBody
-	@RequestMapping(value = "/splash2.js", produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/splash2.js", produces = "application/javascript;charset=UTF-8")
 	public String splash2(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		return "hello_1111111111你好 啊";
@@ -54,7 +54,7 @@ public class JsRule extends AbstractController {
 	 * 开屏
 	 */
 
-	@RequestMapping(value = "/splashAd.do", produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/splashAd.do", produces = "application/javascript;charset=UTF-8")
 	public void splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam p = getActionParam(request);
@@ -71,6 +71,7 @@ public class JsRule extends AbstractController {
 			logger.error(e.getMessage(), e);
 		}
 
+		response.setContentType("application/javascript;charset=UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		//return "";
@@ -80,7 +81,7 @@ public class JsRule extends AbstractController {
 	 * 首页
 	 */
 
-	@RequestMapping(value = "/homeAd.do", produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/homeAd.do", produces = "application/javascript;charset=UTF-8")
 	public void homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 	    long t1 = System.currentTimeMillis();
 		AdvParam p = getActionParam(request);
@@ -97,6 +98,7 @@ public class JsRule extends AbstractController {
 			logger.error(e.getMessage(), e);
 		}
 
+		response.setContentType("application/javascript;charset=UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 		logger.info("total cost time: {}", System.currentTimeMillis() - t1);
@@ -107,7 +109,7 @@ public class JsRule extends AbstractController {
 	 * 详情页右上角
 	 */
 
-	@RequestMapping(value = "/rightTopAd.do", produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/rightTopAd.do", produces = "application/javascript;charset=UTF-8")
 	public void rightTopAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam p = getActionParam(request);
@@ -125,6 +127,7 @@ public class JsRule extends AbstractController {
 		}
 
 		// response.getWriter().write(s);
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -135,7 +138,7 @@ public class JsRule extends AbstractController {
 	 * 站点位置
 	 */
 
-	@RequestMapping(value = "/stationAd.do", produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/stationAd.do", produces = "application/javascript;charset=UTF-8")
 	public void stationAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam p = getActionParam(request);
@@ -162,7 +165,7 @@ public class JsRule extends AbstractController {
 	 * 详情页底部
 	 */
 
-	@RequestMapping(value = "/bottomAd.do", produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/bottomAd.do", produces = "application/javascript;charset=UTF-8")
 	public void bottomAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam p = getActionParam(request);
@@ -179,6 +182,7 @@ public class JsRule extends AbstractController {
 			logger.error(e.getMessage(), e);
 		}
 		String traceInfo = JSONObject.toJSONString(p);
+		response.setContentType("application/javascript;charset=UTF-8");
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
 	//	return "";
@@ -188,7 +192,7 @@ public class JsRule extends AbstractController {
 	 * 换乘
 	 */
 
-	@RequestMapping(value = "/transfer.do", produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/transfer.do", produces = "application/javascript;charset=UTF-8")
 	public void transfer(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam p = getActionParam(request);
@@ -204,6 +208,7 @@ public class JsRule extends AbstractController {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -215,7 +220,7 @@ public class JsRule extends AbstractController {
 	 * 同站线路
 	 */
 
-	@RequestMapping(value = "/stationDetail.do", produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/stationDetail.do", produces = "application/javascript;charset=UTF-8")
 	public void getStationLine(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam p = getActionParam(request);
@@ -233,6 +238,7 @@ public class JsRule extends AbstractController {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -245,7 +251,7 @@ public class JsRule extends AbstractController {
 	// * 更多车辆
 	// */
 	//@ResponseBody
-	@RequestMapping(value = "/allCars.do", produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/allCars.do", produces = "application/javascript;charset=UTF-8")
 	public void allCars(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		AdvParam p = getActionParam(request);
 		if (StringUtils.isBlank(p.getStnName()))
@@ -262,6 +268,7 @@ public class JsRule extends AbstractController {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
 		response.setHeader("traceIdInfo", traceInfo);
@@ -304,7 +311,6 @@ public class JsRule extends AbstractController {
 
 			List<Text> list = StaticAds.NEW_JS_FILE_STR.get(tag);
 
-			// logger.info("map.size={}",map.size());
 
 			JSFileHandle.replaceNewJs(p.getS(), showType, tgs, tag, map);
 
@@ -315,10 +321,10 @@ public class JsRule extends AbstractController {
 			}
 			logger.info("replaceJs cost time: udid={}, showType={}, cost={}", p.getUdid(), showType.getType(), 
 	                System.currentTimeMillis() - tBeginService);
-			// return ReplaceJs.getReplaceStr(list, map);
 		}
-		// return tag;
 	}
+	
+	
 	// String splashJS = "";
 	// if (tgs != null) {
 	// splashJS = originJs.replace("${TASKS}",
