@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.cache.ICache;
 import com.bus.chelaile.common.cache.OCSCacheUtil;
-import com.bus.chelaile.common.cache.RedisAtraceCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTBKCacheImplUtil;
 import com.bus.chelaile.common.cache.RedisTokenCacheImplUtil;
@@ -27,8 +26,8 @@ import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
 public class CacheUtil {
-    //	访问得到token缓存
-	private static ICache client;
+//    //	访问得到token缓存
+//	private static ICache client;
 	//	redis缓存
 	private static ICache redisClient;
 	// 存储token的redis
@@ -41,7 +40,11 @@ public class CacheUtil {
 //    private static ICache redisBUS;
 //	//  用来获取用户头像的redis
 //	private static ICache redisWow;
-	//	保存用户访问量等信息
+    
+    
+    // TODO 以下链接都转到使用新的meme客户端的链接方式来做
+//		保存用户访问量等信息
+    /*
 	private static ICache cacheNewClient;
 	//	获取access_token的 
 	private static ICache cacheApiTokenClient;
@@ -49,9 +52,8 @@ public class CacheUtil {
 	private static ICache cacheCommonClient;
 	
     // 用户traceInfo信息
-	private static ICache traceInfoClient;
-//	//  专为活动[屈臣氏]所设,放置有效用户，以及领取过
-//	private static ICache cacheActivitiesClient;
+	private static ICache traceInfoClient;*/
+    
 	
 	private static boolean isInitSuccess = false;
 	
@@ -63,36 +65,36 @@ public class CacheUtil {
     private static String cacheType = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "cacheType","ocs");
     
     
-    private static final String TRACE_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.tracehost");
-    private static final String TRACE_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.traceport");
-    private static final String TRACE_OCS_USERNAME =  PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.traceusername");
-    private static final String TRACE_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.tracepassword");
-    
-    /**
-     * 存储用户信息
-     */
-    private static final String CC_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.host");
-    private static final String CC_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.port");
-    private static final String CC_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.username");
-    private static final String CC_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.password");
-    
-    /**
-     * 第三方信息
-     */
-    private static final String API_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.host");
-    private static final String API_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.port");
-    private static final String API_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.username");
-    private static final String API_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.password");
-    
-    /**
-     *基础数据获取‘线路是否支持支付’
-     *推送的时候读取token
-     *获取app用户的创建时间
-     */
-    private static final String COMMON_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.host");
-    private static final String COMMON_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.port");
-    private static final String COMMON_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.username");
-    private static final String COMMON_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.password");
+//    private static final String TRACE_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.tracehost");
+//    private static final String TRACE_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.traceport");
+//    private static final String TRACE_OCS_USERNAME =  PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.traceusername");
+//    private static final String TRACE_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.tracepassword");
+//    
+//    /**
+//     * 存储用户信息
+//     */
+//    private static final String CC_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.host");
+//    private static final String CC_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.port");
+//    private static final String CC_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.username");
+//    private static final String CC_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.new.password");
+//    
+//    /**
+//     * 第三方信息
+//     */
+//    private static final String API_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.host");
+//    private static final String API_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.port");
+//    private static final String API_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.username");
+//    private static final String API_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.api.password");
+//    
+//    /**
+//     *基础数据获取‘线路是否支持支付’
+//     *推送的时候读取token
+//     *获取app用户的创建时间
+//     */
+//    private static final String COMMON_PROP_OCS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.host");
+//    private static final String COMMON_PROP_OCS_PORT = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.port");
+//    private static final String COMMON_PROP_OCS_USERNAME = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.username");
+//    private static final String COMMON_PROP_OCS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "ocs.common.password");
     //private static String cacheType = PropertiesReaderWrapper.read("cacheType", "ocs");
     
     private static final String defauleTBKTitle = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "default.tbk.title");
@@ -110,21 +112,21 @@ public class CacheUtil {
        }
     	
        if( cacheType.equals("redis") ){
-    	   client = new RedisCacheImplUtil();
-    	   cacheNewClient = new RedisCacheImplUtil();
-    	   cacheApiTokenClient = new RedisCacheImplUtil();
+//           cacheCommonClient = new RedisCacheImplUtil();
+//    	   cacheNewClient = new RedisCacheImplUtil();
+//    	   cacheApiTokenClient = new RedisCacheImplUtil();
 //    	   cacheActivitiesClient = new RedisCacheImplUtil();
-    	   logger.info("redis cache");
+//    	   logger.info("redis cache");
        }else	if( cacheType.equals("ocs") ){
-    	   client = new OCSCacheUtil(COMMON_PROP_OCS_HOST,COMMON_PROP_OCS_PORT,COMMON_PROP_OCS_USERNAME,COMMON_PROP_OCS_PASSWORD);
-    	   cacheNewClient = new OCSCacheUtil(CC_PROP_OCS_HOST,CC_PROP_OCS_PORT,CC_PROP_OCS_USERNAME,CC_PROP_OCS_PASSWORD);
+//    	   client = new OCSCacheUtil(COMMON_PROP_OCS_HOST,COMMON_PROP_OCS_PORT,COMMON_PROP_OCS_USERNAME,COMMON_PROP_OCS_PASSWORD);
+//    	   cacheNewClient = new OCSCacheUtil(CC_PROP_OCS_HOST,CC_PROP_OCS_PORT,CC_PROP_OCS_USERNAME,CC_PROP_OCS_PASSWORD);
     	   
-    	   cacheApiTokenClient = new OCSCacheUtil(API_PROP_OCS_HOST,API_PROP_OCS_PORT,API_PROP_OCS_USERNAME,API_PROP_OCS_PASSWORD);
-    	   cacheCommonClient = new OCSCacheUtil(COMMON_PROP_OCS_HOST,COMMON_PROP_OCS_PORT,COMMON_PROP_OCS_USERNAME,COMMON_PROP_OCS_PASSWORD);
+//    	   cacheApiTokenClient = new OCSCacheUtil(API_PROP_OCS_HOST,API_PROP_OCS_PORT,API_PROP_OCS_USERNAME,API_PROP_OCS_PASSWORD);
+//    	   cacheCommonClient = new OCSCacheUtil(COMMON_PROP_OCS_HOST,COMMON_PROP_OCS_PORT,COMMON_PROP_OCS_USERNAME,COMMON_PROP_OCS_PASSWORD);
     	   
-    	   traceInfoClient = new OCSCacheUtil(TRACE_OCS_HOST,TRACE_OCS_PORT,TRACE_OCS_USERNAME,TRACE_OCS_PASSWORD);
+//    	   traceInfoClient = new OCSCacheUtil(TRACE_OCS_HOST,TRACE_OCS_PORT,TRACE_OCS_USERNAME,TRACE_OCS_PASSWORD);
 //    	   cacheActivitiesClient = new OCSCacheUtil(ACTIVE_PROP_OCS_HOST,ACTIVE_PROP_OCS_PORT,ACTIVE_PROP_OCS_USERNAME,ACTIVE_PROP_OCS_PASSWORD);
-    	   logger.info("ocs cache");
+//    	   logger.info("ocs cache");
        }else{
     	   throw new IllegalArgumentException("未找到cacheType类型");
        }
@@ -145,7 +147,8 @@ public class CacheUtil {
      */
     public static void set(String key, int exp, Object obj) {
   
-        client.set(key, exp, obj);
+//        cacheCommonClient.set(key, exp, obj);
+        OCSCommonUtil.set(key, exp, obj);;
       
     }
     
@@ -205,31 +208,34 @@ public class CacheUtil {
     }
     
     public static Object get(String key) {
-       return client.get(key);
+//       return cacheCommonClient.get(key);
+       return OCSCommonUtil.get(key);
     }
     
     public static Object getNew(String key) {
-        return cacheNewClient.get(key);
+//        return cacheNewClient.get(key);
+        return OCSNewUtil.get(key);
      }
     
     public static void setNew(String key, int exp, Object obj) {
-    	cacheNewClient.set(key, exp, obj);
+        OCSNewUtil.set(key, exp, obj);
+//    	cacheNewClient.set(key, exp, obj);
     }
     
     public static OperationFuture<Boolean> deleteNew(String key) {
-        return cacheNewClient.delete(key);
+//        return cacheNewClient.delete(key);
+        return OCSNewUtil.delete(key);
     }
 
     public static OperationFuture<Boolean> delete(String key) {
-    	return client.delete(key);
+//    	return cacheCommonClient.delete(key);
+    	return OCSCommonUtil.delete(key);
     }
 
-    public static Map<String, Object> getByList(List<String> list) {
-    	return cacheCommonClient.getByList(list);
-    }
     
     public static Object getApiInfo(String key){
-    	return cacheApiTokenClient.get(key);
+//    	return cacheApiTokenClient.get(key);
+    	return OCSApiUtil.get(key);
     }
     
 //    public static Set<String> getWowDatas(String key) {
@@ -238,7 +244,8 @@ public class CacheUtil {
     
     // ocs查询
     public static String getFromCommonOcs(String key) {
-    	Object j = cacheCommonClient.get(key);
+//    	Object j = cacheCommonClient.get(key);
+    	Object j = OCSCommonUtil.get(key);
     	if(j == null)
     	    return null;
     	else
@@ -247,7 +254,8 @@ public class CacheUtil {
     
     // ocs设置值
     public static void setToCommonOcs(String key, int exp, Object obj) {
-    	cacheCommonClient.set(key, exp, obj);
+//    	cacheCommonClient.set(key, exp, obj);
+    	OCSCommonUtil.set(key, exp, obj);
     }
     
     // token存储升级，在这一步做一些处理，保证输出跟老版本一致 2018-04-02
@@ -292,15 +300,17 @@ public class CacheUtil {
  
     // 将traceInfo保存到redis中, 永久
     public static void setToAtrace(String key, String value) {
-    	if( traceInfoClient != null ) {
-    		traceInfoClient.set(key, -1, value);
-    	}
+//    	if( traceInfoClient != null ) {
+//    		traceInfoClient.set(key, -1, value);
+//    	}
+        OCSTraceUtil.set(key, -1, value);;
     }
     // 同上
     public static void setToAtrace(String key, String value, int exp) {
-    	if( traceInfoClient != null ) {
-    		traceInfoClient.set(key, exp, value);
-    	}
+//    	if( traceInfoClient != null ) {
+//    		traceInfoClient.set(key, exp, value);
+//    	}
+        OCSTraceUtil.set(key, exp, value);
     }
     
     // 记录项目总次数

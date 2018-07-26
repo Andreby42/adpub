@@ -60,7 +60,7 @@ public class LineFeedAdsManager extends AbstractManager {
             }
         }
         
-        StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"for_two" );
+        StaticTimeLog.record(Constants.RECORD_LOG,"for_two" );
         // 如果没有自采买，那么返回一个列表
         if (!hasOwnAd) {
             AdContentCacheEle backupad = null;
@@ -92,7 +92,7 @@ public class LineFeedAdsManager extends AbstractManager {
             }
         }
         
-        StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"setNoAdHistoryMap" );
+        StaticTimeLog.record(Constants.RECORD_LOG,"setNoAdHistoryMap" );
         // 记录投放的第一条广告， 记录发送日志
         if (entities != null && entities.size() > 0) {
 //            if (! (queryParam.isJS() && entities.get(0).getProvider_id().equals("1"))) {
