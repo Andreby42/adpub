@@ -141,7 +141,7 @@ public class JSService {
                 
                 @Override
                 public void run() {
-                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 24 );
+                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 8 );
                     
                 }
             });

@@ -95,7 +95,7 @@ var sdk_baidu = {
             url: "BaiduSDK",
             pos: "banner",
             data: {
-                "appId":"bbf9b3b5",
+                "appId":"d654f7e6",
                 "placementId":"${sdk_baidu_placementId}"
             }
         }
