@@ -14,7 +14,7 @@ import com.bus.chelaile.util.DateUtil;
 public class AdvCache {
 
 	//private static final int AD_RECORD_EXPIRE_TIME = 10 * 24 * 60 * 60;
-	private static final int LONGEST_CACHE_TIME = 11 * 24 * 60 * 60 - 1;
+	private static final int LONGEST_CACHE_TIME = 7 * 24 * 60 * 60 - 1;
 //	private static final int ACITVE_CACHE_TIME = 30 * 24 * 60 * 60;
 	private static final String CSHOW_KEY = "bus#cshow#";
 	private static final String SEND_LINE_FEED = "SEND_LINEFEED_LOG_";
