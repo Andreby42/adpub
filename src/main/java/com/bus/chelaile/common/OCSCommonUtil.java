@@ -249,7 +249,7 @@ public class OCSCommonUtil {
     public static void set(String key, int exp, Object obj) {
         long stamp = System.currentTimeMillis();
 
-        logger.info("[CACHE_SET] key=" + key + ", exp=" + exp + ", obj=" + obj);
+        logger.debug("[CACHE_SET] key=" + key + ", exp=" + exp + ", obj=" + obj);
 
         for (int i = 0; i < SET_RETRIES; i++) {
             OperationFuture<Boolean> future = execute((MemcachedClient client) -> client.set(key, exp, obj));
