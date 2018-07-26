@@ -110,15 +110,16 @@ public abstract class AbstractManager {
 		if (!beforeCheck(advParam, showType)) {
 			return null;
 		}
-		
 
 		// 所有投放的广告
 		List<AdContentCacheEle> adsList = gainAllValidAds(advParam, showType, false);
+		StaticTimeLog.record(Constants.RECORD_LOG, "gainAllValidAds" );
+		
 		if (adsList == null || adsList.size() == 0)
 			return null;
 
 		AdPubCacheRecord cacheRecord = gainCacheRecord(advParam, showType);
-		
+		StaticTimeLog.record(Constants.RECORD_LOG, "gainCacheRecord" );
 	
 		// 需要排序 先打乱次序 ，再按照优先级排序
 		Collections.shuffle(adsList);
@@ -126,6 +127,7 @@ public abstract class AbstractManager {
 		LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
 		// 把所有符合规则的广告放到map中
 		handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
+		StaticTimeLog.record(Constants.RECORD_LOG, "handleAds" );
 
 		if (adMap.size() == 0) {
 			// 此处，经过规则判断不返回广告，需要记录'不投放'的次数
@@ -136,13 +138,12 @@ public abstract class AbstractManager {
 			return null;
 		}
 		
-		StaticTimeLog.record(Constants.RECORD_LOG, "handleAds" );
 
 		// logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(),
 		// advParam.getUdid(), showType);
 		List<BaseAdEntity> entities = getEntities(advParam, cacheRecord, adMap, showType, queryParam);
 		
-		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"getEntities" );
+		StaticTimeLog.record(Constants.RECORD_LOG,"getEntities" );
 
 		// 增加通用内容
 		if (entities != null && entities.size() > 0) {
@@ -162,9 +163,9 @@ public abstract class AbstractManager {
 			}
 		}
 		
-		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"getPlaceMentId" );
+		StaticTimeLog.record(Constants.RECORD_LOG,"getPlaceMentId" );
 		
-		logger.info(StaticTimeLog.summary(advParam.getUdid() +",show=" +showType.getType()));
+		logger.info(StaticTimeLog.summary(Constants.RECORD_LOG));
 		
        // logger.info("serviceList cost time: udid={}, showType={}, cost={}", advParam.getUdid(), showType.getType(), 
        //             System.currentTimeMillis() - tBeginService);
@@ -298,7 +299,7 @@ public abstract class AbstractManager {
 			    CacheUtil.incrProjectSend(advContent.getProjectId(), 1);
 		}
 		
-		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"recordSendEnd" );
+		StaticTimeLog.record(Constants.RECORD_LOG,"recordSendEnd" );
 	}
 
 	/**
@@ -817,14 +818,14 @@ public abstract class AbstractManager {
 	private List<AdContentCacheEle> mergeAllAds(AdvParam advParam, ShowType showType, List<AdContentCacheEle> adsList,
 			boolean isNeedApid) {
 		adsList = CommonService.mergeAllAds(adsList); // 需要按照adid和ruleid做合并
-		String adIdStr = "";
-		for (AdContentCacheEle ad : adsList) {
-			adIdStr += ad.getAds().getId();
-			for (Rule rule : ad.getRules()) {
-				adIdStr += "->" + rule.getRuleId();
-			}
-			adIdStr += ";";
-		}
+//		String adIdStr = "";
+//		for (AdContentCacheEle ad : adsList) {
+//			adIdStr += ad.getAds().getId();
+//			for (Rule rule : ad.getRules()) {
+//				adIdStr += "->" + rule.getRuleId();
+//			}
+//			adIdStr += ";";
+//		}
 //		logger.info(
 //				"[getallavailableAds]:udid={}, adtype={}, isNeedApi={}, type={}, advIds={}, ac={},s={}, "
 //						+ "cityId={}, v={}, vc={}, li={}, sn={}, startMode={}, H5Src={}, wxs={}",
@@ -937,14 +938,14 @@ public abstract class AbstractManager {
 		}
 
 		// 乘车页和活动页不去除广告
-		if (!showType.getType().equals(ShowType.ACTIVE_DETAIL.getType())
-				&& !showType.getType().equals(ShowType.RIDE_DETAIL.getType())) {
-
-			if (isInvalidAccountId(advParam.getAccountId())) {
-				logger.info("取消了广告,accountId={},udid={}", advParam.getAccountId(), advParam.getUdid());
-				return false;
-			}
-		}
+//		if (!showType.getType().equals(ShowType.ACTIVE_DETAIL.getType())
+//				&& !showType.getType().equals(ShowType.RIDE_DETAIL.getType())) {
+//
+//			if (isInvalidAccountId(advParam.getAccountId())) {
+//				logger.info("取消了广告,accountId={},udid={}", advParam.getAccountId(), advParam.getUdid());
+//				return false;
+//			}
+//		}
 
 		// 详情页cshow非空，不等于linedetail的不返回
 		if (showType.getType().equals(ShowType.LINE_DETAIL)) {
@@ -957,10 +958,6 @@ public abstract class AbstractManager {
 		// android 内核4.4一下的，不返回广告 20180118
 		// 这个方法不够严谨，当android更新到版本10的时候，会出错
 		Platform platform = Platform.from(advParam.getS());
-		if (StringUtils.isNoneBlank(advParam.getUdid())
-				&& advParam.getUdid().contains("e02bda79-1349-4a6b-a474-cb3677ee69c6")) {
-			return true;
-		}
 		if (platform.isAndriod(platform.getDisplay())) {
 			if (StringUtils.isNoneBlank(advParam.getSv()) && (advParam.getSv().compareTo("4.4") < 0)) {
 				return false;

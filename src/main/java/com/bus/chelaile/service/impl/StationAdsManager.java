@@ -405,7 +405,7 @@ public class StationAdsManager extends AbstractManager {
                 }
             }
         }
-        StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"for_two" );
+        StaticTimeLog.record(Constants.RECORD_LOG,"for_two" );
         // 如果没有自采买，那么返回一个列表
         if (!hasOwnAd) {
             AdContentCacheEle backupad = null;
@@ -437,7 +437,7 @@ public class StationAdsManager extends AbstractManager {
             }
         }
         
-        StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"setNoAdHistoryMap" );
+        StaticTimeLog.record(Constants.RECORD_LOG,"setNoAdHistoryMap" );
         // 记录投放的第一条广告， 记录发送日志
         if (entities != null && entities.size() > 0) {
             // js请求返回自采买广告，不予计数（包括投放间隔和投放次数等）
