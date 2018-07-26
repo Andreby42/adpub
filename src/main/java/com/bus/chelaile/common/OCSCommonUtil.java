@@ -45,7 +45,7 @@ public class OCSCommonUtil {
 
     private static final String PROP_OCS_HOST = "ocs.common.host";
     private static final String PROP_OCS_PORT = "ocs.common.port";
-    private static final String PROP_OCS_USERNAME = "ocs.common.user";
+    private static final String PROP_OCS_USERNAME = "ocs.common.username";
     private static final String PROP_OCS_PASSWORD = "ocs.common.password";
 
     private static final int DEFAULT_EXPIRE = 60 * 60;
