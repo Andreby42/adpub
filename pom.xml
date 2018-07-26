@@ -7,7 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<properties>
-		<java-version>1.7</java-version>
+		<java-version>1.8</java-version>
 		<org.springframework-version>3.2.18.RELEASE</org.springframework-version>
 		<project.build.sourceEncoding>
 			UTF-8
@@ -443,8 +443,8 @@
                             <artifactId>maven-compiler-plugin</artifactId>
                             <version>3.2</version>
                             <configuration>
-                                <source>1.7</source>
-                                <target>1.7</target>
+                                <source>1.8</source>
+                                <target>1.8</target>
                                 <encoding>UTF-8</encoding>
                                 <showWarnings>false</showWarnings>
                             </configuration>
@@ -497,8 +497,8 @@
                             <artifactId>maven-compiler-plugin</artifactId>
                             <version>3.2</version>
                             <configuration>
-                                <source>1.7</source>
-                                <target>1.7</target>
+                                <source>1.8</source>
+                                <target>1.8</target>
                                 <encoding>UTF-8</encoding>
                                 <showWarnings>false</showWarnings>
                             </configuration>
@@ -549,8 +549,8 @@
                             <artifactId>maven-compiler-plugin</artifactId>
                             <version>3.2</version>
                             <configuration>
-                                <source>1.7</source>
-                                <target>1.7</target>
+                                <source>1.8</source>
+                                <target>1.8</target>
                                 <encoding>UTF-8</encoding>
                                 <showWarnings>false</showWarnings>
                             </configuration>

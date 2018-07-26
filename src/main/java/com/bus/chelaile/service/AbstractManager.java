@@ -276,6 +276,7 @@ public abstract class AbstractManager {
 //			if (!entity.getProvider_id().equals("1")) {
 //				setSendLog(entity, advParam.getUdid(), showType.getType());
 //			}
+			StaticTimeLog.record(Constants.RECORD_LOG,"writeLog" );
 
 			// 记录缓存
 			int adId = entity.getId();
@@ -293,10 +294,12 @@ public abstract class AbstractManager {
 
 			// 每分钟发送量
 			adTimeCounts(cacheRecord, advParam.getUdid(), adMap.get(adId));
+			StaticTimeLog.record(Constants.RECORD_LOG,"adTimeCounts" );
 			
 			AdContent advContent = StaticAds.allAds.get(String.valueOf(adId));
 			if(advContent != null && StringUtils.isNoneBlank(advContent.getProjectId()))
 			    CacheUtil.incrProjectSend(advContent.getProjectId(), 1);
+			StaticTimeLog.record(Constants.RECORD_LOG,"incrProjectSend" );
 		}
 		
 		StaticTimeLog.record(Constants.RECORD_LOG,"recordSendEnd" );
