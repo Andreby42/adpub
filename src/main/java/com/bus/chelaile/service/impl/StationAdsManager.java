@@ -382,7 +382,7 @@ public class StationAdsManager extends AbstractManager {
     @Override
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
-    	StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"for_one" );
+    	StaticTimeLog.record(Constants.RECORD_LOG, "for_one" );
         List<BaseAdEntity> entities = New.arrayList();
         List<Integer> ids = New.arrayList();
         boolean hasOwnAd = false;

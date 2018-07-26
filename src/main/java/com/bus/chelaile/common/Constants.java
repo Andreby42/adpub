@@ -9,6 +9,10 @@ public class Constants {
     
     public static final int INT_UNDEFINED = -1;
     
+    
+    public static final String RECORD_LOG = "RECORD";
+    
+    
     public static final String STATUS_REQUEST_SUCCESS = "00";
     public static final String STATUS_INTERNAL_ERROR = "02";
     public static final String STATUS_FUNCTION_NOT_ENABLED = "03";

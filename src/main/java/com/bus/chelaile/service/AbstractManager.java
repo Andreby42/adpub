@@ -105,7 +105,7 @@ public abstract class AbstractManager {
 	 * 获取ad List的方法 不涉及到策略
 	 */
 	public List<BaseAdEntity> doServiceList(AdvParam advParam, ShowType showType, QueryParam queryParam) {
-		StaticTimeLog.start(advParam.getUdid() +",show=" +showType.getType());
+		StaticTimeLog.start(Constants.RECORD_LOG);
 	   // long tBeginService = System.currentTimeMillis();
 		if (!beforeCheck(advParam, showType)) {
 			return null;
@@ -136,7 +136,7 @@ public abstract class AbstractManager {
 			return null;
 		}
 		
-		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"handleAds" );
+		StaticTimeLog.record(Constants.RECORD_LOG, "handleAds" );
 
 		// logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(),
 		// advParam.getUdid(), showType);
@@ -267,7 +267,7 @@ public abstract class AbstractManager {
 	protected void recordSend(AdvParam advParam, AdPubCacheRecord cacheRecord, Map<Integer, AdContentCacheEle> adMap,
 			ShowType showType, List<BaseAdEntity> entities) {
 		
-		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"recordSendStart" );
+		StaticTimeLog.record(Constants.RECORD_LOG, "recordSendStart" );
 		if (entities != null) {
 			BaseAdEntity entity = entities.get(0);
 			writeSendLog(advParam, adMap.get(entity.getId()).getAds(), entity);
@@ -755,7 +755,7 @@ public abstract class AbstractManager {
 		}
 		
 		
-		StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"recordAdd" );
+		StaticTimeLog.record(Constants.RECORD_LOG, "recordAdd" );
 		return entities;
 	}
 

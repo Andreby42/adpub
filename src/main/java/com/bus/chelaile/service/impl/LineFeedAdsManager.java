@@ -41,7 +41,7 @@ public class LineFeedAdsManager extends AbstractManager {
         List<Integer> ids = New.arrayList();
         boolean hasOwnAd = false;
         
-        StaticTimeLog.record(advParam.getUdid() +",show=" +showType.getType(),"for_one" );
+        StaticTimeLog.record(Constants.RECORD_LOG, "for_one");
         for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
             AdContentCacheEle ad = entry.getValue();
 

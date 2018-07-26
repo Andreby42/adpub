@@ -42,6 +42,7 @@ public class StaticTimeLog {
 		
 		System.out.println(StaticTimeLog.summary(name));
 		
+		System.out.println(System.currentTimeMillis());
 		
 	}
 }
