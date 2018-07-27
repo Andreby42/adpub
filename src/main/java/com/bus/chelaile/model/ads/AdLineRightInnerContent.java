@@ -32,6 +32,8 @@ public class AdLineRightInnerContent extends AdInnerContent {
     private List<Long> timeouts; // 超时时间段设置
 
     private TasksGroup tasksGroup;
+    private String iosURL;
+    private String androidURL;
 
     @Override
     protected void parseJson(String jsonr) {
@@ -44,6 +46,8 @@ public class AdLineRightInnerContent extends AdInnerContent {
             this.autoInterval = ad.autoInterval;
             this.mixInterval = ad.mixInterval;
             this.adMode = ad.adMode;
+            this.iosURL = ad.iosURL;
+            this.androidURL = ad.androidURL;
             if (ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
                 this.pic = ad.pic.split("#")[0];
                 //				this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
@@ -89,7 +93,14 @@ public class AdLineRightInnerContent extends AdInnerContent {
     
     @Override
     public String extractFullPicUrl(String s) {
-        return null;
+        if (pic != null && !pic.equals("")) {
+            return getFullPicUrl(getPic());
+        }
+        if (s.equalsIgnoreCase("ios")) {
+            return getFullPicUrl(getIosURL());
+        } else {
+            return getFullPicUrl(getAndroidURL());
+        }
     }
 
     @Override
@@ -111,6 +122,8 @@ public class AdLineRightInnerContent extends AdInnerContent {
 
     public void completePicUrl() {
         this.pic = getFullPicUrl(pic);
+        this.setIosURL(getFullPicUrl(getIosURL()));
+        this.setAndroidURL(getFullPicUrl(getAndroidURL()));
     }
 
     public String getPic() {
@@ -231,5 +244,21 @@ public class AdLineRightInnerContent extends AdInnerContent {
      */
     public void setAdMode(int adMode) {
         this.adMode = adMode;
+    }
+
+    public String getIosURL() {
+        return iosURL;
+    }
+
+    public void setIosURL(String iosURL) {
+        this.iosURL = iosURL;
+    }
+
+    public String getAndroidURL() {
+        return androidURL;
+    }
+
+    public void setAndroidURL(String androidURL) {
+        this.androidURL = androidURL;
     }
 }

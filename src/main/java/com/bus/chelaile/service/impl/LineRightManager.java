@@ -38,7 +38,8 @@ public class LineRightManager extends AbstractManager {
             res.fillBaseInfo(ad, advParam, new HashMap<String, String>());
             res.setAdMode(inner.getAdMode());
             res.dealLink(advParam);
-            res.setPic(inner.getPic());
+            //            res.setPic(inner.getPic());
+            res.setPic(res.getPicUrl(advParam.getS(), inner.getIosURL(), inner.getAndroidURL(), inner.getPic()));
             res.setAutoInterval(inner.getAutoInterval());
             res.setMixInterval(inner.getMixInterval());
             if (inner.getTasksGroup() != null) {
