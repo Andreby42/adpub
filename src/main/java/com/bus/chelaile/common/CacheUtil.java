@@ -368,6 +368,11 @@ public class CacheUtil {
         redisClient.setHashSetValue(key, field, String.valueOf(System.currentTimeMillis()));
     }
     
+    public static String getCloseAdTime(String udid, String pid) {
+        String key = AdvCache.getCloseAdKey(udid);
+        return redisClient.getHashSetValue(key, pid);
+    }
+    
 //	public static Object getActiveOcs(String key) {
 //		return cacheActivitiesClient.get(key);
 //	}

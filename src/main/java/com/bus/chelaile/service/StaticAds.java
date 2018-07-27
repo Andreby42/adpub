@@ -217,9 +217,13 @@ public class StaticAds {
     private static void readSettings() {
         if (settingKeys != null) {
             for (String key : settingKeys.split(";")) {
-                if (CacheUtil.getFromRedis(key) != null)
+                if (CacheUtil.getFromRedis(key) != null) {
                     SETTINGSMAP.put(key, (String) CacheUtil.getFromRedis(key));
+                }
             }
+        }
+        if(SETTINGSMAP.containsKey(Constants.SETTING_COSE_AD_KEY)) {
+            SETTINGSMAP.put(Constants.SETTING_COSE_AD_KEY, "86400"); // 默认一天
         }
     }
 

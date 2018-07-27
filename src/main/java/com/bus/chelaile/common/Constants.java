@@ -140,10 +140,11 @@ public class Constants {
     public static String LOCKKEY = "lockKey";
     
     public static final String SETTING_PATTERN_KEY = "AD_SETTING_*";
-    public static final String SCREENHEIGHT_KEY = "AD_SETTING_linefeed_screenHeight";  // 详情页下方feed位是否打开，存储分界线value的对应key
-    public static final String INTERVALTIME_KEY = "AD_SETTING_intervalTime";  // 开屏热启动调用广告的时间间隔
-    public static final String OPENTIMEOUT_KEY = "AD_SETTING_openTimeout";  // 开屏最长时间
-    public static final String OPENTIMEOUT_HOT_KEY = "AD_SETTING_hotOpenTimeout"; //热启动开屏最长时间
+    public static final String SETTING_SCREENHEIGHT_KEY = "AD_SETTING_linefeed_screenHeight";  // 详情页下方feed位是否打开，存储分界线value的对应key
+    public static final String SETTING_INTERVALTIME_KEY = "AD_SETTING_intervalTime";  // 开屏热启动调用广告的时间间隔
+    public static final String SETTING_OPENTIMEOUT_KEY = "AD_SETTING_openTimeout";  // 开屏最长时间
+    public static final String SETTING_OPENTIMEOUT_HOT_KEY = "AD_SETTING_hotOpenTimeout"; //热启动开屏最长时间
+    public static final String SETTING_COSE_AD_KEY = "AD_SETTING_closeAdExpire"; // 关闭广告的时长
     
     public static final String HOME_DEBUGLOG_KEY = "AD_SETTING_ios_debug_home";
     public static final String STATION_DEBUGLOG_KEY = "AD_SETTING_ios_debug_station";

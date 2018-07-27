@@ -157,21 +157,4 @@
 		<appender-ref ref="error" />
         <appender-ref ref="ASYNC" />
 	</root>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </configuration>	
