@@ -33,6 +33,7 @@ public abstract class AdInnerContent {
     protected void setCommentContext(AdInnerContent ad,String pic) {
     	this.displayType = ad.getDisplayType();
     	this.picsList = ad.getPicsList();
+    	this.closePic = ad.getClosePic();
     	if( picsList == null || picsList.size() == 0 ) {
     		if( pic != null ) {
     			picsList = New.arrayList();
