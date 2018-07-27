@@ -362,8 +362,14 @@ function buildMdLogger() {
                 url += '&' + k + '=' + this.pars[k];
             }
             console.log('发送第三方埋点:' + url);
+	    var body = '';
+            try{
+                body = (typeof data == 'string' ? data : '')
+            } catch (error) {
+
+            }
             console.log('data:' + data);
-            Http.post(url, {}, typeof data == 'string' ? data : '', 5000, function() {
+            Http.post(url, {}, body, 5000, function() {
                 console.log('成功发送第三方埋点:' + url);
             });
         },

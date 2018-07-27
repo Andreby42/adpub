@@ -281,8 +281,6 @@ function tryNthTaskGroup(rule, nth, callback) {
     sdkInfos.forEach(function(sdkInfo) {
         var req = sdkInfo.task.adurl();
         console.log('try sdk: ' + req.url);
-        console.log('try sdk aid: ' + sdkInfo.task.aid());
-        JsAnchorConfig.name = sdkInfo.task.aid();
         var MdLogger = buildMdLogger();
 
         var stamp1 = now();
@@ -332,7 +330,6 @@ function tryNthTaskGroup(rule, nth, callback) {
                     MdLogger.addPar('ad_order', entity.ad_order || 0);
                 } catch (error) {
                 }
-                JsAnchorConfig.ma = 'ab';
             }
 
             MdLogger.addPar('ad_status', resp.ad ? 1 : 0);
@@ -365,8 +362,14 @@ function buildMdLogger() {
                 url += '&' + k + '=' + this.pars[k];
             }
             console.log('发送第三方埋点:' + url);
+	    var body = '';
+            try{
+                body = (typeof data == 'string' ? data : '')
+            } catch (error) {
+
+            }
             console.log('data:' + data);
-            Http.post(url, {}, typeof data == 'string' ? data : '', 5000, function() {
+            Http.post(url, {}, body, 5000, function() {
                 console.log('成功发送第三方埋点:' + url);
             });
         },
