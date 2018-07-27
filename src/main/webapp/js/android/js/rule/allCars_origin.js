@@ -1,5 +1,7 @@
 // bottom ad js
 
+var variable=require('./variable');
+
 env = {
     wifi: true
 }
