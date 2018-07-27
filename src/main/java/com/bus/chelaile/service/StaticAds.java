@@ -222,7 +222,7 @@ public class StaticAds {
                 }
             }
         }
-        if(SETTINGSMAP.containsKey(Constants.SETTING_COSE_AD_KEY)) {
+        if(! SETTINGSMAP.containsKey(Constants.SETTING_COSE_AD_KEY)) {
             SETTINGSMAP.put(Constants.SETTING_COSE_AD_KEY, "86400"); // 默认一天
         }
     }
