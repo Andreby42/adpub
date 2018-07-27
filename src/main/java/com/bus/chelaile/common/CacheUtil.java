@@ -360,6 +360,14 @@ public class CacheUtil {
         return 0;
     }
     
+    
+    // 保存点击关闭按钮
+    public static void setCloseTimeToRedis(String udid, String pid) {
+        String key = AdvCache.getCloseAdKey(udid);
+        String field = pid;
+        redisClient.setHashSetValue(key, field, String.valueOf(System.currentTimeMillis()));
+    }
+    
 //	public static Object getActiveOcs(String key) {
 //		return cacheActivitiesClient.get(key);
 //	}

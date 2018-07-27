@@ -34,6 +34,7 @@ public class AdvCache {
     
 	protected static final Logger logger = LoggerFactory
 			.getLogger(AdvCache.class);
+    private static final String CLOSE_ADV_KEY = "CLOSE_ADV_";
 
 
 	/**
@@ -410,5 +411,9 @@ public class AdvCache {
     }
     public static String getProjectDayClickKey() {
         return DateUtil.getTodayStr("yyyy-MM-dd") + DAY_CLICK;
+    }
+
+    public static String getCloseAdKey(String udid) {
+        return new StringBuilder(CLOSE_ADV_KEY).append(udid).toString();
     }
 }

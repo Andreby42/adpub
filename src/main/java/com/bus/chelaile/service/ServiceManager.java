@@ -1036,6 +1036,17 @@ public class ServiceManager {
         return getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
 
+    // 关闭广告
+    public boolean closeAd(AdvParam param, String pid) {
+        try {
+            CacheUtil.setCloseTimeToRedis(param.getUdid(), pid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
     /*
      * invalidUser
      */
@@ -1287,5 +1298,4 @@ public class ServiceManager {
             System.out.println(createTime + 100 > System.currentTimeMillis());
         }
     }
-
 }
