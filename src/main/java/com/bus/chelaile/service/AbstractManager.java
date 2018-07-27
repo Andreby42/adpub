@@ -945,10 +945,11 @@ public abstract class AbstractManager {
 
         String closeTime = CacheUtil.getCloseAdTime(advParam.getUdid(), showType.getType());
         long expireTime = Long.parseLong(StaticAds.SETTINGSMAP.get(Constants.SETTING_COSE_AD_KEY));
-        if (StringUtils.isNoneBlank(closeTime) &&
-                (System.currentTimeMillis() - Long.parseLong(closeTime)) < expireTime) {
-            logger.info("close ad time not pass ");
-            return false;
+        if (StringUtils.isNoneBlank(closeTime)) {
+            if (((System.currentTimeMillis() - Long.parseLong(closeTime))) / 1000 < expireTime) {
+                logger.info("close ad time not pass ");
+                return false;
+            }
         }
 
         // 青岛、南京、香港、西安 四城不投广告
