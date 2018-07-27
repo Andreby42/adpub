@@ -944,10 +944,10 @@ public abstract class AbstractManager {
         }
 
         String closeTime = CacheUtil.getCloseAdTime(advParam.getUdid(), showType.getType());
-        long expireTime = Long.parseLong(StaticAds.SETTINGSMAP.get(Constants.SETTING_COSE_AD_KEY));
         if (StringUtils.isNoneBlank(closeTime)) {
+            long expireTime = Long.parseLong(StaticAds.SETTINGSMAP.get(Constants.SETTING_COSE_AD_KEY));
             if (((System.currentTimeMillis() - Long.parseLong(closeTime))) / 1000 < expireTime) {
-                logger.info("close ad time not pass ");
+                logger.info("close ad time not pass ,udid={}, pid={}, closetime={}", advParam.getUdid(), showType.getType(), closeTime);
                 return false;
             }
         }

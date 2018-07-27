@@ -1,7 +1,5 @@
 // bottom ad js
 
-var variable=require('./variable');
-
 env = {
     wifi: true
 }
@@ -794,6 +792,9 @@ function ads() {
       traceInfo : {
 		  traceid: '${TRACEID}',
 		  pid: '26'
+      },
+      closeInfo: {
+          closePic: '${closePic}'
       },
       urls : {
         exposeUrl:'http://atrace.chelaile.net.cn/exhibit?',
