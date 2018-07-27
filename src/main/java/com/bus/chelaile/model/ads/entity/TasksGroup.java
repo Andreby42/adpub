@@ -14,6 +14,8 @@ public class TasksGroup {
     // 参数名字,参数值
     private Map<String,String> map;
     
+    private String closePic;
+    
     public static void main(String[] args) {
         
         TasksGroup tgs = new TasksGroup();
@@ -95,6 +97,14 @@ public class TasksGroup {
 	public void setMap(Map<String, String> map) {
 		this.map = map;
 	}
+
+    public String getClosePic() {
+        return closePic;
+    }
+
+    public void setClosePic(String closePic) {
+        this.closePic = closePic;
+    }
 
 
 
