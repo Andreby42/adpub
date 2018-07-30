@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSON;
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
@@ -78,9 +79,10 @@ public class AdLineRightInnerContent extends AdInnerContent {
                 tasksGroups.setTasks(tasksG);
                 tasksGroups.setTimeouts(ad.timeouts);
                 tasksGroups.setMap(map);
+                tasksGroups.setClosePic(ad.getClosePic());
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) { // 如果tasks为空，设置默认的值，既车来了api
-                this.tasksGroup = createOwnAdTask();
+                this.tasksGroup = createOwnAdTask(ad);
             }
             setCommentContext(ad, this.pic);
         }
@@ -109,10 +111,6 @@ public class AdLineRightInnerContent extends AdInnerContent {
         return null;
     }
 
-    public static void main(String[] args) {
-        //		LineRefreshInnerContent ad = new LineRefreshInnerContent();
-        //		ad.setAndPaseJson("{\"feedAdTitle\":\"\",\"feedAdType\":1,\"feedId\":\"642191129076404224\",\"feedTag\":\"广告\",\"icon\":\"\",\"isSetTop\":1,\"likeNum\":0,\"pic\":\"https://image3.chelaile.net.cn/cf08752ed77849afb8f29d6b6abf2f35\",\"slogan\":\"\",\"tagId\":\"\",\"time\":0}");
-    }
 
     @Override
     public void fillAdEntity(AdEntity adEntity, AdvParam param, int stindex) {
@@ -261,5 +259,14 @@ public class AdLineRightInnerContent extends AdInnerContent {
 
     public void setAndroidURL(String androidURL) {
         this.androidURL = androidURL;
+    }
+    
+    
+    public static void main(String[] args) {
+        AdLineRightInnerContent ad = new AdLineRightInnerContent();
+        ad.setAndParseJson(
+                "{\"closePic\":\"https://image3.chelaile.net.cn/e97febd4501d488e85b096b04721745c\",\"androidURL\":\"https://image3.chelaile.net.cn/0f5007a0e8d34c2a8398d0a14d4a9e88#511,512\",\"iosURL\":\"https://image3.chelaile.net.cn/82d042f985ac4cfa8a9e2ae8b426057b#511,512\",\"adMode\":\"1\",\"linkH5\":\"\",\"backup\":0}");
+   
+       System.out.println(JSONObject.toJSONString(ad));
     }
 }
