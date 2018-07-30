@@ -22,6 +22,8 @@ public abstract class AdInnerContent {
 
     protected List<String> picsList;
     
+    private String closePic = "";
+    
     public void setAndParseJson(String jsonr) {
         this.jsonContent = jsonr;
         parseJson(jsonr);
@@ -31,6 +33,7 @@ public abstract class AdInnerContent {
     protected void setCommentContext(AdInnerContent ad,String pic) {
     	this.displayType = ad.getDisplayType();
     	this.picsList = ad.getPicsList();
+    	this.closePic = ad.getClosePic();
     	if( picsList == null || picsList.size() == 0 ) {
     		if( pic != null ) {
     			picsList = New.arrayList();
@@ -113,5 +116,15 @@ public abstract class AdInnerContent {
 	public void setPicsList(List<String> picsList) {
 		this.picsList = picsList;
 	}
+
+
+    public String getClosePic() {
+        return closePic;
+    }
+
+
+    public void setClosePic(String closePic) {
+        this.closePic = closePic;
+    }
     
 }

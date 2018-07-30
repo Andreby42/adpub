@@ -391,21 +391,21 @@ public class ServiceManager {
 
     private void settingsConfig(JSONObject resultMap) {
         // 读取配置的‘热启动调用广告的时间间隔’
-        settings(resultMap, Constants.INTERVALTIME_KEY, "intervalTime");
+        settings(resultMap, Constants.SETTING_INTERVALTIME_KEY, "intervalTime");
         if (!resultMap.containsKey("intervalTime")) {
             logger.error("配置项，intervalTime丢失 ！ ");
             resultMap.put("intervalTime", 30);
         }
 
         // 读取配置的‘最长开屏时间’
-        settings(resultMap, Constants.OPENTIMEOUT_KEY, "openTimeout");
+        settings(resultMap, Constants.SETTING_OPENTIMEOUT_KEY, "openTimeout");
         if (!resultMap.containsKey("openTimeout")) {
             logger.error("配置项，openTimeout 丢失 ！ ");
             resultMap.put("openTimeout", 8001);
         }
         
         // 读取配置的‘最长热启动开屏时间’
-        settings(resultMap, Constants.OPENTIMEOUT_HOT_KEY, "hotOpenTimeout");
+        settings(resultMap, Constants.SETTING_OPENTIMEOUT_HOT_KEY, "hotOpenTimeout");
         if (!resultMap.containsKey("hotOpenTimeout")) {
             logger.error("配置项，hotOpenTimeout 丢失 ！ ");
             resultMap.put("hotOpenTimeout", 4001);
@@ -432,8 +432,8 @@ public class ServiceManager {
     private Object getLineFeedAds(AdvParam advParam) {
         JSONObject resultMap = new JSONObject();
         // 是否展开
-        if (StaticAds.SETTINGSMAP.containsKey(Constants.SCREENHEIGHT_KEY)) {
-            String sL = StaticAds.SETTINGSMAP.get(Constants.SCREENHEIGHT_KEY);
+        if (StaticAds.SETTINGSMAP.containsKey(Constants.SETTING_SCREENHEIGHT_KEY)) {
+            String sL = (StaticAds.SETTINGSMAP.get(Constants.SETTING_SCREENHEIGHT_KEY));
             try {
                 if (sL != null && Integer.parseInt(sL) >= advParam.getScreenHeight()) {
                     resultMap.put("unfoldFeed", 0); // 0 小屏手机不展开
@@ -1036,6 +1036,17 @@ public class ServiceManager {
         return getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
     }
 
+    // 关闭广告
+    public boolean closeAd(AdvParam param, String pid) {
+        try {
+            CacheUtil.setCloseTimeToRedis(param.getUdid(), pid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
     /*
      * invalidUser
      */
@@ -1287,5 +1298,4 @@ public class ServiceManager {
             System.out.println(createTime + 100 > System.currentTimeMillis());
         }
     }
-
 }

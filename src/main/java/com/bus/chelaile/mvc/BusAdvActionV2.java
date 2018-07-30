@@ -261,4 +261,20 @@ public class BusAdvActionV2 extends AbstractController {
             return serviceManager.getClienSucMapWithNoHead(0, Constants.STATUS_REQUEST_SUCCESS);
         }
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!closeAd.action", produces = "text/plain;charset=UTF-8")
+    public String closeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        AdvParam param = getActionParam(request);
+        String pid = request.getParameter("pid");
+        if (StringUtils.isNoneBlank(pid)) {
+            boolean object = serviceManager.closeAd(param, pid);
+            if (object) {
+                return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
+            } else {
+                return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_INTERNAL_ERROR);
+            }
+        }
+        return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_PARAM_ERROR);
+    }
 }
