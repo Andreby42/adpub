@@ -55,6 +55,8 @@ public class StartService {
 			"minuteTimesFile", "/data/advConfig/commonMinuteTimesFile.csv");
 
     public List<String> init() {
+    	
+
         // 初始化缓存
         CacheUtil.initClient();
         // 启动线程
