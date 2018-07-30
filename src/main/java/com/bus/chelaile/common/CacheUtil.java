@@ -146,9 +146,13 @@ public class CacheUtil {
      * @param obj 缓存的对象
      */
     public static void set(String key, int exp, Object obj) {
+    	if( Constants.ISDEV ) {
+    		redisClient.set(key, exp, obj);
+    		return;
+    	}
   
 //        cacheCommonClient.set(key, exp, obj);
-        OCSCommonUtil.set(key, exp, obj);;
+        OCSCommonUtil.set(key, exp, obj);
       
     }
     
@@ -204,36 +208,59 @@ public class CacheUtil {
      * @param obj 缓存的对象
      */
     public static void set(String key, Object obj) {
+    	if( Constants.ISDEV ) {
+    		redisClient.set(key, DEFAULT_EXPIRE, obj);
+    		return;
+    	}
         set(key, DEFAULT_EXPIRE, obj);
     }
     
     public static Object get(String key) {
+    	if( Constants.ISDEV ) {
+    		return redisClient.get(key);
+    	}
 //       return cacheCommonClient.get(key);
        return OCSCommonUtil.get(key);
     }
     
     public static Object getNew(String key) {
+    	if( Constants.ISDEV ) {
+    		return redisClient.get(key);
+    	}
 //        return cacheNewClient.get(key);
         return OCSNewUtil.get(key);
      }
     
     public static void setNew(String key, int exp, Object obj) {
+    	if( Constants.ISDEV ) {
+    		redisClient.set(key, exp, obj);
+    		return;
+    	}
         OCSNewUtil.set(key, exp, obj);
 //    	cacheNewClient.set(key, exp, obj);
     }
     
     public static OperationFuture<Boolean> deleteNew(String key) {
+    	if( Constants.ISDEV ) {
+    		return redisClient.delete(key);
+    	}
 //        return cacheNewClient.delete(key);
         return OCSNewUtil.delete(key);
     }
 
     public static OperationFuture<Boolean> delete(String key) {
+    	if( Constants.ISDEV ) {
+    		return redisClient.delete(key);
+    	}
 //    	return cacheCommonClient.delete(key);
     	return OCSCommonUtil.delete(key);
     }
 
     
     public static Object getApiInfo(String key){
+    	if( Constants.ISDEV ) {
+    		return redisClient.get(key);
+    	}
 //    	return cacheApiTokenClient.get(key);
     	return OCSApiUtil.get(key);
     }
@@ -244,6 +271,15 @@ public class CacheUtil {
     
     // ocs查询
     public static String getFromCommonOcs(String key) {
+    	
+    	if( Constants.ISDEV ) {
+    		Object j = redisClient.get(key);
+    		if(j == null)
+        	    return null;
+        	else
+        	    return String.valueOf(j);
+    	}
+    	
 //    	Object j = cacheCommonClient.get(key);
     	Object j = OCSCommonUtil.get(key);
     	if(j == null)
@@ -254,6 +290,10 @@ public class CacheUtil {
     
     // ocs设置值
     public static void setToCommonOcs(String key, int exp, Object obj) {
+    	if( Constants.ISDEV ) {
+    		redisClient.set(key, exp, obj);
+    		return;
+    	}
 //    	cacheCommonClient.set(key, exp, obj);
     	OCSCommonUtil.set(key, exp, obj);
     }
@@ -300,6 +340,10 @@ public class CacheUtil {
  
     // 将traceInfo保存到redis中, 永久
     public static void setToAtrace(String key, String value) {
+    	if( Constants.ISDEV ) {
+    		redisClient.set(key, -1, value);
+    		return;
+    	}
 //    	if( traceInfoClient != null ) {
 //    		traceInfoClient.set(key, -1, value);
 //    	}
@@ -307,6 +351,10 @@ public class CacheUtil {
     }
     // 同上
     public static void setToAtrace(String key, String value, int exp) {
+    	if( Constants.ISDEV ) {
+    		redisClient.set(key, exp, value);
+    		return;
+    	}
 //    	if( traceInfoClient != null ) {
 //    		traceInfoClient.set(key, exp, value);
 //    	}
