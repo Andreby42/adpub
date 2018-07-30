@@ -88,7 +88,7 @@ public abstract class AdInnerContent {
         return 0;
     }
     
-    protected TasksGroup createOwnAdTask() {
+    protected TasksGroup createOwnAdTask(AdInnerContent ad) {
         TasksGroup tasksGroups = new TasksGroup();
         List<String> ts = New.arrayList();
         ts.add("api_chelaile");
@@ -98,6 +98,7 @@ public abstract class AdInnerContent {
         times.add(4000L);times.add(4000L);
         tasksGroups.setTasks(tasks);
         tasksGroups.setTimeouts(times);
+        tasksGroups.setClosePic(ad.getClosePic());
         return tasksGroups;
     }
     

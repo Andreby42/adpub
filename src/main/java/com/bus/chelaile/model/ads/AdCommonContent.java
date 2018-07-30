@@ -92,7 +92,7 @@ public class AdCommonContent extends AdInnerContent{
                 tasksGroups.setMap(map);
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
-                this.tasksGroup = createOwnAdTask();
+                this.tasksGroup = createOwnAdTask(ad);
             }
             try {
 				logger.info("json={}",JsonBinder.toJson(this.tasksGroup, JsonBinder.always));
