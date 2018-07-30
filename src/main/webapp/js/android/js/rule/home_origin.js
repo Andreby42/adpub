@@ -14,7 +14,7 @@ var api_chelaile = {
 
     adurl: function() {
         return {
-            url: 'https://api.chelaile.net.cn/adpub/adv!geColumntAds.action?${QUERY_STRING}'
+            url: 'https://api.chelaile.net.cn/adpub/adv!geColumntAds.action'
         }
     },
 
@@ -77,7 +77,6 @@ var api_yd = {
     },
 
     adurl: function() {
-        // 有道post方式要单独设置一个请求头，不支持json格式，所以还是拼 get 链接
         var config = JsFixedConfig.getJsFixedConfig();
         var params = {
           "av" : config.get('v').split('_')[0],
@@ -91,9 +90,8 @@ var api_yd = {
           "llp" : config.get('llp'),
           "wifi" : config.get('wifi'),
           "sc_a" : config.get('screenDensity'), // optional
-          // 不同位置需要更改
-          "id" : "7a7b059ca39624f1c1ec24fa2ad375f6", // 广告位，不知是什么
-          "ran" : "1", // optional 一次请求的广告数量，默认值为 1
+          "id" : "7a7b059ca39624f1c1ec24fa2ad375f6", 
+          "ran" : "1", 
         }
         var str = 'http://gorgon.youdao.com/gorgon/request.s?';
         for (var p in params) {
@@ -101,7 +99,6 @@ var api_yd = {
         }
         str = str.substring(0, str.length - 1);
         return {
-            // url: 'http://gorgon.youdao.com/gorgon/request.s?id=e3f49841bbd3ceb0c6a531ca32f4a754&udid=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&imei=BA8C0E13-F99A-4294-BABA-1489C33E9B6D&lla=73.0&llp=p&wifi=&rip=10.168.0.10&imeimd5=305612168A059FC9CCDAC8D95D99E485&ct=2&dct=0&ll=116.403538,39.994026&auidmd5=305612168A059FC9CCDAC8D95D99E485&av=5.50.0&llt=1'
             url: str
         }
     },
@@ -159,7 +156,7 @@ var api_voicead = {
     adurl: function() {
         var config = JsFixedConfig.getJsFixedConfig();
 
-        var net = parseInt(config.get('dct')); // 有道用dct
+        var net = parseInt(config.get('dct'));
         if (net >= 11 && net <= 13) {
           net = net - 7;
         } else {
@@ -172,8 +169,8 @@ var api_voicead = {
             data: {
                 "tramaterialtype": "json",
                 "api_ver": "1.3.8",
-                "is_support_deeplink": "1", // optional 0不支持(默认值)，1直接触发 2 进入落地页再触发，不能用
-                "secure": "3", // 1 只支持http 2 只支持https 3 都支持
+                "is_support_deeplink": "1", 
+                "secure": "3",
                 "devicetype": "0",
                 "os": "Android",
                 "osv": config.get('sv'),
@@ -188,27 +185,23 @@ var api_voicead = {
                 "ts": config.get('ts'),
                 "dvw": config.get('screenWidth'),
                 "dvh": config.get('screenHeight'),
-                "orientation": "0", // 屏幕方向，强制竖屏
+                "orientation": "0", 
                 "vendor": config.get('vendor'),
                 "model": config.get('model'),
                 "lan": config.get('lan'),
-              //  "geo": config.get('geo_lng') + ',' + config.get('geo_lat'), // optional，用了还报错
-                "batch_cnt": "1", // 广告数量，只支持1
+                "batch_cnt": "1",
                 "appid": "5add7ce1",
                 "appname": "车来了",
                 "appver": config.get('v').split('_')[0],
                 "pkgname": "com.ygkj.chelaile.standard",
-                "debug": { // optional
-                    /* 用于指定下发广告的交互类型，取值范围：0，不限制；1，跳转类； 2，下载类；3，特殊下载类。默认0。当前下载类广告暂不支持 deep link，为2 时下个值不能为1*/
+                "debug": {
                     "action_type": "0",
-                    /* 用于指定下发广告的落地页类型，取值范围：0，不限制；1，包含 landing_url 和 deep_link； 2，仅包含 landing_url。不指定 的话，按值为 0 处理。*/
                     "landing_type": "0"
                 },
-                // 不同位置需要更改
-                "adunitid": "${api_voicead_placementId}", // 广告位
-                "adw": "359", // 广告图宽，看后台申请广告位的尺寸
+                "adunitid": "${api_voicead_placementId}", 
+                "adw": "359",
                 "adh": "92",
-                "isboot": "0", //1表示开屏；0表示非开屏
+                "isboot": "0",
             }
         };
     },
@@ -291,7 +284,7 @@ var api_shunfei = {
 	        }
 			
 
-	        var net = parseInt(config.get('dct')); // 有道用dct
+	        var net = parseInt(config.get('dct'));
 	        if (net >= 11 && net <= 13) {
 	          net = net - 9;
 	        } else {
@@ -425,7 +418,7 @@ var api_zm = {
 	    adurl: function() {
 	        var config = JsFixedConfig.getJsFixedConfig();
 
-	        var net = parseInt(config.get('dct')); // 有道用dct
+	        var net = parseInt(config.get('dct'));
 	        if (net >= 11 && net <= 13) {
 	          net = net - 9;
 	        } else {
@@ -501,7 +494,6 @@ var api_zm = {
 				console.log("interactionType=" + row.materialMetas[0].interactionType);
 				
 				var creativeType = row.materialMetas[0].creativeType;
-				// 只要图文广告,右上角和站点有区别
 				if( creativeType != 3 ){
 				//	continue;
 				}
@@ -555,7 +547,7 @@ var api_zm = {
 	            var ad = {
 	                provider_id: '14',
 	                ad_order: index,
-	                adType: interactionType,				//这两个不知道是否有问题	
+	                adType: interactionType,
 	                packageName: row.materialMetas[0].packageName,
 	                head: title,
 	                subhead: desc,
@@ -573,7 +565,6 @@ var api_zm = {
 			var url = 'http://atrace.chelaile.net.cn/thirdNodata?aid=api_zm&pid=00';
             
 			 Http.get(url, {}, 5000, function() {
-                console.log('成功发送过滤掉数据上报埋点:' + url);
              });
 			
 	        return null;
@@ -588,8 +579,6 @@ var api_zm = {
 	    }
 	}
 
-// sdk taks ===================
-// 手机调用sdk
 
 var sdk_gdt = {
 
@@ -777,12 +766,6 @@ var sdk_ifly = {
     },
 
     hide : function(row) {
-        if (row.title.indexOf('抖音') > -1) {
-            return true;
-        }
-        if (row.title.indexOf('西瓜') > -1) {
-            return true;
-        }
         return false;
     },
 

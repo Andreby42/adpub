@@ -6,6 +6,7 @@
 <!-- http://www.qos.ch/shop/products/professionalSupport -->
 <!-- -->
 <configuration>
+
 	<appender name="info"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<File>
