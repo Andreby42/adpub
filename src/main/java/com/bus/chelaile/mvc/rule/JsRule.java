@@ -119,7 +119,8 @@ public class JsRule extends AbstractController {
 		// 模板
 		String splashOrigin = StaticAds.JS_FILE_STR.get("right_origin");
 		TaskEntity tgs = jSService.getTask(p, "rightTop");
-
+		logger.info("********收到 右上角请求 **** ");
+		
 		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());

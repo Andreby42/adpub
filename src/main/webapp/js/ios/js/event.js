@@ -1,11 +1,11 @@
 "use strict";
 
-var exhibitTrackUrl = "http://atrace.chelaile.net.cn/exhibit";
-var clickTrackUrl = "http://atrace.chelaile.net.cn/click";
-var closeTrackUrl = "http://atrace.chelaile.net.cn/close";
+var exhibitTrackUrl = "https://atrace.chelaile.net.cn/exhibit";
+var clickTrackUrl = "https://atrace.chelaile.net.cn/click";
+var closeTrackUrl = "https://atrace.chelaile.net.cn/close";
 
-var thirdSimpleUrl = "http://atrace.chelaile.net.cn/thirdSimple";
-var thirdPartyResponseUrl = "http://atrace.chelaile.net.cn/thirdPartyResponse";
+var thirdSimpleUrl = "https://atrace.chelaile.net.cn/thirdSimple";
+var thirdPartyResponseUrl = "https://atrace.chelaile.net.cn/thirdPartyResponse";
 
 function flatUrlParams(url, params) {
 
