@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
@@ -63,9 +64,11 @@ public class StartService {
         startThread();
         StaticAds.init();
         activityService.initActivitity(); // 信息流活动初始化
-
-        //		linkActiveHelp.initLinkedMePics();	// linkedMe 图片信息初始化
-        initMinuteTimes(StaticAds.minuteTimes);
+        if( !Constants.ISDEV ) {
+//    		linkActiveHelp.initLinkedMePics();	// linkedMe 图片信息初始化
+            initMinuteTimes(StaticAds.minuteTimes);
+        }
+        
         // 获取当前所有的可以使用的ADS
         List<AdContent> allAds = advContent.listValidAds();
         logger.info("****AllAdsinfosize*****   {}", allAds.size());
@@ -165,9 +168,12 @@ public class StartService {
         logger.info("js文件*********************：{}", StaticAds.JS_FILE_STR.keySet());
 
         try {
-            //	          infoStreamDispatcher.readKafka();
-            infoStreamForAdvClick.readKafka(); // 广告点击日志
-            //	          infoSteamForMaidianLogs.readKafka();  // 埋点日志
+        	if( !Constants.ISDEV ) {
+                //	          infoStreamDispatcher.readKafka();
+                infoStreamForAdvClick.readKafka(); // 广告点击日志
+                //	          infoSteamForMaidianLogs.readKafka();  // 埋点日志
+
+        	}
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("启动kafka出错！ e={}", e.getMessage());

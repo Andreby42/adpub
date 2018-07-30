@@ -36,6 +36,9 @@ public class Constants {
     
     public static final boolean ISTEST = Boolean.parseBoolean(PropertiesUtils.getValue(
 			PropertiesName.PUBLIC.getValue(), "isTest", "false"));
+    
+    public static final boolean ISDEV = Boolean.parseBoolean(PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "isDev", "false"));
+    
     public static final boolean IS_FLOW = Boolean.parseBoolean(PropertiesUtils.getValue(
 			PropertiesName.PUBLIC.getValue(), "isFlow", "false"));
     public static final boolean IS_CACHE_KOUBEI = Boolean.parseBoolean(PropertiesUtils.getValue(

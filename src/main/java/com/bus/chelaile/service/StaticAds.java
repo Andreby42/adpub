@@ -172,14 +172,26 @@ public class StaticAds {
             String fileStr = "/data/advConfig/js/";
             if(Constants.ISTEST)
                 fileStr = "/data/advConfig/test/js/";
+            
+            if( Constants.ISDEV ) {
+            	fileStr = "D:\\js\\android\\";
+            }
+            
             File file = new File(fileStr);
             File[] tempList = file.listFiles();
             
             fileStr = "/data/advConfig/iosjs/";
             if(Constants.ISTEST)
                 fileStr = "/data/advConfig/test/iosjs/";
+            
+            if( Constants.ISDEV ) {
+            	fileStr = "D:\\js\\ios\\";
+            }
+            
             file = new File(fileStr);
             File[] tempList1 = file.listFiles();
+            
+         
             
             for (int i = 0; i < tempList.length; i++) {
                 reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
@@ -206,6 +218,7 @@ public class StaticAds {
                     }
                 }
                 JS_FILE_STR.put(tempList1[i].getName().split("\\.")[0], jsStr.toString());
+                NEW_JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], ReplaceJs.parse(jsStr.toString()));
                 reader.close();
             }
         } catch (Exception e) {
