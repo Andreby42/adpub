@@ -11,11 +11,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
-import com.bus.chelaile.common.PositionJs;
 import com.bus.chelaile.common.ReplaceJs;
 import com.bus.chelaile.common.Text;
-import com.bus.chelaile.model.PlacementCache;
-import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
@@ -23,8 +20,6 @@ import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
-
-import scala.reflect.generic.Constants.Constant;
 
 /**
  * 保存静态的广告数据
@@ -188,8 +183,6 @@ public class StaticAds {
                 }
                 JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
                 NEW_JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], ReplaceJs.parse(jsStr.toString()));
-                logger.info(tempList[i].getName().split("\\.")[0]+"="+jsStr.length());
-                logger.info(tempList[i].getName().split("\\.")[0] + "----->" + ReplaceJs.parse(jsStr.toString()));
 //                reader.close();
             }
         } catch (Exception e) {

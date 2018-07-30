@@ -48,11 +48,12 @@ public class TasksGroup {
     }
 
 
-    public TasksGroup(List<List<String>> tasks, List<Long> timeouts,Map<String,String> map) {
+    public TasksGroup(List<List<String>> tasks, List<Long> timeouts,Map<String,String> map, String closePic) {
         super();
         this.tasks = tasks;
         this.timeouts = timeouts;
         this.map = map;
+        this.closePic = closePic;
     }
 
     /**

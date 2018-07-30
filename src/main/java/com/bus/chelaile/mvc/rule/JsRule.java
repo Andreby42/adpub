@@ -302,6 +302,7 @@ public class JsRule extends AbstractController {
 				map.put("TRACEID", tgs.getTraceid());
 			}
 			map.put("closePic", tgs.getTaskGroups().getClosePic());
+			logger.info("**** closePic={}", tgs.getTaskGroups().getClosePic());
 
 			for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
 				for (String task : tasks) {
