@@ -172,27 +172,11 @@ public class StaticAds {
             String fileStr = "/data/advConfig/js/";
             if(Constants.ISTEST)
                 fileStr = "/data/advConfig/test/js/";
-            
             if( Constants.ISDEV ) {
             	fileStr = "D:\\js\\android\\";
             }
-            
             File file = new File(fileStr);
             File[] tempList = file.listFiles();
-            
-            fileStr = "/data/advConfig/iosjs/";
-            if(Constants.ISTEST)
-                fileStr = "/data/advConfig/test/iosjs/";
-            
-            if( Constants.ISDEV ) {
-            	fileStr = "D:\\js\\ios\\";
-            }
-            
-            file = new File(fileStr);
-            File[] tempList1 = file.listFiles();
-            
-         
-            
             for (int i = 0; i < tempList.length; i++) {
                 reader = new InputStreamReader(new FileInputStream(tempList[i]), "UTF-8");
                 int tempchar;
@@ -203,22 +187,36 @@ public class StaticAds {
                     }
                 }
                 JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], jsStr.toString());
-                logger.info(tempList[i].getName().split("\\.")[0]+"="+jsStr.length());
                 NEW_JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], ReplaceJs.parse(jsStr.toString()));
+                logger.info(tempList[i].getName().split("\\.")[0]+"="+jsStr.length());
+                logger.info(tempList[i].getName().split("\\.")[0] + "----->" + ReplaceJs.parse(jsStr.toString()));
 //                reader.close();
             }
+        } catch (Exception e) {
+            logger.error("读取js文件到缓存出错！ ", e);
+            e.printStackTrace();
+        }
             
-            for (int i = 0; i < tempList1.length; i++) {
-                reader = new InputStreamReader(new FileInputStream(tempList1[i]), "UTF-8");
+        try {
+            String iosFileStr = "/data/advConfig/iosjs/";
+            if (Constants.ISTEST)
+                iosFileStr = "/data/advConfig/test/iosjs/";
+            if (Constants.ISDEV) {
+                iosFileStr = "D:\\js\\ios\\";
+            }
+            File iosFile = new File(iosFileStr);
+            File[] ios_tempList = iosFile.listFiles();
+            for (int i = 0; i < ios_tempList.length; i++) {
+                reader = new InputStreamReader(new FileInputStream(ios_tempList[i]), "UTF-8");
                 int tempchar;
                 StringBuilder jsStr = new StringBuilder();
                 while ((tempchar = reader.read()) != -1) {
-                    if(((char)tempchar) != '\r') {
-                        jsStr.append((char)tempchar);
+                    if (((char) tempchar) != '\r') {
+                        jsStr.append((char) tempchar);
                     }
                 }
-                JS_FILE_STR.put(tempList1[i].getName().split("\\.")[0], jsStr.toString());
-                NEW_JS_FILE_STR.put(tempList[i].getName().split("\\.")[0], ReplaceJs.parse(jsStr.toString()));
+                JS_FILE_STR.put(ios_tempList[i].getName().split("\\.")[0], jsStr.toString());
+                NEW_JS_FILE_STR.put(ios_tempList[i].getName().split("\\.")[0], ReplaceJs.parse(jsStr.toString()));
                 reader.close();
             }
         } catch (Exception e) {
