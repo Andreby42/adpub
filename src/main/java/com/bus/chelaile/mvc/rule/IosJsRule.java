@@ -1,12 +1,14 @@
 package com.bus.chelaile.mvc.rule;
 
-import java.util.List;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,6 @@ import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
-import com.bus.chelaile.mvc.utils.JSFileHandle;
 import com.bus.chelaile.service.JSService;
 import com.bus.chelaile.service.StaticAds;
 
@@ -28,7 +29,7 @@ public class IosJsRule extends AbstractController {
 	@Autowired
 	private JSService jSService;
 
-//	private static final Logger logger = LoggerFactory.getLogger(IosJsRule.class);
+	private static final Logger logger = LoggerFactory.getLogger(IosJsRule.class);
 
 
 	// for test
@@ -44,10 +45,10 @@ public class IosJsRule extends AbstractController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/splashAd.do", produces = "text/plain;charset=UTF-8")
-	public String splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void splashAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		AdvParam p = getActionParam(request);
-
+		response.setContentType("application/javascript;charset=UTF-8");
 		String traceInfo = JSONObject.toJSONString(p);
 
 		// 模板
@@ -55,11 +56,19 @@ public class IosJsRule extends AbstractController {
 		
 		TaskEntity tgs = jSService.getTask(p, "splash");
 
-		String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request, ShowType.OPEN_SCREEN);
-
 		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
-		return splashJS;
+        response.setHeader("traceIdInfo", traceInfo);
+		try {
+            produceJS(p, splashOrigin, tgs, "splash_origin", request, ShowType.OPEN_SCREEN,response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+		
+//		String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request, ShowType.OPEN_SCREEN);
+//
+//		response.setHeader("traceId", p.getTraceid());
+//		response.setHeader("traceIdInfo", traceInfo);
+//		return splashJS;
 	}
 
 	/*
@@ -67,8 +76,9 @@ public class IosJsRule extends AbstractController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/homeAd.do", produces = "text/plain;charset=UTF-8")
-	public String homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void homeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
+	    response.setContentType("application/javascript;charset=UTF-8");
 		AdvParam p = getActionParam(request);
 		String traceInfo = JSONObject.toJSONString(p);
 
@@ -77,12 +87,13 @@ public class IosJsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "home");
 		// setMaidianParams(p, );
 
-		String splashJS = produceJS(p, splashOrigin, tgs, "home_", request, ShowType.DOUBLE_COLUMN);
-
 		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
-
-		return splashJS;
+        response.setHeader("traceIdInfo", traceInfo);
+		try {
+            produceJS(p, splashOrigin, tgs, "home_origin", request, ShowType.DOUBLE_COLUMN,response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
 	}
 
 	/*
@@ -90,8 +101,9 @@ public class IosJsRule extends AbstractController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/rightTopAd.do", produces = "text/plain;charset=UTF-8")
-	public String rightTopAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void rightTopAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
+	    response.setContentType("application/javascript;charset=UTF-8");
 		AdvParam p = getActionParam(request);
 		if (StringUtils.isBlank(p.getStnName()))
 			p.setStnName(request.getParameter("stationName"));
@@ -100,12 +112,14 @@ public class IosJsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_right_origin");
 		TaskEntity tgs = jSService.getTask(p, "rightTop");
 
-		String splashJS = produceJS(p, splashOrigin, tgs, "right_", request, ShowType.LINE_RIGHT_ADV);
-
 		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
-		return splashJS;
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "right_origin", request, ShowType.LINE_RIGHT_ADV,response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
 	}
 
 	/*
@@ -113,8 +127,9 @@ public class IosJsRule extends AbstractController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/stationAd.do", produces = "text/plain;charset=UTF-8")
-	public String stationAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void stationAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
+	    response.setContentType("application/javascript;charset=UTF-8");
 		AdvParam p = getActionParam(request);
 		if (StringUtils.isBlank(p.getStnName()))
 			p.setStnName(request.getParameter("stationName"));
@@ -123,12 +138,14 @@ public class IosJsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_station_origin");
 		TaskEntity tgs = jSService.getTask(p, "station");
 
-		String splashJS = produceJS(p, splashOrigin, tgs, "station_", request, ShowType.STATION_ADV);
-
 		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
-		return splashJS;
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "station_origin", request, ShowType.STATION_ADV,response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
 	}
 
 	/*
@@ -136,8 +153,9 @@ public class IosJsRule extends AbstractController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/bottomAd.do", produces = "text/plain;charset=UTF-8")
-	public String bottomAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void bottomAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
+	    response.setContentType("application/javascript;charset=UTF-8");
 		AdvParam p = getActionParam(request);
 		if (StringUtils.isBlank(p.getStnName()))
 			p.setStnName(request.getParameter("stationName"));
@@ -146,11 +164,14 @@ public class IosJsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_bottom_origin");
 		TaskEntity tgs = jSService.getTask(p, "bottom");
 
-		String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request, ShowType.LINE_FEED_ADV);
 		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
-		return splashJS;
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "bottom_origin", request, ShowType.LINE_FEED_ADV,response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
 	}
 
 	/*
@@ -158,8 +179,9 @@ public class IosJsRule extends AbstractController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/transfer.do", produces = "text/plain;charset=UTF-8")
-	public String transfer(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void transfer(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
+	    response.setContentType("application/javascript;charset=UTF-8");
 		AdvParam p = getActionParam(request);
 		if (StringUtils.isBlank(p.getStnName()))
 			p.setStnName(request.getParameter("stationName"));
@@ -168,11 +190,14 @@ public class IosJsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_transfer_origin");
 		TaskEntity tgs = jSService.getTask(p, "transfer");
 
-		String splashJS = produceJS(p, splashOrigin, tgs, "route_", request, ShowType.TRANSFER_ADV);
 		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
-		return splashJS;
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "transfer_origin", request, ShowType.TRANSFER_ADV, response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
 	}
 
 	//
@@ -181,8 +206,9 @@ public class IosJsRule extends AbstractController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/stationDetail.do", produces = "text/plain;charset=UTF-8")
-	public String getStationLine(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void getStationLine(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
+	    response.setContentType("application/javascript;charset=UTF-8");
 		AdvParam p = getActionParam(request);
 		if (StringUtils.isBlank(p.getStnName()))
 			p.setStnName(request.getParameter("stationName"));
@@ -192,11 +218,15 @@ public class IosJsRule extends AbstractController {
 		
 		TaskEntity tgs = jSService.getTask(p, "stationDetail");
 
-		String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request, ShowType.CAR_ALL_LINE_ADV);
 		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
-		return splashJS;
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "stationDetail_origin", request, ShowType.CAR_ALL_LINE_ADV,
+                    response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
 	}
 
 	//
@@ -205,8 +235,9 @@ public class IosJsRule extends AbstractController {
 	// */
 	@ResponseBody
 	@RequestMapping(value = "/allCars.do", produces = "text/plain;charset=UTF-8")
-	public String allCars(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public void allCars(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
+	    response.setContentType("application/javascript;charset=UTF-8");
 		AdvParam p = getActionParam(request);
 		if (StringUtils.isBlank(p.getStnName()))
 			p.setStnName(request.getParameter("stationName"));
@@ -218,45 +249,48 @@ public class IosJsRule extends AbstractController {
 
 		TaskEntity tgs = jSService.getTask(p, "allCars");
 
-		String splashJS = produceJS(p, splashOrigin, tgs, "bottom_", request, ShowType.ALL_CAR_ADV);
 		String traceInfo = JSONObject.toJSONString(p);
-		response.setHeader("traceId", p.getTraceid());
-		response.setHeader("traceIdInfo", traceInfo);
-		return splashJS;
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "allCars_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
 	}
 
-	private String produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request,
-            ShowType showType) {
-        if (StringUtils.isBlank(originJs)) {
-            return "┭┮﹏┭┮ 原始js文件为空 ";
-        }
-        
-        if(tgs == null || tgs.getTaskGroups() == null || tgs.getTaskGroups().getTasks().size() == 0) {
-            // TODO 
-        }
-
-
-        String splashJS = "";
-        if (tgs != null) {
-            splashJS = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
-            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTaskGroups().getTimeouts().toString());
-            if (StringUtils.isNoneBlank(tgs.getTraceid())) {
-                splashJS = splashJS.replace("${TRACEID}", tgs.getTraceid());
-            }
-
-            for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
-                for (String task : tasks) {
-                    if (task.contains("api_chelaile")) {
-                        splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
-                        splashJS = splashJS.replace("${API_CHELAILE_DATA}", tgs.getAdDataString());
-                    }
-                }
-            }
-        }
-
-        //		return replaceJs(splashJS, showType, tgs, tag);
-        return JSFileHandle.replaceJs(p.getS(), splashJS, showType, tgs, tag);
-
-    }
+//	private void produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request,
+//            ShowType showType) {
+//        if (StringUtils.isBlank(originJs)) {
+//            return "┭┮﹏┭┮ 原始js文件为空 ";
+//        }
+//        
+//        if(tgs == null || tgs.getTaskGroups() == null || tgs.getTaskGroups().getTasks().size() == 0) {
+//            // TODO 
+//        }
+//
+//
+//        String splashJS = "";
+//        if (tgs != null) {
+//            splashJS = originJs.replace("${TASKS}", tgs.getTaskGroups().getTasks().toString());
+//            splashJS = splashJS.replace("${TIMEOUTS}", tgs.getTaskGroups().getTimeouts().toString());
+//            if (StringUtils.isNoneBlank(tgs.getTraceid())) {
+//                splashJS = splashJS.replace("${TRACEID}", tgs.getTraceid());
+//            }
+//
+//            for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
+//                for (String task : tasks) {
+//                    if (task.contains("api_chelaile")) {
+//                        splashJS = splashJS.replace("${QUERY_STRING}", request.getQueryString());
+//                        splashJS = splashJS.replace("${API_CHELAILE_DATA}", tgs.getAdDataString());
+//                    }
+//                }
+//            }
+//        }
+//
+//        //		return replaceJs(splashJS, showType, tgs, tag);
+//        return JSFileHandle.replaceJs(p.getS(), splashJS, showType, tgs, tag);
+//
+//    }
 
 }

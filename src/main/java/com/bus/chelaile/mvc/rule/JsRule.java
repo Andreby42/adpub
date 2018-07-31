@@ -1,11 +1,6 @@
 package com.bus.chelaile.mvc.rule;
 
 import java.io.IOException;
-import java.io.Writer;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,18 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
-import com.bus.chelaile.common.PositionJs;
-import com.bus.chelaile.common.ReplaceJs;
-import com.bus.chelaile.common.Text;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.mvc.AbstractController;
 import com.bus.chelaile.mvc.AdvParam;
-import com.bus.chelaile.mvc.utils.JSFileHandle;
 import com.bus.chelaile.service.JSService;
 import com.bus.chelaile.service.StaticAds;
-import com.bus.chelaile.thread.StaticTimeLog;
-import com.bus.chelaile.util.New;
 
 @Controller
 @RequestMapping("/js/android/js/rule")
@@ -277,56 +266,6 @@ public class JsRule extends AbstractController {
 	//	return "";
 	}
 
-	private void produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request,
-			ShowType showType, Writer writer) {
-		if (StringUtils.isBlank(originJs)) {
-			return;
-			// return "originjs file is null ";
-		}
-
-		if (tgs == null || tgs.getTaskGroups() == null || tgs.getTaskGroups().getTasks().size() == 0) {
-			logger.info("tgs is null");
-			return;
-		}
-		
-		
-		Map<String, String> map = New.hashMap();
-
-		long tBeginService = System.currentTimeMillis();
-		if (tgs != null) {
-			logger.info(tgs.getTaskGroups().getTasks().toString());
-
-			map.put("TASKS", tgs.getTaskGroups().getTasks().toString());
-			map.put("TIMEOUTS", tgs.getTaskGroups().getTimeouts().toString());
-			if (StringUtils.isNoneBlank(tgs.getTraceid())) {
-				map.put("TRACEID", tgs.getTraceid());
-			}
-			map.put("closePic", tgs.getTaskGroups().getClosePic());
-			logger.info("**** closePic={}", tgs.getTaskGroups().getClosePic());
-
-			for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
-				for (String task : tasks) {
-					if (task.contains("api_chelaile")) {
-						map.put("QUERY_STRING", request.getQueryString());
-						map.put("API_CHELAILE_DATA", tgs.getAdDataString());
-					}
-				}
-			}
-
-			List<Text> list = StaticAds.NEW_JS_FILE_STR.get(tag);
-
-
-			JSFileHandle.replaceNewJs(p.getS(), showType, tgs, tag, map);
-
-			try {
-				ReplaceJs.getNewReplaceStr(list, map, writer);
-			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
-			}
-			logger.info("replaceJs cost time: udid={}, showType={}, cost={}", p.getUdid(), showType.getType(), 
-	                System.currentTimeMillis() - tBeginService);
-		}
-	}
 	
 	
 	// String splashJS = "";

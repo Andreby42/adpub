@@ -675,16 +675,18 @@ public class ServiceManager {
         //            wechat#unionId#2#openid
         //            value
         //            unionId#createTime
-        String createTimeStr = CacheUtil.getFromCommonOcs(key);
-        if (StringUtils.isNotEmpty(createTimeStr)) {
-            String buf[] = createTimeStr.split("#");
-            if (buf.length >= 2) {
-                Long createTime = Long.parseLong(buf[1]);
-                logger.info("getcreate time : key={}, createTimeStr={}", key, createTimeStr);
-
-                return createTime + newUserPeriod > System.currentTimeMillis();
-            }
-        }
+        // TODO
+        // 0731临时改成全部放开
+//        String createTimeStr = CacheUtil.getFromCommonOcs(key);
+//        if (StringUtils.isNotEmpty(createTimeStr)) {
+//            String buf[] = createTimeStr.split("#");
+//            if (buf.length >= 2) {
+//                Long createTime = Long.parseLong(buf[1]);
+//                logger.info("getcreate time : key={}, createTimeStr={}", key, createTimeStr);
+//
+//                return createTime + newUserPeriod > System.currentTimeMillis();
+//            }
+//        }
         
         return false;
     }
