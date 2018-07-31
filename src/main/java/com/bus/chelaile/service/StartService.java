@@ -22,6 +22,7 @@ import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.kafka.InfoStreamForAdvClick;
+import com.bus.chelaile.model.AdvProject;
 import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
 import com.bus.chelaile.model.ShowType;
@@ -77,6 +78,9 @@ public class StartService {
         readyPlacementCache(allPlacements);
         logger.info("****android Placements***  {}", JSONObject.toJSONString(StaticAds.androidPlacementMap));
         logger.info("****ios Placements***  {}", JSONObject.toJSONString(StaticAds.iosPlacementMap));
+        
+        List<AdvProject> allProjects = advContent.listAllProjects();
+        
         // 保存已生效的广告id
         // 1的话就取全部的,0就只读取线路详情,2除线路详情\站点广告外的其它内容
         // 2018-07不再使用了
@@ -89,6 +93,14 @@ public class StartService {
                 continue;
             }
 
+            AdvProject projectRelation = null;
+            for(AdvProject project : allProjects) {
+                if(project.getProjectId().equals(ad.getProjectId())) {
+                    projectRelation = project;
+                    ad.setProjectIdClickExpireTime(projectRelation.getProjectIdClickExpireTime());
+                    break;
+                }
+            }
             // ad.completePicUrl();
             List<Rule> ruleList = new ArrayList<Rule>();
             List<AdRule> adRuleList = advRule.list4AdvIdByTime(ad.getId(), new Date()); // 包含 endDate >= #{today,jdbcType=TIMESTAMP}
@@ -99,7 +111,7 @@ public class StartService {
                     continue;
                 }
 
-                Rule rule = RuleEngine.parseRule(adRule);
+                Rule rule = RuleEngine.parseRule(adRule, projectRelation);
                 if (rule != null) {
                     if (rule.getUserIds() != null && rule.getUserIds().size() == 0) {
                         continue;

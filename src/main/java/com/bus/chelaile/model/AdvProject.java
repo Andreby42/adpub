@@ -1,4 +1,4 @@
-package com.bus.chelaile.model.ads;
+package com.bus.chelaile.model;
 
 import lombok.Data;
 
@@ -6,8 +6,7 @@ import lombok.Data;
 @Data
 public class AdvProject {
 
-    private int projectId;
-    private String projectName;
+    private String projectId;
     private int projectTotalSend;
     private int projectTotalClick;
     private int projectDaySend;

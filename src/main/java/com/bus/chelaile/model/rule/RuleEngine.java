@@ -9,6 +9,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.model.AdvProject;
 import com.bus.chelaile.model.rule.version.VersionEntity;
 import com.bus.chelaile.util.AdvUtil;
 import com.bus.chelaile.util.FileUtil;
@@ -35,15 +37,46 @@ public class RuleEngine {
                     logger.debug(AdvUtil.getTimeStr() + " - rInfo: " + rInfo);
                     Rule rule = parseRule(rInfo);
                     if (rule != null) {
-//                        if (rule.hasCities() || rule.hasPlatforms() || rule.hasChannels() || rule.hasStations()
-//                                || rule.hasUserIds() || rule.hasVersions() || rule.hasGpsList() || rule.hasNetStatus()) {
                         rule.setRuleId(Integer.toString(adRule.getRuleId()));
                         rule.setStartDate(adRule.getStartDate());
                         rule.setEndDate(adRule.getEndDate());
-//                        } else {
-//                            logger.info("adRuleId: {} has no rule", adRule.getAdvId());
-//                            return null;
-//                        }
+                    }
+                    return rule;
+            } else {
+                logger.info(String.format("%s - RuleInfo is null, adRule=%s", AdvUtil.getTimeStr(), adRule));
+            }
+            
+            return null;
+        } catch (JsonProcessingException e) {
+            logger.error(String.format("Parse json exception: adRule=%s", adRule), e);
+        } catch (IOException e) {
+            logger.error("获取ResponseBody异常: siteId=nj_zsgj", e);
+        }
+        
+        return null;
+    }
+    
+    
+    public static Rule parseRule(AdRule adRule, AdvProject projectRelation) {
+        try {
+            JsonNode rulesInfo = objMapper.readTree(adRule.getRule());
+            if (rulesInfo != null) {
+                    JsonNode rInfo = rulesInfo;
+                    logger.debug(AdvUtil.getTimeStr() + " - rInfo: " + rInfo);
+                    Rule rule = parseRule(rInfo);
+                    if (rule != null) {
+                        rule.setRuleId(Integer.toString(adRule.getRuleId()));
+                        rule.setStartDate(adRule.getStartDate());
+                        rule.setEndDate(adRule.getEndDate());
+                        
+                        if(projectRelation != null) {
+                            rule.setProjectClick(projectRelation.getProjectClick());
+                            rule.setProjectDayClick(projectRelation.getProjectDayClick());
+                            rule.setProjectDaySend(projectRelation.getProjectDaySend());
+                            rule.setProjectTotalClick(projectRelation.getProjectTotalClick());
+                            rule.setProjectTotalSend(projectRelation.getProjectTotalSend());
+                        }
+                        logger.info("init rule , rule={}", JSONObject.toJSONString(rule));
                     }
                     return rule;
             } else {
@@ -368,11 +401,24 @@ public class RuleEngine {
         Map<VersionEntity, String> vMap = New.hashMap();
         JsonNode verNodes = rInfo.get(propName);
         if (verNodes != null) {
-            for (int i=0; i<verNodes.size(); i++) {
-                String verStr = verNodes.get(i).getTextValue();
-                VersionEntity ver = VersionEntity.parseVersionStr(verStr);
-                if (ver != null) {
-                	vMap.put(ver, null);
+            if (verNodes.toString().contains("[[")) {
+                for (int i = 0; i < verNodes.size(); i++) {
+                    JsonNode verNodei = verNodes.get(i);
+                    for (int j = 0; j < verNodei.size(); j++) {
+                        String verStr = verNodei.get(j).getTextValue();
+                        VersionEntity ver = VersionEntity.parseVersionStr(verStr);
+                        if (ver != null) {
+                            vMap.put(ver, null);
+                        }
+                    }
+                }
+            } else {
+                for (int i = 0; i < verNodes.size(); i++) {
+                    String verStr = verNodes.get(i).getTextValue();
+                    VersionEntity ver = VersionEntity.parseVersionStr(verStr);
+                    if (ver != null) {
+                        vMap.put(ver, null);
+                    }
                 }
             }
         } else {
@@ -440,8 +486,7 @@ public class RuleEngine {
 
 
     public static void main(String[] args) throws IOException {
-        String str = "{\"cities\":[],\"days\":\"9\",\"perDayCount\":10}";
-        str = "{\"cities\":[\"067\",\"027\"],\"stations\":[\"大屯东\",\"炎黄艺术馆\"],\"platforms\":[\"android\"],\"netStatus\":[\"4G\",\"WIFI\"],\"versions\":[\"2.0.2\",\"2.1.0\",\"3.21.0\",\"3.22.0\"],\"userType\":0,\"cacheTime\":60,\"rightPushNum\":3,\"autoBlackList\":0,\"chatOrRide\":0,\"days\":3,\"perDayCount\":5,\"totalCount\":10,\"adTimeCounts\":[{\"count\":100000,\"time\":\"07:00-08:00\"},{\"count\":100000,\"time\":\"08:00-09:00\"}]}";
+        String str = "{\"platforms\":[\"android\",\"ios\"],\"versions\":[[\"2.2.0\",\"2.1.2\",\"2.3.0\"],[]],\"noLessThanVersionsAndroid\":\"2.3.0\",\"noLessThanVersionsIos\":\"4.3.2\"}";
         JsonNode rulesInfo = objMapper.readTree(str);
         System.out.println(rulesInfo.toString());
         Rule rule = parseRule(rulesInfo);

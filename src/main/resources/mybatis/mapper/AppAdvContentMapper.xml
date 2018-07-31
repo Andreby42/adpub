@@ -19,5 +19,11 @@
         pid, platform, aid, displayType, placementId, pidName, aidName 
         FROM APP_ADV_PLACEMENT
     </select>
+    
+    <select id="listAllProjects" resultType="com.bus.chelaile.model.AdvProject">
+        SELECT  
+        projectId, projectTotalSend, projectTotalClick, projectDaySend, projectDayClick, projectClick, projectIdClickExpireTime 
+        FROM APP_ADV_PROJECT
+    </select>
        
 </mapper>
