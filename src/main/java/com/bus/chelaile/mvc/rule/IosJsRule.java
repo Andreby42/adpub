@@ -59,7 +59,7 @@ public class IosJsRule extends AbstractController {
 		response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
 		try {
-            produceJS(p, splashOrigin, tgs, "splash_origin", request, ShowType.OPEN_SCREEN,response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_splash_origin", request, ShowType.OPEN_SCREEN,response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -90,7 +90,7 @@ public class IosJsRule extends AbstractController {
 		response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
 		try {
-            produceJS(p, splashOrigin, tgs, "home_origin", request, ShowType.DOUBLE_COLUMN,response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_home_origin", request, ShowType.DOUBLE_COLUMN,response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -116,7 +116,7 @@ public class IosJsRule extends AbstractController {
 		response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "right_origin", request, ShowType.LINE_RIGHT_ADV,response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_right_origin", request, ShowType.LINE_RIGHT_ADV,response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -142,7 +142,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "station_origin", request, ShowType.STATION_ADV,response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_station_origin", request, ShowType.STATION_ADV,response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -168,7 +168,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "bottom_origin", request, ShowType.LINE_FEED_ADV,response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_bottom_origin", request, ShowType.LINE_FEED_ADV,response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -194,7 +194,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "transfer_origin", request, ShowType.TRANSFER_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_transfer_origin", request, ShowType.TRANSFER_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -222,7 +222,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "stationDetail_origin", request, ShowType.CAR_ALL_LINE_ADV,
+            produceJS(p, splashOrigin, tgs, "ios_stationDetail_origin", request, ShowType.CAR_ALL_LINE_ADV,
                     response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -253,7 +253,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "allCars_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_allCars_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
