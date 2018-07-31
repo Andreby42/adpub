@@ -818,6 +818,9 @@ function ads() {
 		  traceid: '${TRACEID}',
 		  pid: '00'
       },
+      closeInfo: {
+          closePic: '${closePic}'
+      },
       urls : {
         exposeUrl:'http://atrace.chelaile.net.cn/exhibit?',
         clickUrl:'http://atrace.chelaile.net.cn/click?',

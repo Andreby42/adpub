@@ -319,6 +319,10 @@ function tryNthTaskGroup(rule, nth, callback) {
                 resp.aid = sdkInfo.task.aid();
                 resp.refreshTime = 15000;
                 resp.mixRefreshAdInterval = 5000;
+                if(rule.closeInfo && rule.closeInfo.closePic) {
+                    resp.closePic = rule.closeInfo.closePic;
+                }
+                
 
                 if (sdkInfo.task.adStyle) {
                     resp.adStyle = sdkInfo.task.adStyle();

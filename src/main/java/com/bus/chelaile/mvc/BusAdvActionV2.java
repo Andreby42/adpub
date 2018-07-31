@@ -267,6 +267,9 @@ public class BusAdvActionV2 extends AbstractController {
     public String closeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         AdvParam param = getActionParam(request);
         String pid = request.getParameter("pid");
+        param.setAid(request.getParameter("aid"));
+        param.setAdv_title(request.getParameter("adv_title"));
+        param.setAdv_image(request.getParameter("adv_image"));
         if (StringUtils.isNoneBlank(pid)) {
             boolean object = serviceManager.closeAd(param, pid);
             if (object) {

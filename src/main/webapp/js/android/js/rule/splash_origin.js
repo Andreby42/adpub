@@ -10,7 +10,7 @@ var api_chelaile = {
 
     adurl: function() {
         return {
-            url: 'https://api.chelaile.net.cn/adpub/adv!getCoopenAds.action?${QUERY_STRING}'
+            url: 'https://api.chelaile.net.cn/adpub/adv!getCoopenAds.action'
         }
     },
 
@@ -533,6 +533,9 @@ function ads() {
 			traceid: '${TRACEID}',
 			pid: '04'
 		},
+        closeInfo: {
+          closePic: '${closePic}'
+        },
 		urls : {
 			exposeUrl:'http://atrace.chelaile.net.cn/exhibit?',
 			clickUrl:'http://atrace.chelaile.net.cn/click?',

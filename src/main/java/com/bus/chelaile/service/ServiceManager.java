@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.bus.chelaile.common.AdvCache;
@@ -32,7 +31,6 @@ import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.TypeNumber;
-import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.Station;
 import com.bus.chelaile.model.ads.entity.ActiveAdEntity;
 import com.bus.chelaile.model.ads.entity.AdEntity;
@@ -232,9 +230,7 @@ public class ServiceManager {
         Object entity = null;
         JSONObject object = new JSONObject();
         if (methodName.equals("getLineDetails")) { // 线路详情
-            long startTime = System.currentTimeMillis();
             object = getLineDetails(advParam);
-            logger.info("getLineDetailAds cost time :{}", System.currentTimeMillis() - startTime);
             if (object == null) {
                 return null;
             }
@@ -1040,6 +1036,8 @@ public class ServiceManager {
     public boolean closeAd(AdvParam param, String pid) {
         try {
             CacheUtil.setCloseTimeToRedis(param.getUdid(), pid);
+            AnalysisLog.info("CLOSE_AD, pid={}, udid={}, aid={}, adv_title={}, adv_image={}", pid, param.getUdid(),
+                    param.getAid(), param.getAdv_title(), param.getAdv_image());
         } catch (Exception e) {
             e.printStackTrace();
             return false;

@@ -99,6 +99,10 @@ public class AdvParam {
      private int site; // 标注小程序广告banner广告的位置， 0或者没有是首页， 1 是详情页
      
      private int moreCities; //获取所有城市的信息
+     
+     private String aid;
+     private String adv_title;
+     private String adv_image;
      /**
       * 存入的s都会被转换为小写。
       *
@@ -749,6 +753,36 @@ public class AdvParam {
 
     public void setMoreCities(int moreCities) {
         this.moreCities = moreCities;
+    }
+
+
+    public String getAid() {
+        return aid;
+    }
+
+
+    public void setAid(String aid) {
+        this.aid = aid;
+    }
+
+
+    public String getAdv_title() {
+        return adv_title;
+    }
+
+
+    public void setAdv_title(String adv_title) {
+        this.adv_title = adv_title;
+    }
+
+
+    public String getAdv_image() {
+        return adv_image;
+    }
+
+
+    public void setAdv_image(String adv_image) {
+        this.adv_image = adv_image;
     }
 
 
