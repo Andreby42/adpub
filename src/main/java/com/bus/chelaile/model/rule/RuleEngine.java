@@ -486,13 +486,13 @@ public class RuleEngine {
 
 
     public static void main(String[] args) throws IOException {
-        String str = "{\"platforms\":[\"android\",\"ios\"],\"versions\":[[\"2.2.0\",\"2.1.2\",\"2.3.0\"],[]],\"noLessThanVersionsAndroid\":\"2.3.0\",\"noLessThanVersionsIos\":\"4.3.2\"}";
+        String str = "{\"platforms\":[\"android\"],\"versions\":[\"3.53.0\",\"3.53.2\",\"3.53.4\",\"3.54.0\",\"3.55.0\",\"3.56.0\"],\"chatOrRide\":0,\"days\":10,\"perDayCount\":0,\"totalCount\":200000,\"cities\":[\"069\",\"003\",\"019\",\"040\",\"025\",\"014\",\"056\",\"038\"]}";
         JsonNode rulesInfo = objMapper.readTree(str);
         System.out.println(rulesInfo.toString());
         Rule rule = parseRule(rulesInfo);
-        System.out.println("rule:" + rule.getCities());
-        System.out.println("rule:" + rule.getVersions());
-        System.out.println("rule:" + rule.getAdTimeCounts().size());
+        System.out.println("rule.citites:" + rule.getCities());
+        System.out.println("rule.versions:" + rule.getVersions());
+        System.out.println("rule.adtimecount:" + rule.getAdTimeCounts());
         if (rulesInfo != null) {
             JsonNode jsonNode = rulesInfo;
             jsonNode  = jsonNode.get("cacheTime");

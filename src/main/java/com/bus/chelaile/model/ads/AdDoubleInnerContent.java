@@ -24,6 +24,8 @@ import com.bus.chelaile.util.config.PropertiesUtils;
  */
 public class AdDoubleInnerContent extends AdInnerContent {
 
+    private String pic;
+    
     private String brandIcon;
     private String brandName;
     private String promoteTitle;
@@ -75,6 +77,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
         AdDoubleInnerContent ad = null;
         ad = JSON.parseObject(jsonr, AdDoubleInnerContent.class);
         if (ad != null) {
+            this.pic = ad.pic;
             this.brandIcon = ad.brandIcon;
             this.brandName = ad.brandName;
             this.promoteTitle = ad.promoteTitle;
@@ -519,5 +522,13 @@ public class AdDoubleInnerContent extends AdInnerContent {
      */
     public void setTasksJ(List<TaskModel> tasksJ) {
         this.tasksJ = tasksJ;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 }
