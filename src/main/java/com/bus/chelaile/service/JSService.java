@@ -155,8 +155,6 @@ public class JSService {
         JSONObject resultMap = new JSONObject();
         resultMap.put("ads", entities);
         taskEntity.setAdDataString(JSONObject.toJSONString(serviceManager.getClienSucMap(resultMap, Constants.STATUS_REQUEST_SUCCESS)));
-        logger.info("getTask cost time: udid={}, showType={}, cost={}", param.getUdid(), site, 
-                System.currentTimeMillis() - tBeginService);
         return taskEntity;
     }
 

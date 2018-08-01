@@ -32,24 +32,20 @@ public class AbstractController {
         }
 
         if (tgs == null || tgs.getTaskGroups() == null || tgs.getTaskGroups().getTasks().size() == 0) {
-            logger.info("tgs is null");
+            logger.info("udid={}, tgs is null", p.getUdid());
             return;
         }
         
         
         Map<String, String> map = New.hashMap();
 
-        long tBeginService = System.currentTimeMillis();
         if (tgs != null) {
-            logger.info(tgs.getTaskGroups().getTasks().toString());
-
             map.put("TASKS", tgs.getTaskGroups().getTasks().toString());
             map.put("TIMEOUTS", tgs.getTaskGroups().getTimeouts().toString());
             if (StringUtils.isNoneBlank(tgs.getTraceid())) {
                 map.put("TRACEID", tgs.getTraceid());
             }
             map.put("closePic", tgs.getTaskGroups().getClosePic());
-            logger.info("**** closePic={}", tgs.getTaskGroups().getClosePic());
 
             for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
                 for (String task : tasks) {
@@ -70,8 +66,6 @@ public class AbstractController {
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
             }
-            logger.info("replaceJs cost time: udid={}, showType={}, cost={}", p.getUdid(), showType.getType(), 
-                    System.currentTimeMillis() - tBeginService);
         }
     }
 
