@@ -139,7 +139,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
                 this.tasksGroup = createOwnAdTask(ad);
             }
             
-            setCommentContext(ad, null);
+            setCommentContext(ad, this.pic);
         }
     }
     
