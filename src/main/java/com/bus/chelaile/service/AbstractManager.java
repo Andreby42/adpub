@@ -126,7 +126,7 @@ public abstract class AbstractManager {
         LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
         // 把所有符合规则的广告放到map中
         handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
-        StaticTimeLog.record(Constants.RECORD_LOG, "handleAds");
+        StaticTimeLog.record(Constants.RECORD_LOG, "handleAdsAll");
 
         if (adMap.size() == 0) {
             // 此处，经过规则判断不返回广告，需要记录'不投放'的次数
@@ -346,6 +346,7 @@ public abstract class AbstractManager {
                     }
                 }
             }
+            StaticTimeLog.record(Constants.RECORD_LOG, "setAds");
             // 遍历所有规则
             // 如果一条广告存在多条规则，那么只会返回第一条满足 ruleCheck条件的广告
             // 所以后续不可以再涉及到规则判断，否则这里就存在漏洞
@@ -550,10 +551,11 @@ public abstract class AbstractManager {
         // 次数判断
         // 包括，每人点击次数限制、每人投放次数上限、每人days天内总投放次数上限
         if (cacheRecord != null && !cacheRecord.todayCanPub(ad, rule)) {
-            logger.info("todayCanPub return false,advId={},ruleId={},udid={}", ad.getId(), rule.getRuleId(), advParam.getUdid());
+//            logger.info("todayCanPub return false,advId={},ruleId={},udid={}", ad.getId(), rule.getRuleId(), advParam.getUdid());
             return false;
         }
-
+        
+        StaticTimeLog.record(Constants.RECORD_LOG, "rulecheck half");
         // 每个时间段的发送次数，目前是考察到分钟
         if (rule.getTotalCount() > 0
                 && !rule.adTimeCounts(ad.getId(), rule.getRuleId(), cacheRecord, advParam.getUdid(), false)) {
@@ -562,6 +564,7 @@ public abstract class AbstractManager {
 
             return false;
         }
+        StaticTimeLog.record(Constants.RECORD_LOG, "rulecheck adTimeCount");
 
         // 最小时间间隔，热启动 开屏广告用
         if (advParam.getStartMode() == 1 && rule.getMinIntervalTime() > 0) {
@@ -619,18 +622,18 @@ public abstract class AbstractManager {
         }
 
         // 判断点击概率是否达标
-        if (clickRate != null) {
-            double rate = getClickStandardRate(advParam.getUdid(), ad.getId(), rule.getRuleId(), showType);
-            // logger.info("clickRate info : ruleId={},udid={},rate={},rateStandard={}",
-            // rule.getRuleId(),
-            // advParam.getUdid(), clickRate.getRate(), rate);
-            if (rate >= 0.0 && clickRate.getRate() < rate) {
-                // logger.info("clickRate return
-                // false,ruleId={},udid={},rate={},rateStandard={}", rule.getRuleId(),
-                // advParam.getUdid(), clickRate.getRate(), rate);
-                return false;
-            }
-        }
+//        if (clickRate != null) {
+//            double rate = getClickStandardRate(advParam.getUdid(), ad.getId(), rule.getRuleId(), showType);
+//            // logger.info("clickRate info : ruleId={},udid={},rate={},rateStandard={}",
+//            // rule.getRuleId(),
+//            // advParam.getUdid(), clickRate.getRate(), rate);
+//            if (rate >= 0.0 && clickRate.getRate() < rate) {
+//                // logger.info("clickRate return
+//                // false,ruleId={},udid={},rate={},rateStandard={}", rule.getRuleId(),
+//                // advParam.getUdid(), clickRate.getRate(), rate);
+//                return false;
+//            }
+//        }
 
         return true;
     }
