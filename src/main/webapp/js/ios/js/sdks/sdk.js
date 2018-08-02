@@ -86,10 +86,14 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                 }
 
                 if (data && data.adEntityArray) {
+                    var closePic = rule && rule.closeInfo && rule.closeInfo.closePic;
+
                     for (var i = 0; i < data.adEntityArray.length; i++) {
                         var adentity = data.adEntityArray[i];
                         var info = adentity.info;
                         if (info) {
+                            if(closePic)
+                                info.closePic = closePic;
                             if (task.adStyle) {
                                 info.displayType = task.adStyle();
                             }
