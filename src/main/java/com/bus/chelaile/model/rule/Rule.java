@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.UserType;
@@ -26,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.bus.chelaile.thread.Queue;
+import com.bus.chelaile.thread.StaticTimeLog;
 
 public class Rule {
 	private Date startDate;
@@ -107,12 +109,13 @@ public class Rule {
 	 * 在发送时间之内并且次数是小于要求的数量,return true
 	 * 
 	 */
-	public boolean adTimeCounts(int advId, String ruleId, AdPubCacheRecord cacheRecord, String udid, boolean isRecord) {
+	public boolean adTimeCounts(int advId, String ruleId, AdPubCacheRecord cacheRecord, String udid, boolean isRecord, int i, int j) {
 
 		String minuteStr = DateUtil.getMinuteStr();
+		StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "getMinite_" + i + "," + j);
 		if (!isRecord) {
 			// 该时间段的次数
-			Long count = getAdTimeCount(ruleId, minuteStr, udid);
+			Long count = getAdTimeCount(ruleId, minuteStr, udid,i ,j);
 
 			// 该分钟发送次数已经到达上限
 			int countMinute = StaticAds.getMinuteNumbers(advId + "#" + ruleId, minuteStr, udid);
@@ -237,13 +240,16 @@ public class Rule {
 	/*
 	 * 见上一个方法，这个方法是取上面存的数
 	 */
-	private Long getAdTimeCount(String ruleId, String minuteStr, String udid) {
-		long time = System.currentTimeMillis();
-		Object value = CacheUtil.getFromRedis(AdvCache.getMinuteTimesKey(ruleId, minuteStr));
-		time = System.currentTimeMillis() - time;
-		if (time > 40) {
-			TimeLong.info("udid={},getAdTimeCount={}", udid, time);
-		}
+	private Long getAdTimeCount(String ruleId, String minuteStr, String udid, int i, int j) {
+//		long time = System.currentTimeMillis();
+		String key = AdvCache.getMinuteTimesKey(ruleId, minuteStr);
+		StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "getMinuteTimesKey_" + i + "," + j);
+		Object value = CacheUtil.getFromRedis(key);
+//		time = System.currentTimeMillis() - time;
+//		if (time > 40) {
+//			TimeLong.info("udid={},getAdTimeCount={}", udid, time);
+//		}
+		StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "getFromRedis_" + i + "," + j);
 
 		if (value instanceof String) {
 			return Long.parseLong((String) value);

@@ -566,13 +566,13 @@ public abstract class AbstractManager {
         StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterTodayCanPub_" + i + "," + j);
         // 每个时间段的发送次数，目前是考察到分钟
         if (rule.getTotalCount() > 0
-                && !rule.adTimeCounts(ad.getId(), rule.getRuleId(), cacheRecord, advParam.getUdid(), false)) {
+                && !rule.adTimeCounts(ad.getId(), rule.getRuleId(), cacheRecord, advParam.getUdid(), false, i, j)) {
             // logger.info("hasAdTimeCounts return false,ruleId={},udid={}",
             // rule.getRuleId(), advParam.getUdid());
 
             return false;
         }
-
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterAdTime_" + i + "," + j);
         // 最小时间间隔，热启动 开屏广告用
         if (advParam.getStartMode() == 1 && rule.getMinIntervalTime() > 0) {
             if (cacheRecord != null && !cacheRecord.hasPassIntervalTime(ad.getId(), rule.getMinIntervalTime())) {
@@ -794,7 +794,7 @@ public abstract class AbstractManager {
 
         if (adc.getRule().getTotalCount() > 0) {
             // 记录每分钟的发送量
-            adc.getRule().adTimeCounts(adc.getAds().getId(), adc.getRule().getRuleId(), cacheRecord, udid, true);
+            adc.getRule().adTimeCounts(adc.getAds().getId(), adc.getRule().getRuleId(), cacheRecord, udid, true, -1, -1);
             // 记录总投放pv到缓存
             // logger.info("记录投放pv次数 advId={}, ruleId={}", adc.getAds().getId(),
             // adc.getRule().getRuleId());
