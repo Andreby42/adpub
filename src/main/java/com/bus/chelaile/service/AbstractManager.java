@@ -125,7 +125,10 @@ public abstract class AbstractManager {
         Collections.sort(adsList, AD_CONTENT_COMPARATOR);
         LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
         // 把所有符合规则的广告放到map中
+        StaticTimeLog.start(Constants.RECORD_HANDLEADS_LOG);
         handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
+        StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG);
+        
         StaticTimeLog.record(Constants.RECORD_LOG, "handleAdsAll");
 
         if (adMap.size() == 0) {
@@ -346,26 +349,29 @@ public abstract class AbstractManager {
                     }
                 }
             }
-            StaticTimeLog.record(Constants.RECORD_LOG, "setAds");
+            StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "setAdsBeforRuleCheck");
             // 遍历所有规则
             // 如果一条广告存在多条规则，那么只会返回第一条满足 ruleCheck条件的广告
             // 所以后续不可以再涉及到规则判断，否则这里就存在漏洞
             // ===> 所有的规则都需要在 ruleCheck 这一步搞定
             // 运营上避免这种情况的完美做法就是： 同一个advId最好不要对应多条ruleId。
+            int i = 0;
             for (Rule rule : cacheEle.getRules()) {
-                if (!ruleCheck(rule, advParam, ad, cacheRecord, showType, isNeedApid, queryParam, clickRate)) {
+                if (!ruleCheck(rule, advParam, ad, cacheRecord, showType, isNeedApid, queryParam, clickRate, i)) {
                     continue;
                 }
                 AdContentCacheEle adContentCacheEle = new AdContentCacheEle();
                 adContentCacheEle.setAds(ad);
                 adContentCacheEle.setRule(rule);
                 adMap.put(ad.getId(), adContentCacheEle);
+                i ++;
                 if (num == 1) {
                     return;
                 }
                 break;
             }
         }
+//        StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG);
     }
 
     /**
@@ -406,7 +412,7 @@ public abstract class AbstractManager {
      * @return true 可投放 ; fasle 不可投放
      */
     private boolean ruleCheck(Rule rule, AdvParam advParam, AdContent ad, AdPubCacheRecord cacheRecord, ShowType showType,
-            boolean isNeedApid, QueryParam queryParam, UserClickRate clickRate) {
+            boolean isNeedApid, QueryParam queryParam, UserClickRate clickRate, int i) {
         // 存在黑名单中
         if (StaticAds.isBlack(ad.getId(), advParam.getUdid())) {
             // logger.info("black list,advId={},udid={}", ad.getId(), advParam.getUdid());
@@ -435,7 +441,7 @@ public abstract class AbstractManager {
         if (rule.hasVersions() && !rule.isVersionMatch(advParam.getV())) {
             return false;
         }
-
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterVersions_" + i);
         if (!rule.isVersionNoLessThan(advParam.getV(), advParam.getS())) {
             logger.info("version no less return false, udid={},advId={},ruleId={}, v={}, s={}", advParam.getUdid(), ad.getId(),
                     rule.getRuleId(), advParam.getV(), advParam.getS());
@@ -455,14 +461,14 @@ public abstract class AbstractManager {
                     advParam.getStartMode(), advParam.getUdid());
             return false;
         }
-
         if (rule.hasNetStatus() && !rule.isNetStatusMatch(advParam.getNw())) {
             return false;
         }
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterNw_" + i);
         if (!rule.isUserTypeMatch(advParam)) {
             return false;
         }
-
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterUserType_" + i);
         if (rule.getScreenHeight() > 0 && advParam.getScreenHeight() < rule.getScreenHeight()) {
             logger.info("screenHeithg return false.advId={}, rule={}, s={}, udid={}, height={}", ad.getId(), rule.getRuleId(),
                     advParam.getS(), advParam.getUdid(), advParam.getScreenHeight());
@@ -485,21 +491,21 @@ public abstract class AbstractManager {
                     advParam.getLat(), advParam.getUdid());
             return false;
         }
-
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterPostionMatch_" + i);
         // 总点击次数判断
         if (rule.getTotalClickPV() > 0 && rule.currentTotalClickPV(ad) >= rule.getTotalClickPV()) {
             // logger.info("totalClickPV return false, ruleId={}, udid={}",
             // rule.getRuleId(), advParam.getUdid());
             return false;
         }
-
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterTotalClickPv_" + i);
         // 每个人点击次数判断
         if (rule.getIsClickEndPush() > 0 && cacheRecord.hasClicked(ad.getId())) { // 点击后不再投放
             logger.info("hasClicked ad return false, ruleId={},advId={}, udid={}", rule.getRuleId(), ad.getId(),
                     advParam.getUdid());
             return false;
         }
-
+        
         if (rule.isOverUvCount(advParam.getUdid())) {
             // 如果uvlimit次数已经饱和,查看该用户是否投放过,没投放过就返回了
             if (!cacheRecord.isSendUv(ad.getId())) {
@@ -508,7 +514,7 @@ public abstract class AbstractManager {
                 return false;
             }
         }
-
+        
         // 项目控制
         if (StringUtils.isNoneBlank(ad.getProjectId())) {
             if (rule.getProjectClick() > 0 && rule.projectClickOut(advParam.getUdid(), ad.getProjectId())) {
@@ -541,7 +547,7 @@ public abstract class AbstractManager {
                 return false;
             }
         }
-
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterProject_" + i);
         // 判断自动黑名单
         if (rule.getUvLimit() > 0 && cacheRecord.isDisplayUv(ad.getId(), rule.getAutoBlackList())) {
             logger.info("autoBlack return false,ruleId={},udid={}", rule.getRuleId(), advParam.getUdid());
@@ -554,8 +560,7 @@ public abstract class AbstractManager {
 //            logger.info("todayCanPub return false,advId={},ruleId={},udid={}", ad.getId(), rule.getRuleId(), advParam.getUdid());
             return false;
         }
-        
-        StaticTimeLog.record(Constants.RECORD_LOG, "rulecheck half");
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterTodayCanPub_" + i);
         // 每个时间段的发送次数，目前是考察到分钟
         if (rule.getTotalCount() > 0
                 && !rule.adTimeCounts(ad.getId(), rule.getRuleId(), cacheRecord, advParam.getUdid(), false)) {
@@ -564,7 +569,6 @@ public abstract class AbstractManager {
 
             return false;
         }
-        StaticTimeLog.record(Constants.RECORD_LOG, "rulecheck adTimeCount");
 
         // 最小时间间隔，热启动 开屏广告用
         if (advParam.getStartMode() == 1 && rule.getMinIntervalTime() > 0) {
@@ -620,7 +624,7 @@ public abstract class AbstractManager {
                 return false;
             }
         }
-
+        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterUdidPater_" + i);
         // 判断点击概率是否达标
 //        if (clickRate != null) {
 //            double rate = getClickStandardRate(advParam.getUdid(), ad.getId(), rule.getRuleId(), showType);

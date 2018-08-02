@@ -212,6 +212,9 @@ function ads() {
           traceid: '${TRACEID}',
           pid: '15'
       },
+      closeInfo: {
+          closePic: '${closePic}'
+      },
         timeouts: ${TIMEOUTS},
         tasks: ${TASKS}
     }

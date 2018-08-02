@@ -11,7 +11,7 @@ public class Constants {
     
     
     public static final String RECORD_LOG = "RECORD";
-    
+    public static final String RECORD_HANDLEADS_LOG = "RECORD_HANDLEADS";
     
     public static final String STATUS_REQUEST_SUCCESS = "00";
     public static final String STATUS_INTERNAL_ERROR = "02";
