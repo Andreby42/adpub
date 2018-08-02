@@ -37,6 +37,7 @@ import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
+import kafka.log.Log;
 import scala.util.Random;
 
 public abstract class AbstractManager {
@@ -127,7 +128,7 @@ public abstract class AbstractManager {
         // 把所有符合规则的广告放到map中
         StaticTimeLog.start(Constants.RECORD_HANDLEADS_LOG);
         handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
-        StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG);
+        logger.info(StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG));
         
         StaticTimeLog.record(Constants.RECORD_LOG, "handleAdsAll");
 
