@@ -134,6 +134,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
                 tasksGroups.setTasks(tasksG);
                 tasksGroups.setTimeouts(ad.timeouts);
                 tasksGroups.setMap(map);
+                tasksGroups.setClosePic(ad.getClosePic());
                 this.tasksGroup = tasksGroups;
             } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
                 this.tasksGroup = createOwnAdTask(ad);
