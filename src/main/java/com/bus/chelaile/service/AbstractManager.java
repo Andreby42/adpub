@@ -366,12 +366,13 @@ public abstract class AbstractManager {
                 adContentCacheEle.setAds(ad);
                 adContentCacheEle.setRule(rule);
                 adMap.put(ad.getId(), adContentCacheEle);
-                i ++;
+                j ++;
                 if (num == 1) {
                     return;
                 }
                 break;
             }
+            i ++;
         }
 //        StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG);
     }
