@@ -198,8 +198,8 @@ public class Rule {
 	 * @return
 	 */
 	public int currentTotalClickPV(AdContent ad) {
-		Object value = CacheUtil.getFromRedis(AdvCache.getTotalClickPV(String.valueOf(ad.getId())));
-//		logger.info("get click numbers : advId={}, number={}", ad.getId(), value);
+//		Object value = CacheUtil.getFromRedis(AdvCache.getTotalClickPV(String.valueOf(ad.getId())));
+		Object value = CacheUtil.getFromOftenRedis(AdvCache.getTotalClickPV(String.valueOf(ad.getId())));
 
 		if (value instanceof String) {
 			int number = 0;
@@ -241,14 +241,15 @@ public class Rule {
 	 * 见上一个方法，这个方法是取上面存的数
 	 */
 	private Long getAdTimeCount(String ruleId, String minuteStr, String udid, int i, int j) {
-//		long time = System.currentTimeMillis();
+		long time = System.currentTimeMillis();
 		String key = AdvCache.getMinuteTimesKey(ruleId, minuteStr);
 		StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "getMinuteTimesKey_" + i + "," + j);
-		Object value = CacheUtil.getFromRedis(key);
-//		time = System.currentTimeMillis() - time;
-//		if (time > 40) {
-//			TimeLong.info("udid={},getAdTimeCount={}", udid, time);
-//		}
+//		Object value = CacheUtil.getFromRedis(key);
+		Object value = CacheUtil.getFromOftenRedis(key);
+		time = System.currentTimeMillis() - time;
+		if (time > 40) {
+			TimeLong.info("udid={},getAdTimeCount={}", udid, time);
+		}
 		StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "getFromRedis_" + i + "," + j);
 
 		if (value instanceof String) {
@@ -722,7 +723,9 @@ public class Rule {
 		}
 		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
 		long time = System.currentTimeMillis();
-		Object value = CacheUtil.getFromRedis(todayStr + "_uvRuleId_" + ruleId);
+		String uvCountKey = AdvCache.getUVCountKey(todayStr, ruleId);
+//		Object value = CacheUtil.getFromRedis(uvCountKey);
+		Object value = CacheUtil.getFromOftenRedis(uvCountKey);
 		time = System.currentTimeMillis() - time;
 		if (time > 40) {
 			TimeLong.info("udid={},isOverUv={}", udid, time);
@@ -744,7 +747,8 @@ public class Rule {
 		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
 		QueueObject queueobj = new QueueObject();
 		// 用线程去处理了
-		queueobj.setRedisIncrKey(todayStr + "_uvRuleId_" + ruleId);
+		String uvCountKey = AdvCache.getUVCountKey(todayStr, ruleId);
+		queueobj.setRedisIncrKey(uvCountKey);
 		Queue.set(queueobj);
 	}
 	
@@ -1138,7 +1142,8 @@ public class Rule {
         }
         
         String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
-        String value = (String) CacheUtil.getFromRedis(projectClickKey);
+//        String value = (String) CacheUtil.getFromRedis(projectClickKey);
+        String value = (String) CacheUtil.getFromOftenRedis(projectClickKey);
         if (value != null) {
             logger.info("projectNumControl, projectId={}, projectClick={}, realProjectClick={}", projectId, projectClick, value);
             if (Integer.parseInt(value) >= projectClick) {

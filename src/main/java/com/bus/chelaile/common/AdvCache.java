@@ -416,4 +416,9 @@ public class AdvCache {
     public static String getCloseAdKey(String udid) {
         return new StringBuilder(CLOSE_ADV_KEY).append(udid).toString();
     }
+
+
+    public static String getUVCountKey(String todayStr, String ruleId) {
+        return todayStr + "_uvRuleId_" + ruleId;
+    }
 }

@@ -7,6 +7,40 @@ var closeTrackUrl = "https://atrace.chelaile.net.cn/close";
 var thirdSimpleUrl = "https://atrace.chelaile.net.cn/thirdSimple";
 var thirdPartyResponseUrl = "https://atrace.chelaile.net.cn/thirdPartyResponse";
 
+var reportCloseAdUrl;
+if(typeof GetConfig == 'function') {
+    var Config = GetConfig();
+    if('dev' == Config.server) {
+        reportCloseAdUrl = "http://dev.chelaile.net.cn/adpub/adv!closeAd.action";
+    } else if('stage' == Config.server) {
+        reportCloseAdUrl = "http://stage.chelaile.net.cn/adpub/adv!closeAd.action";
+    } else if('api' == Config.server) {
+        reportCloseAdUrl = "http://api.chelaile.net.cn/adpub/adv!closeAd.action";
+    }
+}
+
+//==================================//
+
+function reportAdsClose(sdk, ad) {
+    if(!reportCloseAdUrl) {
+        return;
+    }
+    var params = trackBaseParams(sdk, ad);
+
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+    var picsList = info.picsList;
+    var adv_image = "";
+    if(picsList && picsList.length) {
+        adv_image = picsList.join(";")
+    }
+    addParamsIfNotNull(params, "adv_title", info.head);
+    addParamsIfNotNull(params, "adv_image", adv_image);
+    sendTrackRequest(reportCloseAdUrl, params);
+}
+
+//==================================//
+
 function flatUrlParams(url, params) {
 
     var baseUrl = "";
@@ -105,6 +139,7 @@ function trackClick(sdk, ad) {
 function trackClose(sdk, ad) {
     var params = trackBaseParams(sdk, ad);
     sendTrackRequest(closeTrackUrl, params);
+    reportAdsClose(sdk, ad);
 }
 
 function trackThirdBaseParams(params) {

@@ -155,7 +155,8 @@ public class SelfManager {
 	 */
 	private boolean isNeedPushRightPic(String udid, int advId, long rightPushNum) {
 		String key = getRightPushNumKey(udid, advId);
-		Object value = CacheUtil.getFromRedis(key);
+//		Object value = CacheUtil.getFromRedis(key);
+		Object value = CacheUtil.getFromOftenRedis(key);
 		if (value instanceof String) {
 			long havePushNum = Long.parseLong((String) value);
 			if (havePushNum >= rightPushNum) {
@@ -181,7 +182,8 @@ public class SelfManager {
 	private void incrRightPushNum(String udid, int advId) {
 		String key = getRightPushNumKey(udid, advId);
 
-		CacheUtil.incrToCache(key, Constants.ONE_DAY_TIME);
+//		CacheUtil.incrToCache(key, Constants.ONE_DAY_TIME);
+		CacheUtil.incrToOftenRedis(key, Constants.ONE_DAY_TIME);
 
 	}
 
@@ -205,9 +207,11 @@ public class SelfManager {
 	 */
 	public void clearRithPushNum(String udid, int advId) {
 		String key = getRightPushNumKey(udid, advId);
-		Object value = CacheUtil.getFromRedis(key);
+//		Object value = CacheUtil.getFromRedis(key);
+		Object value = CacheUtil.getFromOftenRedis(key);
 		if (value != null) {
-			CacheUtil.redisDelete(key);
+//			CacheUtil.redisDelete(key);
+			CacheUtil.redisOftenDelete(key);
 			logger.debug("clearRithPushNumKey:" + key);
 		}
 

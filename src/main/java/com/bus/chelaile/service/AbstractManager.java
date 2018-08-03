@@ -187,7 +187,8 @@ public abstract class AbstractManager {
             return true;
         }
         String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(advParam.getUdid(), showType);
-        String lastSendIdStr = (String) CacheUtil.getFromRedis(sendLineFeedLogKey);
+//        String lastSendIdStr = (String) CacheUtil.getFromRedis(sendLineFeedLogKey);
+        String lastSendIdStr = (String) CacheUtil.getFromOftenRedis(sendLineFeedLogKey);
         if (lastSendIdStr != null) {
             try {
                 // logger.info("找到未过期的投放记录，udid={}, lastSendId={}", advParam.getUdid(),
@@ -248,11 +249,11 @@ public abstract class AbstractManager {
         }
     }
 
-    // 记录发送的第一条广告的log
-    protected void setSendLog(BaseAdEntity baseAdEntity, String udid, String showType) {
-        String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(udid, showType);
-        CacheUtil.setToRedis(sendLineFeedLogKey, Constants.SEDN_LINEFEED_EXTIME, String.valueOf(baseAdEntity.getId()));
-    }
+//    // 记录发送的第一条广告的log
+//    protected void setSendLog(BaseAdEntity baseAdEntity, String udid, String showType) {
+//        String sendLineFeedLogKey = AdvCache.getSendLineFeedLogKey(udid, showType);
+//        CacheUtil.setToRedis(sendLineFeedLogKey, Constants.SEDN_LINEFEED_EXTIME, String.valueOf(baseAdEntity.getId()));
+//    }
 
     // 记录广告发送记录， 默认只取第一条
     protected void writeSendLog(AdvParam advParam, AdContent ad, BaseAdEntity entity) {
@@ -467,7 +468,6 @@ public abstract class AbstractManager {
         if (rule.hasNetStatus() && !rule.isNetStatusMatch(advParam.getNw())) {
             return false;
         }
-        StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterNw_" + i + "," + j);
         if (!rule.isUserTypeMatch(advParam)) {
             return false;
         }

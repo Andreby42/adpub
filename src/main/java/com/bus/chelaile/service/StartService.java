@@ -151,24 +151,24 @@ public class StartService {
         }
 
         // 从配置文件读取tbk title存储到redis的key
-        try {
-            String tbkKeyStrs = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "tbk_ads_title_keys");
-            if (StringUtils.isNotEmpty(tbkKeyStrs)) {
-                String keys[] = tbkKeyStrs.split(";");
-                for (String s : keys) {
-                    String[] entry = s.split(",");
-                    if (entry.length > 1) {
-                        StaticAds.advTBKTitleKey.put(Integer.parseInt(entry[0]), entry[1]);
-                        logger.info("tbk keys detailes : advId={}, titleKey={}", entry[0], entry[1]);
-                    }
-                }
-                logger.info("初始化淘宝客结束， tbkKeyStrs={}, advTBKTitleKey.size={}", tbkKeyStrs, StaticAds.advTBKTitleKey.size());
-                logger.info("");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("初始化淘宝客title出错");
-        }
+//        try {
+//            String tbkKeyStrs = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "tbk_ads_title_keys");
+//            if (StringUtils.isNotEmpty(tbkKeyStrs)) {
+//                String keys[] = tbkKeyStrs.split(";");
+//                for (String s : keys) {
+//                    String[] entry = s.split(",");
+//                    if (entry.length > 1) {
+//                        StaticAds.advTBKTitleKey.put(Integer.parseInt(entry[0]), entry[1]);
+//                        logger.info("tbk keys detailes : advId={}, titleKey={}", entry[0], entry[1]);
+//                    }
+//                }
+//                logger.info("初始化淘宝客结束， tbkKeyStrs={}, advTBKTitleKey.size={}", tbkKeyStrs, StaticAds.advTBKTitleKey.size());
+//                logger.info("");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            logger.error("初始化淘宝客title出错");
+//        }
 
         logger.info("所有按照用户投放的广告加载完毕，用户数={}", StaticAds.adsMap.size());
         logger.info("所有按照用户投放的广告数目={}", StaticAds.allAdContentCache.size());

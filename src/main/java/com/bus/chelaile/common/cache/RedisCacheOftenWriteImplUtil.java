@@ -20,17 +20,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class RedisCacheImplUtil implements ICache{
-	private static Logger log = LoggerFactory.getLogger(RedisCacheImplUtil.class) ;
+public class RedisCacheOftenWriteImplUtil implements ICache{
+	private static Logger log = LoggerFactory.getLogger(RedisCacheOftenWriteImplUtil.class) ;
 //	private static final String DEFAULT_REDIS_HOST = "127.0.0.1";
 //	private static final int DEFAULT_REDIS_PORT = 6379;
     
 	//private static String REDIS_HOST = PropertiesReaderWrapper.read("redisCount.host", DEFAULT_REDIS_HOST);
 	//private static int REDIS_PORT = PropertiesReaderWrapper.readInt("redisCount.port", DEFAULT_REDIS_PORT);
 	
-	private static String REDIS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisCount.host");
-	private static int REDIS_PORT = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisCount.port"));
-	private static String REDIS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisCount.password", "");
+	private static String REDIS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisCount.write.host");
+	private static int REDIS_PORT = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisCount.write.port"));
+	private static String REDIS_PASSWORD = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisCount.write.password", "");
 	
 	private static JedisPool pool = null;
 	
@@ -55,7 +55,7 @@ public class RedisCacheImplUtil implements ICache{
 		
 //		pool = new JedisPool(config, host, port);
 		String password = REDIS_PASSWORD;
-		pool = new JedisPool(config, host, port, 2000, password);
+        pool = new JedisPool(config, host, port, 2000, password);
 		
 		log.info("RedisCacheImplUtil init success,ip={},host={}",REDIS_HOST,REDIS_PORT);
 	}
