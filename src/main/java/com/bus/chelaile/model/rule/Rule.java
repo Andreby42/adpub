@@ -39,9 +39,12 @@ public class Rule {
 	private List<Position> gpsList;
 	private List<String> channels;
 	private List<String> platforms;
+	
 	private VersionEntity noLessThanVersionsAndroid;
 	private VersionEntity noLessThanVersionsIos;
 	private Map<VersionEntity, String> versions;
+	private Map<VersionEntity, String> excludeVersions;  // 排除的版本
+	
 	private List<String> lines; // 线路详情的投放规则
 	private LocationKDTree kdTree;
 
@@ -443,22 +446,30 @@ public class Rule {
 		return isStrMatch(platforms, s);
 	}
 
-	public boolean isVersionMatch(String tgtVersion) {
-		if (versions == null || versions.isEmpty()) {
-			return true;
-		}
+    public boolean isVersionMatch(String tgtVersion) {
+        // 投放版本 并且 限制不投放版本  都为空，那么意味着没有限制
+        if ((versions == null || versions.isEmpty()) && (excludeVersions == null || excludeVersions.isEmpty())) {
+            return true;
+        }
 
-		if (tgtVersion == null) {
-			return false;
-		}
+        // 这两个条件至少有一个不为空
+        if (tgtVersion == null) {
+            return false;
+        }
 
-		VersionEntity queryVersion = VersionEntity.parseVersionStr(tgtVersion);
+        VersionEntity queryVersion = VersionEntity.parseVersionStr(tgtVersion);
 
-		if (versions.containsKey(queryVersion))
-			return true;
+        if (versions != null && !versions.isEmpty()) {
+            if (!versions.containsKey(queryVersion))
+                return false;
+        }
+        if (excludeVersions != null && !excludeVersions.isEmpty()) {
+            if (excludeVersions.containsKey(queryVersion))
+                return false;
+        }
 
-		return false;
-	}
+        return true;
+    }
 
     public boolean isVersionNoLessThan(String tgtVersion, String s) {
         if(noLessThanVersionsAndroid == null && noLessThanVersionsIos == null) {
@@ -484,6 +495,7 @@ public class Rule {
         
         return true;
     }
+    
 
 	// public boolean isVersionMatch(RuleParam param) {
 	// if (versions == null || versions.isEmpty()) {
@@ -1199,6 +1211,14 @@ public class Rule {
 
     public void setNoLessThanVersionsIos(VersionEntity noLessThanVersionsIos) {
         this.noLessThanVersionsIos = noLessThanVersionsIos;
+    }
+
+    public Map<VersionEntity, String> getExcludeVersions() {
+        return excludeVersions;
+    }
+
+    public void setExcludeVersions(Map<VersionEntity, String> excludeVersions) {
+        this.excludeVersions = excludeVersions;
     }
 
 }

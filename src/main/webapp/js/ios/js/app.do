@@ -306,25 +306,25 @@ global.TrackClass = {
     trackEvent: trackEvent,
     Type: {
         //params = {userdata, rule, task}
-        LoadSplash: "LoadSplash", //¿ªÊ¼µ÷ÓÃ sdk/api loadSplash·½·¨
-        LoadBanner: "LoadBanner", //¿ªÊ¼µ÷ÓÃ sdk/api loadBanner·½·¨
+        LoadSplash: "LoadSplash", //å¼€å§‹è°ƒç”¨ sdk/api loadSplashæ–¹æ³•
+        LoadBanner: "LoadBanner", //å¼€å§‹è°ƒç”¨ sdk/api loadBanneræ–¹æ³•
 
         //params = {userdata, data, rule, task}
-        LoadedSplash: "LoadedSplash", //¿ªÆÁ¼ÓÔØÍê³É
-        LoadedBanner: "LoadedBanner", //Banner¼ÓÔØÍê³É
+        LoadedSplash: "LoadedSplash", //å¼€å±åŠ è½½å®Œæˆ
+        LoadedBanner: "LoadedBanner", //BanneråŠ è½½å®Œæˆ
 
         //params = {error:"code", des:"", requestInfo:requestInfo, userdata,rule}
-        FailedSplash: "FailedSplash", //¿ªÆÁ¼ÓÔØÊ§°Ü
-        FailedBanner: "FailedBanner", //Banner¼ÓÔØÊ§°Ü
+        FailedSplash: "FailedSplash", //å¼€å±åŠ è½½å¤±è´¥
+        FailedBanner: "FailedBanner", //BanneråŠ è½½å¤±è´¥
 
         //params = {used,rule,userdata}
-        AllAdTimeout: "AllAdTimeout", //Ñ­»·¼ì²éjs³¬Ê±
+        AllAdTimeout: "AllAdTimeout", //å¾ªç¯æ£€æŸ¥jsè¶…æ—¶
 
         //params = {data,rule,userdata}
-        FetchedAd: "FetchedAd", //×îÖÕ»ñÈ¡µ½µÄ¹ã¸æ
+        FetchedAd: "FetchedAd", //æœ€ç»ˆè·å–åˆ°çš„å¹¿å‘Š
 
         //params = {rule,userdata}
-        NoDataLastGroup: "NoDataLastGroup" //µ½´ï×îºóÒ»×éÅäÖÃ£¬ÈÔÃ»ÓĞ»ñÈ¡µ½¹ã¸æ
+        NoDataLastGroup: "NoDataLastGroup" //åˆ°è¾¾æœ€åä¸€ç»„é…ç½®ï¼Œä»æ²¡æœ‰è·å–åˆ°å¹¿å‘Š
 
     }
 }
@@ -365,7 +365,7 @@ function getExistSdks(taskGroup) {
 
 /**
  * @param {string!} sdkname
- * @brief Í¨¹ıruleÎÄ¼şÅäÖÃµÄÃû³Æ£¬²éÕÒsdk½Ó¿Ú
+ * @brief é€šè¿‡ruleæ–‡ä»¶é…ç½®çš„åç§°ï¼ŒæŸ¥æ‰¾sdkæ¥å£
  */
 function getSdk(sdkname) {
 
@@ -417,7 +417,7 @@ function getAds(rule, userdata, callback) {
 }
 
 /**
- * ³¢ÊÔµÚn¸ötaskGroup
+ * å°è¯•ç¬¬nä¸ªtaskGroup
  */
 function tryNthTaskGroup(rule, nth, callback) {
     var taskGroups = rule.tasks;
@@ -437,8 +437,8 @@ function tryNthTaskGroup(rule, nth, callback) {
     }
 
     /**
-     * Í£Ö¹³ınoStopTaskNthÖ®ÍâµÄtask
-     * @param noStopTaskNth Int ¼ÌĞøÖ´ĞĞµÄtask£¬¿ÉÒÔÎªnull£¬Í£Ö¹È«²¿µÄtask
+     * åœæ­¢é™¤noStopTaskNthä¹‹å¤–çš„task
+     * @param noStopTaskNth Int ç»§ç»­æ‰§è¡Œçš„taskï¼Œå¯ä»¥ä¸ºnullï¼Œåœæ­¢å…¨éƒ¨çš„task
      */
     function stopCheckerAndTasks(noStopTaskNth) {
         if (checker) {

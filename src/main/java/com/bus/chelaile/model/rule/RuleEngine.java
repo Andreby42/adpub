@@ -254,6 +254,13 @@ public class RuleEngine {
             rule.setNoLessThanVersionsAndroid(vsAndroid);
             rule.setNoLessThanVersionsIos(vsIos);
             
+            // 排除掉的版本
+            Map<VersionEntity, String> excludeVersionsCmps = parseVersionList(rInfo, "excludeVersions");
+            if(excludeVersionsCmps != null && !excludeVersionsCmps.isEmpty()) {
+                rule.setExcludeVersions(excludeVersionsCmps);
+            }
+            
+            
             rule.setChatOrRide(getChildAsInt(rInfo, "chatOrRide"));
             rule.setIsClickEndPush(getChildAsInt(rInfo, "isClickEndPush"));
             
