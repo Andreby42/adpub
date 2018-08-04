@@ -11,11 +11,11 @@ var reportCloseAdUrl;
 if(typeof GetConfig == 'function') {
     var Config = GetConfig();
     if('dev' == Config.server) {
-        reportCloseAdUrl = "http://dev.chelaile.net.cn/adpub/adv!closeAd.action";
+        reportCloseAdUrl = "https://dev.chelaile.net.cn/adpub/adv!closeAd.action";
     } else if('stage' == Config.server) {
-        reportCloseAdUrl = "http://stage.chelaile.net.cn/adpub/adv!closeAd.action";
+        reportCloseAdUrl = "https://stage.chelaile.net.cn/adpub/adv!closeAd.action";
     } else if('api' == Config.server) {
-        reportCloseAdUrl = "http://api.chelaile.net.cn/adpub/adv!closeAd.action";
+        reportCloseAdUrl = "https://api.chelaile.net.cn/adpub/adv!closeAd.action";
     }
 }
 
