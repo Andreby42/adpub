@@ -250,7 +250,7 @@ public class RuleEngine {
             }
             // android的最低版本和ios的最低版本
             VersionEntity vsAndroid = parseNoLessVersion(rInfo, "noLessThanVersionsAndroid");
-            VersionEntity vsIos = parseNoLessVersion(rInfo, "noLessThanVersionsAndroid");
+            VersionEntity vsIos = parseNoLessVersion(rInfo, "noLessThanVersionsIos");
             rule.setNoLessThanVersionsAndroid(vsAndroid);
             rule.setNoLessThanVersionsIos(vsIos);
             
@@ -493,33 +493,35 @@ public class RuleEngine {
 
 
     public static void main(String[] args) throws IOException {
-        String str = "{\"platforms\":[\"android\"],\"versions\":[\"3.53.0\",\"3.53.2\",\"3.53.4\",\"3.54.0\",\"3.55.0\",\"3.56.0\"],\"chatOrRide\":0,\"days\":10,\"perDayCount\":0,\"totalCount\":200000,\"cities\":[\"069\",\"003\",\"019\",\"040\",\"025\",\"014\",\"056\",\"038\"]}";
+        String str = "{\"platforms\":[\"android\"],\"versions\":[[]],\"excludeVersions\":[\"3.53.0\"],\"days\":0,\"perDayCount\":0,\"noLessThanVersionsAndroid\":\"3.52.0\",\"noLessThanVersionsIos\":\"5.50.3\"}";
         JsonNode rulesInfo = objMapper.readTree(str);
         System.out.println(rulesInfo.toString());
         Rule rule = parseRule(rulesInfo);
         System.out.println("rule.citites:" + rule.getCities());
         System.out.println("rule.versions:" + rule.getVersions());
         System.out.println("rule.adtimecount:" + rule.getAdTimeCounts());
-        if (rulesInfo != null) {
-            JsonNode jsonNode = rulesInfo;
-            jsonNode  = jsonNode.get("cacheTime");
-            jsonNode = jsonNode.get("adTimeCounts");
-            
-            
-            
-            Iterator<JsonNode> keys = jsonNode.getElements();     
-            while(keys.hasNext()){
-            	JsonNode jn = keys.next();
-            	JsonNode jt = jn.get("time");
-            	System.out.println(jt.getTextValue());
-//                String fieldName = keys.next();    
-//                System.out.println(fieldName + ": " + jsonNode.path(fieldName).toString());    
-            }  
-            List<String> list = parseList(rulesInfo, "netStatus");
-            System.out.println(list.size());
-        //    int i = getChildAsInt(jsonNode, "days");
-         //   System.out.println(i);
-        }
+        System.out.println("rule.excludeVersions: " + rule.getExcludeVersions());
+        System.out.println("ruleJson:" + JSONObject.toJSONString(rule));
+//        if (rulesInfo != null) {
+//            JsonNode jsonNode = rulesInfo;
+//            jsonNode  = jsonNode.get("cacheTime");
+//            jsonNode = jsonNode.get("adTimeCounts");
+//            
+//            
+//            
+//            Iterator<JsonNode> keys = jsonNode.getElements();     
+//            while(keys.hasNext()){
+//            	JsonNode jn = keys.next();
+//            	JsonNode jt = jn.get("time");
+//            	System.out.println(jt.getTextValue());
+////                String fieldName = keys.next();    
+////                System.out.println(fieldName + ": " + jsonNode.path(fieldName).toString());    
+//            }  
+//            List<String> list = parseList(rulesInfo, "netStatus");
+//            System.out.println(list.size());
+//        //    int i = getChildAsInt(jsonNode, "days");
+//         //   System.out.println(i);
+//        }
 
     }
     
