@@ -51,6 +51,86 @@ var api_chelaile = {
     }
 }
 
+
+
+var api_voicead = {
+
+    sdkname: function() {
+        return "api_chelaile";
+    },
+
+    adurl_ios: function() {
+        var configInfoString = GetDeviceInfo();
+        var configKVArray = configInfoString.split('&');
+        var deviceInfo = {};
+        configKVArray.forEach(function(itemString) {
+            var itemArr = itemString.split('=');
+            deviceInfo[itemArr[0]] = decodeURIComponent(itemArr[1]);
+        });
+
+        console.log(JSON.stringify(deviceInfo));
+
+        return {
+            type:"banner",
+            url: 'http://cs.voiceads.cn/ad/request',
+            data: {
+                ad_data : "AsyncPostData",
+                dataFormater : this.dataFormater,
+                postData:{
+                    "tramaterialtype": "json",
+                    "api_ver": "1.3.8",
+                    "is_support_deeplink": "1", // optional 0不支持(默认值)，1直接触发 2 进入落地页再触发，不能用
+                    "secure": "3", // 1 只支持http 2 只支持https 3 都支持
+                    "devicetype": deviceInfo.deviceType||"",//iPhone10,1
+                    "os": "IOS",
+                    "osv": deviceInfo.sv||"",//'11.4.1'
+                    "adid": "adid",//?
+                    "imei": "",
+                    "mac": "",
+                    "density": "",
+                    "operator": "",//config.get('operator'),
+                    "net": "",//deviceInfo.nw //"WIFI"
+                    "ip": "",//config.get('ip'),
+                    "ua": deviceInfo.userAgent||"",
+                    "ts": "",//config.get('ts'),
+                    "dvw": deviceInfo.screenWidth||"",
+                    "dvh": deviceInfo.screenHeight||"",
+                    "orientation": "0", // 屏幕方向，强制竖屏
+                    "vendor": "apple",
+                    "model": "",//config.get('model'),
+                    "lan": "",// deviceInfo.language "1"
+                  //  "geo": config.get('geo_lng') + ',' + config.get('geo_lat'), // optional，用了还报错
+                    "batch_cnt": "1", // 广告数量，只支持1
+                    "appid": "5add7ce1",
+                    "appname": "车来了",
+                    "appver": (deviceInfo.v||"0").split('_')[0],
+                    "pkgname": "com.chelaile.lite",
+                    "debug": { // optional
+                        /* 用于指定下发广告的交互类型，取值范围：0，不限制；1，跳转类； 2，下载类；3，特殊下载类。默认0。当前下载类广告暂不支持 deep link，为2 时下个值不能为1*/
+                        "action_type": "0"
+                    }
+                }
+            }
+        }
+    },
+
+    dataFormater : {
+        parse:function(data) {
+            if('AsyncPostData' == data) {
+                return [{"AsyncPostData":data}];
+            }
+            else {
+                return [{}];
+            }
+        }
+    },
+
+    ad_data : function () {
+        return '${API_CHELAILE_DATA}'
+    }
+}
+
+
 // sdk taks ===================
 // ææºè°ç¨sdk
 

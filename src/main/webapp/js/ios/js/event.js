@@ -36,7 +36,7 @@ function reportAdsClose(sdk, ad) {
     }
     addParamsIfNotNull(params, "adv_title", info.head);
     addParamsIfNotNull(params, "adv_image", adv_image);
-    sendTrackRequest(reportCloseAdUrl, params);
+    sendTrackRequest(reportCloseAdUrl +'?'+ GetDeviceInfo(), params);
 }
 
 //==================================//

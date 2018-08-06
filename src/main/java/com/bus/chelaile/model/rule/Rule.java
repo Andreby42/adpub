@@ -580,6 +580,10 @@ public class Rule {
 	public boolean hasVersions() {
 		return isNotEmpty(versions);
 	}
+	
+	public boolean hasExcludeVersions() {
+        return isNotEmpty(excludeVersions);
+    }
 
 	public boolean hasPlatforms() {
 		return isNotEmpty(platforms) && !platforms.contains("all");

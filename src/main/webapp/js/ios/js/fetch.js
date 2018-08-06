@@ -58,9 +58,9 @@ function getAds(rule, userdata, callback) {
     var hookCallback = function hookCallback(data) {
         if (data && (typeof data === "undefined" ? "undefined" : _typeof(data)) == 'object' && data.sdk) {
 
-            data.sdk.refreshTime = 20000;
+            data.sdk.refreshTime = 15000;
             data.sdk.traceInfo = rule.traceInfo;
-            data.sdk.mixRefreshAdInterval = 8000;
+            data.sdk.mixRefreshAdInterval = 5000;
             data.sdk.maxSplashTimeout = 8000;
             data.sdk.warmSplashIntervalTime = 30 * 60 * 1000;
         }

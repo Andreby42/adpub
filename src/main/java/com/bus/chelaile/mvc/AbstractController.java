@@ -136,7 +136,8 @@ public class AbstractController {
         } else {
             param.setIp(request.getParameter("remote_addr"));
         }
-        param.setScreenWidth( getInt(request, "screenWidth"));
+        param.setScreenWidth( getInt(request, "screenWidth"));   // 屏幕高度
+        param.setScreenDensity(getDouble(request, "screenDensity")); // 几倍屏
         param.setDpi(request.getParameter("dpi"));
         param.setGpsAccuracy(request.getParameter("geo_lac"));
         if( request.getParameter("gpsAccuracy") != null && !request.getParameter("gpsAccuracy").equals("") ) {

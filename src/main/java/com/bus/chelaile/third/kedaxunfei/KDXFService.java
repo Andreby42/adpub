@@ -230,5 +230,10 @@ public class KDXFService {
 		// ap.setWifissid("da");
 		// TotalUtil.getYouDaoData(ap, ShowType.OPEN_SCREEN, "1");
 		//s.doService(ap, ShowType.LINE_FEED_ADV);
+		
+		int a = 1;
+		int b = 12;
+		double m = a / b;
+		System.out.println(m);
 	}
 }

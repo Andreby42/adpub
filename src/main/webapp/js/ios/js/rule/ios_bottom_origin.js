@@ -202,6 +202,35 @@ var sdk_inmobi = {
     }
 }
 
+
+// 手机sdk inmobi no.2 。低价版inmobi
+var sdk_inmobi_no2 = {
+
+    sdkname : function() {
+        return "sdk_inmobi";
+    },
+
+    adurl_ios : function() {
+        return {
+            url:"InMobiSdk",
+            type:"banner",
+            pos:"homecell",
+            data:{
+                "appId":"f83af5e921de42cf813dc475c362aaf0",
+                "placementId":"${sdk_inmobi_no2_placementId}"
+            }
+        }
+    },
+    
+    aid : function () {
+        return 'sdk_inmobi_no2_${sdk_inmobi_no2_aid}';
+    },
+	
+	adStyle : function() {
+      return "${sdk_inmobi_no2_displayType}";
+    }
+}
+
 function ads() {
 
 //var ads = [api_chelaile, sdk_inmobi, sdk_toutiao, sdk_gdt, sdk_voicead, sdk_baidu];

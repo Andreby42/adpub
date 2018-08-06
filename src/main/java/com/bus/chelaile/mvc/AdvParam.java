@@ -103,6 +103,8 @@ public class AdvParam {
      private String aid;
      private String adv_title;
      private String adv_image;
+     
+     private double screenDensity;   // 几倍屏
      /**
       * 存入的s都会被转换为小写。
       *
@@ -783,6 +785,16 @@ public class AdvParam {
 
     public void setAdv_image(String adv_image) {
         this.adv_image = adv_image;
+    }
+
+
+    public double getScreenDensity() {
+        return screenDensity;
+    }
+
+
+    public void setScreenDensity(double screenDensity) {
+        this.screenDensity = screenDensity;
     }
 
 

@@ -322,36 +322,11 @@ public abstract class AbstractManager {
             AdContent ad = cacheEle.getAds();
             UserClickRate clickRate = cacheEle.getUserClickRate();
 
-            if (!ad.getShowType().equals(showType.getType())) {
+            // 跟规则无关的一些判断
+            if(!adCheck(ad, cacheRecord, advParam, showType)) {
                 continue;
             }
-            // 线路详情单独处理
-            if (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())) {
-                // 当点击了右下角不感兴趣
-                if (!lineDetailIsSilentTimePassed(ad, cacheRecord, advParam)) {
-                    continue;
-                }
-            } else if (ad.getShowType().equals(ShowType.DOUBLE_COLUMN.getType())
-                    || ad.getShowType().equals(ShowType.FEED_ADV.getType())) {
-                // 当点击了双栏不感兴趣
-                if (cacheRecord.isUninterest(ad.getId())) {
-                    logger.info("isSilentTimePassed return false,adtype={}, advId={},udid={}", showType, ad.getId(),
-                            advParam.getUdid());
-                    continue;
-                }
-
-                // 如果距离太远，不投放单车。
-                if (ad.getTargetType() == Constants.DOUBLE_BICYCLE_ADV) {
-                    if (!CommonService.isShowBikeByDistance(advParam)) {
-                        continue;
-                    }
-
-                    if (advParam.getRideStatus() == 1) { // 0没骑车 ，1骑行中， 3骑行结束
-                        logger.info("rideStatus is riding, udid={}", advParam.getUdid());
-                        continue;
-                    }
-                }
-            }
+            
             StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "setAdsBeforRuleCheck_" + i);
             // 遍历所有规则
             // 如果一条广告存在多条规则，那么只会返回第一条满足 ruleCheck条件的广告
@@ -377,6 +352,55 @@ public abstract class AbstractManager {
         }
 //        StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG);
     }
+
+    private boolean adCheck(AdContent ad, AdPubCacheRecord cacheRecord, AdvParam advParam, ShowType showType) {
+        if (!ad.getShowType().equals(showType.getType())) {
+            return false;
+        }
+        
+        // 佛山详情页底部广告
+        if(ad.getShowType().equals(ShowType.LINE_FEED_ADV.getType())) {
+            if(StringUtils.isNoneBlank(advParam.getCityId()) && advParam.getCityId().equals("019")
+                    && advParam.getScreenDensity() != -1.0 && advParam.getScreenHeight() != -1) {
+                double density = advParam.getScreenHeight() / advParam.getScreenDensity();
+                if(density <= 590.0) {
+                    logger.info("foshan density return false, udid={}, cityId={}, screenHeight={}, screenDensity={}",
+                            advParam.getUdid(), advParam.getCityId(), advParam.getScreenHeight(), advParam.getScreenDensity());
+                    return false;
+                }
+            }
+        }
+        
+        // 线路详情
+        if (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())) {
+            // 当点击了右下角不感兴趣
+            if (!lineDetailIsSilentTimePassed(ad, cacheRecord, advParam)) {
+                return false;
+            }
+        } else if (ad.getShowType().equals(ShowType.DOUBLE_COLUMN.getType())
+                || ad.getShowType().equals(ShowType.FEED_ADV.getType())) {
+            // 当点击了双栏不感兴趣
+            if (cacheRecord.isUninterest(ad.getId())) {
+                logger.info("isSilentTimePassed return false,adtype={}, advId={},udid={}", showType, ad.getId(),
+                        advParam.getUdid());
+                return false;
+            }
+
+            // 如果距离太远，不投放单车。
+            if (ad.getTargetType() == Constants.DOUBLE_BICYCLE_ADV) {
+                if (!CommonService.isShowBikeByDistance(advParam)) {
+                    return false;
+                }
+
+                if (advParam.getRideStatus() == 1) { // 0没骑车 ，1骑行中， 3骑行结束
+                    logger.info("rideStatus is riding, udid={}", advParam.getUdid());
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     /**
      * 当只有右下角图片的时候判断
@@ -442,7 +466,7 @@ public abstract class AbstractManager {
         if (rule.hasCities() && !rule.isCityMatch(advParam.getCityId())) {
             return false;
         }
-        if (rule.hasVersions() && !rule.isVersionMatch(advParam.getV())) {
+        if ((rule.hasVersions() || rule.hasExcludeVersions()) && !rule.isVersionMatch(advParam.getV())) {
             return false;
         }
         StaticTimeLog.record(Constants.RECORD_HANDLEADS_LOG, "afterVersions_" + i + "," + j);
@@ -594,30 +618,6 @@ public abstract class AbstractManager {
             }
         }
 
-        // 乘车页广告和聊天室广告
-        //		if (showType == ShowType.RIDE_DETAIL) {
-        //			// 0 显示乘车页 1 显示聊天室 2 均显示 3 均不显示
-        //			if (rule.getChatOrRide() == 3) {
-        //				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
-        //				// rule.getRuleId(),
-        //				// advParam.getType(), advParam.getUdid());
-        //				return false;
-        //			}
-        //			// 聊天室的请求
-        //			else if (advParam.getType() == 2 && rule.getChatOrRide() != 1 && rule.getChatOrRide() != 2) {
-        //				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
-        //				// rule.getRuleId(),
-        //				// advParam.getType(), advParam.getUdid());
-        //				return false;
-        //			}
-        //			// 乘车页的请求
-        //			else if (advParam.getType() == 1 && rule.getChatOrRide() != 0 && rule.getChatOrRide() != 2) {
-        //				// logger.info("getChatOrRide return false,ruleId={},type={},udid={}",
-        //				// rule.getRuleId(),
-        //				// advParam.getType(), advParam.getUdid());
-        //				return false;
-        //			}
-        //		}
         // udid 模糊匹配
         if (StringUtils.isNoneBlank(rule.getUdidPattern()) && advParam.getUdid() != null) {
             if (!advParam.getUdid().matches(rule.getUdidPattern())) {
@@ -962,7 +962,7 @@ public abstract class AbstractManager {
             }
         }
 
-        // 青岛、南京、香港、西安 四城不投广告
+        // 香港不投广告
         if (StringUtils.isNotBlank(advParam.getCityId()) && (advParam.getCityId().equals("085"))) {
             return false;
         }
