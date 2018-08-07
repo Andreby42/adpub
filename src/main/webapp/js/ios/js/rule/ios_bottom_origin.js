@@ -70,7 +70,7 @@ var api_shunfei = {
 
         console.log('deviceInfo=' + JSON.stringify(deviceInfo));
 
-	    console.log("parseInt(deviceInfo.dct || '')=" + parseInt(deviceInfo.dct || ''));
+	    //console.log("parseInt(deviceInfo.dct || '')=" + parseInt(deviceInfo.dct || ''));
 	        var geolng = deviceInfo.geo_lng || '' ;
 	        var geolat = deviceInfo.geo_lat || '';
 	        var ts = (+new Date) + '';
@@ -92,7 +92,7 @@ var api_shunfei = {
             if (net=='WIFI') {
                 net = 1;
             } else {
-                net = net.substring(1,2)
+                net = parseInt(net.substring(1,2))
             }
 			
 			var sign = JsEncryptUtil.md5('177'+'zDczEwi)+(e1)6^YB)(s*WdPZy*Y0H6w'+ts)+'';
