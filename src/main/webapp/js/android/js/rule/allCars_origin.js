@@ -180,7 +180,7 @@ var api_shunfei = {
 	        
 	        
 	        return {
-	            url: 'http://hostname:port/api/v1/bid',
+	            url: 'http://i-mbv.biddingx.com/api/v1/bid',
 	            data: {
 	            	 "ip": config.get('ip'),
 	            	 "user_agent": config.get('ua'),
@@ -378,8 +378,6 @@ var api_voicead = {
       return ${api_voicead_aid};
     }
 }
-
-
 
 
 var api_zm = {

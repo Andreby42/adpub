@@ -51,6 +51,167 @@ var api_chelaile = {
     }
 }
 
+
+var api_shunfei = {
+
+	sdkname: function() {
+	        return "api_chelaile";
+	},
+
+	adurl_ios: function() {
+	    //var config = JsFixedConfig.getJsFixedConfig();
+        var configInfoString = GetDeviceInfo();
+        var configKVArray = configInfoString.split('&');
+        var deviceInfo = {};
+        configKVArray.forEach(function(itemString) {
+            var itemArr = itemString.split('=');
+            deviceInfo[itemArr[0]] = decodeURIComponent(itemArr[1]);
+        });
+
+        console.log('deviceInfo=' + JSON.stringify(deviceInfo));
+
+	    console.log("parseInt(deviceInfo.dct || '')=" + parseInt(deviceInfo.dct || ''));
+	        var geolng = deviceInfo.geo_lng || '' ;
+	        var geolat = deviceInfo.geo_lat || '';
+	        var ts = (+new Date) + '';
+	    
+		
+			ts = String(ts).slice(0,-3);
+			 
+            console.log("ts=" + ts);
+				
+			
+	        var sv1 = deviceInfo.sv || '' + "";
+			var sv = sv1.split(".");
+	        var micro = 0;
+	        if( sv.length == 3 ){
+	        	micro = sv[2];
+	        }
+            
+	        var net = deviceInfo.nw || '0G'; // network
+            if (net=='WIFI') {
+                net = 1;
+            } else {
+                net = net.substring(1,2)
+            }
+			
+			var sign = JsEncryptUtil.md5('177'+'zDczEwi)+(e1)6^YB)(s*WdPZy*Y0H6w'+ts)+'';
+	        
+	        var ret = {
+	            url: 'http://i-mbv.biddingx.com/api/v1/bid',
+	            data: {
+	            	 "ip": '182.18.10.10',
+	            	 "user_agent": deviceInfo.userAgent || ''+'',
+	            	 "detected_time": parseInt(ts),
+	            	 "time_zone": "+0800",
+					 "detected_language": "en_",
+					 
+					 "geo": {
+						"latitude":parseFloat(deviceInfo.geo_lat || ''+''), 
+						"longitude":parseFloat(deviceInfo.geo_lng || ''+'') 
+						},
+	            	 
+	            	 "mobile": {
+	            		 "device_id": '',
+	            		 "device_type":1,
+	            		 "platform":1,
+	            		 "os_version": {
+	            			 "os_version_major": parseInt(sv[0]),
+	            			 "os_version_minor": parseInt(sv[1]),
+                             "os_version_micro": parseInt(micro)	 
+	            			 },
+	            		 
+						 "brand":deviceInfo.vendor || ''+'',
+						 "model":deviceInfo.deviceType || ''+'',
+						 
+	        	         "screen_width":parseInt(deviceInfo.screenWidth || ''+''),
+	        	         "screen_height": parseInt(deviceInfo.screenHeight || ''+''),
+	        	         "wireless_network_type":parseInt(net),
+	        	         "for_advertising_id":deviceInfo.idfa || ''+'',
+	        	         "mobile_app": {
+	        	        	 "app_id":1987,
+	        	        	 "sign":sign,
+	        	        	 "app_bundle_id":'com.ygkj.chelaile.standard',
+							 "first_launch": false
+	        	         }
+	            	 },
+	            		 
+	            	"adslot":[
+	            			 {
+	            				 "ad_block_key":1985,
+	            				 "adslot_type":17,
+	            				 "width":179,
+	            			     "height":88
+	            			 }
+	            	],
+	            	 
+	            	 "api_version":"1.6",
+	            	 "is_test":false,
+	          
+	            }
+	        };
+			
+			var s = JSON.stringify(ret);
+            var j = JSON.parse(s);
+            //console.log("******** str " + s)
+            //console.log("******** json " + j)
+            return j;
+    },
+
+    dataFormater : {
+        parse:function(data) {
+            if('AsyncPostData' == data) {
+                return [{"AsyncPostData":data}];
+            }
+            else {
+                console.log('****' + JSON.stringify(data))
+                if (typeof data == 'string')
+	            data = eval("a=" + data);
+
+	        var rows = data.batch_ma;
+	        if (!rows || rows.length === 0)
+	            return null;
+
+	        for (var i = 0; i < rows.length; i++) {
+	            var row = rows[i];
+
+	            var ad = {
+	                provider_id: '12',
+	                ad_order: i,
+	                adType: row.adType,
+	                downloadType: row.download_type,
+	                packageName: row.package_name,
+	                head: row.title,
+	                subhead: row.sub_title,
+	                pic: row.image,
+	                brandIcon: row.icon,
+	                link: row.landing_url,
+	                deepLink: row.deep_link,
+	                unfoldMonitorLink: row.impr_url.join(";"),
+	                clickMonitorLink: row.click_url.join(";"),
+					picsList: row.img_urls
+	            }
+	            return [ad];
+	        }
+	        return [{}];
+            }
+        }
+    },
+
+    filter_ios: function(list) {
+        return list;
+    },
+
+    aid : function () {
+        return 'api_shunfei_2';
+    },
+
+    adStyle : function() {
+        return "2";
+    }
+}
+
+
 // sdk taks ===================
 // ææºè°ç¨sdk
 

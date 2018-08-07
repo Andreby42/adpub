@@ -56,7 +56,7 @@ var api_chelaile = {
 var api_voicead = {
 
     sdkname: function() {
-        return "api_chelaile";
+        return "api_voicead";
     },
 
     adurl_ios: function() {
@@ -108,11 +108,11 @@ var api_voicead = {
                     "debug": { // optional
                         /* 用于指定下发广告的交互类型，取值范围：0，不限制；1，跳转类； 2，下载类；3，特殊下载类。默认0。当前下载类广告暂不支持 deep link，为2 时下个值不能为1*/
                         "action_type": "0"
+                        }
                     }
                 }
             }
-        }
-    },
+        },
 
     dataFormater : {
         parse:function(data) {
@@ -120,16 +120,49 @@ var api_voicead = {
                 return [{"AsyncPostData":data}];
             }
             else {
+                var rows = data.batch_ma;
+                if (!rows || rows.length === 0)
+                return null;
+
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+
+                    var ad = {
+                        provider_id: '12',
+                        ad_order: i,
+                        adType: row.adType,
+                        downloadType: row.download_type,
+                        packageName: row.package_name,
+                        head: row.title,
+                        subhead: row.sub_title,
+                        pic: row.image,
+                        brandIcon: row.icon,
+                        link: row.landing_url,
+                        deepLink: row.deep_link,
+                        unfoldMonitorLink: row.impr_url.join(";"),
+                        clickMonitorLink: row.click_url.join(";"),
+                        picsList: row.img_urls
+                    }
+                    return [ad];
+                }
                 return [{}];
             }
         }
     },
 
-    ad_data : function () {
-        return '${API_CHELAILE_DATA}'
+    filter_ios : function(list) {
+        return list;
+    },
+
+    aid : function () {
+        return 'api_voicead_${api_voicead_displayType}';
+    },
+	
+	adStyle : function() {
+      return ${api_voicead_aid};
     }
 }
-
+    
 
 // sdk taks ===================
 // ææºè°ç¨sdk

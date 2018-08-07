@@ -2,6 +2,45 @@
 
 var RENDER_MSG = 'render_ok';
 
+function loadHttpPost(reqUrl, header, postData, fetchTimeout, callback) {
+    Http.post(reqUrl, header, postData, fetchTimeout, function (string, response, error) {
+        callback(string);
+    });
+}
+
+function loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult) {
+    var hasCalled = false;
+    if(data && data.adEntityArray && data.adEntityArray.length)
+    {
+        if(requestInfo.data && requestInfo.data.ad_data){
+            if(requestInfo.data.ad_data == "AsyncPostData") {
+                var postString = "";
+                if(requestInfo.data.postData){
+                    postString = JSON.stringify(requestInfo.data.postData);
+                }
+                hasCalled = true;
+                data.adEntityArray[0].info = undefined;
+                loadHttpPost(requestInfo.data.placementId, null, postString, fetchTimeout, function(string){
+                    if(requestInfo.data.dataFormater && requestInfo.data.dataFormater.parse && string) {
+                        var arr = requestInfo.data.dataFormater.parse(string);
+                        if(arr && arr.length){
+                            if(data.sdk){
+                                data.sdk.finishedReqTime = +new Date;
+                                data.sdk.didReqTime = +new Date;
+                            }
+                            data.adEntityArray[0].info = arr[0];
+                        }
+                    }
+                    callResult();
+                });
+            }
+        }
+    }
+    if(!hasCalled) {
+        callResult();
+    }
+}
+
 function load(task, rule, userdata, fetchTimeout, callback) {
 
     var sdknameMap = {
@@ -11,7 +50,6 @@ function load(task, rule, userdata, fetchTimeout, callback) {
         "IFLYSDK": "CLLIflySdk",
         "InMobiSdk": "CLLInMobiSdk"
     };
-
     var requestInfo = task.adurl_ios();
     if (requestInfo.url && requestInfo.url.toLowerCase().indexOf("http") == 0) {
         requestInfo.data = requestInfo.data || {};
@@ -34,28 +72,31 @@ function load(task, rule, userdata, fetchTimeout, callback) {
 
         sdkIns.loadSplash(requestInfo.data, userdata, fetchTimeout, function (data) {
 
-            try {
-                if (task.aid && data.sdk) {
-                    data.sdk.aid = task.aid();
-                }
+            function callResult() {
+                try {
+                    if (task.aid && data.sdk) {
+                        data.sdk.aid = task.aid();
+                    }
 
-                var task_filter = task.filter_ios;
-                if (task_filter && data) {
-                    data.adEntityArray = task_filter(data.adEntityArray);
-                }
+                    var task_filter = task.filter_ios;
+                    if (task_filter && data) {
+                        data.adEntityArray = task_filter(data.adEntityArray);
+                    }
 
-                if (userdata && userdata.startMode && data.adEntityArray && data.adEntityArray.length > 0) {
-
-                    var info = data.adEntityArray[0].info;
-                    info.startMode = userdata.startMode;
-                    data.adEntityArray[0].info = info;
+                    if (userdata && userdata.startMode && data.adEntityArray && data.adEntityArray.length > 0) {
+                        var info = data.adEntityArray[0].info;
+                        info.startMode = userdata.startMode;
+                        data.adEntityArray[0].info = info;
+                    }
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, { data: data, userdata: userdata, rule: rule, task: task });
+                    callback(data);
+                } catch (e) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: "-91000", des: "" + e, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
+                    callback(null);
                 }
-                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, { data: data, userdata: userdata, rule: rule, task: task });
-                callback(data);
-            } catch (e) {
-                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: "-91000", des: "" + e, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
-                callback(null);
             }
+            loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult);
+
         }, function (error) {
             error = error || "-90000";
             TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: error, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
@@ -66,7 +107,7 @@ function load(task, rule, userdata, fetchTimeout, callback) {
         TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadBanner, { userdata: userdata, rule: rule, task: task });
 
         if (task.adStyle) {
-            var style = task.adStyle();
+            var style = task.adStyle() == '' ? 2 : parseInt(task.adStyle());
             var sizeObj = {
                 "1": { showWidth: 180, showHeight: 88 },
                 "2": { showWidth: 96, showHeight: 64 },
@@ -79,48 +120,52 @@ function load(task, rule, userdata, fetchTimeout, callback) {
             }
         }
         sdkIns.loadBanner(requestInfo.data, userdata, fetchTimeout, function (data) {
+            function callResult() {
+                try {
+                    if (task.aid && data.sdk) {
+                        data.sdk.aid = task.aid();
+                    }
 
-            try {
-                if (task.aid && data.sdk) {
-                    data.sdk.aid = task.aid();
-                }
+                    if (data && data.adEntityArray) {
+                        var closePic = rule && rule.closeInfo && rule.closeInfo.closePic;
 
-                if (data && data.adEntityArray) {
-                    var closePic = rule && rule.closeInfo && rule.closeInfo.closePic;
-
-                    for (var i = 0; i < data.adEntityArray.length; i++) {
-                        var adentity = data.adEntityArray[i];
-                        var info = adentity.info;
-                        if (info) {
-                            if(closePic)
-                                info.closePic = closePic;
-                            if (task.adStyle) {
-                                info.displayType = task.adStyle();
+                        for (var i = 0; i < data.adEntityArray.length; i++) {
+                            var adentity = data.adEntityArray[i];
+                            var info = adentity.info;
+                            if (info) {
+                                if(closePic)
+                                    info.closePic = closePic;
+                                if (task.adStyle) {
+                                info.displayType = task.adStyle() == '' ? 2 : parseInt(task.adStyle());
+                                }
+                                info.head = info.head || "";
+                                info.subhead = info.subhead || "";
+                                info.stats_act = userdata.stats_act;
+                                if (info.head.length > info.subhead.length) {
+                                    var tstr = info.subhead;
+                                    info.subhead = info.head;
+                                    info.head = tstr;
+                                }
+                                adentity.info = info;
                             }
-                            info.head = info.head || "";
-                            info.subhead = info.subhead || "";
-                            info.stats_act = userdata.stats_act;
-                            if (info.head.length > info.subhead.length) {
-                                var tstr = info.subhead;
-                                info.subhead = info.head;
-                                info.head = tstr;
-                            }
-                            adentity.info = info;
                         }
                     }
-                }
 
-                var task_filter = task.filter_ios;
-                if (task_filter && data) {
-                    data.adEntityArray = task_filter(data.adEntityArray);
-                }
+                    var task_filter = task.filter_ios;
+                    if (task_filter && data) {
+                        data.adEntityArray = task_filter(data.adEntityArray);
+                    }
 
-                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedBanner, { userdata: userdata, data: data, rule: rule, task: task });
-                callback(data);
-            } catch (e) {
-                TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: "-91001", des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
-                callback(null);
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedBanner, { userdata: userdata, data: data, rule: rule, task: task });
+                    callback(data);
+
+                } catch (e) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: "-91001", des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                }
             }
+            loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult);
+
         }, function (error, data, extension) {
             error = error || "-90001";
             TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: error, requestInfo: requestInfo, userdata: userdata, data: data, rule: rule, task: task });
