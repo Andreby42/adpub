@@ -96,11 +96,15 @@ var api_shunfei = {
             }
 			
 			var sign = JsEncryptUtil.md5('177'+'zDczEwi)+(e1)6^YB)(s*WdPZy*Y0H6w'+ts)+'';
-	        
 	        var ret = {
+                type:"banner",
 	            url: 'http://i-mbv.biddingx.com/api/v1/bid',
 	            data: {
-	            	 "ip": '182.18.10.10',
+                    ad_data:"AsyncPostData",
+                    dataFormater:this.dataFormater;
+	            	 postData: {
+                     
+                     "ip": '182.18.10.10',
 	            	 "user_agent": deviceInfo.userAgent || ''+'',
 	            	 "detected_time": parseInt(ts),
 	            	 "time_zone": "+0800",
@@ -134,28 +138,25 @@ var api_shunfei = {
 	        	        	 "app_bundle_id":'com.ygkj.chelaile.standard',
 							 "first_launch": false
 	        	         }
-	            	 },
+                      },
 	            		 
-	            	"adslot":[
+                        "adslot":[
 	            			 {
 	            				 "ad_block_key":1985,
 	            				 "adslot_type":17,
 	            				 "width":179,
 	            			     "height":88
 	            			 }
-	            	],
+                        ],
 	            	 
 	            	 "api_version":"1.6",
 	            	 "is_test":false,
 	          
-	            }
+                    }
+                }
 	        };
 			
-			var s = JSON.stringify(ret);
-            var j = JSON.parse(s);
-            //console.log("******** str " + s)
-            //console.log("******** json " + j)
-            return j;
+            return ret;
     },
 
     dataFormater : {
@@ -193,7 +194,7 @@ var api_shunfei = {
 	            }
 	            return [ad];
 	        }
-	        return [{}];
+	        return null;
             }
         }
     },

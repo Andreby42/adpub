@@ -10,6 +10,7 @@ import com.bus.chelaile.model.ads.Tag;
 import com.bus.chelaile.model.ads.entity.OpenAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenOldAdEntity;
 import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.util.New;
 
 
 /**
@@ -72,6 +73,8 @@ public class SelfOpenManager {
 	                    fullInner.getIosURL(),
 	                    fullInner.getAndroidURL(),
 	                    fullInner.getPic()));
+	            res.setPicsList(New.arrayList());
+	            res.getPicsList().add(res.getPic());
 	            res.setIsSkip(fullInner.getIsSkip());
 	            res.setIsDisplay(fullInner.getIsDisplay());
 	            res.setDuration(fullInner.getDuration());

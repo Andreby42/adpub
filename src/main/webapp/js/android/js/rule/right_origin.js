@@ -43,8 +43,9 @@ var api_chelaile = {
 			monitorType: row.monitorType,
             openType: row.openType,
             ad_order: 0,
-            pic: row.pic
-        }
+            pic: row.pic,
+            picsList: [row.pic]
+        };
 
         return ad;
     },

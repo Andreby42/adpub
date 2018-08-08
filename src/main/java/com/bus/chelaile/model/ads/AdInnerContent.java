@@ -22,7 +22,9 @@ public abstract class AdInnerContent {
 
     protected List<String> picsList;
     
-    private String closePic = "";
+    protected String closePic = "";
+    protected String wx_miniPro_id;
+    protected String wx_miniPro_path; // 跳转小程序， 2018-04-09出现； 2018-08-08提到通用
     
     public void setAndParseJson(String jsonr) {
         this.jsonContent = jsonr;
@@ -30,18 +32,24 @@ public abstract class AdInnerContent {
     }
     
     
-    protected void setCommentContext(AdInnerContent ad,String pic) {
-    	this.displayType = ad.getDisplayType();
-    	this.picsList = ad.getPicsList();
-    	this.closePic = ad.getClosePic();
-    	if( picsList == null || picsList.size() == 0 ) {
-    		if( pic != null ) {
-    			picsList = New.arrayList();
-        		picsList.add(pic);
-    		}
-    		
-    	}
-    	
+    protected void setCommentContext(AdInnerContent ad, String pic) {
+        this.displayType = ad.getDisplayType();
+        this.picsList = ad.getPicsList();
+        this.closePic = ad.getClosePic();
+        this.setWx_miniPro_id(ad.getWx_miniPro_id());
+        this.setWx_miniPro_path(ad.getWx_miniPro_path());
+        if (this.getWx_miniPro_id() != null)
+            this.setWx_miniPro_id(this.getWx_miniPro_id().trim());
+        if (this.getWx_miniPro_path() != null)
+            this.setWx_miniPro_path(this.getWx_miniPro_path().trim());
+        if (picsList == null || picsList.size() == 0) {
+            if (pic != null && StringUtils.isNoneBlank(pic)) {
+                picsList = New.arrayList();
+                picsList.add(pic);
+            }
+
+        }
+
     }
     
     public void fillAdEntity(AdEntity adEntity, AdvParam param, int stindex) {
@@ -126,6 +134,26 @@ public abstract class AdInnerContent {
 
     public void setClosePic(String closePic) {
         this.closePic = closePic;
+    }
+
+
+    public String getWx_miniPro_id() {
+        return wx_miniPro_id;
+    }
+
+
+    public void setWx_miniPro_id(String wx_miniPro_id) {
+        this.wx_miniPro_id = wx_miniPro_id;
+    }
+
+
+    public String getWx_miniPro_path() {
+        return wx_miniPro_path;
+    }
+
+
+    public void setWx_miniPro_path(String wx_miniPro_path) {
+        this.wx_miniPro_path = wx_miniPro_path;
     }
     
 }

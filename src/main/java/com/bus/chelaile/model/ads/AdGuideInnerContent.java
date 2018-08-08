@@ -15,8 +15,8 @@ import lombok.EqualsAndHashCode;
 public class AdGuideInnerContent extends AdInnerContent {
 	
 	private String pic; // 广告图片的URL
-	private String wx_miniPro_id; 
-	private String wx_miniPro_path; 
+//	private String wx_miniPro_id; 
+//	private String wx_miniPro_path; 
 	private String servingPlace;	 // 投放 小程序范围， 逗号分割的字符串，多个
 	private List<String> servingPlaceList; // 投放的小程序范围，list
 	private int site; // 位置， 0 首页； 2 我的页面
@@ -40,12 +40,6 @@ public class AdGuideInnerContent extends AdInnerContent {
 				this.pic = ad.pic.split("#")[0];
 			}
 			
-			this.wx_miniPro_id = ad.getWx_miniPro_id();
-			this.wx_miniPro_path = ad.getWx_miniPro_path();
-			if(this.wx_miniPro_id != null)
-                this.wx_miniPro_id = this.wx_miniPro_id.trim();
-            if(this.wx_miniPro_path != null)
-                this.wx_miniPro_path = this.wx_miniPro_path.trim();
 			this.site = ad.site;
 			this.adType = ad.adType;
 			this.redPoint = ad.redPoint;
@@ -61,11 +55,9 @@ public class AdGuideInnerContent extends AdInnerContent {
 				}
 			}
 			
-//			setCommentContext(ad, this.pic);
+			setCommentContext(ad, this.pic);
 		}
 	}
-	
-	
 	
 
 	

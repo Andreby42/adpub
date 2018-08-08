@@ -157,7 +157,11 @@ public abstract class AbstractManager {
                 AdContentCacheEle ace = adMap.get(ad.getId());
                 if (ace != null) {
                     ad.setDisplayType(ace.getAds().getAdInnerContent().getDisplayType());
-                    ad.setPicsList(ace.getAds().getAdInnerContent().getPicsList());
+                    if((ad.getPicsList() == null || ad.getPicsList().isEmpty())) {
+                        ad.setPicsList(ace.getAds().getAdInnerContent().getPicsList());
+                    }
+                    ad.setWxMiniProId(ace.getAds().getAdInnerContent().getWx_miniPro_id());
+                    ad.setWxMiniProPath(ace.getAds().getAdInnerContent().getWx_miniPro_path());
 
                     String placementId = getPlaceMentId(showType, ad.getProvider_id(), advParam.getS(), ad.getDisplayType());
                     ad.setPlacementId(placementId);

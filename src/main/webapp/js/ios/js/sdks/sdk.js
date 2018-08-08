@@ -4,7 +4,7 @@ var RENDER_MSG = 'render_ok';
 
 function loadHttpPost(reqUrl, header, postData, fetchTimeout, callback) {
     Http.post(reqUrl, header, postData, fetchTimeout, function (string, response, error) {
-        callback(string);
+        callback(string, response, error);
     });
 }
 
@@ -20,7 +20,7 @@ function loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult) {
                 }
                 hasCalled = true;
                 data.adEntityArray[0].info = undefined;
-                loadHttpPost(requestInfo.data.placementId, null, postString, fetchTimeout, function(string){
+                loadHttpPost(requestInfo.data.placementId, null, postString, fetchTimeout, function(string, response, error){
                     if(requestInfo.data.dataFormater && requestInfo.data.dataFormater.parse && string) {
                         var arr = requestInfo.data.dataFormater.parse(string);
                         if(arr && arr.length){
@@ -29,9 +29,12 @@ function loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult) {
                                 data.sdk.didReqTime = +new Date;
                             }
                             data.adEntityArray[0].info = arr[0];
+                        } else {
+                            callResult("-90003");
                         }
+                    } else {
+                        callResult(OCValueForKey(error, "code"));
                     }
-                    callResult();
                 });
             }
         }
@@ -72,7 +75,12 @@ function load(task, rule, userdata, fetchTimeout, callback) {
 
         sdkIns.loadSplash(requestInfo.data, userdata, fetchTimeout, function (data) {
 
-            function callResult() {
+            function callResult(errorCode) {
+                if(errorCode) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: errorCode, des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                    return;
+                }
                 try {
                     if (task.aid && data.sdk) {
                         data.sdk.aid = task.aid();
@@ -107,7 +115,7 @@ function load(task, rule, userdata, fetchTimeout, callback) {
         TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadBanner, { userdata: userdata, rule: rule, task: task });
 
         if (task.adStyle) {
-            var style = task.adStyle() == '' ? 2 : parseInt(task.adStyle());
+            var style = task.adStyle();
             var sizeObj = {
                 "1": { showWidth: 180, showHeight: 88 },
                 "2": { showWidth: 96, showHeight: 64 },
@@ -120,7 +128,12 @@ function load(task, rule, userdata, fetchTimeout, callback) {
             }
         }
         sdkIns.loadBanner(requestInfo.data, userdata, fetchTimeout, function (data) {
-            function callResult() {
+            function callResult(errorCode) {
+                if(errorCode) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: errorCode, des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                    return;
+                }
                 try {
                     if (task.aid && data.sdk) {
                         data.sdk.aid = task.aid();
@@ -136,8 +149,12 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                                 if(closePic)
                                     info.closePic = closePic;
                                 if (task.adStyle) {
-                                info.displayType = task.adStyle() == '' ? 2 : parseInt(task.adStyle());
+                                    info.displayType = task.adStyle() == '' ? 2 : parseInt(task.adStyle());
                                 }
+                                if(info.displayType) {
+                                    info.displayType = parseInt(info.displayType);
+                                }
+                                
                                 info.head = info.head || "";
                                 info.subhead = info.subhead || "";
                                 info.stats_act = userdata.stats_act;

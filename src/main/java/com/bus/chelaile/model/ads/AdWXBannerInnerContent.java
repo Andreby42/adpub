@@ -27,12 +27,6 @@ public class AdWXBannerInnerContent extends AdInnerContent {
 				this.pic = ad.pic.split("#")[0];
 			}
 			
-			this.wx_miniPro_id = ad.getWx_miniPro_id();
-			this.wx_miniPro_path = ad.getWx_miniPro_path();
-			if(this.wx_miniPro_id != null)
-                this.wx_miniPro_id = this.wx_miniPro_id.trim();
-			if(this.wx_miniPro_path != null)
-                this.wx_miniPro_path = this.wx_miniPro_path.trim();
 			this.site = ad.site;
 			if(StringUtils.isNotEmpty(ad.getServingPlace())) {
 				this.servingPlaceList = New.arrayList();

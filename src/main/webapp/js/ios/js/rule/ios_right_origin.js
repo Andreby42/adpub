@@ -40,6 +40,7 @@ var api_chelaile = {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[list.length - 1].info;
             info.adid = info.id;
+            info.picsList = [info.pic];
             list[list.length - 1].info = info;
             return [list[list.length - 1]];
         }

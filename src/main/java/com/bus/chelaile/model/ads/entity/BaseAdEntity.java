@@ -41,6 +41,9 @@ public abstract class BaseAdEntity {
 	private int apiType = 1; // 1 原生，目前只有1 
 	private String provider_id = "1"; // 我们自己的广告
 	
+	private String wxMiniProId; // 小程序appId
+	private String wxMiniProPath;
+	
 	@JSONField(serialize=false)  
 	private int priority;
 	@JSONField(serialize=false)  
@@ -483,6 +486,22 @@ public abstract class BaseAdEntity {
 	public void setPlacementId(String placementId) {
 		this.placementId = placementId;
 	}
+
+    public String getWxMiniProId() {
+        return wxMiniProId;
+    }
+
+    public void setWxMiniProId(String wxMiniProId) {
+        this.wxMiniProId = wxMiniProId;
+    }
+
+    public String getWxMiniProPath() {
+        return wxMiniProPath;
+    }
+
+    public void setWxMiniProPath(String wxMiniProPath) {
+        this.wxMiniProPath = wxMiniProPath;
+    }
     
     
 }
