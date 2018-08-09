@@ -54,4 +54,9 @@ String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
 	global.JsEncryptUtil = {};
 	global.JsEncryptUtil.md5 = global.md5;
 
+	global.RuleMap = {
+			"CLLHomeViewController":"homeAd",
+			"CLLGrayLineDetailViewController":"homeAd"
+		};
+
 })(global);

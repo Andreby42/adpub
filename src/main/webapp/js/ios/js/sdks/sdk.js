@@ -29,6 +29,7 @@ function loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult) {
                                 data.sdk.didReqTime = +new Date;
                             }
                             data.adEntityArray[0].info = arr[0];
+                            callResult();
                         } else {
                             callResult("-90003");
                         }
@@ -90,10 +91,17 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                     if (task_filter && data) {
                         data.adEntityArray = task_filter(data.adEntityArray);
                     }
-
-                    if (userdata && userdata.startMode && data.adEntityArray && data.adEntityArray.length > 0) {
+console.log("1info info = "+info);
+                    if (userdata &&  data.adEntityArray && data.adEntityArray.length > 0) {
                         var info = data.adEntityArray[0].info;
-                        info.startMode = userdata.startMode;
+                        if(userdata.startMode){
+                            info.startMode = userdata.startMode;
+                        }
+                        console.log("info info = "+info);
+                        info.isSplash = true;
+                        if(info.provider_id != 1 && !info.link) {
+                            info.targetType = 1;
+                        }
                         data.adEntityArray[0].info = info;
                     }
                     TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, { data: data, userdata: userdata, rule: rule, task: task });
@@ -154,7 +162,7 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                                 if(info.displayType) {
                                     info.displayType = parseInt(info.displayType);
                                 }
-                                
+
                                 info.head = info.head || "";
                                 info.subhead = info.subhead || "";
                                 info.stats_act = userdata.stats_act;
@@ -163,6 +171,15 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                                     info.subhead = info.head;
                                     info.head = tstr;
                                 }
+
+                                if(userdata.startMode){
+                                    info.startMode = userdata.startMode;
+                                    info.isSplash = true;
+                                    if(info.provider_id != 1 && !info.link) {
+                                        info.targetType = 1;
+                                    }
+                                }
+
                                 adentity.info = info;
                             }
                         }

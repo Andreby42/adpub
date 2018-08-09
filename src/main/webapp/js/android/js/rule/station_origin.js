@@ -49,6 +49,8 @@ var api_chelaile = {
             openType: row.openType,
             ad_order: 0,
             action: row.action,
+            wxMiniProId: row.wxMiniProId,
+            wxMiniProPath: row.wxMiniProPath,
             bannerInfo: {
                 bannerType:row.bannerInfo.bannerType,
                 color: row.bannerInfo.color,

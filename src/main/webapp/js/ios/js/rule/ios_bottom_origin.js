@@ -92,7 +92,7 @@ var api_shunfei = {
             if (net=='WIFI') {
                 net = 1;
             } else {
-                net = parseInt(net.substring(1,2))
+                net = parseInt(net.substring(0,1))
             }
 			
 			var sign = JsEncryptUtil.md5('177'+'zDczEwi)+(e1)6^YB)(s*WdPZy*Y0H6w'+ts)+'';
@@ -101,10 +101,10 @@ var api_shunfei = {
 	            url: 'http://i-mbv.biddingx.com/api/v1/bid',
 	            data: {
                     ad_data:"AsyncPostData",
-                    dataFormater:this.dataFormater;
+                    dataFormater:this.dataFormater,
 	            	 postData: {
                      
-                     "ip": '182.18.10.10',
+                     "ip": '',
 	            	 "user_agent": deviceInfo.userAgent || ''+'',
 	            	 "detected_time": parseInt(ts),
 	            	 "time_zone": "+0800",
@@ -133,16 +133,16 @@ var api_shunfei = {
 	        	         "wireless_network_type":parseInt(net),
 	        	         "for_advertising_id":deviceInfo.idfa || ''+'',
 	        	         "mobile_app": {
-	        	        	 "app_id":1987,
+	        	        	 "app_id":970,
 	        	        	 "sign":sign,
-	        	        	 "app_bundle_id":'com.ygkj.chelaile.standard',
+	        	        	 "app_bundle_id":'com.chelaile.lite',
 							 "first_launch": false
 	        	         }
                       },
 	            		 
                         "adslot":[
 	            			 {
-	            				 "ad_block_key":1985,
+	            				 "ad_block_key":1987,
 	            				 "adslot_type":17,
 	            				 "width":179,
 	            			     "height":88
@@ -169,28 +169,35 @@ var api_shunfei = {
                 if (typeof data == 'string')
 	            data = eval("a=" + data);
 
-	        var rows = data.batch_ma;
+	        var rows = data.ads;
 	        if (!rows || rows.length === 0)
 	            return null;
 
 	        for (var i = 0; i < rows.length; i++) {
 	            var row = rows[i];
 
+				var click_type = parseInt(row.click_type);
+				 
+				if( click_type == 2 ){
+					click_type = 0;	
+				}else{
+					click_type = 1;	
+				}
+				
 	            var ad = {
-	                provider_id: '12',
+	                provider_id: '13',
 	                ad_order: i,
-	                adType: row.adType,
-	                downloadType: row.download_type,
-	                packageName: row.package_name,
+	                adType: click_type,
 	                head: row.title,
-	                subhead: row.sub_title,
-	                pic: row.image,
-	                brandIcon: row.icon,
-	                link: row.landing_url,
-	                deepLink: row.deep_link,
-	                unfoldMonitorLink: row.impr_url.join(";"),
-	                clickMonitorLink: row.click_url.join(";"),
-					picsList: row.img_urls
+	                subhead: row.desc,
+	                pic: row.imgs[0],
+	                brandIcon: row.logo_url,
+	                link: row.click_url.join(";"),
+	                deepLink: row.deep_url,
+	                unfoldMonitorLink: row.exposure.join(";"),
+					actionMonitorLink: row.action_url.join(";"),
+	                clickMonitorLink: row.click.join(";"),
+					picsList: row.imgs
 	            }
 	            return [ad];
 	        }
@@ -336,6 +343,37 @@ var sdk_ifly = {
     }
 }
 
+// for some cities
+var sdk_ifly_no2 = {
+
+    sdkname : function() {
+        return "sdk_ifly";
+    },
+    
+    adurl_ios : function() {
+        return {
+            url:"IFLYSDK",
+            pos:"banner",
+            data:{
+                "appId":"5acf1d60",
+                "placementId":"${sdk_ifly_no2_placementId}"
+            }
+        }
+    },
+
+    filter_ios : function(list) {
+        return list;
+    },
+
+    aid : function () {
+        return 'sdk_ifly_no2_${sdk_ifly_no2_aid}';
+    },
+	
+	adStyle : function() {
+      return "${sdk_ifly_no2_displayType}";
+    }
+}
+
 // 手机sdk inmobi
 var sdk_inmobi = {
 
@@ -365,7 +403,7 @@ var sdk_inmobi = {
 }
 
 
-// 手机sdk inmobi no.2 。低价版inmobi
+//sdk inmobi no.2 。low price inmobi
 var sdk_inmobi_no2 = {
 
     sdkname : function() {

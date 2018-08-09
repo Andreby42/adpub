@@ -525,6 +525,39 @@ var sdk_voicead = {
     }
 }
 
+// sdk_voiced for some cities
+var sdk_voicead_no2 = {
+
+    adurl: function() {
+        return {
+            url: "IFLYSDK",
+            pos: "splash",
+            data: {
+                appId: "",
+                placementId: "19A3EC9B66B1A480B5B16ADF1489F867"
+            }
+        }
+    },
+
+    sdkname: function() {
+        return "sdk_voicead";
+    },
+
+    filter: function(ad) {
+        return ad;
+    },
+    
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        return ret;
+    },
+
+    aid : function () {
+        return 'sdk_voicead_no2';
+    }
+}
 
 
 function ads() {

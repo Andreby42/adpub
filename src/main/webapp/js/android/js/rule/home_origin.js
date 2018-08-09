@@ -55,6 +55,8 @@ var api_chelaile = {
 			type : row.targetType,
 			sindex :row.sindex,
 			picsList: row.picsList,
+            wxMiniProId: row.wxMiniProId,
+            wxMiniProPath: row.wxMiniProPath,
 			adStyle: row.displayType
         }
 

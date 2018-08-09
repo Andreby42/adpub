@@ -62,7 +62,7 @@ var sdk_gdt = {
             pos: "splash",
             data: {
                 appId: "1105595946",
-                placementId: "5050032383403340"
+                placementId: "1040935476065022"
             }
         }
     },
@@ -231,6 +231,42 @@ var sdk_voicead = {
     
     aid : function () {
         return 'sdk_voicead';
+    }
+}
+
+// sdk_voiced for some cities
+var sdk_voicead_no2 = {
+
+    sdkname : function() {
+        return "sdk_voicead";
+    },
+    
+    adurl_ios : function() {
+        return {
+            url:"IFLYSDK",
+            pos:"banner",
+            data:{
+                "appId":"5acf1d60",
+                "placementId":"B42751F67AAFC10F8CF1C090FD834962"
+            }
+        }
+    },
+
+    filter_ios: function(list) {
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.adid = "sdk_voicead_test";
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 5;
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
+    },
+    
+    aid : function () {
+        return 'sdk_voicead_no2';
     }
 }
 

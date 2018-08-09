@@ -14,7 +14,7 @@ if(typeof GetConfig == 'function') {
         reportCloseAdUrl = "https://dev.chelaile.net.cn/adpub/adv!closeAd.action";
     } else if('stage' == Config.server) {
         reportCloseAdUrl = "https://stage.chelaile.net.cn/adpub/adv!closeAd.action";
-    } else if('api' == Config.server) {
+    } else {
         reportCloseAdUrl = "https://api.chelaile.net.cn/adpub/adv!closeAd.action";
     }
 }
@@ -139,7 +139,11 @@ function trackClick(sdk, ad) {
 function trackClose(sdk, ad) {
     var params = trackBaseParams(sdk, ad);
     sendTrackRequest(closeTrackUrl, params);
-    reportAdsClose(sdk, ad);
+
+    var info = ad.info || {};
+    if(!info.isSplash && !info.isFloat) {
+        reportAdsClose(sdk, ad);
+    }
 }
 
 function trackThirdBaseParams(params) {

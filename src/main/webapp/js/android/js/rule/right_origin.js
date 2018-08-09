@@ -44,6 +44,8 @@ var api_chelaile = {
             openType: row.openType,
             ad_order: 0,
             pic: row.pic,
+            wxMiniProId: row.wxMiniProId,
+            wxMiniProPath: row.wxMiniProPath,
             picsList: [row.pic]
         };
 

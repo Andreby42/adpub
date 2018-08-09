@@ -48,6 +48,8 @@ var api_chelaile = {
 			action: row.action,
             pic: row.pic,
 			picsList: row.picsList,
+            wxMiniProId: row.wxMiniProId,
+            wxMiniProPath: row.wxMiniProPath,
 			adStyle: row.displayType
         }
 
@@ -819,6 +821,70 @@ var sdk_ifly = {
 	
 	adStyle : function() {
      return ${sdk_ifly_displayType};
+    }
+}
+
+// for some cities
+var sdk_ifly_no2 = {
+
+    adurl : function() {
+        return {
+            url:"IFLYSDK",
+            pos:"banner",
+            data:{
+                appId:"1106616441",
+                placementId:"${sdk_ifly_no2_placementId}"
+                // placementId:"9040714184494018"
+            }
+        }
+    },
+
+    sdkname : function() {
+        return "sdk_ifly";
+    },
+
+    hide : function(row) {
+        return false;
+    },
+	
+	asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        ret.head = ad.getTitle();
+        ret.subhead = ad.getSubTitle();
+        return ret;
+    },
+
+    exurls : function(row) {
+        return {}
+    },
+   
+    filter: function(list) {
+		var ad = list && list[0];
+        if (!ad) return null;
+        
+        if (this.adCheck(ad)) {
+          return ad;
+        } else {
+          return null;
+        }
+    },
+    adCheck : function(ad) {
+      if (this.adStyle() == 3){
+        console.log("ad img list: " + ad.getImgUrls());
+        return (ad.getImgUrls() != null && ad.getImgUrls().size() == 3);
+      } else {
+        return true;
+      }
+    },
+
+    aid : function () {
+        return 'sdk_ifly_no2_${sdk_ifly_no2_aid}';
+    },
+	
+	adStyle : function() {
+     return ${sdk_ifly_no2_displayType};
     }
 }
 
