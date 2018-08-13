@@ -282,7 +282,7 @@ public class JsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "interstitialHome_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "interstitialHome_origin", request, ShowType.INTERSHOME_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -306,7 +306,7 @@ public class JsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "interstitialTransit_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "interstitialTransit_origin", request, ShowType.INTERSTRANSIT_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -330,7 +330,7 @@ public class JsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "interstitialEnergy_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "interstitialEnergy_origin", request, ShowType.INTERSENERGY_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -354,7 +354,7 @@ public class JsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "interstitialMine_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "interstitialMine_origin", request, ShowType.INTERSMINE_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
