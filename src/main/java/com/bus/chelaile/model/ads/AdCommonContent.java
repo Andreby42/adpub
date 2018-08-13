@@ -12,7 +12,6 @@ import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
-import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.util.JsonBinder;
 import com.bus.chelaile.util.New;
 
@@ -21,8 +20,8 @@ import com.bus.chelaile.util.New;
  * @author 41945
  *
  */
-public class AdCommonContent extends AdInnerContent{
-	private String pic; // 广告图片的URL
+public class AdCommonContent extends AdInnerContent {
+    private String pic; // 广告图片的URL
 
     private int apiType;
     private int provider_id; // 广告提供商， 0 自采买， 2 广点通
@@ -36,21 +35,31 @@ public class AdCommonContent extends AdInnerContent{
     private int backup; // 是否是备选方案
     private int clickDown; // 点击后排序到最后
 
+    private int isSkip;
+    private int isDisplay;
+    private int duration;
+    private String iosURL;
+    private String androidURL;
+
     //  private String tasksStr; // tasks列表
     private List<TaskModel> tasksJ;
     private List<Long> timeouts; // 超时时间段设置
 
     private TasksGroup tasksGroup;
-    
 
     protected static final Logger logger = LoggerFactory.getLogger(AdCommonContent.class);
-	
 
     @Override
     protected void parseJson(String jsonr) {
-    	AdCommonContent ad = null;
+        AdCommonContent ad = null;
         ad = JSON.parseObject(jsonr, AdCommonContent.class);
         if (ad != null) {
+            this.isSkip = ad.isSkip;
+            this.isDisplay = ad.isDisplay;
+            this.duration = ad.duration;
+            this.iosURL = ad.iosURL;
+            this.androidURL = ad.androidURL;
+
             this.adWeight = ad.adWeight;
             this.autoInterval = ad.autoInterval * 1000;
             this.mixInterval = ad.mixInterval * 1000;
@@ -62,19 +71,18 @@ public class AdCommonContent extends AdInnerContent{
             this.setImgsType(ad.getImgsType());
             this.pic = ad.pic;
             this.clickDown = ad.clickDown;
-          
-            Map<String,String> map = New.hashMap();
 
+            Map<String, String> map = New.hashMap();
+            
             this.setTasksJ(ad.getTasksJ());
             List<List<String>> tasksG = New.arrayList();
             if (this.getTasksJ() != null && this.getTasksJ().size() > 0) {
                 Collections.sort(tasksJ, TaskModel_COMPARATOR);
                 Set<Integer> prioritys = New.hashSet();
                 for (TaskModel t : getTasksJ()) {
-                	
-                	map.put(t.getApiName(), t.getDisplayType()+"");
-                	
-                	
+
+                    map.put(t.getApiName(), t.getDisplayType() + "");
+
                     if (!prioritys.contains(t.getPriority())) {
                         List<String> ts = New.arrayList();
                         ts.add(t.getApiName());
@@ -92,18 +100,18 @@ public class AdCommonContent extends AdInnerContent{
                 tasksGroups.setMap(map);
                 tasksGroups.setClosePic(ad.getClosePic());
                 this.tasksGroup = tasksGroups;
-            } else if (provider_id < 2) {    // 如果tasks为空，设置默认的值，既车来了api
+            } else if (provider_id < 2) { // 如果tasks为空，设置默认的值，既车来了api
                 this.tasksGroup = createOwnAdTask(ad);
             }
             try {
-				logger.info("json={}",JsonBinder.toJson(this.tasksGroup, JsonBinder.always));
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
+                logger.info("json={}", JsonBinder.toJson(this.tasksGroup, JsonBinder.always));
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
             setCommentContext(ad, this.pic);
         }
     }
-    
+
     @Override
     public int getIsBackup() {
         return this.backup;
@@ -111,7 +119,14 @@ public class AdCommonContent extends AdInnerContent{
 
     @Override
     public String extractFullPicUrl(String s) {
-        return null;
+        if (pic != null && !pic.equals("")) {
+            return getFullPicUrl(getPic());
+        }
+        if (s.equalsIgnoreCase("ios")) {
+            return getFullPicUrl(getIosURL());
+        } else {
+            return getFullPicUrl(getAndroidURL());
+        }
     }
 
     @Override
@@ -157,7 +172,11 @@ public class AdCommonContent extends AdInnerContent{
     }
 
     @Override
-    public void completePicUrl() {}
+    public void completePicUrl() {
+        this.pic = getFullPicUrl(pic);
+        this.setIosURL(getFullPicUrl(getIosURL()));
+        this.setAndroidURL(getFullPicUrl(getAndroidURL()));
+    }
 
     /**
      * @return the backup
@@ -313,10 +332,44 @@ public class AdCommonContent extends AdInnerContent{
         this.tasksJ = tasksJ;
     }
 
-	
+    public int getIsSkip() {
+        return isSkip;
+    }
 
+    public void setIsSkip(int isSkip) {
+        this.isSkip = isSkip;
+    }
 
+    public int getIsDisplay() {
+        return isDisplay;
+    }
 
-    
-    
+    public void setIsDisplay(int isDisplay) {
+        this.isDisplay = isDisplay;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getIosURL() {
+        return iosURL;
+    }
+
+    public void setIosURL(String iosURL) {
+        this.iosURL = iosURL;
+    }
+
+    public String getAndroidURL() {
+        return androidURL;
+    }
+
+    public void setAndroidURL(String androidURL) {
+        this.androidURL = androidURL;
+    }
+
 }

@@ -29,6 +29,10 @@ public class OtherAdEntity extends BaseAdEntity {
     private int imgsType; // 图片样式  0小图， 1 大图， 2 信息流专用右图小图样式
 
     private String action; //跳转信息流使用的字段
+    
+    private int isSkip;
+    private int isDisplay;
+    private int duration;
 
     // 构造方法
     //	public LineFeedAdEntity() {
@@ -156,6 +160,30 @@ public class OtherAdEntity extends BaseAdEntity {
 	public void setStype(ShowType stype) {
 		this.stype = stype;
 	}
+
+    public int getIsSkip() {
+        return isSkip;
+    }
+
+    public void setIsSkip(int isSkip) {
+        this.isSkip = isSkip;
+    }
+
+    public int getIsDisplay() {
+        return isDisplay;
+    }
+
+    public void setIsDisplay(int isDisplay) {
+        this.isDisplay = isDisplay;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
     
     
     

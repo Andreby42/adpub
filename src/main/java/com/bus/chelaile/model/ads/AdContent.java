@@ -121,11 +121,18 @@ public class AdContent {
             AdLineRightInnerContent rightInner = new AdLineRightInnerContent();
             rightInner.setAndParseJson(content);
             innerContent = rightInner;
-        }else if(ShowType.TRANSFER_ADV.getType().equals(showType) || ShowType.CAR_ALL_LINE_ADV.getType().equals(showType) || ShowType.ALL_CAR_ADV.getType().equals(showType) ) {      // 通用
+        }else if(ShowType.TRANSFER_ADV.getType().equals(showType) || ShowType.CAR_ALL_LINE_ADV.getType().equals(showType) || ShowType.ALL_CAR_ADV.getType().equals(showType)
+                || ShowType.INTERSHOME_ADV.getType().equals(showType) || ShowType.INTERSTRANSIT_ADV.getType().equals(showType) || ShowType.INTERSENERGY_ADV.getType().equals(showType)
+                 || ShowType.INTERSMINE_ADV.getType().equals(showType)) {      // 通用
         	AdCommonContent inner = new AdCommonContent();
             inner.setAndParseJson(content);
             innerContent = inner;
         } else if(ShowType.GUIDE_ADV.getType().equals(showType)) {
+            AdGuideInnerContent inner = new AdGuideInnerContent();
+            inner.setAndParseJson(content);
+            innerContent = inner;
+        }
+        else if(ShowType.GUIDE_ADV.getType().equals(showType)) {
             AdGuideInnerContent inner = new AdGuideInnerContent();
             inner.setAndParseJson(content);
             innerContent = inner;

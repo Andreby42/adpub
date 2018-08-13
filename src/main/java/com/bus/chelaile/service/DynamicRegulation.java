@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.koubei.CouponService;
-import com.bus.chelaile.thread.KoubeiThread;
 import com.bus.chelaile.thread.UpdateSendPV;
 import com.bus.chelaile.koubei.KBUpdateCouponStatusThread;
 

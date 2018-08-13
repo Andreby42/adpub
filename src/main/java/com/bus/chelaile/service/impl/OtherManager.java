@@ -4,31 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
-import com.alibaba.fastjson.JSON;
-
-import com.bus.chelaile.common.Constants;
-
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdCommonContent;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
-
-
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
-
 import com.bus.chelaile.model.ads.entity.OtherAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
-import com.bus.chelaile.service.model.Ads;
-import com.bus.chelaile.service.model.FeedAdGoto;
-import com.bus.chelaile.service.model.Thumbnails;
 import com.bus.chelaile.strategy.AdCategory;
-import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 /**
  * 换乘，更多车辆，站点对应线路接口走这个manager
@@ -138,6 +125,16 @@ public class OtherManager extends AbstractManager {
                 res.setSubhead(inner.getSlogan());
                 res.setHead(inner.getFeedAdTitle());
                 res.setPic(inner.getPic());
+                
+                if(showType == ShowType.INTERSENERGY_ADV || showType == ShowType.INTERSHOME_ADV
+                        || showType == ShowType.INTERSMINE_ADV || showType == ShowType.INTERSTRANSIT_ADV) {
+                    res.setIsDisplay(inner.getIsDisplay());
+                    res.setIsSkip(inner.getIsSkip());
+                    res.setDuration(inner.getDuration());
+                    res.setPic(res.getPicUrl(advParam.getS(), inner.getIosURL(), inner.getAndroidURL(), inner.getPic()));
+                    res.setPicsList(New.arrayList());
+                    res.getPicsList().add(res.getPic());
+                }
                 
                 if(inner.getTasksGroup() != null) {
                     res.setTasksGroup(inner.getTasksGroup());

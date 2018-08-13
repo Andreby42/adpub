@@ -151,9 +151,9 @@ public abstract class AbstractManager {
         if (entities != null && entities.size() > 0) {
             for (BaseAdEntity ad : entities) {
                 // 子类已经处理过了
-                if (ad.getPicsList() != null) {
-                    continue;
-                }
+//                if (ad.getPicsList() != null) {
+//                    continue;
+//                }
                 AdContentCacheEle ace = adMap.get(ad.getId());
                 if (ace != null) {
                     ad.setDisplayType(ace.getAds().getAdInnerContent().getDisplayType());

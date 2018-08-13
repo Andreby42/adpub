@@ -104,6 +104,22 @@ public class JSService {
                 //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.ALL_CAR_ADV, queryParam);
                 break; 
+            case "interstitialHome":
+                //                showType = ShowType.LINE_FEED_ADV;
+                entities = otherManager.doServiceList(param, ShowType.INTERSHOME_ADV, queryParam);
+                break;
+            case "interstitialTransit":
+                //                showType = ShowType.LINE_FEED_ADV;
+                entities = otherManager.doServiceList(param, ShowType.INTERSTRANSIT_ADV, queryParam);
+                break;
+            case "interstitialEnergy":
+                //                showType = ShowType.LINE_FEED_ADV;
+                entities = otherManager.doServiceList(param, ShowType.INTERSENERGY_ADV, queryParam);
+                break;
+            case "interstitialMine":
+                //                showType = ShowType.LINE_FEED_ADV;
+                entities = otherManager.doServiceList(param, ShowType.INTERSMINE_ADV, queryParam);
+                break;
 
             default:
                 logger.error("未知类型的 site， udid={}, site={}", param);
