@@ -55,8 +55,12 @@ String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
 	global.JsEncryptUtil.md5 = global.md5;
 
 	global.RuleMap = {
-			"CLLHomeViewController":"homeAd",
-			"CLLGrayLineDetailViewController":"homeAd"
+			//理论上可以配置做任意界面浮层广告
+			"CLLHomeViewController":"homeAd" //首页
+			,"CLLGrayLineDetailViewController":"homeAd" //线路详情灰度
+			,"CLLTransferMainViewController":"homeAd"   //路线
+			,"CLLEnergyMainViewController":"homeAd"   // 福利社
+			,"CLLMoreMainViewController":"homeAd"    //我
 		};
 
 })(global);

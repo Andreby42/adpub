@@ -270,6 +270,36 @@ var sdk_voicead_no2 = {
     }
 }
 
+var sdk_adview = {
+
+    sdkname: function() {
+        return "sdk_adview";
+    },
+
+    adurl_ios: function() {
+        return {
+            url: "AdViewSDK",
+            pos: "splash",
+            data: {
+                "appId":"SDK20181709050815opfx8spc79j5ria",
+                "placementId":"POSIDbcr1f417qu6v"
+            }
+        }
+    },
+
+    filter_ios : function(list) {
+        return list;
+    },
+
+    aid : function () {
+        return 'sdk_adview';
+    },
+
+	adStyle : function() {
+      return "2";
+    }
+}
+
 function ads() {
 
 //var ads = [api_chelaile, sdk_inmobi, sdk_toutiao, sdk_gdt, sdk_voicead, sdk_baidu];

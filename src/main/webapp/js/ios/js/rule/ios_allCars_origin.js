@@ -315,6 +315,38 @@ var sdk_inmobi = {
     }
 }
 
+
+
+var sdk_adview = {
+
+    sdkname: function() {
+        return "sdk_adview";
+    },
+
+    adurl_ios: function() {
+        return {
+            url: "AdViewSDK",
+            pos: "banner",
+            data: {
+                "appId":"SDK20181709050815opfx8spc79j5ria",
+                "placementId":"${sdk_adview_placementId}"
+            }
+        }
+    },
+
+    filter_ios : function(list) {
+        return list;
+    },
+
+    aid : function () {
+        return 'sdk_adview_${sdk_adview_aid}';
+    },
+
+	adStyle : function() {
+      return '${sdk_adview_displayType}';
+    }
+}
+
 function ads() {
 
 //var ads = [api_chelaile, sdk_inmobi, sdk_toutiao, sdk_gdt, sdk_voicead, sdk_baidu];

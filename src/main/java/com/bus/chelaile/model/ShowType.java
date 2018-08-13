@@ -30,7 +30,11 @@ public enum ShowType {
 	TRANSFER_ADV("24"),		//路线换乘
 	CAR_ALL_LINE_ADV("25"),	//同站线路
 	ALL_CAR_ADV("26"),		//更多车辆
-	GUIDE_ADV("27");         //导流位广告
+	GUIDE_ADV("27"),         //导流位广告
+	INTERSHOME_ADV("28"),     //首页页插屏
+	INTERSTRANSIT_ADV("29"),     //路线页插屏
+	INTERSENERGY_ADV("30"),     //福利社插屏
+	INTERSMINE_ADV("31");     //我的页插屏
     
     private String type;
     private int val;

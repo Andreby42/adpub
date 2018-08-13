@@ -32,17 +32,17 @@ function load(task, userdata, callback) {
             } else {
                 console.log(logHead + ' get ad:' + ad);
                 resp.ad = ad;
-                if (requestInfo.pos == "splash") {
+                if (requestInfo.pos == "splash" || requestInfo.pos == "interstitial") {
                     resp.isSkip = 0;
                     resp.isDisplay = 0;
                     resp.duration = 4;
                     resp.isFullShow = 0;
                 }
                 resp.entity = task.asEntity ? task.asEntity(ad) : ad;
-				if( task.banner ){
-					resp.banner = task.banner();
-				}
-				
+                if( task.banner ){
+                    resp.banner = task.banner();
+                }
+                
                 callback(resp);
             }
         } catch (e) {
@@ -54,7 +54,7 @@ function load(task, userdata, callback) {
     console.log("*********" + requestInfo.pos);
     if (requestInfo.pos == "splash") {
         sdkIns.loadSplash(requestInfo.data.appId, requestInfo.data.placementId, userdata, 3000, wrappedFn);
-    } else if (requestInfo.pos == "banner") {
+    } else if (requestInfo.pos == "banner"  || requestInfo.pos == "interstitial") {
         console.log(vendor + ' load banner')
         sdkIns.loadBanner(requestInfo.data.appId, requestInfo.data.placementId, userdata, 3000, wrappedFn);
     }

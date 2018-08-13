@@ -31,15 +31,6 @@ public class IosJsRule extends AbstractController {
 
 	private static final Logger logger = LoggerFactory.getLogger(IosJsRule.class);
 
-
-	// for test
-	@ResponseBody
-	@RequestMapping(value = "/splash2.js", produces = "text/html;charset=UTF-8")
-	public String splash2(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-		return "hello_1111111111你好 啊";
-	}
-
 	/*
 	 * 开屏
 	 */

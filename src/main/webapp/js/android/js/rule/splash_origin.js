@@ -559,6 +559,38 @@ var sdk_voicead_no2 = {
     }
 }
 
+var sdk_adview = {
+
+    adurl: function() {
+        return {
+            url: "ADVIEWSDK",
+            pos: "splash",
+            data: {
+                appId: "SDK201817090508490a6u8s7z5m4aoqf",
+                placementId: "POSIDpkv8ukt3j0th"
+            }
+        }
+    },
+
+    sdkname: function() {
+        return "sdk_adview";
+    },
+
+    filter: function(ad) {
+        return ad;
+    },
+    
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        return ret;
+    },
+
+    aid : function () {
+        return 'sdk_adview';
+    }
+}
 
 function ads() {
     return {

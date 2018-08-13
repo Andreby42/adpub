@@ -56,13 +56,14 @@ public class AbstractController {
                 }
             }
 
-            List<Text> list = StaticAds.NEW_JS_FILE_STR.get(tag);
+            Text list = StaticAds.NEW_JS_FILE_STR.get(tag);
 
 
             JSFileHandle.replaceNewJs(p.getS(), showType, tgs, tag, map);
 
             try {
-                ReplaceJs.getNewReplaceStr(list, map, writer);
+                list.write(writer, map);
+//                ReplaceJs.getNewReplaceStr(list, map, writer);
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
             }

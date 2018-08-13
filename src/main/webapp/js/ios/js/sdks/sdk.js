@@ -78,7 +78,7 @@ function load(task, rule, userdata, fetchTimeout, callback) {
 
             function callResult(errorCode) {
                 if(errorCode) {
-                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: errorCode, des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: errorCode, des: "" + errorCode, userdata: userdata, data: data, rule: rule, task: task });
                     callback(null);
                     return;
                 }
@@ -138,7 +138,7 @@ console.log("1info info = "+info);
         sdkIns.loadBanner(requestInfo.data, userdata, fetchTimeout, function (data) {
             function callResult(errorCode) {
                 if(errorCode) {
-                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: errorCode, des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: errorCode, des: "" + errorCode, userdata: userdata, data: data, rule: rule, task: task });
                     callback(null);
                     return;
                 }

@@ -663,6 +663,64 @@ var sdk_ifly = {
 }
 
 
+var sdk_adview = {
+
+    adurl : function() {
+        return {
+            url:"ADVIEWSDK",
+            pos:"banner",
+            data:{
+                appId:"SDK201817090508490a6u8s7z5m4aoqf",
+                placementId:"${sdk_adview_placementId}"
+                // placementId:"9040714184494018"
+            }
+        }
+    },
+
+    sdkname : function() {
+        return "sdk_adview";
+    },
+
+    hide : function(row) {
+        return false;
+    },
+	
+	asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        ret.head = ad.getTitle();
+        ret.subhead = ad.getSubTitle();
+        return ret;
+    },
+
+    exurls : function(row) {
+        return {}
+    },
+   
+    filter: function(list) {
+		var ad = list && list[0];
+        if (!ad) return null;
+        
+        if (this.adCheck(ad)) {
+          return ad;
+        } else {
+          return null;
+        }
+    },
+    adCheck : function(ad) {
+      return true;
+    },
+
+    aid : function () {
+        return 'sdk_adview_${sdk_adview_aid}';
+    },
+	
+	adStyle : function() {
+     return ${sdk_adview_displayType};
+    }
+}
+
 
 function ads() {
     return {

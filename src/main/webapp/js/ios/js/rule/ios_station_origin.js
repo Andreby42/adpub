@@ -1,6 +1,3 @@
-
-
-
 env = {
     wifi: true
 }
@@ -12,16 +9,16 @@ var api_chelaile = {
 
     adurl_ios: function() {
         return {
-            type:"banner",
+            type: "banner",
             url: 'https://api.chelaile.net.cn/adpub/adv!getStationAds.action?${QUERY_STRING}',
-            data:{
-                dataFormater:this.dataFormater
+            data: {
+                dataFormater: this.dataFormater
             }
         }
     },
-    
-    dataFormater : {
-        parse:function(data) {
+
+    dataFormater: {
+        parse: function(data) {
             var array = data.split("YGKJ");
             if (array.length < 2) {
                 return null;
@@ -30,14 +27,14 @@ var api_chelaile = {
             if (typeof data == 'string')
                 data = eval("a=" + data);
             var rows = data.jsonr.data.ads;
-            console.log("rows="+rows);
+            console.log("rows=" + rows);
             return rows;
         }
     },
-    
-    
+
+
     filter_ios: function(list) {
-        if(Array.isArray(list) && list.length > 0) {
+        if (Array.isArray(list) && list.length > 0) {
             var info = list[list.length - 1].info;
             info.adid = info.id;
             list[list.length - 1].info = info;
@@ -45,8 +42,8 @@ var api_chelaile = {
         }
         return [];
     },
-    
-    aid : function () {
+
+    aid: function() {
         return 'api_chelaile';
     }
 }
@@ -59,22 +56,29 @@ var sdk_gdt = {
     sdkname: function() {
         return "sdk_gdt";
     },
-    
+
     adurl_ios: function() {
         return {
             url: "GDTSDK",
             pos: "banner",
             data: {
-                "appId":"1105595946",
-                "placementId":"9060637344635371"
+                "appId": "1105595946",
+                "placementId": "9060637344635371"
             }
         }
     },
 
-    filter_ios : function(list) {
-        if(Array.isArray(list) && list.length > 0) {
+    filter_ios: function(list) {
+        if (Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'}};
+            info.bannerInfo = {
+                'bannerType': 4,
+                'color': '#66ccff',
+                'sloganColor': '#000000',
+                'button': {
+                    'buttonPic': 'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'
+                }
+            };
             info.pic = '';
             list[0].info = info;
             return [list[0]];
@@ -82,11 +86,11 @@ var sdk_gdt = {
         return [];
     },
 
-    aid : function () {
+    aid: function() {
         return 'sdk_gdt';
     },
-    
-    adStyle : function() {
+
+    adStyle: function() {
         return 2;
     }
 }
@@ -96,22 +100,29 @@ var sdk_baidu = {
     sdkname: function() {
         return "sdk_baidu";
     },
-    
+
     adurl_ios: function() {
         return {
             url: "BaiduSDK",
             pos: "banner",
             data: {
-                "appId":"d654f7e6",
-                "placementId":"5826171"
+                "appId": "d654f7e6",
+                "placementId": "5826171"
             }
         }
     },
-    
-    filter_ios : function(list) {
-        if(Array.isArray(list) && list.length > 0) {
+
+    filter_ios: function(list) {
+        if (Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'}};
+            info.bannerInfo = {
+                'bannerType': 4,
+                'color': '#66ccff',
+                'sloganColor': '#000000',
+                'button': {
+                    'buttonPic': 'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'
+                }
+            };
             info.pic = '';
             list[0].info = info;
             return [list[0]];
@@ -119,11 +130,11 @@ var sdk_baidu = {
         return [];
     },
 
-    aid : function () {
+    aid: function() {
         return 'sdk_baidu';
     },
-    
-    adStyle : function() {
+
+    adStyle: function() {
         return 2;
     }
 }
@@ -135,8 +146,8 @@ var sdk_toutiao = {
             url: "TOUTIAOSDK",
             pos: "banner",
             data: {
-                "appId":"5001451",
-                "placementId":"901451521"
+                "appId": "5001451",
+                "placementId": "901451521"
             }
         }
     },
@@ -145,76 +156,134 @@ var sdk_toutiao = {
         return "sdk_toutiao";
     },
 
-    filter_ios : function(list) {
-        if(Array.isArray(list) && list.length > 0) {
+    filter_ios: function(list) {
+        if (Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'}};
+            info.bannerInfo = {
+                'bannerType': 4,
+                'color': '#66ccff',
+                'sloganColor': '#000000',
+                'button': {
+                    'buttonPic': 'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'
+                }
+            };
             info.pic = '';
             list[0].info = info;
             return [list[0]];
         }
         return [];
     },
-    
-    aid : function () {
+
+    aid: function() {
         return 'sdk_toutiao';
     },
-    
-    adStyle : function() {
-        return 1;
+
+    adStyle: function() {
+        return 2;
     }
 }
 
 var sdk_ifly = {
 
-    sdkname : function() {
+    sdkname: function() {
         return "sdk_ifly";
     },
-    
-    adurl_ios : function() {
+
+    adurl_ios: function() {
         return {
-            url:"IFLYSDK",
-            pos:"banner",
-            data:{
-                "appId":"5acf1d60",
-                "placementId":"70EB266B2C8429B0B6C10D9B6F9BFA93"
+            url: "IFLYSDK",
+            pos: "banner",
+            data: {
+                "appId": "5acf1d60",
+                "placementId": "70EB266B2C8429B0B6C10D9B6F9BFA93"
             }
         }
     },
 
-    filter_ios : function(list) {
-        if(Array.isArray(list) && list.length > 0) {
+    filter_ios: function(list) {
+        if (Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.bannerInfo = {'bannerType':4,'color':'#66ccff','sloganColor':'#000000','button':{'buttonPic':'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'}};
+            info.bannerInfo = {
+                'bannerType': 4,
+                'color': '#66ccff',
+                'sloganColor': '#000000',
+                'button': {
+                    'buttonPic': 'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'
+                }
+            };
             info.pic = '';
             list[0].info = info;
             return [list[0]];
         }
         return [];
     },
-    
-    aid : function () {
+
+    aid: function() {
         return 'sdk_ifly';
     },
-    
-    adStyle : function() {
+
+    adStyle: function() {
         return 2;
     }
 }
 
 
+var sdk_adview = {
+
+    sdkname: function() {
+        return "sdk_adview";
+    },
+
+    adurl_ios: function() {
+        return {
+            url: "AdViewSDK",
+            pos: "banner",
+            data: {
+                "appId": "SDK20181709050815opfx8spc79j5ria",
+                "placementId": "POSIDyy1gy4o99so9"
+            }
+        }
+    },
+
+    filter_ios: function(list) {
+        if (Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.bannerInfo = {
+                'bannerType': 4,
+                'color': '#66ccff',
+                'sloganColor': '#000000',
+                'button': {
+                    'buttonPic': 'https://image3.chelaile.net.cn//3c8d25de6d6b481989e596bad3d42cff'
+                }
+            };
+            info.pic = '';
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
+    },
+
+    aid: function() {
+        return 'sdk_adview';
+    },
+
+    adStyle: function() {
+        return '2';
+    }
+}
+
 
 function ads() {
 
-//var ads = [api_chelaile, sdk_inmobi, sdk_toutiao, sdk_gdt, sdk_voicead, sdk_baidu];
+    //var ads = [api_chelaile, sdk_inmobi, sdk_toutiao, sdk_gdt, sdk_voicead, sdk_baidu];
     return {
-      traceInfo : {
-          traceid: '${TRACEID}',
-          pid: '15'
-      },
-      closeInfo: {
-          closePic: '${closePic}'
-      },
+        traceInfo: {
+            traceid: '${TRACEID}',
+            pid: '15'
+        },
+        closeInfo:{
+            closePic: '${closePic}'
+            },
         timeouts: ${TIMEOUTS},
         tasks: ${TASKS}
     }
@@ -225,10 +294,10 @@ console.log('splash loaded');
 
 
 var getAds = require('./fetch');
+
 function loadAds(userdata, callback) {
-    if(getAds) {
+    if (getAds) {
         getAds(ads(), userdata, callback);
     }
 }
 module.exports = loadAds;
-

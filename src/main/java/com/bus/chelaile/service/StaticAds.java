@@ -57,7 +57,7 @@ public class StaticAds {
 	// js原始文件的缓存
 	public static Map<String, String> JS_FILE_STR = New.hashMap();
 	// 新的替换
-	public static Map<String,List<Text>> NEW_JS_FILE_STR = New.hashMap();
+	public static Map<String, Text> NEW_JS_FILE_STR = New.hashMap();
 	
 	// 存储placementId的缓存
 	public static Map<String, String> androidPlacementMap = New.hashMap();

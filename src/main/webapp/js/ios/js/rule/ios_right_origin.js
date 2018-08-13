@@ -157,7 +157,7 @@ var sdk_ifly = {
             pos:"banner",
             data:{
                 "appId":"5acf1d60",
-                "placementId":"957963E3D7047F783BE1CBFC450BF458"
+                "placementId":"2EC979D4F845F81DD899B62F497E3F67"
             }
         }
     },

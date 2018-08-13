@@ -122,6 +122,17 @@ function trackExhibit(sdk, ad) {
     addParamsIfNotNull(params, "adv_desc", info.subhead);
 
     sendTrackRequest(exhibitTrackUrl, params);
+    
+    if(info.unfoldMonitorLink && info.actionMonitorLink) {
+        var actionLink = info.actionMonitorLink.replace('{action}','5');
+        var ts = (+new Date) + '';
+        ts = String(ts).slice(0,-3);
+        actionLink = actionLink.replace('{time}', ts);
+        actionLink = actionLink.replace('{play_time}', '0')
+        
+        sendTrackRequest(info.unfoldMonitorLink, {});
+        sendTrackRequest(actionLink, {});
+    }
 }
 
 function trackClick(sdk, ad) {
@@ -134,6 +145,19 @@ function trackClick(sdk, ad) {
     addParamsIfNotNull(params, "adv_desc", info.subhead);
 
     sendTrackRequest(clickTrackUrl, params);
+    if(info.actionMonitorLink) {
+        var actionLink = info.actionMonitorLink.replace('{action}','6');
+        var ts = (+new Date) + '';
+        ts = String(ts).slice(0,-3);
+        actionLink = actionLink.replace('{time}', ts);
+        actionLink = actionLink.replace('{play_time}', '0');
+        
+        sendTrackRequest(actionLink, {});
+    }
+    // some own ads ,has clickLink ,have no actionLink
+    if(info.clickMonitorLink) {
+        sendTrackRequest(info.clickMonitorLink, {});
+    }
 }
 
 function trackClose(sdk, ad) {
@@ -143,6 +167,16 @@ function trackClose(sdk, ad) {
     var info = ad.info || {};
     if(!info.isSplash && !info.isFloat) {
         reportAdsClose(sdk, ad);
+    } else {
+        if(info.actionMonitorLink) {
+            var actionLink = info.actionMonitorLink.replace('{action}','7');
+            var ts = (+new Date) + '';
+            ts = String(ts).slice(0,-3);
+            actionLink = actionLink.replace('{time}', ts);
+            actionLink = actionLink.replace('{play_time}', '0')
+            
+            sendTrackRequest(actionLink, {});
+        }
     }
 }
 
