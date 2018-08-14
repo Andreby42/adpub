@@ -870,8 +870,6 @@ var sdk_adview = {
     }
 }
 
-
-
 function ads() {
     return {
       traceInfo : {

@@ -322,6 +322,16 @@ function tryNthTaskGroup(rule, nth, callback) {
                 if(rule.closeInfo && rule.closeInfo.closePic) {
                     resp.closePic = rule.closeInfo.closePic;
                 }
+
+                try {
+                    if(
+                        (entity.head && entity.head.contains("记录")) || (entity.subhead && entity.subhead.contains("记录"))
+                        ) {
+                        resp.brandPic = "https://image3.chelaile.net.cn/400f580348814c64937526531d307d02";
+                    }
+                } catch(error) {
+                    //
+                }
                 
 
                 if (sdkInfo.task.adStyle) {

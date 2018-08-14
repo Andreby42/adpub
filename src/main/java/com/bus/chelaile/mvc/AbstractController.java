@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bus.chelaile.common.ReplaceJs;
 import com.bus.chelaile.common.Text;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.TaskEntity;

@@ -232,8 +232,48 @@ public class BusAdvActionV2 extends AbstractController {
     public String getGuideAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         AdvParam advParam = getActionParam(request);
 //        advParam.setMoreCities(getInt(request, "morecities"));
-        advParam.setWxs(request.getParameter("wxs")); // 小程序来源
         Object result = serviceManager.getGuideAds(advParam);
+        
+        return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    // 插屏的四个广告
+    @ResponseBody
+    @RequestMapping(value = "adv!getInterstitialHomeAds.action", produces = "text/plain;charset=UTF-8")
+    public String getInterstitialHomeAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        AdvParam advParam = getActionParam(request);
+//        advParam.setMoreCities(getInt(request, "morecities"));
+        Object result = serviceManager.getCommont(advParam, ShowType.INTERSHOME_ADV);
+        
+        return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!getInterstitialTransitAds.action", produces = "text/plain;charset=UTF-8")
+    public String getInterstitialTransitAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        AdvParam advParam = getActionParam(request);
+//        advParam.setMoreCities(getInt(request, "morecities"));
+        Object result = serviceManager.getCommont(advParam, ShowType.INTERSTRANSIT_ADV);
+        
+        return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!getInterstitialEnergyAds.action", produces = "text/plain;charset=UTF-8")
+    public String getInterstitialEnergyAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        AdvParam advParam = getActionParam(request);
+//        advParam.setMoreCities(getInt(request, "morecities"));
+        Object result = serviceManager.getCommont(advParam, ShowType.INTERSENERGY_ADV);
+        
+        return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "adv!getInterstitialMineAds.action", produces = "text/plain;charset=UTF-8")
+    public String getInterstitialMineAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        AdvParam advParam = getActionParam(request);
+//        advParam.setMoreCities(getInt(request, "morecities"));
+        Object result = serviceManager.getCommont(advParam, ShowType.INTERSMINE_ADV);
         
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
     }

@@ -12,7 +12,7 @@ var api_chelaile = {
 
     adurl: function() {
         return {
-            url: 'https://api.chelaile.net.cn/adpub/adv!getInterstitialHomeAds.action'}
+            url: 'https://api.chelaile.net.cn/adpub/adv!getInterstitialTransitAds.action'}
     },
 
 
@@ -236,7 +236,7 @@ function ads() {
     return {
         traceInfo: {
             traceid: '${TRACEID}',
-            pid: '28'
+            pid: '29'
             },
         closeInfo: {
             closePic: '${closePic}'

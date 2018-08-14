@@ -249,6 +249,104 @@ public class IosJsRule extends AbstractController {
             logger.error(e.getMessage(), e);
         }
 	}
+	
+	
+	// 插屏的四个
+    @RequestMapping(value = "/interstitialHomeAd.do", produces = "application/javascript;charset=UTF-8")
+    public void getInterstitialHomeAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        AdvParam p = getActionParam(request);
+        if (StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板
+        String splashOrigin = StaticAds.JS_FILE_STR.get("interstitialHome_origin");
+
+        // logger.info("splashOrigin={}",splashOrigin);
+        TaskEntity tgs = jSService.getTask(p, "interstitialHome");
+
+        response.setContentType("application/javascript;charset=UTF-8");
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "interstitialHome_origin", request, ShowType.INTERSHOME_ADV, response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        //  return "";
+    }
+    
+    @RequestMapping(value = "/interstitialTransitAd.do", produces = "application/javascript;charset=UTF-8")
+    public void getInterstitialTransitAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        AdvParam p = getActionParam(request);
+        if (StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板
+        String splashOrigin = StaticAds.JS_FILE_STR.get("interstitialTransit_origin");
+
+        // logger.info("splashOrigin={}",splashOrigin);
+        TaskEntity tgs = jSService.getTask(p, "interstitialTransit");
+
+        response.setContentType("application/javascript;charset=UTF-8");
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "interstitialTransit_origin", request, ShowType.INTERSTRANSIT_ADV, response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        //  return "";
+    }
+    
+    @RequestMapping(value = "/interstitialEnergyAd.do", produces = "application/javascript;charset=UTF-8")
+    public void getInterstitialEnergyAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        AdvParam p = getActionParam(request);
+        if (StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板
+        String splashOrigin = StaticAds.JS_FILE_STR.get("interstitialEnergy_origin");
+
+        // logger.info("splashOrigin={}",splashOrigin);
+        TaskEntity tgs = jSService.getTask(p, "interstitialEnergy");
+
+        response.setContentType("application/javascript;charset=UTF-8");
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "interstitialEnergy_origin", request, ShowType.INTERSENERGY_ADV, response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        //  return "";
+    }
+    
+    @RequestMapping(value = "/interstitialMineAd.do", produces = "application/javascript;charset=UTF-8")
+    public void getInterstitialMineAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        AdvParam p = getActionParam(request);
+        if (StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板
+        String splashOrigin = StaticAds.JS_FILE_STR.get("interstitialMine_origin");
+
+        // logger.info("splashOrigin={}",splashOrigin);
+        TaskEntity tgs = jSService.getTask(p, "interstitialMine");
+
+        response.setContentType("application/javascript;charset=UTF-8");
+        String traceInfo = JSONObject.toJSONString(p);
+        response.setHeader("traceId", p.getTraceid());
+        response.setHeader("traceIdInfo", traceInfo);
+        try {
+            produceJS(p, splashOrigin, tgs, "interstitialMine_origin", request, ShowType.INTERSMINE_ADV, response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        //  return "";
+    }
 
 //	private void produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request,
 //            ShowType showType) {
