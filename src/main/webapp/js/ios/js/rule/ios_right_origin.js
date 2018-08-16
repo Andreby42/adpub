@@ -13,8 +13,9 @@ var api_chelaile = {
     adurl_ios: function() {
         return {
             type:"banner",
-            url: 'https://api.chelaile.net.cn/adpub/adv!getRightTopAds.action?${QUERY_STRING}',
+            url: 'https://api.chelaile.net.cn/adpub/adv!getRightTopAds.action',
             data:{
+                ad_data : this.ad_data(),
                 dataFormater:this.dataFormater
             }
         }
@@ -49,6 +50,10 @@ var api_chelaile = {
     
     aid : function () {
         return 'api_chelaile';
+    },
+
+    ad_data: function() {
+        return '${API_CHELAILE_DATA}'
     }
 }
 

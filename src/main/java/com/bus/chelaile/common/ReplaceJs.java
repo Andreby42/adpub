@@ -13,7 +13,6 @@ import com.bus.chelaile.service.JSService;
 import com.bus.chelaile.util.FileUtil;
 import com.bus.chelaile.util.New;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 

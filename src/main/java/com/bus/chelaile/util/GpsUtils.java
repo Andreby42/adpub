@@ -58,6 +58,8 @@ public class GpsUtils {
 		
 		System.out.println(geo_distance(114.374446,30.521626,114.373058,30.514447)) ;
 		System.out.println(distance(114.374446,30.521626,114.373058,30.514447)) ;
+		
+		System.out.println(distance(116.40388397158098,39.99415452075391,116.403765,39.994546)) ;
 
 	}
 }

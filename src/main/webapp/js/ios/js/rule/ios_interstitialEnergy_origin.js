@@ -1,26 +1,26 @@
-
-
+// Interstitial ad js
 
 env = {
     wifi: true
 }
+
 
 var api_chelaile = {
     sdkname: function() {
         return 'api_chelaile'
     },
 
-    adurl_ios: function() {
+    adurl: function() {
         return {
-            type:"banner",
-            url: 'https://api.chelaile.net.cn/adpub/adv!getStationLine.action',
-            data:{
+            type: "banner",
+            url: 'https://api.chelaile.net.cn/adpub/adv!getInterstitialEnergyAds.action',
+            data: {
                 ad_data : this.ad_data(),
                 dataFormater:this.dataFormater
             }
         }
     },
-    
+
     dataFormater : {
         parse:function(data) {
             var array = data.split("YGKJ");
@@ -35,8 +35,7 @@ var api_chelaile = {
             return rows;
         }
     },
-    
-    
+
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[list.length - 1].info;
@@ -56,8 +55,9 @@ var api_chelaile = {
     }
 }
 
+
 // sdk taks ===================
-// ææºè°ç¨sdk
+// 手机调用sdk
 
 var sdk_gdt = {
 
@@ -83,71 +83,13 @@ var sdk_gdt = {
     aid : function () {
         return 'sdk_gdt_${sdk_gdt_aid}';
     },
-	
-	adStyle : function() {
+    
+    adStyle : function() {
       return "${sdk_gdt_displayType}";
     }
 }
 
-var sdk_baidu = {
 
-    sdkname: function() {
-        return "sdk_baidu";
-    },
-    
-    adurl_ios: function() {
-        return {
-            url: "BaiduSDK",
-            pos: "banner",
-            data: {
-                "appId":"d654f7e6",
-                "placementId":"${sdk_baidu_placementId}"
-            }
-        }
-    },
-    
-    filter_ios : function(list) {
-        return list;
-    },
-
-    aid : function () {
-        return 'sdk_baidu_${sdk_baidu_aid}';
-    },
-	
-	adStyle : function() {
-      return "${sdk_baidu_displayType}";
-    }
-}
-
-var sdk_toutiao = {
-
-    adurl_ios: function() {
-        return {
-            url: "TOUTIAOSDK",
-            pos: "banner",
-            data: {
-                "appId":"5001451",
-                "placementId":"${sdk_toutiao_placementId}"
-            }
-        }
-    },
-
-    sdkname: function() {
-        return "sdk_toutiao";
-    },
-
-    filter_ios : function(list) {
-        return list;
-    },
-
-    aid : function () {
-        return 'sdk_toutiao_${sdk_toutiao_aid}';
-    },
-	
-	adStyle : function() {
-      return "${sdk_toutiao_displayType}";
-    }
-}
 
 var sdk_ifly = {
 
@@ -173,40 +115,11 @@ var sdk_ifly = {
     aid : function () {
         return 'sdk_ifly_${sdk_ifly_aid}';
     },
-	
-	adStyle : function() {
+    
+    adStyle : function() {
       return "${sdk_ifly_displayType}";
     }
 }
-
-// 手机sdk inmobi
-var sdk_inmobi = {
-
-    sdkname : function() {
-        return "sdk_inmobi";
-    },
-
-    adurl_ios : function() {
-        return {
-            url:"InMobiSdk",
-            type:"banner",
-            pos:"homecell",
-            data:{
-                "appId":"f83af5e921de42cf813dc475c362aaf0",
-                "placementId":"${sdk_inmobi_placementId}"
-            }
-        }
-    },
-    
-    aid : function () {
-        return 'sdk_inmobi_${sdk_inmobi_aid}';
-    },
-	
-	adStyle : function() {
-      return "${sdk_inmobi_displayType}";
-    }
-}
-
 
 var sdk_adview = {
 
@@ -233,29 +146,25 @@ var sdk_adview = {
         return 'sdk_adview_${sdk_adview_aid}';
     },
 
-	adStyle : function() {
+    adStyle : function() {
       return '${sdk_adview_displayType}';
     }
 }
 
-function ads() {
 
-//var ads = [api_chelaile, sdk_inmobi, sdk_toutiao, sdk_gdt, sdk_voicead, sdk_baidu];
+function ads() {
     return {
-      traceInfo : {
-          traceid: '${TRACEID}',
-          pid: '26'
-      },
-      closeInfo: {
-          closePic: '${closePic}'
-      },
+        traceInfo: {
+            traceid: '${TRACEID}',
+            pid: '30'
+        },
+        closeInfo: {
+            closePic: '${closePic}'
+        },
         timeouts: ${TIMEOUTS},
         tasks: ${TASKS}
     }
 }
-
-console.log('splash loaded');
-
 
 var getAds = require('./fetch');
 function loadAds(userdata, callback) {
@@ -264,4 +173,3 @@ function loadAds(userdata, callback) {
     }
 }
 module.exports = loadAds;
-

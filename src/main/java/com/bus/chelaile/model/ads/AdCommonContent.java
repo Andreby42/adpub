@@ -59,6 +59,7 @@ public class AdCommonContent extends AdInnerContent {
             this.duration = ad.duration;
             this.iosURL = ad.iosURL;
             this.androidURL = ad.androidURL;
+            this.slogan = ad.slogan;
 
             this.adWeight = ad.adWeight;
             this.autoInterval = ad.autoInterval * 1000;

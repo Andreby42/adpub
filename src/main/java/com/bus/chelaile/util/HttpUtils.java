@@ -32,10 +32,13 @@ import org.slf4j.LoggerFactory;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 import com.alibaba.fastjson.util.IOUtils;
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.PropertiesName;
-import com.bus.chelaile.tanxSSP.TanxProtos.Request;
-import com.bus.chelaile.tanxSSP.TanxProtos.Response;
+import com.bus.chelaile.third.ali.TanxSsp.Request;
+import com.bus.chelaile.third.ali.TanxSsp.Response;
 import com.bus.chelaile.util.config.PropertiesUtils;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 
 /**
  * @author zzj 2015年4月25日
@@ -169,7 +172,8 @@ public class HttpUtils {
 		CloseableHttpResponse response = null;
 		try {
 			Request r = Request.parseFrom(bytes);
-			System.out.println("反序列化输入的对象：" + r.toString());
+			if(r != null)
+			    System.out.println("反序列化输入的对象：" + r.toString());
 			
 			response = HTTP_CLIENT.execute(post);
 			in = response.getEntity().getContent();

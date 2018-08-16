@@ -30,7 +30,9 @@ public class RedisTBKCacheImplUtil implements ICache {
 
     private static String REDIS_HOST = PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisTBK.host");
     private static int REDIS_PORT = Integer.parseInt(PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisTBK.port"));
-
+    private static String REDIS_PASSWORD =
+            PropertiesUtils.getValue(PropertiesName.CACHE.getValue(), "redisTBK.password", "");
+    
     private static JedisPool pool = null;
 
     static {
@@ -52,7 +54,11 @@ public class RedisTBKCacheImplUtil implements ICache {
 //        config.setTestOnBorrow(true);
 //        config.setTestOnReturn(true);
 
-        pool = new JedisPool(config, host, port);
+        String password = REDIS_PASSWORD;
+        if (StringUtils.isNoneBlank(password))
+            pool = new JedisPool(config, host, port, 2000, password);
+        else
+            pool = new JedisPool(config, host, port);
 
         log.info("Redis_TBK_CacheImplUtil init success,ip={},host={}", REDIS_HOST, REDIS_PORT);
     }

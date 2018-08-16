@@ -134,6 +134,7 @@ public class OtherManager extends AbstractManager {
                     res.setPic(res.getPicUrl(advParam.getS(), inner.getIosURL(), inner.getAndroidURL(), inner.getPic()));
                     res.setPicsList(New.arrayList());
                     res.getPicsList().add(res.getPic());
+                    res.setHead(inner.getSlogan());
                 }
                 
                 if(inner.getTasksGroup() != null) {

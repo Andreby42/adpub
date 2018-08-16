@@ -9,8 +9,9 @@ var api_chelaile = {
     adurl_ios: function() {
         return {
             type:"splash",
-            url: 'https://api.chelaile.net.cn/adpub/adv!getCoopenAds.action?${QUERY_STRING}',
+            url: 'https://api.chelaile.net.cn/adpub/adv!getCoopenAds.action',
             data:{
+                ad_data : this.ad_data(),
                 dataFormater:this.dataFormater
             }
         }
@@ -50,6 +51,10 @@ var api_chelaile = {
 
     aid : function () {
         return 'api_chelaile';
+    },
+
+    ad_data: function() {
+        return '${API_CHELAILE_DATA}'
     }
 }
 

@@ -12,10 +12,10 @@ import com.bus.chelaile.flow.model.Thumbnail;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.mvc.AdvParam;
-import com.bus.chelaile.tanxSSP.TanxProtos.Response.Seat.Ad;
-import com.bus.chelaile.tanxSSP.TanxProtos.Response.Seat.Ad.NativeAd.Attr;
-import com.bus.chelaile.tanxSSP.TanxProtos.Request.*;
-import com.bus.chelaile.tanxSSP.TanxProtos.*;
+import com.bus.chelaile.third.ali.TanxSsp.Response.Seat.Ad;
+import com.bus.chelaile.third.ali.TanxSsp.Response.Seat.Ad.NativeAd.Attr;
+import com.bus.chelaile.third.ali.TanxSsp.Request.*;
+import com.bus.chelaile.third.ali.TanxSsp.*;
 import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
@@ -23,15 +23,14 @@ public class TanxHelper {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TanxHelper.class);
 	
-//	public static final String TANX_URL = "http://140.205.241.3/api";	// test
+	public static final String TANX_URL = "http://140.205.241.3/api";	// test
 //	public static final String TANX_URL = "http://ope.tanx.com/api";
-	public static final String TANX_URL = "http://ope.tanx.com/api?trace=1";
+//	public static final String TANX_URL = "http://ope.tanx.com/api?trace=1";
 	
 	
 	
 	public static Response getResponse(AdvParam advParam) {
 //		android mm_26632831_36214064_129188704
-		// ios    mm_26632831_36214064_129188735
 		String ip = advParam.getIp();
 		String ua = advParam.getUa();
 		ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Mobile/14G60";
@@ -79,7 +78,7 @@ public class TanxHelper {
 //		App app = App.newBuilder().setPackageName("com.ygkj.chelaile.standard").setAppName("车来了").setCategory("101701").build();
 		App app = App.newBuilder().setPackageName("com.xxx.news").setAppName("新闻").addCategory("101701").build();
 		
-		Request tanxRequest = Request.newBuilder().setVersion(2).setId("0a674362000057b6be176e7610d4c081")
+		Request tanxRequest = Request.newBuilder().setVersion(2).setId("0a674362000057b6be176e7610d4c0811")
 				.addImp(imp).setDevice(device)
 				.setApp(app)
 				.build();
@@ -117,13 +116,14 @@ public class TanxHelper {
 			in  = HttpUtils.postBytes(TANX_URL, tanxRequest.toByteArray(), "application/octet-stream");
 //			String byteStr = HttpUtils.sendPost(TANX_URL, tanxRequest.toByteArray(), "utf-8");
 			responseData = Response.parseFrom(in);
-			System.out.println(responseData.toString());
+			System.out.println("*******\r" + responseData.toString());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 
+		System.exit(1);
 
 //		ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(new File("D:/tanxRequest.txt")));
 //		oo.writeObject(tanxRequest);
