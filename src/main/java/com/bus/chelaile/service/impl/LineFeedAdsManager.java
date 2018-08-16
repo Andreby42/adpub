@@ -134,6 +134,7 @@ public class LineFeedAdsManager extends AbstractManager {
                 res.setSubhead(inner.getSlogan());
                 res.setHead(inner.getFeedAdTitle());
                 res.setPic(inner.getPic());
+                res.setBrandPic(inner.getBrandPic());
                 
                 if(inner.getTasksGroup() != null) {
                     res.setTasksGroup(inner.getTasksGroup());

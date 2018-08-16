@@ -31,6 +31,8 @@ public class AdLineFeedInnerContent extends AdInnerContent {
     private long mixInterval; // 最小展示时间
     private int backup; // 是否是备选方案
     private int clickDown; // 点击后排序到最后
+    
+    private String brandPic;    // 品牌车图片
 
     //  private String tasksStr; // tasks列表
     private List<TaskModel> tasksJ;
@@ -54,6 +56,7 @@ public class AdLineFeedInnerContent extends AdInnerContent {
             this.setImgsType(ad.getImgsType());
             this.pic = ad.pic;
             this.clickDown = ad.clickDown;
+            this.setBrandPic(ad.getBrandPic());
             Map<String,String> map = New.hashMap();
             this.setTasksJ(ad.getTasksJ());
             List<List<String>> tasksG = New.arrayList();
@@ -296,5 +299,13 @@ public class AdLineFeedInnerContent extends AdInnerContent {
      */
     public void setTasksJ(List<TaskModel> tasksJ) {
         this.tasksJ = tasksJ;
+    }
+
+    public String getBrandPic() {
+        return brandPic;
+    }
+
+    public void setBrandPic(String brandPic) {
+        this.brandPic = brandPic;
     }
 }

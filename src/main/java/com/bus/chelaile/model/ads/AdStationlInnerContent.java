@@ -12,7 +12,6 @@ import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
-import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.util.New;
 
 /**
@@ -39,6 +38,8 @@ public class AdStationlInnerContent extends AdInnerContent {
     private long mixInterval; // 最小展示时间
     private int backup; // 是否是备选方案
     private int clickDown; // 点击后排序到最后
+    
+    private String brandPic;    // 品牌车图片
 
     //  private String tasksStr; // tasks列表
     private List<TaskModel> tasksJ;
@@ -66,6 +67,7 @@ public class AdStationlInnerContent extends AdInnerContent {
 //                this.setWx_miniPro_id(this.getWx_miniPro_id().trim());
 //            if(this.getWx_miniPro_path() != null)
 //                this.setWx_miniPro_path(this.getWx_miniPro_path().trim());
+            this.setBrandPic(ad.getBrandPic());
             this.apiType = ad.apiType;
             this.provider_id = ad.getProvider_id();
             this.autoInterval = ad.autoInterval * 1000;
@@ -322,6 +324,13 @@ public class AdStationlInnerContent extends AdInnerContent {
 	public void setAdProducer(String adProducer) {
 		this.adProducer = adProducer;
 	}
-    
-    
+
+    public String getBrandPic() {
+        return brandPic;
+    }
+
+    public void setBrandPic(String brandPic) {
+        this.brandPic = brandPic;
+    }
+
 }

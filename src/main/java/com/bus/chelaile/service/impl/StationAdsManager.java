@@ -121,6 +121,7 @@ public class StationAdsManager extends AbstractManager {
             res.setBuyOut(stationInner.getBuyOut());
             res.setWxMiniProId(stationInner.getWx_miniPro_id());
             res.setWxMiniProPath(stationInner.getWx_miniPro_path());
+            res.setBrandPic(stationInner.getBrandPic());
             
             if (stationInner.getTasksGroup() != null) {
                 res.setTasksGroup(stationInner.getTasksGroup());

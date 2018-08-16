@@ -40,6 +40,7 @@ var api_chelaile = {
 			imgsType: row.imgsType,
 			targetType: row.targetType,
             link: row.link,
+            brandPic: row.brandPic,
             unfoldMonitorLink: row.unfoldMonitorLink,
             clickMonitorLink: row.clickMonitorLink,
 			monitorType: row.monitorType,

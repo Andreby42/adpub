@@ -140,6 +140,8 @@ public abstract class AbstractManager {
             AdvCache.setAdPubRecordToCache(cacheRecord, advParam.getUdid(), ShowType.DOUBLE_COLUMN.getType());
             return null;
         }
+        
+        logger.info("**** adMap={}", JSONObject.toJSONString(adMap));
 
         // logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(),
         // advParam.getUdid(), showType);
@@ -955,6 +957,18 @@ public abstract class AbstractManager {
         if (SynchronizationControl.isReload()) {
             logger.info("reload is Running");
             return false;
+        }
+        
+     // 是否展开底部广告
+        if (showType == ShowType.LINE_FEED_ADV && StaticAds.SETTINGSMAP.containsKey(Constants.SETTING_SCREENHEIGHT_KEY)) {
+            String sL = (StaticAds.SETTINGSMAP.get(Constants.SETTING_SCREENHEIGHT_KEY));
+            try {
+                if (sL != null && Integer.parseInt(sL) >= advParam.getScreenHeight()) {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         String closeTime = CacheUtil.getCloseAdTime(advParam.getUdid(), showType.getType());

@@ -28,6 +28,7 @@ public class LineFeedAdEntity extends BaseAdEntity {
     private int imgsType; // 图片样式  0小图， 1 大图， 2 信息流专用右图小图样式
 
     private String action; //跳转信息流使用的字段
+    private String brandPic;     /// 品牌车图标
 
     // 构造方法
     //	public LineFeedAdEntity() {
@@ -146,5 +147,13 @@ public class LineFeedAdEntity extends BaseAdEntity {
      */
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getBrandPic() {
+        return brandPic;
+    }
+
+    public void setBrandPic(String brandPic) {
+        this.brandPic = brandPic;
     }
 }

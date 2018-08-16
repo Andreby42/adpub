@@ -47,6 +47,7 @@ var api_chelaile = {
             clickMonitorLink: row.clickMonitorLink,
             monitorType: row.monitorType,
             openType: row.openType,
+            brandPic: row.brandPic,
             ad_order: 0,
             action: row.action,
             bannerInfo: {

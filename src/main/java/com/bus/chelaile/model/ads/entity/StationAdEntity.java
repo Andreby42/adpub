@@ -29,6 +29,8 @@ public class StationAdEntity extends BaseAdEntity {
     private String adProducer; //广告主
     
     private String h5Url;
+    
+    private String brandPic;     /// 品牌车图标
 
     // 构造方法
     public StationAdEntity() {
@@ -170,6 +172,14 @@ public class StationAdEntity extends BaseAdEntity {
 	public void setH5Url(String h5Url) {
 		this.h5Url = h5Url;
 	}
+
+    public String getBrandPic() {
+        return brandPic;
+    }
+
+    public void setBrandPic(String brandPic) {
+        this.brandPic = brandPic;
+    }
 
     
     
