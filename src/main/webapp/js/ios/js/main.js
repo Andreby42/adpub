@@ -55,12 +55,17 @@ String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
 	global.JsEncryptUtil.md5 = global.md5;
 
 	global.RuleMap = {
-			//ÀíÂÛÉÏ¿ÉÒÔÅäÖÃ×öÈÎÒâ½çÃæ¸¡²ã¹ã¸æ
-			"CLLHomeViewController":"homeAd" //Ê×Ò³
-			,"CLLGrayLineDetailViewController":"homeAd" //ÏßÂ·ÏêÇé»Ò¶È
-			,"CLLTransferMainViewController":"homeAd"   //Â·Ïß
-			,"CLLEnergyMainViewController":"homeAd"   // ¸£ÀûÉç
-			,"CLLMoreMainViewController":"homeAd"    //ÎÒ
+			//ç†è®ºä¸Šå¯ä»¥é…ç½®åšä»»æ„ç•Œé¢æµ®å±‚å¹¿å‘Š
+			"CLLHomeViewController":"interstitialHomeAd" //é¦–é¡µ
+			,"CLLTransferMainViewController":"interstitialTransitAd"   //è·¯çº¿
+			,"CLLEnergyMainViewController":"interstitialEnergyAd"   // ç¦åˆ©ç¤¾
+			,"CLLMoreMainViewController":"interstitialMineAd"    //æˆ‘
 		};
+	global.RuleCountMap = {
+		"interstitialHomeAd":1,
+		"interstitialTransitAd":1,
+		"interstitialEnergyAd":1,
+		"interstitialMineAd":1
+	}
 
 })(global);

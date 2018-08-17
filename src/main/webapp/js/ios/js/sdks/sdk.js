@@ -52,7 +52,8 @@ function load(task, rule, userdata, fetchTimeout, callback) {
         "BaiduSDK": "CLLBaiduSdk",
         "TOUTIAOSDK": "CLLTTSdk",
         "IFLYSDK": "CLLIflySdk",
-        "InMobiSdk": "CLLInMobiSdk"
+        "InMobiSdk": "CLLInMobiSdk",
+        "AdViewSDK": "CLLAdViewSdk"
     };
     var requestInfo = task.adurl_ios();
     if (requestInfo.url && requestInfo.url.toLowerCase().indexOf("http") == 0) {
@@ -177,6 +178,21 @@ console.log("1info info = "+info);
                                     info.isSplash = true;
                                     if(info.provider_id != 1 && !info.link) {
                                         info.targetType = 1;
+                                    }
+                                }
+                                
+                                // add brandPic 
+                                if(task.sdkname() == 'sdk_gdt') {
+                                    if(
+                                    (info.head && info.head.contains("美团")) || (info.subhead && info.subhead.contains("美团"))
+                                    ) {
+                                        info.brandPic = "https://image3.chelaile.net.cn/59fc10535556460a9c7282d2fc636493";
+                                    }
+                                    
+                                    else if (
+                                    (info.head && info.head.contains("京东")) || (info.subhead && info.subhead.contains("京东"))
+                                    ) {
+                                        info.brandPic = "https://image3.chelaile.net.cn/47db7ec76e75407cb57a890cead60c85";
                                     }
                                 }
 

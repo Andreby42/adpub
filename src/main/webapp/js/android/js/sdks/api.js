@@ -24,8 +24,7 @@ function load(task, userdata, callback) {
                 isSkip: ad.isSkip,
                 isDisplay: ad.isDisplay,
                 duration: ad.duration,
-                isFullShow: ad.isFullShow,
-                brandPic: ad.brandPic
+                isFullShow: ad.isFullShow
             }
         } else {
             var ret = {

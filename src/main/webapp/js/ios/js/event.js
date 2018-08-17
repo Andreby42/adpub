@@ -104,7 +104,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "startMode", info.startMode);
     addParamsIfNotNull(params, "stats_act", info.stats_act);
     addParamsIfNotNull(params, "viewstatus", ad.viewstatus);
-
+    addParamsIfNotNull(params, "req_timestamp", +new Date);
     return params;
 }
 

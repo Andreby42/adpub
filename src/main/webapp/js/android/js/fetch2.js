@@ -324,13 +324,26 @@ function tryNthTaskGroup(rule, nth, callback) {
                 }
 
                 try {
-                    if(
-                        (entity.head && entity.head.contains("记录")) || (entity.subhead && entity.subhead.contains("记录"))
-                        ) {
-                        resp.brandPic = "https://image3.chelaile.net.cn/400f580348814c64937526531d307d02";
+                    if(sdkInfo.task.sdkname() == "sdk_gdt") {
+                        if(rule.traceInfo.pid == "15") {
+                            console.log("sdk_gdt, 站点广告: " + entity.head + "," + entity.subhead + "," + entity.pic);
+                        if(
+                            (entity.head && entity.head.contains("美团")) || (entity.subhead && entity.subhead.contains("美团"))
+                            ) {
+                            resp.brandPic = "https://image3.chelaile.net.cn/59fc10535556460a9c7282d2fc636493";
+                            }
+                        }
+                        if(rule.traceInfo.pid == "22") {
+                            console.log("sdk_gdt, 底部广告： " + entity.head + "," + entity.subhead + "," + entity.pic);
+                        if(
+                            (entity.head && entity.head.contains("京东")) || (entity.subhead && entity.subhead.contains("京东"))
+                            ) {
+                            resp.brandPic = "https://image3.chelaile.net.cn/47db7ec76e75407cb57a890cead60c85";
+                            }
+                        }
                     }
                 } catch(error) {
-                    //
+                    console.log(error);
                 }
                 
 

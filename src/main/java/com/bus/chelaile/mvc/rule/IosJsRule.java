@@ -259,7 +259,7 @@ public class IosJsRule extends AbstractController {
             p.setStnName(request.getParameter("stationName"));
 
         // 模板
-        String splashOrigin = StaticAds.JS_FILE_STR.get("interstitialHome_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("ios_interstitialHome_origin");
 
         // logger.info("splashOrigin={}",splashOrigin);
         TaskEntity tgs = jSService.getTask(p, "interstitialHome");
@@ -269,7 +269,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "interstitialHome_origin", request, ShowType.INTERSHOME_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_interstitialHome_origin", request, ShowType.INTERSHOME_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -283,7 +283,7 @@ public class IosJsRule extends AbstractController {
             p.setStnName(request.getParameter("stationName"));
 
         // 模板
-        String splashOrigin = StaticAds.JS_FILE_STR.get("interstitialTransit_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("ios_interstitialTransit_origin");
 
         // logger.info("splashOrigin={}",splashOrigin);
         TaskEntity tgs = jSService.getTask(p, "interstitialTransit");
@@ -293,7 +293,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "interstitialTransit_origin", request, ShowType.INTERSTRANSIT_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_interstitialTransit_origin", request, ShowType.INTERSTRANSIT_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -307,7 +307,7 @@ public class IosJsRule extends AbstractController {
             p.setStnName(request.getParameter("stationName"));
 
         // 模板
-        String splashOrigin = StaticAds.JS_FILE_STR.get("interstitialEnergy_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("ios_interstitialEnergy_origin");
 
         // logger.info("splashOrigin={}",splashOrigin);
         TaskEntity tgs = jSService.getTask(p, "interstitialEnergy");
@@ -317,7 +317,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "interstitialEnergy_origin", request, ShowType.INTERSENERGY_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_interstitialEnergy_origin", request, ShowType.INTERSENERGY_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -331,7 +331,7 @@ public class IosJsRule extends AbstractController {
             p.setStnName(request.getParameter("stationName"));
 
         // 模板
-        String splashOrigin = StaticAds.JS_FILE_STR.get("interstitialMine_origin");
+        String splashOrigin = StaticAds.JS_FILE_STR.get("ios_interstitialMine_origin");
 
         // logger.info("splashOrigin={}",splashOrigin);
         TaskEntity tgs = jSService.getTask(p, "interstitialMine");
@@ -341,7 +341,7 @@ public class IosJsRule extends AbstractController {
         response.setHeader("traceId", p.getTraceid());
         response.setHeader("traceIdInfo", traceInfo);
         try {
-            produceJS(p, splashOrigin, tgs, "interstitialMine_origin", request, ShowType.INTERSMINE_ADV, response.getWriter());
+            produceJS(p, splashOrigin, tgs, "ios_interstitialMine_origin", request, ShowType.INTERSMINE_ADV, response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
