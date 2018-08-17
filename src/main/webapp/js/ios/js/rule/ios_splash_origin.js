@@ -82,7 +82,7 @@ var sdk_gdt = {
             info.adid = "sdk_gdt_test";
             info.isDisplay = 0;
             info.isSkip = 0;
-            info.duration = 5;
+            info.duration = 4;
             list[0].info = info;
             return [list[0]];
         }
@@ -118,7 +118,7 @@ var sdk_baidu = {
             info.adid = "sdk_baidu_test";
             info.isDisplay = 0;
             info.isSkip = 0;
-            info.duration = 5;
+            info.duration = 4;
             list[0].info = info;
             return [list[0]];
         }
@@ -153,7 +153,7 @@ var sdk_toutiao = {
             info.adid = "sdk_toutiao_test";
             info.isDisplay = 0;
             info.isSkip = 0;
-            info.duration = 5;
+            info.duration = 4;
             list[0].info = info;
             return [list[0]];
         }
@@ -188,7 +188,7 @@ var sdk_inmobi = {
             info.adid = "sdk_inmobi_test";
             info.isDisplay = 0;
             info.isSkip = 0;
-            info.duration = 5;
+            info.duration = 4;
             list[0].info = info;
             return [list[0]];
         }
@@ -227,7 +227,7 @@ var sdk_voicead = {
             info.adid = "sdk_ifly_test";
             info.isDisplay = 0;
             info.isSkip = 0;
-            info.duration = 5;
+            info.duration = 4;
             list[0].info = info;
             return [list[0]];
         }
@@ -263,7 +263,7 @@ var sdk_voicead_no2 = {
             info.adid = "sdk_voicead_test";
             info.isDisplay = 0;
             info.isSkip = 0;
-            info.duration = 5;
+            info.duration = 4;
             list[0].info = info;
             return [list[0]];
         }

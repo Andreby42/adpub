@@ -127,7 +127,8 @@ public abstract class AbstractManager {
         LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
         // 把所有符合规则的广告放到map中
         StaticTimeLog.start(Constants.RECORD_HANDLEADS_LOG);
-        handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam);
+        String ids = handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam).toString();
+        logger.info("after adCheck and ruleCheck **** ids={}", ids);
         logger.info(StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG));
         
         StaticTimeLog.record(Constants.RECORD_LOG, "handleAdsAll");
@@ -141,7 +142,6 @@ public abstract class AbstractManager {
             return null;
         }
         
-        logger.info("**** adMap={}", JSONObject.toJSONString(adMap));
 
         // logger.info("过滤条件后，得到适合条件的Ad数目为：{}, udid={}, showType={}", adMap.size(),
         // advParam.getUdid(), showType);
@@ -320,10 +320,11 @@ public abstract class AbstractManager {
      * @param num
      *            1 的时候只要一个广告,-1的时候全部
      */
-    private void setAds(Map<Integer, AdContentCacheEle> adMap, List<AdContentCacheEle> adsList, ShowType showType,
+    private StringBuilder setAds(Map<Integer, AdContentCacheEle> adMap, List<AdContentCacheEle> adsList, ShowType showType,
             AdvParam advParam, AdPubCacheRecord cacheRecord, int num, boolean isNeedApid, QueryParam queryParam) {
         // 取得符合规则的广告
         int i = 0;
+        StringBuilder ids = new StringBuilder("");
         for (AdContentCacheEle cacheEle : adsList) {
             AdContent ad = cacheEle.getAds();
             UserClickRate clickRate = cacheEle.getUserClickRate();
@@ -348,14 +349,16 @@ public abstract class AbstractManager {
                 adContentCacheEle.setAds(ad);
                 adContentCacheEle.setRule(rule);
                 adMap.put(ad.getId(), adContentCacheEle);
+                ids.append(ad.getId() + ", ");
                 j ++;
                 if (num == 1) {
-                    return;
+                    return ids;
                 }
                 break;
             }
             i ++;
         }
+        return ids;
 //        StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG);
     }
 
@@ -816,12 +819,12 @@ public abstract class AbstractManager {
     protected abstract List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
 			Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception;
 
-    private void handleAds(Map<Integer, AdContentCacheEle> adMap, List<AdContentCacheEle> adsList, ShowType showType,
+    private StringBuilder handleAds(Map<Integer, AdContentCacheEle> adMap, List<AdContentCacheEle> adsList, ShowType showType,
             AdvParam advParam, AdPubCacheRecord cacheRecord, boolean isNeedApid, QueryParam queryParam) {
         if (isNeedApid) {
-            setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid, queryParam);
+            return setAds(adMap, adsList, showType, advParam, cacheRecord, -1, isNeedApid, queryParam);
         } else {
-            setAds(adMap, adsList, showType, advParam, cacheRecord, 1, isNeedApid, queryParam);
+            return setAds(adMap, adsList, showType, advParam, cacheRecord, 1, isNeedApid, queryParam);
         }
     }
 
@@ -964,6 +967,7 @@ public abstract class AbstractManager {
             String sL = (StaticAds.SETTINGSMAP.get(Constants.SETTING_SCREENHEIGHT_KEY));
             try {
                 if (sL != null && Integer.parseInt(sL) >= advParam.getScreenHeight()) {
+                    logger.info("screenHeight is too low to show bottomAds, deviceHeight={}, redLine={}", advParam.getScreenHeight(), sL);
                     return false;
                 }
             } catch (Exception e) {

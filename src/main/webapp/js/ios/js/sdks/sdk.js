@@ -155,8 +155,11 @@ console.log("1info info = "+info);
                             var adentity = data.adEntityArray[i];
                             var info = adentity.info;
                             if (info) {
-                                if(closePic)
+                                if(closePic) {
                                     info.closePic = closePic;
+                                    info.isDisplay = 1;
+                                    info.isSkip = 1;
+                                }
                                 if (task.adStyle) {
                                     info.displayType = task.adStyle() == '' ? 2 : parseInt(task.adStyle());
                                 }

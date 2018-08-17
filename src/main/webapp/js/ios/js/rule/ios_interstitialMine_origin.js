@@ -76,8 +76,17 @@ var sdk_gdt = {
         }
     },
 
-    filter_ios : function(list) {
-        return list;
+    filter_ios: function(list) {
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.adid = "sdk_inmobi_test";
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 4;
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
     },
 
     aid : function () {
@@ -108,8 +117,17 @@ var sdk_ifly = {
         }
     },
 
-    filter_ios : function(list) {
-        return list;
+    filter_ios: function(list) {
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.adid = "sdk_inmobi_test";
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 4;
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
     },
 
     aid : function () {
@@ -120,6 +138,47 @@ var sdk_ifly = {
       return "${sdk_ifly_displayType}";
     }
 }
+
+
+var sdk_inmobi = {
+
+    sdkname : function() {
+        return "sdk_inmobi";
+    },
+
+    adurl_ios : function() {
+        return {
+            url:"InMobiSdk",
+            type:"banner",
+            data:{
+                "appId":"f83af5e921de42cf813dc475c362aaf0",
+                "placementId":"${sdk_inmobi_placementId}"
+            }
+        }
+    },
+    
+    filter_ios: function(list) {
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.adid = "sdk_inmobi_test";
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 4;
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
+    },
+    
+    aid : function () {
+        return 'sdk_inmobi_${sdk_inmobi_aid}';
+    },
+	
+	adStyle : function() {
+      return "${sdk_inmobi_displayType}";
+    }
+}
+
 
 var sdk_adview = {
 
@@ -138,8 +197,17 @@ var sdk_adview = {
         }
     },
 
-    filter_ios : function(list) {
-        return list;
+    filter_ios: function(list) {
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.adid = "sdk_inmobi_test";
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 4;
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
     },
 
     aid : function () {
