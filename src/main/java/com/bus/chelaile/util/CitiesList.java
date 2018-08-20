@@ -85,6 +85,6 @@ public class CitiesList {
 
 	public static void main(String[] args) {
 		System.out.println((int)((Math.random()*9+1)*100000));  
-		System.out.println(new scala.util.Random().nextInt(999999));
+//		System.out.println(new scala.util.Random().nextInt(999999));
 	}
 }

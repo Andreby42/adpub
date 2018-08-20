@@ -78,4 +78,23 @@ public class AdGuideInnerContent extends AdInnerContent {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public static void main(String[] args) {
+	    String s = "{\"backup\":0,\"site\":0,\"servingPlace\":\"wx_app\",\"pic\":\"https://image3.chelaile.net.cn/2ba45ee30cde4a4a91086e1db656ffb4#60,60\",\"sort\":2,\"groupId\":1,\"desc\":\"免费领\",\"adType\":3,\"redPoint\":0,\"redPointTime\":\"\",\"wx_miniPro_id\":\"\",\"wx_miniPro_path\":\"/pages/specialtopics/kanjia/pages/index/index\"}";
+	    
+	    AdGuideInnerContent ad = null;
+        ad = JSON.parseObject(s, AdGuideInnerContent.class);
+        if (ad != null) {
+            
+            List servingPlaceList = New.arrayList();
+            if(StringUtils.isNotEmpty(ad.getServingPlace())) {
+                for(String ss : ad.getServingPlace().split(",")) {
+                    servingPlaceList.add(ss);
+                }
+            }
+            
+            System.out.println(servingPlaceList);
+            
+        }
+	}
 }

@@ -356,11 +356,18 @@
 		</dependency>
 
 		<!-- logcenter2 -->
+        
 		<dependency>
 			<groupId>com_chelaile</groupId>
 			<artifactId>logcenter2-sdk</artifactId>
 			<version>1.0.2</version>
 		</dependency>
+        
+        <!-- 
+        <groupId>com_chelaile</groupId>
+            <artifactId>logcenter2-sdk-4-kfk0.10.1</artifactId>
+        <version>2.0.2</version>
+        -->
 
 		<dependency>
 			<groupId>org.xerial.snappy</groupId>

@@ -155,6 +155,15 @@ public class AbstractController {
 
         return param;
     }
+    
+    public void setWechatParams(HttpServletRequest request, AdvParam param) {
+        param.setWxs(request.getParameter("wxs")); // 小程序来源
+        param.setSrc(request.getParameter("src"));
+        if (StringUtils.isEmpty(param.getH5Src()))
+            param.setH5Src(request.getParameter("src"));
+        param.setUdid(request.getParameter("h5Id"));     // 接口没定义好，客户端上传的是h5Id
+        param.setSite(getInt(request, "site"));  // 区分位置。 目前小程序相关，只有引流位不care这个位置参数
+    }
 
     public SinglePushParam getPushParam(HttpServletRequest request) {
         SinglePushParam singlePushParam = new SinglePushParam();

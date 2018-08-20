@@ -182,6 +182,7 @@ public class StartService {
         try {
         	if( !Constants.ISDEV ) {
                 //	          infoStreamDispatcher.readKafka();
+        	    // 2018-08-20
                 infoStreamForAdvClick.readKafka(); // 广告点击日志
                 //	          infoSteamForMaidianLogs.readKafka();  // 埋点日志
 
