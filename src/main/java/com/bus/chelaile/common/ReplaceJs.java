@@ -82,20 +82,20 @@ public class ReplaceJs {
         return new TextCompImpl(list);
     }
 
-    public static void getNewReplaceStr(List<Text> list, Map<String, String> map, Appendable buffer) throws IOException {
-
-        //		for (Map.Entry<String, String> entry : map.entrySet()) {
-        //			String key = entry.getKey().toString();
-        //			String value = entry.getValue().toString();
-        //			logger.info("key=" + key + " value=" + value);
-        //		}
-
-        for (int i = 0; i < list.size(); i++) {
-            Text origin = list.get(i);
-            origin.write(buffer, map);
-        }
-
-    }
+//    public static void getNewReplaceStr(List<Text> list, Map<String, String> map, Appendable buffer) throws IOException {
+//
+//        //		for (Map.Entry<String, String> entry : map.entrySet()) {
+//        //			String key = entry.getKey().toString();
+//        //			String value = entry.getValue().toString();
+//        //			logger.info("key=" + key + " value=" + value);
+//        //		}
+//
+//        for (int i = 0; i < list.size(); i++) {
+//            Text origin = list.get(i);
+//            origin.write(buffer, map);
+//        }
+//
+//    }
 
     public static void main(String[] args) {
         String file = FileUtil.readFile("D:\\splash_origin.js");

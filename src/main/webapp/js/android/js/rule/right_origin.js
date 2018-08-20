@@ -516,12 +516,6 @@ var sdk_ifly = {
     },
 
     hide : function(row) {
-        if (row.title.indexOf('抖音') > -1) {
-            return true;
-        }
-        if (row.title.indexOf('西瓜') > -1) {
-            return true;
-        }
         return false;
     },
 
@@ -547,6 +541,46 @@ var sdk_ifly = {
     }
 }
 
+
+var sdk_adview = {
+
+    adurl : function() {
+        return {
+            url:"ADVIEWSDK",
+            pos:"banner",
+            data:{
+                appId:"SDK201817090508490a6u8s7z5m4aoqf",
+                placementId:"POSIDkdcvuyqzbdjz"
+            }
+        }
+    },
+
+    sdkname : function() {
+        return "sdk_adview";
+    },
+
+    hide : function(row) {
+        return false;
+    },
+
+
+    filter : function(list) {
+        return list[0];
+    },
+    
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        ret.head = ad.getTitle();
+        ret.subhead = ad.getSubTitle();
+        return ret;
+    },
+
+    aid : function () {
+        return 'sdk_adview';
+    }
+}
 
 function ads() {
     return {

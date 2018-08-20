@@ -10,7 +10,7 @@ var api_chelaile = {
         return 'api_chelaile'
     },
 
-    adurl: function() {
+    adurl_ios: function() {
         return {
             type: "banner",
             url: 'https://api.chelaile.net.cn/adpub/adv!getInterstitialMineAds.action',
@@ -79,7 +79,6 @@ var sdk_gdt = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_inmobi_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -120,7 +119,6 @@ var sdk_ifly = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_inmobi_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -160,7 +158,6 @@ var sdk_inmobi = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_inmobi_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -200,7 +197,6 @@ var sdk_adview = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_inmobi_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;

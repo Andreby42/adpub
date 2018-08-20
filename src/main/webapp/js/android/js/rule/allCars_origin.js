@@ -570,11 +570,15 @@ var sdk_gdt = {
 
 	filter: function(list) {
 		var ad = list[0];
-		if (this.adCheck(ad)) {
-			return ad;
-		} else {
+		if (! this.adCheck(ad)) {
 			return null;
-		}
+		} 
+    	if (!ad) return null;
+    	if (this.adCheck(ad) && !hasClicked(this.sdkname(), this.asEntity(ad))) {
+        	return ad;
+    	} else {
+        	return null;
+    	}
 	},
 	adCheck: function(ad) {
 		if (this.adStyle() == 3) {
@@ -847,6 +851,15 @@ var sdk_adview = {
 	}
 }
 
+
+// hasClicked aid'father:provider_id
+function hasClicked(provider_id, entity) {
+    	var clickBefores = {'api_zm': '[]' }
+    	var rs = clickBefores[provider_id]
+    	if (!rs) 
+    		return false;
+    	return rs.indexOf(entity.title) > -1
+	}
 
 function ads() {
 	return {

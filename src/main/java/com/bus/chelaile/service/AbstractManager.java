@@ -128,7 +128,7 @@ public abstract class AbstractManager {
         // 把所有符合规则的广告放到map中
         StaticTimeLog.start(Constants.RECORD_HANDLEADS_LOG);
         String ids = handleAds(adMap, adsList, showType, advParam, cacheRecord, true, queryParam).toString();
-        logger.info("after adCheck and ruleCheck **** ids={}", ids);
+        logger.info("after adCheck and ruleCheck **** udid={}, showType={}, ids={}", advParam.getUdid(), showType.getType(), ids);
         logger.info(StaticTimeLog.summary(Constants.RECORD_HANDLEADS_LOG));
         
         StaticTimeLog.record(Constants.RECORD_LOG, "handleAdsAll");

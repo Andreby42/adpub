@@ -794,8 +794,7 @@ var sdk_adview = {
     asEntity: function(ad) {
         return !ad ? null : {
             head: ad.getTitle(),
-            subhead: ad.getDesc()
-            //pic: ad.getImgUrl()
+            subhead: ad.getSubTitle()
        }
     },
 

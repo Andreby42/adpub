@@ -148,6 +148,11 @@ console.log("1info info = "+info);
                         data.sdk.aid = task.aid();
                     }
 
+                    var task_filter = task.filter_ios;
+                    if (task_filter && data) {
+                        data.adEntityArray = task_filter(data.adEntityArray);
+                    }
+
                     if (data && data.adEntityArray) {
                         var closePic = rule && rule.closeInfo && rule.closeInfo.closePic;
 
@@ -204,10 +209,6 @@ console.log("1info info = "+info);
                         }
                     }
 
-                    var task_filter = task.filter_ios;
-                    if (task_filter && data) {
-                        data.adEntityArray = task_filter(data.adEntityArray);
-                    }
 
                     TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedBanner, { userdata: userdata, data: data, rule: rule, task: task });
                     callback(data);
