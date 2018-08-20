@@ -91,10 +91,27 @@ function addParamsIfNotNull(params, key, value) {
     }
 }
 
+function GetDeviceInfoObject() {
+    var string = GetDeviceInfo();
+    var deviceObj = {};
+    if(string) {
+        var array = string.split("&");
+        if(array && array.length) {
+            array.forEach(function(item) {
+                var itemArray = item.split("=");
+                if(itemArray[0] && itemArray[1]) {
+                    deviceObj[itemArray[0]] = itemArray[1]
+                }
+            })
+        }
+    }
+    return deviceObj;
+}
 function trackBaseParams(sdk, ad) {
     var params = {};
     var info = ad.info || {};
     var traceInfo = sdk.traceInfo || {};
+    var deviceObject = GetDeviceInfoObject() || {}
 
     addParamsIfNotNull(params, "traceid", traceInfo.traceid);
     addParamsIfNotNull(params, "pid", traceInfo.pid);
@@ -105,6 +122,8 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "stats_act", info.stats_act);
     addParamsIfNotNull(params, "viewstatus", ad.viewstatus);
     addParamsIfNotNull(params, "req_timestamp", +new Date);
+    addParamsIfNotNull(params, "s", deviceObject.s);
+    addParamsIfNotNull(params, "v", deviceObject.v);
     return params;
 }
 
@@ -122,14 +141,14 @@ function trackExhibit(sdk, ad) {
     addParamsIfNotNull(params, "adv_desc", info.subhead);
 
     sendTrackRequest(exhibitTrackUrl, params);
-    
+
     if(info.unfoldMonitorLink && info.actionMonitorLink) {
         var actionLink = info.actionMonitorLink.replace('{action}','5');
         var ts = (+new Date) + '';
         ts = String(ts).slice(0,-3);
         actionLink = actionLink.replace('{time}', ts);
         actionLink = actionLink.replace('{play_time}', '0')
-        
+
         sendTrackRequest(info.unfoldMonitorLink, {});
         sendTrackRequest(actionLink, {});
     }
@@ -151,7 +170,7 @@ function trackClick(sdk, ad) {
         ts = String(ts).slice(0,-3);
         actionLink = actionLink.replace('{time}', ts);
         actionLink = actionLink.replace('{play_time}', '0');
-        
+
         sendTrackRequest(actionLink, {});
     }
     // some own ads ,has clickLink ,have no actionLink
@@ -174,7 +193,7 @@ function trackClose(sdk, ad) {
             ts = String(ts).slice(0,-3);
             actionLink = actionLink.replace('{time}', ts);
             actionLink = actionLink.replace('{play_time}', '0')
-            
+
             sendTrackRequest(actionLink, {});
         }
     }
@@ -187,6 +206,7 @@ function trackThirdBaseParams(params) {
     var task = params.task || {};
     var rule = params.rule || {};
     var userdata = params.userdata || {}
+    var deviceObject = GetDeviceInfoObject() || {}
 
     if(rule.traceInfo){
         addParamsIfNotNull(trackParams, "traceid", rule.traceInfo.traceid);
@@ -198,6 +218,8 @@ function trackThirdBaseParams(params) {
 
     addParamsIfNotNull(trackParams, "req_timestamp", +new Date);
     addParamsIfNotNull(trackParams, "eventId", userdata.uniReqId);
+    addParamsIfNotNull(trackParams, "s", deviceObject.s);
+    addParamsIfNotNull(trackParams, "v", deviceObject.v);
 
     return trackParams;
 }
