@@ -37,7 +37,7 @@ public class InfoStreamHelp {
 //			System.out.println(line.split("\\|#")[12]);
 			try {
 				if(line.contains(Constants.REDIRECT_DOMAIN_NAME) || line.contains("dev.ad.chelaile.net.cn"))
-					parameterMap = arrayToMap(line.split("\\|#")[3].trim().split(" ")[1].replace("?", "").replace("/", "").split("&"), "=");
+					parameterMap = arrayToMap(line.split("\\|#")[3].trim().replace("?", "").replace("/", "").split("&"), "=");
 				else if(line.split("\\|#").length > 3 && line.split("\\|#")[12].trim().split(" ").length > 1)
 					parameterMap = arrayToMap(line.split("\\|#")[12].trim().split(" ")[1].replace("?", "").replace("/", "").split("&"), "=");
 				else

@@ -202,7 +202,9 @@ public class MaidianLogsHandle {
 
             return params;
         } catch (Exception e) {
-            throw new IllegalAccessError();
+            logger.error("广告 解析点击日志-埋点-出错, line={}", line);
+            e.printStackTrace();
+            return null;
         }
     }
 
