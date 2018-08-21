@@ -21,17 +21,19 @@ import org.springframework.stereotype.Service;
 
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.kafka.InfoStreamHelp;
-import com.bus.chelaile.kafka.TestConsumer;
+import com.bus.chelaile.model.PropertiesName;
+import com.bus.chelaile.util.config.PropertiesUtils;
 import com.chelaile.logcenter2.sdk.api.Consumer;
 import com.chelaile.logcenter2.sdk.api.LcFactory;
 import com.chelaile.logcenter2.sdk.kafka.consumer.ConsumerCallbackWorker;
-import com.chelaile.logcenter2.sdk.utils.LocaLUtil;
 
 @Service()
 @Scope()
 public class ConsumerHandle implements Runnable {
 
     private static final String TOPIC_ID = "adv_log";
+    private static final String GROUP_ID = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "group_id_adv_click",
+          "info_flow_adv_click_log");
 
     @Autowired
     ApplicationContext ctx;
@@ -48,7 +50,7 @@ public class ConsumerHandle implements Runnable {
             props.put("auto.commit.interval.ms", "3000");
             props.put("session.timeout.ms","30000");
             props.put("enable.auto.commit","true");
-            props.put("group.id", "group_id_adv_click");
+            props.put("group.id", GROUP_ID);
             
             
 //                    LocaLUtil.getProperties(TestConsumer.class, "kfk-consumer.properties");
@@ -62,7 +64,6 @@ public class ConsumerHandle implements Runnable {
 
                 @Override
                 public void callback(byte[] bt) {
-                    System.out.println(222222222);
                     try {
                         String str = new String(bt, "UTF-8");
 
