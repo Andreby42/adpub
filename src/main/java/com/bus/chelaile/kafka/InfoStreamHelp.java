@@ -38,10 +38,10 @@ public class InfoStreamHelp {
 			try {
 				if(line.contains(Constants.REDIRECT_DOMAIN_NAME) || line.contains("dev.ad.chelaile.net.cn"))
 					parameterMap = arrayToMap(line.split("\\|#")[3].trim().replace("?", "").replace("/", "").split("&"), "=");
-				else if(line.split("\\|#").length > 3 && line.split("\\|#")[12].trim().split(" ").length > 1)
-					parameterMap = arrayToMap(line.split("\\|#")[12].trim().split(" ")[1].replace("?", "").replace("/", "").split("&"), "=");
+//				else if(line.split("\\|#").length > 3 && line.split("\\|#")[12].trim().split(" ").length > 1)
+//					parameterMap = arrayToMap(line.split("\\|#")[12].trim().split(" ")[1].replace("?", "").replace("/", "").split("&"), "=");
 				else
-					parameterMap = arrayToMap(line.split("\\|#")[12].trim().split(" ")[0].replace("?", "").replace("/", "").split("&"), "=");
+					parameterMap = arrayToMap(line.split("\\|#")[3].trim().replace("?", "").replace("/", "").split("&"), "=");
 			} catch(Exception e) {
 				logger.error("广告 解析点击日志出错,line={}", line);
 				e.printStackTrace();
@@ -51,7 +51,7 @@ public class InfoStreamHelp {
 			String advId = parameterMap.get("advId");
 			String udid = parameterMap.get("udid");
 			if(udid == null || advId == null) {
-				logger.info("广告为空 line={}", line);
+				logger.error("广告为空 line={}", line);
 				return;
 			}
 			if(! Constants.ISTEST)

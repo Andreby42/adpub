@@ -67,7 +67,7 @@ public class ConsumerHandle implements Runnable {
                     try {
                         String str = new String(bt, "UTF-8");
 
-                        logger.info("********** get string from kafka, str={}", str);
+//                        logger.info("********** get string from kafka, str={}", str);
 
                         final int filterCode = filterContent(str.trim());
                         if (filterCode != Constants.ROW_SKIP) {
