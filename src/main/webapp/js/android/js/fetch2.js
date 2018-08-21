@@ -323,6 +323,7 @@ function tryNthTaskGroup(rule, nth, callback) {
                     resp.closePic = rule.closeInfo.closePic;
                 }
 
+                /*
                 try {
                     if(sdkInfo.task.sdkname() == "sdk_gdt") {
                         if(rule.traceInfo.pid == "15") {
@@ -345,7 +346,7 @@ function tryNthTaskGroup(rule, nth, callback) {
                 } catch(error) {
                     console.log(error);
                 }
-                
+                */
 
                 if (sdkInfo.task.adStyle) {
                     resp.adStyle = sdkInfo.task.adStyle();

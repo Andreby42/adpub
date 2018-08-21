@@ -98,6 +98,12 @@ public class ConsumerHandle implements Runnable {
     private void processLog(String line, int filterCode) {
         if(line.contains("advId=FEEDS"))
             return;
+        // 只解析app的中转
+        // 小程序的中转是有点击埋点的，所以不解析中转
+        boolean isApp = line.contains("s=android") ||  line.contains("s=IOS") || line.contains("s=ios");
+        if (! isApp)
+            return;
+        
         logger.info("**** get log from adv_log , str={}", line);
         InfoStreamHelp.analysisClick(line);
     }

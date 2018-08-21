@@ -94,6 +94,7 @@ public class MaidianLogsHandle {
                 udid = params.get("udid");
             }
             String provider_id = params.get("provider_id");
+            // app的自采买广告，老版本，都有provider_id等于1这个特质
             if (StringUtils.isNoneBlank(provider_id) && provider_id.equals("1")) {
                 // 自采买的广告，不从埋点处理
                 return;

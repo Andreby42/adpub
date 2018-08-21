@@ -323,6 +323,7 @@ function tryNthTaskGroup(rule, nth, callback) {
                     resp.closePic = rule.closeInfo.closePic;
                 }
 
+                /*
                 try {
                     if(sdkInfo.task.sdkname() == "sdk_gdt") {
                         if(rule.traceInfo.pid == "15") {
@@ -345,7 +346,7 @@ function tryNthTaskGroup(rule, nth, callback) {
                 } catch(error) {
                     console.log(error);
                 }
-                
+                */
 
                 if (sdkInfo.task.adStyle) {
                     resp.adStyle = sdkInfo.task.adStyle();
@@ -389,7 +390,7 @@ function buildMdLogger() {
                 url += '&' + k + '=' + this.pars[k];
             }
             console.log('发送第三方埋点:' + url);
-        var body = '';
+	    var body = '';
             try{
                 body = (typeof data == 'string' ? data : '')
             } catch (error) {
