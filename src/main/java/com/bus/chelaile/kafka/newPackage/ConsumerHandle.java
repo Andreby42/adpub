@@ -96,6 +96,8 @@ public class ConsumerHandle implements Runnable {
 
     // 处理kafka日志（已被过滤过的）
     private void processLog(String line, int filterCode) {
+        if(line.contains("advId=FEEDS"))
+            return;
         logger.info("**** get log from adv_log , str={}", line);
         InfoStreamHelp.analysisClick(line);
     }
