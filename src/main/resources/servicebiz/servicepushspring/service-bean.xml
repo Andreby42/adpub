@@ -90,6 +90,10 @@
 	</bean>
 	<bean id="dynamicRegulation" class="com.bus.chelaile.service.DynamicRegulation" >
 	</bean>
+	
+	<!-- 读取kafka -->
+	<bean id="infoStreamForAdvClick" class="com.bus.chelaile.kafka.newPackage.InfoStreamForAdvClick" >
+	</bean>
 
 	
 	<!-- pushServer类 -->
