@@ -136,7 +136,8 @@
 	
 	
 	<!-- 新版信息流相关 -->
-	<bean id="flowServiceManager" class="com.bus.chelaile.flowNew.FlowServiceManager"  init-method="initFlows">
+	<bean id="flowServiceManager" class="com.bus.chelaile.flowNew.FlowServiceManager" >
+         <!-- init-method="initFlows"  -->
 	</bean>
 	<bean id="FeedService" class="com.bus.chelaile.flowNew.FeedService" >
 	</bean>

@@ -43,13 +43,21 @@ public class ConsumerHandle implements Runnable {
         try {
             lf = LcFactory.getInstance();
 
-            Properties props = LocaLUtil.getProperties(TestConsumer.class, "kfk-consumer.properties");
+            Properties props = new Properties();
+            props.put("bootstrap.servers", "BKFK1:9092,BKFK2:9092,BKFK3:9092,BKFK4:9092,BKFK5:9092");
+            props.put("auto.commit.interval.ms", "3000");
+            props.put("session.timeout.ms","30000");
+            props.put("enable.auto.commit","true");
+            props.put("group.id", "group_id_adv_click");
+            
+            
+//                    LocaLUtil.getProperties(TestConsumer.class, "kfk-consumer.properties");
             String groupId = (String) props.get("group.id");
             // 虽然卡夫支持很多种序列化方式 。 这两种作为sdk默认， lf.newByteProducer 中指定（所以配置不配置，都是一样的）
             // props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
             // props.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
             Consumer cm = lf.newConsumer(TOPIC_ID, groupId, props);
-            System.out.println(1111111);
+            System.out.println(11111111111);
             cm.receive(new ConsumerCallbackWorker() {
 
                 @Override
