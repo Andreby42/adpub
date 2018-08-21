@@ -11,8 +11,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import scala.collection.mutable.StringBuilder;
-
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
