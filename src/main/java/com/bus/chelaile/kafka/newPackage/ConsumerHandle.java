@@ -57,7 +57,7 @@ public class ConsumerHandle implements Runnable {
             // props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
             // props.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
             Consumer cm = lf.newConsumer(TOPIC_ID, groupId, props);
-            System.out.println(11111111111);
+            System.out.println(1111111111);
             cm.receive(new ConsumerCallbackWorker() {
 
                 @Override
