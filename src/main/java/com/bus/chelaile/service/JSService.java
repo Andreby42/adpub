@@ -2,8 +2,6 @@ package com.bus.chelaile.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import javax.annotation.Resource;
@@ -60,7 +58,6 @@ public class JSService {
 //            "thread.count", "10")));
 
     public TaskEntity getTask(final AdvParam param, String site) {
-        long tBeginService = System.currentTimeMillis();
         TaskEntity taskEntity = new TaskEntity();
         //        ShowType showType;
         List<BaseAdEntity> entities = null;

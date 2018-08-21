@@ -82,18 +82,23 @@ public class MaidianLogsHandle {
      * @param str
      */
     public static void analysisMaidianClick(String line) {
-        Map<String, String> params = preHandleMaidianLog(line);
+        Map<String, String> params = null;
+        try {
+            params = preHandleMaidianLog(line);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (params != null) {
             String udid = params.get("userId");
             if (params.containsKey("udid")) {
                 udid = params.get("udid");
             }
             String provider_id = params.get("provider_id");
-            if(StringUtils.isNoneBlank(provider_id) && provider_id.equals("1")) {
+            if (StringUtils.isNoneBlank(provider_id) && provider_id.equals("1")) {
                 // 自采买的广告，不从埋点处理
                 return;
             }
-            
+
             String advId = params.get("adv_id");
             if (udid == null || advId == null) {
                 logger.error("点击埋点解析， 广告为空 line={}", line);
@@ -101,10 +106,8 @@ public class MaidianLogsHandle {
             }
             logger.info("点击埋点得到点击日志： udid={}, advId={}", udid, advId);
             if (StaticAds.allAds.get(advId) == null) {
-                //                logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
                 return;
             }
-            //            logger.info("点击埋点得到点击日志： udid={}, advId={}", udid, advId);
 
             recordClick(udid, advId);
 
@@ -178,25 +181,29 @@ public class MaidianLogsHandle {
     //    }
 
     private static Map<String, String> preHandleMaidianLog(String line) {
-        String encodedURL = null;
         try {
-            encodedURL = URLDecoder.decode(line, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        }
-        int index = 0;
-        Map<String, String> params = New.hashMap();
-        if (encodedURL.contains("ADV_EXHIBIT")) {
-            index = encodedURL.indexOf("ADV_EXHIBIT");
-            params = paramsAnalysis(encodedURL.substring(index + 12));
-        } else if (encodedURL.contains("ADV_CLICK")) {
-            index = encodedURL.indexOf("ADV_CLICK");
-            params = paramsAnalysis(encodedURL.substring(index + 10));
-        }
-        //        System.out.println(encodedURL.substring(index + 12));
+            String encodedURL = null;
+            try {
+                encodedURL = URLDecoder.decode(line, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return null;
+            }
+            int index = 0;
+            Map<String, String> params = New.hashMap();
+            if (encodedURL.contains("ADV_EXHIBIT")) {
+                index = encodedURL.indexOf("ADV_EXHIBIT");
+                params = paramsAnalysis(encodedURL.substring(index + 12));
+            } else if (encodedURL.contains("ADV_CLICK")) {
+                index = encodedURL.indexOf("ADV_CLICK");
+                params = paramsAnalysis(encodedURL.substring(index + 10));
+            }
+            //        System.out.println(encodedURL.substring(index + 12));
 
-        return params;
+            return params;
+        } catch (Exception e) {
+            throw new IllegalAccessError();
+        }
     }
 
     private static Map<String, String> paramsAnalysis(String url) {

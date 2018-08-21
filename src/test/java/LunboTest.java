@@ -1,10 +1,10 @@
 import java.util.List;
+import java.util.Random;
 
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.StationAdEntity;
 import com.bus.chelaile.mvc.AdvParam;
 
-import scala.util.Random;
 
 public class LunboTest {
 

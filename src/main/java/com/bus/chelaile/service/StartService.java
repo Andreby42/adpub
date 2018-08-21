@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
-import com.bus.chelaile.kafka.InfoStreamForAdvClick;
+import com.bus.chelaile.kafka.newPackage.InfoStreamForAdvClick;
 import com.bus.chelaile.model.AdvProject;
 import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
@@ -126,22 +125,6 @@ public class StartService {
             // 把所有当前可能投放的广告放入这个集合中
             StaticAds.addAds(ad);
 
-            // 详情页广告与其他广告分开
-            // 2018-06-14日去除这个  // TODO 
-//            if (ad.getShowType() != null) {
-//                // 只要线路详情
-//                if (isLineDetails.equals("0") && !(ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
-//                        || ad.getShowType().equals(ShowType.STATION_ADV.getType())
-//                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
-//                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
-//                    continue;
-//                } else if (isLineDetails.equals("2") && (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())
-//                        || ad.getShowType().equals(ShowType.STATION_ADV.getType())
-//                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_ADV.getType())
-//                        || ad.getShowType().equals(ShowType.LINEDETAIL_REFRESH_OPEN_ADV.getType()))) {
-//                    continue;
-//                }
-//            }
             // 黑名单
             initBlackListMap(ad, ruleList);
             // 把广告分按照用户投放和不按照用户投放两种，分开初始化入map中
@@ -149,26 +132,6 @@ public class StartService {
             // initPic(ad);
             advIds.add(ad.getId() + "");
         }
-
-        // 从配置文件读取tbk title存储到redis的key
-//        try {
-//            String tbkKeyStrs = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "tbk_ads_title_keys");
-//            if (StringUtils.isNotEmpty(tbkKeyStrs)) {
-//                String keys[] = tbkKeyStrs.split(";");
-//                for (String s : keys) {
-//                    String[] entry = s.split(",");
-//                    if (entry.length > 1) {
-//                        StaticAds.advTBKTitleKey.put(Integer.parseInt(entry[0]), entry[1]);
-//                        logger.info("tbk keys detailes : advId={}, titleKey={}", entry[0], entry[1]);
-//                    }
-//                }
-//                logger.info("初始化淘宝客结束， tbkKeyStrs={}, advTBKTitleKey.size={}", tbkKeyStrs, StaticAds.advTBKTitleKey.size());
-//                logger.info("");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            logger.error("初始化淘宝客title出错");
-//        }
 
         logger.info("所有按照用户投放的广告加载完毕，用户数={}", StaticAds.adsMap.size());
         logger.info("所有按照用户投放的广告数目={}", StaticAds.allAdContentCache.size());
@@ -216,11 +179,6 @@ public class StartService {
 		// 启动固定频率更新投放pv到redis，和启动固定频率计算控制投放的比例因子
 		dynamicRegulation.threadUpdateTotalPV();
 		
-		// 从redis中读取 ‘不投广告的用户’到内存中
-		// 改成 spring配置的定时任务了
-		// ReloadInvalidAccountIdTimer ri = new ReloadInvalidAccountIdTimer();
-		// Thread rtd = new Thread(ri);
-		// rtd.start();
 	}
 
 	private void initBlackListMap(AdContent adv, List<Rule> ruleList) {

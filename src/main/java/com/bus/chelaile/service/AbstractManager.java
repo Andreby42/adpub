@@ -6,11 +6,11 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
@@ -32,17 +32,13 @@ import com.bus.chelaile.model.rule.UserClickRate;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
-import com.bus.chelaile.thread.CalculatePerMinCount;
 import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
-import kafka.log.Log;
-import scala.util.Random;
-
 public abstract class AbstractManager {
-    @Autowired
-    private AdvInvalidService invaildService;
+//    @Autowired
+//    private AdvInvalidService invaildService;
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractManager.class);
     protected static String AD_GOTO_INFO_URL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "ad.gotoinfo.url",
@@ -654,22 +650,22 @@ public abstract class AbstractManager {
         return true;
     }
 
-    /**
-     * 是否通过花钱取消广告
-     * 
-     * @return
-     */
-    private boolean isInvalidAccountId(String accountId) {
-        if (accountId == null) {
-            return false;
-        }
-        try {
-            return invaildService.isInvalid(accountId);
-        } catch (Exception e) {
-            logger.error(e.getMessage() + ",accountId:" + accountId, e);
-        }
-        return false;
-    }
+//    /**
+//     * 是否通过花钱取消广告
+//     * 
+//     * @return
+//     */
+//    private boolean isInvalidAccountId(String accountId) {
+//        if (accountId == null) {
+//            return false;
+//        }
+//        try {
+//            return invaildService.isInvalid(accountId);
+//        } catch (Exception e) {
+//            logger.error(e.getMessage() + ",accountId:" + accountId, e);
+//        }
+//        return false;
+//    }
 
     /**
      * 应该按照优先级倒叙排序
@@ -836,15 +832,15 @@ public abstract class AbstractManager {
      * @param showType
      * @return
      */
-    private double getClickStandardRate(String udid, int advId, String ruleId, ShowType showType) {
-
-        boolean delUdidRule = false;
-        if (delUdidRule) {
-            StaticAds.delUdidRule(udid, advId, showType);
-        }
-
-        return CalculatePerMinCount.getCTRRate(advId + "#" + ruleId);
-    }
+//    private double getClickStandardRate(String udid, int advId, String ruleId, ShowType showType) {
+//
+//        boolean delUdidRule = false;
+//        if (delUdidRule) {
+//            StaticAds.delUdidRule(udid, advId, showType);
+//        }
+//
+//        return CalculatePerMinCount.getCTRRate(advId + "#" + ruleId);
+//    }
 
     private List<AdContentCacheEle> mergeAllAds(AdvParam advParam, ShowType showType, List<AdContentCacheEle> adsList,
             boolean isNeedApid) {
