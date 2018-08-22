@@ -158,6 +158,8 @@ public class Constants {
     public static final String ALLCARS_DEBUGLOG_KEY = "AD_SETTING_ios_debug_allcars";
     
     
+    public static final String SETTING_WECHATAP_NEWTIME_KEY = "AD_SETTING_wechatApp_newTime";
+    
     public static final Object SETTING_TESTNEWUSER_AD_KEY = "AD_SETTING_testNewUsersWithOutAds";
     
     // 版本控制号

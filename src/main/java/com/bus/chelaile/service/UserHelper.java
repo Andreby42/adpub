@@ -43,7 +43,13 @@ public class UserHelper {
                 }
             } else if (s.equals("h5") && h5Src.equals("weixinapp_cx")) {
                 key = "wechat#unionId#2#" + udid;
+                
                 newUserPeriod = Constants.TOW_DAY_NEW_USER_PERIOD;
+                String wechatappNewTime = StaticAds.SETTINGSMAP.get(Constants.SETTING_WECHATAP_NEWTIME_KEY);
+                if(StringUtils.isNoneBlank(wechatappNewTime)) {
+                    newUserPeriod = Long.parseLong(wechatappNewTime);
+                }
+                
                 //            key
                 //            wechat#unionId#2#openid
                 //            value
