@@ -668,9 +668,29 @@ public class ServiceManager {
     }
     
     // 判断小程序用户是否新用户
-    public boolean getIsNew(AdvParam param) {
-        String key = "wechat#unionId#2#" + param.getUdid();
-        int newUserPeriod = Constants.TOW_DAY_NEW_USER_PERIOD;
+    public boolean getIsNew(AdvParam p) {
+//        String key = "wechat#unionId#2#" + p.getUdid();
+//        int newUserPeriod = Constants.TOW_DAY_NEW_USER_PERIOD;
+        
+        /*
+         * for temp TEST
+         * return true 
+         */
+        boolean isforTempTest = false;
+        String forTestStr = StaticAds.SETTINGSMAP.get(Constants.SETTING_TESTNEWUSER_AD_KEY);
+        if(StringUtils.isNoneBlank(forTestStr))
+            isforTempTest = Boolean.parseBoolean(forTestStr);
+        if (isforTempTest) {
+            boolean isNew = UserHelper.isNewUser(p.getS(), p.getH5Src(), p.getUdid());
+            if (isNew) {
+                if (p.getUdid().startsWith("okBHq0A") || p.getUdid().startsWith("okBHq0B")) {
+                    AnalysisLog.info("FORTEST, NOADRETURN, s={}, udid={}", p.getS(), p.getUdid());
+
+                    return true;
+                }
+            }
+        }
+        
         //            key
         //            wechat#unionId#2#openid
         //            value

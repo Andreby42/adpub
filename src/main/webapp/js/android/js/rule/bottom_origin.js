@@ -948,7 +948,8 @@ function ads() {
     return {
       traceInfo : {
 		  traceid: '${TRACEID}',
-		  pid: '22'
+		  pid: '22',
+          s: 'android'
       },
       closeInfo: {
           closePic: '${closePic}'

@@ -106,6 +106,7 @@ public abstract class AbstractManager {
         if (!beforeCheck(advParam, showType)) {
             return null;
         }
+        StaticTimeLog.record(Constants.RECORD_LOG, "beforeCheck");
 
         // 所有投放的广告
         List<AdContentCacheEle> adsList = gainAllValidAds(advParam, showType, false);
@@ -948,22 +949,23 @@ public abstract class AbstractManager {
     /**
      * 最初的检测
      * 
-     * @param advParam
+     * @param p
      * @param showType
      * @return true 检测成功,false 检测失败
      */
-    protected boolean beforeCheck(AdvParam advParam, ShowType showType) {
+    protected boolean beforeCheck(AdvParam p, ShowType showType) {
         if (SynchronizationControl.isReload()) {
             logger.info("reload is Running");
             return false;
         }
-        
-     // 是否展开底部广告
+
+        // 是否展开底部广告
         if (showType == ShowType.LINE_FEED_ADV && StaticAds.SETTINGSMAP.containsKey(Constants.SETTING_SCREENHEIGHT_KEY)) {
             String sL = (StaticAds.SETTINGSMAP.get(Constants.SETTING_SCREENHEIGHT_KEY));
             try {
-                if (sL != null && Integer.parseInt(sL) >= advParam.getScreenHeight()) {
-                    logger.info("screenHeight is too low to show bottomAds, deviceHeight={}, redLine={}", advParam.getScreenHeight(), sL);
+                if (sL != null && Integer.parseInt(sL) >= p.getScreenHeight()) {
+                    logger.info("screenHeight is too low to show bottomAds, deviceHeight={}, redLine={}",
+                            p.getScreenHeight(), sL);
                     return false;
                 }
             } catch (Exception e) {
@@ -971,40 +973,59 @@ public abstract class AbstractManager {
             }
         }
 
-        String closeTime = CacheUtil.getCloseAdTime(advParam.getUdid(), showType.getType());
+        // 关闭广告位之后，一段时间内不再打开
+        String closeTime = CacheUtil.getCloseAdTime(p.getUdid(), showType.getType());
         if (StringUtils.isNoneBlank(closeTime)) {
             long expireTime = Long.parseLong(StaticAds.SETTINGSMAP.get(Constants.SETTING_COSE_AD_KEY));
             if (((System.currentTimeMillis() - Long.parseLong(closeTime))) / 1000 < expireTime) {
-                logger.info("close ad time not pass ,udid={}, pid={}, closetime={}", advParam.getUdid(), showType.getType(), closeTime);
+                logger.info("close ad time not pass ,udid={}, pid={}, closetime={}", p.getUdid(), showType.getType(),
+                        closeTime);
                 return false;
             }
         }
 
         // 香港不投广告
-        if (StringUtils.isNotBlank(advParam.getCityId()) && (advParam.getCityId().equals("085"))) {
+        if (StringUtils.isNotBlank(p.getCityId()) && (p.getCityId().equals("085"))) {
             return false;
         }
 
         // 详情页cshow非空，不等于linedetail的不返回
         if (showType.getType().equals(ShowType.LINE_DETAIL)) {
-            if (StringUtils.isNoneBlank(advParam.getCshow()) && !advParam.getCshow().equals(Constants.CSHOW_LINEDETAIL)) {
+            if (StringUtils.isNoneBlank(p.getCshow()) && !p.getCshow().equals(Constants.CSHOW_LINEDETAIL)) {
                 return false;
             }
         }
 
         // android 内核4.4一下的，不返回广告 20180118
         // 这个方法不够严谨，当android更新到版本10的时候，会出错
-        Platform platform = Platform.from(advParam.getS());
+        Platform platform = Platform.from(p.getS());
         if (platform.isAndriod(platform.getDisplay())) {
-            if (StringUtils.isNoneBlank(advParam.getSv()) && (advParam.getSv().compareTo("4.4") < 0)) {
+            if (StringUtils.isNoneBlank(p.getSv()) && (p.getSv().compareTo("4.4") < 0)) {
                 return false;
             }
         }
         // 来自城市服务|泰安，不返回广告
         if (platform.isH5(platform.getDisplay())) {
-            if (StringUtils.isNoneBlank(advParam.getFrom()) && (advParam.getFrom().equalsIgnoreCase("city_taian")
-                    || advParam.getFrom().equalsIgnoreCase("wxcityservice"))) {
+            if (StringUtils.isNoneBlank(p.getFrom()) && (p.getFrom().equalsIgnoreCase("city_taian")
+                    || p.getFrom().equalsIgnoreCase("wxcityservice"))) {
                 return false;
+            }
+        }
+        
+        // for temp TEST
+        boolean isforTempTest = false;
+        String forTestStr = StaticAds.SETTINGSMAP.get(Constants.SETTING_TESTNEWUSER_AD_KEY);
+        if(StringUtils.isNoneBlank(forTestStr))
+            isforTempTest = Boolean.parseBoolean(forTestStr);
+        if (isforTempTest) {
+            boolean isNew = UserHelper.isNewUser(p.getS(), p.getH5Src(), p.getUdid());
+            if (isNew) {
+                if (p.getUdid().startsWith("0") || p.getUdid().startsWith("1") || p.getUdid().startsWith("okBHq0A")
+                        || p.getUdid().startsWith("okBHq0B")) {
+                    AnalysisLog.info("FORTEST, NOADRETURN, s={}, udid={}", p.getS(), p.getUdid());
+
+                    return false;
+                }
             }
         }
 

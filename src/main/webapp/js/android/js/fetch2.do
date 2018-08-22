@@ -284,7 +284,7 @@ function tryNthTaskGroup(rule, nth, callback) {
         var MdLogger = buildMdLogger();
 
         var stamp1 = now();
-        ['traceid', 'pid', 'adid'].forEach(function(field) {
+        ['traceid', 'pid', 's', 'adid'].forEach(function(field) {
             MdLogger.addPar(field, rule.traceInfo[field]);
         });
         MdLogger.addPar('aid', sdkInfo.task.aid());
