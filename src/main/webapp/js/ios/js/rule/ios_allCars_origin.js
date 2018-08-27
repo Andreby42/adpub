@@ -40,6 +40,10 @@ var api_chelaile = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[list.length - 1].info;
+            info.is_backup = 0;
+            if(list.length > 1) {
+                info.is_backup = 1;
+            }
             info.adid = info.id;
             list[list.length - 1].info = info;
             return [list[list.length - 1]];

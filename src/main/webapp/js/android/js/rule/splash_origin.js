@@ -49,7 +49,7 @@ var api_chelaile = {
     },
 
     aid : function () {
-        return 'chelaile';
+        return 'api_chelaile';
     },
 
     ad_data : function () {

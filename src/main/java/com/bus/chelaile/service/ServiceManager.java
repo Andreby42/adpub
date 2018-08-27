@@ -863,7 +863,8 @@ public class ServiceManager {
         });
         for (BaseAdEntity ad : guideAds) {
             GuideAdEntity guideAd = (GuideAdEntity) ad;
-            if (guideAd.getSite() == 0) {
+            // 把-1当做0用
+            if (guideAd.getSite() == 0 || guideAd.getSite() == -1) {
                 advs.add(ad);
             } else {
                 if(! groupAds.containsKey(guideAd.getGroupId())) {

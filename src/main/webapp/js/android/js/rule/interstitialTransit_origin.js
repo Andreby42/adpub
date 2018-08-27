@@ -217,9 +217,11 @@ var sdk_adview = {
         var ad = list && list[0];
         if (!ad) return null;
 
-        if (this.adCheck(ad)) {
-            return ad;} else {
-            return null;}
+        if (this.adCheck(ad) && !hasClicked(this.sdkname(), this.asEntity(ad))) {
+            return ad;
+        } else {
+            return null;
+        }
     },
     adCheck: function(ad) {
         return true;
@@ -234,6 +236,15 @@ var sdk_adview = {
     }
 }
 
+// hasClicked aid'father:provider_id
+function hasClicked(provider_id, entity) {
+    	var clickBefores = {'sdk_adview': '这个是测试广告,测试测试测试' }
+    	var rs = clickBefores[provider_id]
+        console.log("21,clickHistory=" + rs + ",adHead=" + entity.head)
+    	if (!rs || typeof(rs) == "undefined")
+            return false;
+        return rs.indexOf(entity.head) > -1
+}
 
 function ads() {
     return {

@@ -323,30 +323,23 @@ function tryNthTaskGroup(rule, nth, callback) {
                     resp.closePic = rule.closeInfo.closePic;
                 }
 
-                /*
+
                 try {
                     if(sdkInfo.task.sdkname() == "sdk_gdt") {
-                        if(rule.traceInfo.pid == "15") {
-                            console.log("sdk_gdt, 站点广告: " + entity.head + "," + entity.subhead + "," + entity.pic);
+                        var traceid = rule && rule.traceInfo && rule.traceInfo.traceid;
                         if(
-                            (entity.head && entity.head.contains("美团")) || (entity.subhead && entity.subhead.contains("美团"))
-                            ) {
-                            resp.brandPic = "https://image3.chelaile.net.cn/59fc10535556460a9c7282d2fc636493";
-                            }
-                        }
-                        if(rule.traceInfo.pid == "22") {
-                            console.log("sdk_gdt, 底部广告： " + entity.head + "," + entity.subhead + "," + entity.pic);
-                        if(
-                            (entity.head && entity.head.contains("京东")) || (entity.subhead && entity.subhead.contains("京东"))
-                            ) {
+                            /^e/.test(traceid) && 
+                            ((entity.head && entity.head.contains("京东")) || (entity.subhead && entity.subhead.contains("京东")))
+                          ) 
+                       {
                             resp.brandPic = "https://image3.chelaile.net.cn/47db7ec76e75407cb57a890cead60c85";
-                            }
-                        }
+                       }
+
                     }
                 } catch(error) {
                     console.log(error);
                 }
-                */
+
 
                 if (sdkInfo.task.adStyle) {
                     resp.adStyle = sdkInfo.task.adStyle();

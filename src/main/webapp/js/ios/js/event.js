@@ -124,6 +124,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "req_timestamp", +new Date);
     addParamsIfNotNull(params, "s", deviceObject.s);
     addParamsIfNotNull(params, "v", deviceObject.v);
+    addParamsIfNotNull(params, "is_backup", info.is_backup);
     return params;
 }
 
@@ -136,7 +137,6 @@ function trackExhibit(sdk, ad) {
 
     addParamsIfNotNull(params, "show_status", info.show_status || 0);
     addParamsIfNotNull(params, "cost_time", info.cost_time);
-    addParamsIfNotNull(params, "is_backup", info.is_backup);
     addParamsIfNotNull(params, "adv_title", info.head);
     addParamsIfNotNull(params, "adv_desc", info.subhead);
 

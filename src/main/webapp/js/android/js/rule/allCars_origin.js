@@ -856,10 +856,11 @@ var sdk_adview = {
 function hasClicked(provider_id, entity) {
     	var clickBefores = {'api_zm': '[]' }
     	var rs = clickBefores[provider_id]
-    	if (!rs) 
-    		return false;
-    	return rs.indexOf(entity.title) > -1
-	}
+        console.log("21,clickHistory=" + rs + ",adHead=" + entity.head)
+    	if (!rs || typeof(rs) == "undefined")
+            return false;
+        return rs.indexOf(entity.head) > -1
+}
 
 function ads() {
 	return {

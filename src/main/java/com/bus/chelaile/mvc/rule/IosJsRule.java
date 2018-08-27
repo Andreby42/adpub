@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.mvc.AbstractController;
@@ -40,7 +39,6 @@ public class IosJsRule extends AbstractController {
 
 		AdvParam p = getActionParam(request);
 		response.setContentType("application/javascript;charset=UTF-8");
-		String traceInfo = JSONObject.toJSONString(p);
 
 		// 模板
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_splash_origin");
@@ -48,18 +46,11 @@ public class IosJsRule extends AbstractController {
 		TaskEntity tgs = jSService.getTask(p, "splash");
 
 		response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
 		try {
             produceJS(p, splashOrigin, tgs, "ios_splash_origin", request, ShowType.OPEN_SCREEN,response.getWriter());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
-		
-//		String splashJS = produceJS(p, splashOrigin, tgs, "splash_", request, ShowType.OPEN_SCREEN);
-//
-//		response.setHeader("traceId", p.getTraceid());
-//		response.setHeader("traceIdInfo", traceInfo);
-//		return splashJS;
 	}
 
 	/*
@@ -71,7 +62,6 @@ public class IosJsRule extends AbstractController {
 
 	    response.setContentType("application/javascript;charset=UTF-8");
 		AdvParam p = getActionParam(request);
-		String traceInfo = JSONObject.toJSONString(p);
 
 		// 模板
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_home_origin");
@@ -79,7 +69,6 @@ public class IosJsRule extends AbstractController {
 		// setMaidianParams(p, );
 
 		response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
 		try {
             produceJS(p, splashOrigin, tgs, "ios_home_origin", request, ShowType.DOUBLE_COLUMN,response.getWriter());
         } catch (IOException e) {
@@ -103,9 +92,7 @@ public class IosJsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_right_origin");
 		TaskEntity tgs = jSService.getTask(p, "rightTop");
 
-		String traceInfo = JSONObject.toJSONString(p);
 		response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_right_origin", request, ShowType.LINE_RIGHT_ADV,response.getWriter());
         } catch (IOException e) {
@@ -129,9 +116,7 @@ public class IosJsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_station_origin");
 		TaskEntity tgs = jSService.getTask(p, "station");
 
-		String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_station_origin", request, ShowType.STATION_ADV,response.getWriter());
         } catch (IOException e) {
@@ -155,9 +140,7 @@ public class IosJsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_bottom_origin");
 		TaskEntity tgs = jSService.getTask(p, "bottom");
 
-		String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_bottom_origin", request, ShowType.LINE_FEED_ADV,response.getWriter());
         } catch (IOException e) {
@@ -181,9 +164,7 @@ public class IosJsRule extends AbstractController {
 		String splashOrigin = StaticAds.JS_FILE_STR.get("ios_transfer_origin");
 		TaskEntity tgs = jSService.getTask(p, "transfer");
 
-		String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_transfer_origin", request, ShowType.TRANSFER_ADV, response.getWriter());
         } catch (IOException e) {
@@ -209,9 +190,7 @@ public class IosJsRule extends AbstractController {
 		
 		TaskEntity tgs = jSService.getTask(p, "stationDetail");
 
-		String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_stationDetail_origin", request, ShowType.CAR_ALL_LINE_ADV,
                     response.getWriter());
@@ -240,9 +219,7 @@ public class IosJsRule extends AbstractController {
 
 		TaskEntity tgs = jSService.getTask(p, "allCars");
 
-		String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_allCars_origin", request, ShowType.ALL_CAR_ADV, response.getWriter());
         } catch (IOException e) {
@@ -265,9 +242,7 @@ public class IosJsRule extends AbstractController {
         TaskEntity tgs = jSService.getTask(p, "interstitialHome");
 
         response.setContentType("application/javascript;charset=UTF-8");
-        String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_interstitialHome_origin", request, ShowType.INTERSHOME_ADV, response.getWriter());
         } catch (IOException e) {
@@ -289,9 +264,7 @@ public class IosJsRule extends AbstractController {
         TaskEntity tgs = jSService.getTask(p, "interstitialTransit");
 
         response.setContentType("application/javascript;charset=UTF-8");
-        String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_interstitialTransit_origin", request, ShowType.INTERSTRANSIT_ADV, response.getWriter());
         } catch (IOException e) {
@@ -313,9 +286,7 @@ public class IosJsRule extends AbstractController {
         TaskEntity tgs = jSService.getTask(p, "interstitialEnergy");
 
         response.setContentType("application/javascript;charset=UTF-8");
-        String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_interstitialEnergy_origin", request, ShowType.INTERSENERGY_ADV, response.getWriter());
         } catch (IOException e) {
@@ -337,9 +308,7 @@ public class IosJsRule extends AbstractController {
         TaskEntity tgs = jSService.getTask(p, "interstitialMine");
 
         response.setContentType("application/javascript;charset=UTF-8");
-        String traceInfo = JSONObject.toJSONString(p);
         response.setHeader("traceId", p.getTraceid());
-        response.setHeader("traceIdInfo", traceInfo);
         try {
             produceJS(p, splashOrigin, tgs, "ios_interstitialMine_origin", request, ShowType.INTERSMINE_ADV, response.getWriter());
         } catch (IOException e) {

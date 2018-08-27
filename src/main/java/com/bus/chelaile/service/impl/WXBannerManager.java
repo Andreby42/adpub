@@ -52,11 +52,17 @@ public class WXBannerManager extends AbstractManager {
 			AdContentCacheEle ad = entry.getValue();
 			AdWXBannerInnerContent adWXBanner = (AdWXBannerInnerContent) ad.getAds().getAdInnerContent();
 			
-			if( advParam.getSite() != adWXBanner.getSite()) { // 配置首页， site是1
+			// site不为空，并且参数site跟inner的site不同，那么略过
+			if(advParam.getSite() != -1 &&  advParam.getSite() != adWXBanner.getSite()) {
 			    logger.info("wxbanner site not match, param site={}, inner site={}, udid={}, adid={}", 
 			            advParam.getSite(), adWXBanner.getSite(), advParam.getUdid(), ad.getAds().getId());
 			    continue;
 			}
+			// site为空，只有inner的site是0才能继续，否则略过
+			if( advParam.getSite() == -1 && adWXBanner.getSite() != 0) {
+			    continue;
+			}
+	            
 
 			// 广告结构体有对来源的要求
 			if (adWXBanner.getServingPlaceList() != null && adWXBanner.getServingPlaceList().size() > 0) {

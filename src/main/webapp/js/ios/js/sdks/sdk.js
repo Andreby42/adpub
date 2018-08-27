@@ -191,15 +191,12 @@ console.log("1info info = "+info);
                                 
                                 // add brandPic 
                                 if(task.sdkname() == 'sdk_gdt') {
-                                    if(
-                                    (info.head && info.head.contains("美团")) || (info.subhead && info.subhead.contains("美团"))
-                                    ) {
-                                        info.brandPic = "https://image3.chelaile.net.cn/59fc10535556460a9c7282d2fc636493";
-                                    }
-                                    
-                                    else if (
-                                    (info.head && info.head.contains("京东")) || (info.subhead && info.subhead.contains("京东"))
-                                    ) {
+                                    var traceid = rule && rule.traceInfo && rule.traceInfo.traceid;
+                                    if ( 
+                                        /^e/.test(traceid) &&  
+                                        (   (info.head && info.head.contains("京东")) || (info.subhead && info.subhead.contains("京东")) || (info.head && info.head.contains("杜蕾斯")) || (info.subhead && info.subhead.contains("杜蕾斯")) )
+                                     )
+                                    {
                                         info.brandPic = "https://image3.chelaile.net.cn/47db7ec76e75407cb57a890cead60c85";
                                     }
                                 }
