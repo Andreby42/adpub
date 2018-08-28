@@ -480,10 +480,12 @@ function ads() {
           pid: '22'
       },
       closeInfo: {
-          closePic: '${closePic}'
+          closePic: '${closePic}',
+          hostSpotSize: '${hostSpotSize}',
+          fakeRate: '${fakeRate}'
       },
-        timeouts: ${TIMEOUTS},
-        tasks: ${TASKS}
+      timeouts: ${TIMEOUTS},
+      tasks: ${TASKS}
     }
 }
 

@@ -149,8 +149,8 @@ public class JSService {
                         closePic = entity.getTasksGroup().getClosePic();
                     if(StringUtils.isNoneBlank(entity.getTasksGroup().getHostSpotSize()))
                         hostSpotSize = entity.getTasksGroup().getHostSpotSize();
-                    if(entity.getTasksGroup().getHostSpotSize() != null)
-                        hostSpotSize = entity.getTasksGroup().getHostSpotSize();
+                    if(entity.getTasksGroup().getFakeRate() != null)
+                        fakeRate = entity.getTasksGroup().getFakeRate();
                 }
             }
             // 存储atraceInfo到redis中

@@ -1,1 +1,867 @@
-"use strict";var _typeof2="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};String.prototype.contains=String.prototype.contains||function(t){return 0<=this.indexOf(t)},String.prototype.startsWith=String.prototype.startsWith||function(t){return 0===this.indexOf(t)},String.prototype.endsWith=String.prototype.endsWith||function(t){return 0<=this.indexOf(t,this.length-t.length)},function(i){var o={},s=i.require;i.require=function(t,e,a){try{var r,n=t;return n.startsWith("./")&&(n=n.slice(2)),n.endsWith(".do")||(n+=".do"),e||a?r=s.apply(this,arguments):"function"!=typeof(r=o[n])&&(r=s.apply(this,arguments),o[n]=r),r?r(i):function(){}}catch(t){throw console.log("e="+t),delete o[n],t}},i.AddModule=function(t,e){o[t]=e},function(t){function u(t,e){var a=(65535&t)+(65535&e);return(t>>16)+(e>>16)+(a>>16)<<16|65535&a}function s(t,e,a,r,n,i){return u((o=u(u(e,t),u(r,i)))<<(s=n)|o>>>32-s,a);var o,s}function f(t,e,a,r,n,i,o){return s(e&a|~e&r,t,e,n,i,o)}function p(t,e,a,r,n,i,o){return s(e&r|a&~r,t,e,n,i,o)}function h(t,e,a,r,n,i,o){return s(e^a^r,t,e,n,i,o)}function y(t,e,a,r,n,i,o){return s(a^(e|~r),t,e,n,i,o)}function d(t,e){t[e>>5]|=128<<e%32,t[14+(e+64>>>9<<4)]=e;var a,r,n,i,o,s=1732584193,d=-271733879,l=-1732584194,c=271733878;for(a=0;a<t.length;a+=16)d=y(d=y(d=y(d=y(d=h(d=h(d=h(d=h(d=p(d=p(d=p(d=p(d=f(d=f(d=f(d=f(n=d,l=f(i=l,c=f(o=c,s=f(r=s,d,l,c,t[a],7,-680876936),d,l,t[a+1],12,-389564586),s,d,t[a+2],17,606105819),c,s,t[a+3],22,-1044525330),l=f(l,c=f(c,s=f(s,d,l,c,t[a+4],7,-176418897),d,l,t[a+5],12,1200080426),s,d,t[a+6],17,-1473231341),c,s,t[a+7],22,-45705983),l=f(l,c=f(c,s=f(s,d,l,c,t[a+8],7,1770035416),d,l,t[a+9],12,-1958414417),s,d,t[a+10],17,-42063),c,s,t[a+11],22,-1990404162),l=f(l,c=f(c,s=f(s,d,l,c,t[a+12],7,1804603682),d,l,t[a+13],12,-40341101),s,d,t[a+14],17,-1502002290),c,s,t[a+15],22,1236535329),l=p(l,c=p(c,s=p(s,d,l,c,t[a+1],5,-165796510),d,l,t[a+6],9,-1069501632),s,d,t[a+11],14,643717713),c,s,t[a],20,-373897302),l=p(l,c=p(c,s=p(s,d,l,c,t[a+5],5,-701558691),d,l,t[a+10],9,38016083),s,d,t[a+15],14,-660478335),c,s,t[a+4],20,-405537848),l=p(l,c=p(c,s=p(s,d,l,c,t[a+9],5,568446438),d,l,t[a+14],9,-1019803690),s,d,t[a+3],14,-187363961),c,s,t[a+8],20,1163531501),l=p(l,c=p(c,s=p(s,d,l,c,t[a+13],5,-1444681467),d,l,t[a+2],9,-51403784),s,d,t[a+7],14,1735328473),c,s,t[a+12],20,-1926607734),l=h(l,c=h(c,s=h(s,d,l,c,t[a+5],4,-378558),d,l,t[a+8],11,-2022574463),s,d,t[a+11],16,1839030562),c,s,t[a+14],23,-35309556),l=h(l,c=h(c,s=h(s,d,l,c,t[a+1],4,-1530992060),d,l,t[a+4],11,1272893353),s,d,t[a+7],16,-155497632),c,s,t[a+10],23,-1094730640),l=h(l,c=h(c,s=h(s,d,l,c,t[a+13],4,681279174),d,l,t[a],11,-358537222),s,d,t[a+3],16,-722521979),c,s,t[a+6],23,76029189),l=h(l,c=h(c,s=h(s,d,l,c,t[a+9],4,-640364487),d,l,t[a+12],11,-421815835),s,d,t[a+15],16,530742520),c,s,t[a+2],23,-995338651),l=y(l,c=y(c,s=y(s,d,l,c,t[a],6,-198630844),d,l,t[a+7],10,1126891415),s,d,t[a+14],15,-1416354905),c,s,t[a+5],21,-57434055),l=y(l,c=y(c,s=y(s,d,l,c,t[a+12],6,1700485571),d,l,t[a+3],10,-1894986606),s,d,t[a+10],15,-1051523),c,s,t[a+1],21,-2054922799),l=y(l,c=y(c,s=y(s,d,l,c,t[a+8],6,1873313359),d,l,t[a+15],10,-30611744),s,d,t[a+6],15,-1560198380),c,s,t[a+13],21,1309151649),l=y(l,c=y(c,s=y(s,d,l,c,t[a+4],6,-145523070),d,l,t[a+11],10,-1120210379),s,d,t[a+2],15,718787259),c,s,t[a+9],21,-343485551),s=u(s,r),d=u(d,n),l=u(l,i),c=u(c,o);return[s,d,l,c]}function l(t){var e,a="",r=32*t.length;for(e=0;e<r;e+=8)a+=String.fromCharCode(t[e>>5]>>>e%32&255);return a}function c(t){var e,a=[];for(a[(t.length>>2)-1]=void 0,e=0;e<a.length;e+=1)a[e]=0;var r=8*t.length;for(e=0;e<r;e+=8)a[e>>5]|=(255&t.charCodeAt(e/8))<<e%32;return a}function r(t){var e,a,r="";for(a=0;a<t.length;a+=1)e=t.charCodeAt(a),r+="0123456789abcdef".charAt(e>>>4&15)+"0123456789abcdef".charAt(15&e);return r}function a(t){return unescape(encodeURIComponent(t))}function n(t){return l(d(c(e=a(t)),8*e.length));var e}function i(t,e){return function(t,e){var a,r,n=c(t),i=[],o=[];for(i[15]=o[15]=void 0,16<n.length&&(n=d(n,8*t.length)),a=0;a<16;a+=1)i[a]=909522486^n[a],o[a]=1549556828^n[a];return r=d(i.concat(c(e)),512+8*e.length),l(d(o.concat(r),640))}(a(t),a(e))}function e(t,e,a){return e?a?i(e,t):r(i(e,t)):a?n(t):r(n(t))}"function"==typeof define&&define.amd?define(function(){return e}):t.md5=e}(i),i.JsEncryptUtil={},i.JsEncryptUtil.md5=i.md5,i.RuleMap={CLLHomeViewController:"interstitialHomeAd",CLLTransferMainViewController:"interstitialTransitAd",CLLEnergyMainViewController:"interstitialEnergyAd",CLLMoreMainViewController:"interstitialMineAd"},i.RuleCountMap={interstitialHomeAd:1,interstitialTransitAd:1,interstitialEnergyAd:1,interstitialMineAd:1}}(global),global.AddModule("event.do",function(t){var v={};return t=t||this,exports={},v.exports=exports,function(t,e,a){var o,n="https://atrace.chelaile.net.cn/thirdSimple",s="https://atrace.chelaile.net.cn/thirdPartyResponse";if("function"==typeof GetConfig){var r=GetConfig();o="dev"==r.server?"https://dev.chelaile.net.cn/adpub/adv!closeAd.action":"stage"==r.server?"https://stage.chelaile.net.cn/adpub/adv!closeAd.action":"https://api.chelaile.net.cn/adpub/adv!closeAd.action"}function d(t,e,a){var r=function(t,e){var a="",r="",n="";if(0<=t.indexOf("#")){var i=t.split("#");a=0<=i[0].indexOf("?")?i[0]+"&":i[0]+"?",r="#"+i.slice(1).join("#")}else a=0<=t.indexOf("?")?t+"&":t+"?";for(var o in e)n+="&"+o+"="+encodeURIComponent(e[o]);return a+n+r}(t,e);null!=a&&null!=a&&"string"!=typeof a&&(a=JSON.stringify(a)),a?Http.post(r,null,a,5e3,function(t,e,a){console.log("sendTrackRequest ret="+t+" response.header="+JSON.stringify(OCValueForKey(e,"allHeaderFields"))+" error="+a)}):Http.get(r,null,5e3,function(t,e,a){console.log("sendTrackRequest ret="+t+" response.header="+JSON.stringify(OCValueForKey(e,"allHeaderFields"))+" error="+a)})}function l(t,e,a){null!=a&&null!=a&&(t[e]=a)}function c(){var t=GetDeviceInfo(),a={};if(t){var e=t.split("&");e&&e.length&&e.forEach(function(t){var e=t.split("=");e[0]&&e[1]&&(a[e[0]]=e[1])})}return a}function u(t,e){var a={},r=e.info||{},n=t.traceInfo||{},i=c()||{};return l(a,"traceid",n.traceid),l(a,"pid",n.pid),l(a,"aid",t.aid),l(a,"ad_order",r.ad_order),l(a,"adid",r.adid),l(a,"startMode",r.startMode),l(a,"stats_act",r.stats_act),l(a,"viewstatus",e.viewstatus),l(a,"req_timestamp",+new Date),l(a,"s",i.s),l(a,"v",i.v),l(a,"is_backup",r.is_backup),a}function i(t,e){var a=u(t,e),r=e.info||{};t.traceInfo;if(l(a,"show_status",r.show_status||0),l(a,"cost_time",r.cost_time),l(a,"adv_title",r.head),l(a,"adv_desc",r.subhead),d("https://atrace.chelaile.net.cn/exhibit",a),r.unfoldMonitorLink&&r.actionMonitorLink){var n=r.actionMonitorLink.replace("{action}","5"),i=+new Date+"";i=String(i).slice(0,-3),n=(n=n.replace("{time}",i)).replace("{play_time}","0"),d(r.unfoldMonitorLink,{}),d(n,{})}}function f(t,e){var a=u(t,e),r=e.info||{};t.traceInfo;if(l(a,"adv_title",r.head),l(a,"adv_desc",r.subhead),d("https://atrace.chelaile.net.cn/click",a),r.actionMonitorLink){var n=r.actionMonitorLink.replace("{action}","6"),i=+new Date+"";i=String(i).slice(0,-3),d(n=(n=n.replace("{time}",i)).replace("{play_time}","0"),{})}r.clickMonitorLink&&d(r.clickMonitorLink,{})}function p(t,e){d("https://atrace.chelaile.net.cn/close",u(t,e));var a=e.info||{};if(a.isSplash||a.isFloat){if(a.actionMonitorLink){var r=a.actionMonitorLink.replace("{action}","7"),n=+new Date+"";n=String(n).slice(0,-3),d(r=(r=r.replace("{time}",n)).replace("{play_time}","0"),{})}}else!function(t,e){if(o){var a=u(t,e),r=e.info||{},n=(t.traceInfo,r.picsList),i="";n&&n.length&&(i=n.join(";")),l(a,"adv_title",r.head),l(a,"adv_image",i),d(o+"?"+GetDeviceInfo(),a)}}(t,e)}function h(t){var e={},a=(t=t||{}).task||{},r=t.rule||{},n=t.userdata||{},i=c()||{};return r.traceInfo&&(l(e,"traceid",r.traceInfo.traceid),l(e,"pid",r.traceInfo.pid)),a.aid&&l(e,"aid",a.aid()),l(e,"req_timestamp",+new Date),l(e,"eventId",n.uniReqId),l(e,"s",i.s),l(e,"v",i.v),e}function y(t){var e=h(t),a=((t=t||{}).task,t.rule,t.data||{}),r=function(t){if(t&&t.adEntityArray&&0<t.adEntityArray.length)return t.adEntityArray[0].info}(a),n=r||{};l(e,"ad_order",n.ad_order),l(e,"adid",n.adid),l(e,"req_time",(a.sdk&&a.sdk.didReqTime||0)-(a.sdk&&a.sdk.willReqTime||0)),l(e,"ad_status",r?1:0),l(e,"resp_size",a.contentLength),t.error?l(e,"code",t.error):l(e,"code",OCValueForKey(a.extensionData,"statusCode"));var i={};l(i,"adv_title",n.head),l(i,"adv_desc",n.subhead),l(i,"icon_image",n.pic),l(i,"main_image",n.picsList),l(i,"link",n.link),l(i,"url_type",n.adType),d(s,e,i)}function k(t,e,a){var r;console.log("trackEvent eventId="+t+" eventType="+e+" params="+JSON.stringify(a||{})),e==TrackClass.Type.LoadSplash||e==TrackClass.Type.LoadBanner?(r=h(a),d(n,r)):e==TrackClass.Type.LoadedSplash||e==TrackClass.Type.LoadedBanner?y(a):e!=TrackClass.Type.FailedSplash&&e!=TrackClass.Type.FailedBanner||y(a)}a.trackEvent=k,v.exports={trackExhibit:i,trackClick:f,trackClose:p,trackEvent:k},a.TrackClass={trackExhibit:i,trackClick:f,trackClose:p,trackEvent:k,Type:{LoadSplash:"LoadSplash",LoadBanner:"LoadBanner",LoadedSplash:"LoadedSplash",LoadedBanner:"LoadedBanner",FailedSplash:"FailedSplash",FailedBanner:"FailedBanner",AllAdTimeout:"AllAdTimeout",FetchedAd:"FetchedAd",NoDataLastGroup:"NoDataLastGroup"}}}(0,exports,t),v.exports}),global.AddModule("fetch.do",function(t){var o={};return t=t||this,exports={},o.exports=exports,function(t,e,a){var n="function"==typeof Symbol&&"symbol"===_typeof2(Symbol.iterator)?function(t){return void 0===t?"undefined":_typeof2(t)}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":void 0===t?"undefined":_typeof2(t)};var r={};function i(t){var a=[];return(t=t||[]).forEach(function(t){var e=function(t){var e=r["sdk"];if(!e){try{e=require("sdks/"+"sdk")}catch(t){console.log(t)}e&&(r.sdk=e)}return e}(t.sdkname());e&&a.push({task:t,sdk:e})}),a}var f=1e3,p=2e3;function h(){return(new Date).getTime()}o.exports=function(e,t,a){if(!e)return a(null);Array.isArray(e.timeouts)&&(f=e.timeouts[0]||f,p=e.timeouts[1]||p);var r=function(t){t&&"object"==(void 0===t?"undefined":n(t))&&t.sdk&&(t.sdk.refreshTime=15e3,t.sdk.traceInfo=e.traceInfo,t.sdk.mixRefreshAdInterval=5e3,t.sdk.maxSplashTimeout=8e3,t.sdk.warmSplashIntervalTime=18e5),a(t)};r.userdata=t,!e.tasks||e.tasks.length<=0?a(null):function e(o,a,s){var r=o.tasks;function d(t){return t?(TrackClass.trackEvent(s.userdata.uniReqId,TrackClass.Type.FetchedAd,{data:t,rule:o,userdata:s.userdata}),s(t)):a==r.length-1?(TrackClass.trackEvent(s.userdata.uniReqId,TrackClass.Type.NoDataLastGroup,{rule:o,userdata:s.userdata}),s(null)):void e(o,a+1,s)}function l(a){n&&clearInterval(n),u.forEach(function(t,e){e!==a&&t.sdk.stop2&&t.sdk.stop2(t.task)})}function t(){var t=h()-c;if(f+p<t)return TrackClass.trackEvent(s.userdata.uniReqId,TrackClass.Type.AllAdTimeout,{used:t,rule:o,userdata:s.userdata}),l(),void d(null);for(var e,a,r=0,n=0,i=0;i<u.length;i++)if(e=u[i],null!=(a=e._result)&&(r++,a[0]&&(n++,f<t||0==i)))return l(i),void d(a[0]);r>=u.length&&(0==n?(console.log("All finish without any succeed."),l(),d(null)):(l(),0<minIndex&&minIndex<u.length-1&&(e=u[minIndex],d((a=e._result)[0]))))}t._count=0;var c=h(),u=i(r[a]);u.forEach(function(e){var t=e.task.adurl_ios();console.log("try sdk: "+t.url),e.sdk.load(e.task,o,s.userdata,f+p,function(t){console.log("uniReqId="+s.userdata.uniReqId+" data comes "+t),e._result=[t]})});var n=setInterval(t,50)}(e,0,r)}}(0,exports),o.exports}),global.AddModule("sdks/sdk.do",function(t){var r={};return t=t||this,exports={},r.exports=exports,function(t,e,a){function i(n,t,i,o){var e,a,r,s,d,l=!1;if(i&&i.adEntityArray&&i.adEntityArray.length&&n.data&&n.data.ad_data&&"AsyncPostData"==n.data.ad_data){var c="";n.data.postData&&(c=JSON.stringify(n.data.postData)),l=!0,i.adEntityArray[0].info=void 0,e=n.data.placementId,a=null,r=c,s=t,d=function(t,e,a){if(n.data.dataFormater&&n.data.dataFormater.parse&&t){var r=n.data.dataFormater.parse(t);r&&r.length?(i.sdk&&(i.sdk.finishedReqTime=+new Date,i.sdk.didReqTime=+new Date),i.adEntityArray[0].info=r[0],o()):o("-90003")}else o(OCValueForKey(a,"code"))},Http.post(e,a,r,s,function(t,e,a){d(t,e,a)})}l||o()}r.exports={load:function(l,c,u,t,f){var e={GDTSDK:"CLLGdtSdk",BaiduSDK:"CLLBaiduSdk",TOUTIAOSDK:"CLLTTSdk",IFLYSDK:"CLLIflySdk",InMobiSdk:"CLLInMobiSdk",AdViewSDK:"CLLAdViewSdk"},n=l.adurl_ios();n.url&&0==n.url.toLowerCase().indexOf("http")?(n.data=n.data||{},n.data.placementId=n.url,n.url="CLLAdApi"):n.url&&e[n.url]&&(n.url=e[n.url]),n.url;var a=newInstance(n.url);if(!a)return f(null);if(n.type=n.type||n.pos,"splash"==n.type)TrackClass.trackEvent(u.uniReqId,TrackClass.Type.LoadSplash,{userdata:u,rule:c,task:l}),a.loadSplash(n.data,u,t,function(r){i(n,t,r,function(t){if(t)return TrackClass.trackEvent(u.uniReqId,TrackClass.Type.FailedSplash,{error:t,des:""+t,userdata:u,data:r,rule:c,task:l}),void f(null);try{l.aid&&r.sdk&&(r.sdk.aid=l.aid());var e=l.filter_ios;if(e&&r&&(r.adEntityArray=e(r.adEntityArray)),console.log("1info info = "+a),u&&r.adEntityArray&&0<r.adEntityArray.length){var a=r.adEntityArray[0].info;u.startMode&&(a.startMode=u.startMode),console.log("info info = "+a),a.isSplash=!0,1==a.provider_id||a.link||(a.targetType=1),r.adEntityArray[0].info=a}TrackClass.trackEvent(u.uniReqId,TrackClass.Type.LoadedSplash,{data:r,userdata:u,rule:c,task:l}),f(r)}catch(t){TrackClass.trackEvent(u.uniReqId,TrackClass.Type.FailedSplash,{error:"-91000",des:""+t,requestInfo:n,userdata:u,rule:c,task:l}),f(null)}})},function(t){t=t||"-90000",TrackClass.trackEvent(u.uniReqId,TrackClass.Type.FailedSplash,{error:t,requestInfo:n,userdata:u,rule:c,task:l}),f(null)});else if("banner"==n.type){if(TrackClass.trackEvent(u.uniReqId,TrackClass.Type.LoadBanner,{userdata:u,rule:c,task:l}),l.adStyle){var r={1:{showWidth:180,showHeight:88},2:{showWidth:96,showHeight:64},5:{showWidth:96,showHeight:64}}[l.adStyle()+""];r&&(u.showWidth=r.showWidth,u.showHeight=r.showHeight)}a.loadBanner(n.data,u,t,function(d){i(n,t,d,function(t){if(t)return TrackClass.trackEvent(u.uniReqId,TrackClass.Type.FailedBanner,{error:t,des:""+t,userdata:u,data:d,rule:c,task:l}),void f(null);try{l.aid&&d.sdk&&(d.sdk.aid=l.aid());var e=l.filter_ios;if(e&&d&&(d.adEntityArray=e(d.adEntityArray)),d&&d.adEntityArray)for(var a=c&&c.closeInfo&&c.closeInfo.closePic,r=0;r<d.adEntityArray.length;r++){var n=d.adEntityArray[r],i=n.info;if(i){if(a&&(i.closePic=a,i.isDisplay=1,i.isSkip=1),l.adStyle&&(i.displayType=""==l.adStyle()?2:parseInt(l.adStyle())),i.displayType&&(i.displayType=parseInt(i.displayType)),i.head=i.head||"",i.subhead=i.subhead||"",i.stats_act=u.stats_act,i.head.length>i.subhead.length){var o=i.subhead;i.subhead=i.head,i.head=o}if(u.startMode&&(i.startMode=u.startMode,i.isSplash=!0,1==i.provider_id||i.link||(i.targetType=1)),"sdk_gdt"==l.sdkname()){var s=c&&c.traceInfo&&c.traceInfo.traceid;/^e/.test(s)&&(i.head&&i.head.contains("京东")||i.subhead&&i.subhead.contains("京东")||i.head&&i.head.contains("杜蕾斯")||i.subhead&&i.subhead.contains("杜蕾斯"))&&(i.brandPic="https://image3.chelaile.net.cn/47db7ec76e75407cb57a890cead60c85")}n.info=i}}TrackClass.trackEvent(u.uniReqId,TrackClass.Type.LoadedBanner,{userdata:u,data:d,rule:c,task:l}),f(d)}catch(t){TrackClass.trackEvent(u.uniReqId,TrackClass.Type.FailedBanner,{error:"-91001",des:""+t,userdata:u,data:d,rule:c,task:l}),f(null)}})},function(t,e,a){t=t||"-90001",TrackClass.trackEvent(u.uniReqId,TrackClass.Type.FailedBanner,{error:t,requestInfo:n,userdata:u,data:e,rule:c,task:l}),f(null)})}},stop2:function(t){t.adurl_ios().url}}}(0,exports),r.exports}),require("./event");
+'use strict';
+
+String.prototype.contains = String.prototype.contains || function(str) {
+	return this.indexOf(str) >= 0;
+};
+
+String.prototype.startsWith = String.prototype.startsWith || function(prefix) {
+	return this.indexOf(prefix) === 0;
+};
+
+String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
+	return this.indexOf(suffix, this.length - suffix.length) >= 0;
+};
+
+(function (global) {
+    var moduleCaches = {};
+    var systemRequire = global.require;
+    global.require = function (filename, noCache, forceUpdate) {
+        try {
+            var name = filename;
+            if (name.startsWith('./')) {
+                name = name.slice(2);
+            }
+            if (!name.endsWith('.do')) {
+                name += '.do';
+            }
+
+            var ret;
+            if (noCache || forceUpdate) {
+                ret = systemRequire.apply(this, arguments);
+            } else {
+                ret = moduleCaches[name];
+                if (!(typeof ret === 'function')) {
+                    ret = systemRequire.apply(this, arguments);
+                    moduleCaches[name] = ret;
+                }
+            }
+
+            return ret ? ret(global) : function () {};
+        } catch (e) {
+            console.log('e=' + e);
+            delete moduleCaches[name];
+            throw e;
+        }
+    };
+
+    global.AddModule = function (name, code) {
+        moduleCaches[name] = code;
+    };
+
+
+	!function(n){"use strict";function t(n,t){var r=(65535&n)+(65535&t);return(n>>16)+(t>>16)+(r>>16)<<16|65535&r}function r(n,t){return n<<t|n>>>32-t}function e(n,e,o,u,c,f){return t(r(t(t(e,n),t(u,f)),c),o)}function o(n,t,r,o,u,c,f){return e(t&r|~t&o,n,t,u,c,f)}function u(n,t,r,o,u,c,f){return e(t&o|r&~o,n,t,u,c,f)}function c(n,t,r,o,u,c,f){return e(t^r^o,n,t,u,c,f)}function f(n,t,r,o,u,c,f){return e(r^(t|~o),n,t,u,c,f)}function i(n,r){n[r>>5]|=128<<r%32,n[14+(r+64>>>9<<4)]=r;var e,i,a,d,h,l=1732584193,g=-271733879,v=-1732584194,m=271733878;for(e=0;e<n.length;e+=16)i=l,a=g,d=v,h=m,g=f(g=f(g=f(g=f(g=c(g=c(g=c(g=c(g=u(g=u(g=u(g=u(g=o(g=o(g=o(g=o(g,v=o(v,m=o(m,l=o(l,g,v,m,n[e],7,-680876936),g,v,n[e+1],12,-389564586),l,g,n[e+2],17,606105819),m,l,n[e+3],22,-1044525330),v=o(v,m=o(m,l=o(l,g,v,m,n[e+4],7,-176418897),g,v,n[e+5],12,1200080426),l,g,n[e+6],17,-1473231341),m,l,n[e+7],22,-45705983),v=o(v,m=o(m,l=o(l,g,v,m,n[e+8],7,1770035416),g,v,n[e+9],12,-1958414417),l,g,n[e+10],17,-42063),m,l,n[e+11],22,-1990404162),v=o(v,m=o(m,l=o(l,g,v,m,n[e+12],7,1804603682),g,v,n[e+13],12,-40341101),l,g,n[e+14],17,-1502002290),m,l,n[e+15],22,1236535329),v=u(v,m=u(m,l=u(l,g,v,m,n[e+1],5,-165796510),g,v,n[e+6],9,-1069501632),l,g,n[e+11],14,643717713),m,l,n[e],20,-373897302),v=u(v,m=u(m,l=u(l,g,v,m,n[e+5],5,-701558691),g,v,n[e+10],9,38016083),l,g,n[e+15],14,-660478335),m,l,n[e+4],20,-405537848),v=u(v,m=u(m,l=u(l,g,v,m,n[e+9],5,568446438),g,v,n[e+14],9,-1019803690),l,g,n[e+3],14,-187363961),m,l,n[e+8],20,1163531501),v=u(v,m=u(m,l=u(l,g,v,m,n[e+13],5,-1444681467),g,v,n[e+2],9,-51403784),l,g,n[e+7],14,1735328473),m,l,n[e+12],20,-1926607734),v=c(v,m=c(m,l=c(l,g,v,m,n[e+5],4,-378558),g,v,n[e+8],11,-2022574463),l,g,n[e+11],16,1839030562),m,l,n[e+14],23,-35309556),v=c(v,m=c(m,l=c(l,g,v,m,n[e+1],4,-1530992060),g,v,n[e+4],11,1272893353),l,g,n[e+7],16,-155497632),m,l,n[e+10],23,-1094730640),v=c(v,m=c(m,l=c(l,g,v,m,n[e+13],4,681279174),g,v,n[e],11,-358537222),l,g,n[e+3],16,-722521979),m,l,n[e+6],23,76029189),v=c(v,m=c(m,l=c(l,g,v,m,n[e+9],4,-640364487),g,v,n[e+12],11,-421815835),l,g,n[e+15],16,530742520),m,l,n[e+2],23,-995338651),v=f(v,m=f(m,l=f(l,g,v,m,n[e],6,-198630844),g,v,n[e+7],10,1126891415),l,g,n[e+14],15,-1416354905),m,l,n[e+5],21,-57434055),v=f(v,m=f(m,l=f(l,g,v,m,n[e+12],6,1700485571),g,v,n[e+3],10,-1894986606),l,g,n[e+10],15,-1051523),m,l,n[e+1],21,-2054922799),v=f(v,m=f(m,l=f(l,g,v,m,n[e+8],6,1873313359),g,v,n[e+15],10,-30611744),l,g,n[e+6],15,-1560198380),m,l,n[e+13],21,1309151649),v=f(v,m=f(m,l=f(l,g,v,m,n[e+4],6,-145523070),g,v,n[e+11],10,-1120210379),l,g,n[e+2],15,718787259),m,l,n[e+9],21,-343485551),l=t(l,i),g=t(g,a),v=t(v,d),m=t(m,h);return[l,g,v,m]}function a(n){var t,r="",e=32*n.length;for(t=0;t<e;t+=8)r+=String.fromCharCode(n[t>>5]>>>t%32&255);return r}function d(n){var t,r=[];for(r[(n.length>>2)-1]=void 0,t=0;t<r.length;t+=1)r[t]=0;var e=8*n.length;for(t=0;t<e;t+=8)r[t>>5]|=(255&n.charCodeAt(t/8))<<t%32;return r}function h(n){return a(i(d(n),8*n.length))}function l(n,t){var r,e,o=d(n),u=[],c=[];for(u[15]=c[15]=void 0,o.length>16&&(o=i(o,8*n.length)),r=0;r<16;r+=1)u[r]=909522486^o[r],c[r]=1549556828^o[r];return e=i(u.concat(d(t)),512+8*t.length),a(i(c.concat(e),640))}function g(n){var t,r,e="";for(r=0;r<n.length;r+=1)t=n.charCodeAt(r),e+="0123456789abcdef".charAt(t>>>4&15)+"0123456789abcdef".charAt(15&t);return e}function v(n){return unescape(encodeURIComponent(n))}function m(n){return h(v(n))}function p(n){return g(m(n))}function s(n,t){return l(v(n),v(t))}function C(n,t){return g(s(n,t))}function A(n,t,r){return t?r?s(t,n):C(t,n):r?m(n):p(n)}"function"==typeof define&&define.amd?define(function(){return A}):n.md5=A}(global);
+
+	global.JsEncryptUtil = {};
+	global.JsEncryptUtil.md5 = global.md5;
+
+	global.RuleMap = {
+			//理论上可以配置做任意界面浮层广告
+			"CLLHomeViewController":"interstitialHomeAd" //首页
+			,"CLLTransferMainViewController":"interstitialTransitAd"   //路线
+			,"CLLEnergyMainViewController":"interstitialEnergyAd"   // 福利社
+			,"CLLMoreMainViewController":"interstitialMineAd"    //我
+		};
+	global.RuleCountMap = {
+		"interstitialHomeAd":1,
+		"interstitialTransitAd":1,
+		"interstitialEnergyAd":1,
+		"interstitialMineAd":1
+	}
+
+})(global);
+
+global.AddModule('event.do', (function(global) {
+   var module = {};
+   global = global || this;
+   exports = {};
+   module.exports = exports;
+   (function(moudle, exports, global) {
+       "use strict";
+
+var exhibitTrackUrl = "https://atrace.chelaile.net.cn/exhibit";
+var clickTrackUrl = "https://atrace.chelaile.net.cn/click";
+var closeTrackUrl = "https://atrace.chelaile.net.cn/close";
+
+var thirdSimpleUrl = "https://atrace.chelaile.net.cn/thirdSimple";
+var thirdPartyResponseUrl = "https://atrace.chelaile.net.cn/thirdPartyResponse";
+
+var reportCloseAdUrl;
+if(typeof GetConfig == 'function') {
+    var Config = GetConfig();
+    if('dev' == Config.server) {
+        reportCloseAdUrl = "https://dev.chelaile.net.cn/adpub/adv!closeAd.action";
+    } else if('stage' == Config.server) {
+        reportCloseAdUrl = "https://stage.chelaile.net.cn/adpub/adv!closeAd.action";
+    } else {
+        reportCloseAdUrl = "https://api.chelaile.net.cn/adpub/adv!closeAd.action";
+    }
+}
+
+//==================================//
+
+function reportAdsClose(sdk, ad) {
+    if(!reportCloseAdUrl) {
+        return;
+    }
+    var params = trackBaseParams(sdk, ad);
+
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+    var picsList = info.picsList;
+    var adv_image = "";
+    if(picsList && picsList.length) {
+        adv_image = picsList.join(";")
+    }
+    addParamsIfNotNull(params, "adv_title", info.head);
+    addParamsIfNotNull(params, "adv_image", adv_image);
+    sendTrackRequest(reportCloseAdUrl +'?'+ GetDeviceInfo(), params);
+}
+
+//==================================//
+
+function flatUrlParams(url, params) {
+
+    var baseUrl = "";
+    var indexUrl = "";
+    var query = "";
+
+    var hasIndex = url.indexOf("#") >= 0;
+    if (hasIndex) {
+        var urlArray = url.split("#");
+        baseUrl = urlArray[0].indexOf("?") >= 0 ? urlArray[0] + "&" : urlArray[0] + "?";
+        indexUrl = "#" + urlArray.slice(1).join("#");
+    } else {
+        baseUrl = url.indexOf("?") >= 0 ? url + "&" : url + "?";
+    }
+
+    for (var key in params) {
+        query += "&" + key + "=" + encodeURIComponent(params[key]);
+    }
+
+    var reqUrl = baseUrl + query + indexUrl;
+    return reqUrl;
+}
+
+function sendTrackRequest(url, params, body) {
+
+    var reqUrl = flatUrlParams(url, params);
+    if(body != null && body != undefined) {
+        if(typeof body != 'string') {
+            body = JSON.stringify(body);
+        }
+    }
+
+    if(body) {
+        Http.post(reqUrl, null, body, 5000, function (string, response, error) {
+            console.log("sendTrackRequest ret="+string + " response.header="+JSON.stringify(OCValueForKey(response, "allHeaderFields"))+ " error="+error);
+        });
+    }
+    else {
+        Http.get(reqUrl, null, 5000, function (string, response, error) {
+            console.log("sendTrackRequest ret="+string + " response.header="+JSON.stringify(OCValueForKey(response, "allHeaderFields"))+ " error="+error);
+        });
+    }
+}
+
+function addParamsIfNotNull(params, key, value) {
+    if (value != undefined && value != null) {
+        params[key] = value;
+    }
+}
+
+function GetDeviceInfoObject() {
+    var string = GetDeviceInfo();
+    var deviceObj = {};
+    if(string) {
+        var array = string.split("&");
+        if(array && array.length) {
+            array.forEach(function(item) {
+                var itemArray = item.split("=");
+                if(itemArray[0] && itemArray[1]) {
+                    deviceObj[itemArray[0]] = itemArray[1]
+                }
+            })
+        }
+    }
+    return deviceObj;
+}
+function trackBaseParams(sdk, ad) {
+    var params = {};
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+    var deviceObject = GetDeviceInfoObject() || {}
+
+    addParamsIfNotNull(params, "traceid", traceInfo.traceid);
+    addParamsIfNotNull(params, "pid", traceInfo.pid);
+    addParamsIfNotNull(params, "aid", sdk.aid);
+    addParamsIfNotNull(params, "ad_order", info.ad_order);
+    addParamsIfNotNull(params, "adid", info.adid);
+    addParamsIfNotNull(params, "startMode", info.startMode);
+    addParamsIfNotNull(params, "stats_act", info.stats_act);
+    addParamsIfNotNull(params, "viewstatus", ad.viewstatus);
+    addParamsIfNotNull(params, "req_timestamp", +new Date);
+    addParamsIfNotNull(params, "s", deviceObject.s);
+    addParamsIfNotNull(params, "v", deviceObject.v);
+    addParamsIfNotNull(params, "is_backup", info.is_backup);
+    return params;
+}
+
+function trackExhibit(sdk, ad) {
+
+    var params = trackBaseParams(sdk, ad);
+
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+
+    addParamsIfNotNull(params, "show_status", info.show_status || 0);
+    addParamsIfNotNull(params, "cost_time", info.cost_time);
+    addParamsIfNotNull(params, "adv_title", info.head);
+    addParamsIfNotNull(params, "adv_desc", info.subhead);
+
+    sendTrackRequest(exhibitTrackUrl, params);
+
+    if(info.unfoldMonitorLink && info.actionMonitorLink) {
+        var actionLink = info.actionMonitorLink.replace('{action}','5');
+        var ts = (+new Date) + '';
+        ts = String(ts).slice(0,-3);
+        actionLink = actionLink.replace('{time}', ts);
+        actionLink = actionLink.replace('{play_time}', '0')
+
+        sendTrackRequest(info.unfoldMonitorLink, {});
+        sendTrackRequest(actionLink, {});
+    }
+}
+
+function trackClick(sdk, ad) {
+    var params = trackBaseParams(sdk, ad);
+
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+
+    addParamsIfNotNull(params, "adv_title", info.head);
+    addParamsIfNotNull(params, "adv_desc", info.subhead);
+
+    sendTrackRequest(clickTrackUrl, params);
+    if(info.actionMonitorLink) {
+        var actionLink = info.actionMonitorLink.replace('{action}','6');
+        var ts = (+new Date) + '';
+        ts = String(ts).slice(0,-3);
+        actionLink = actionLink.replace('{time}', ts);
+        actionLink = actionLink.replace('{play_time}', '0');
+
+        sendTrackRequest(actionLink, {});
+    }
+    // some own ads ,has clickLink ,have no actionLink
+    if(info.clickMonitorLink) {
+        sendTrackRequest(info.clickMonitorLink, {});
+    }
+}
+
+function trackClose(sdk, ad) {
+    var params = trackBaseParams(sdk, ad);
+    sendTrackRequest(closeTrackUrl, params);
+
+    var info = ad.info || {};
+    if(!info.isSplash && !info.isFloat) {
+        reportAdsClose(sdk, ad);
+    } else {
+        if(info.actionMonitorLink) {
+            var actionLink = info.actionMonitorLink.replace('{action}','7');
+            var ts = (+new Date) + '';
+            ts = String(ts).slice(0,-3);
+            actionLink = actionLink.replace('{time}', ts);
+            actionLink = actionLink.replace('{play_time}', '0')
+
+            sendTrackRequest(actionLink, {});
+        }
+    }
+}
+
+function trackThirdBaseParams(params) {
+
+    var trackParams = {};
+    params = params || {};
+    var task = params.task || {};
+    var rule = params.rule || {};
+    var userdata = params.userdata || {}
+    var deviceObject = GetDeviceInfoObject() || {}
+
+    if(rule.traceInfo){
+        addParamsIfNotNull(trackParams, "traceid", rule.traceInfo.traceid);
+        addParamsIfNotNull(trackParams, "pid", rule.traceInfo.pid);
+    }
+    if(task.aid) {
+        addParamsIfNotNull(trackParams, "aid", task.aid());
+    }
+
+    addParamsIfNotNull(trackParams, "req_timestamp", +new Date);
+    addParamsIfNotNull(trackParams, "eventId", userdata.uniReqId);
+    addParamsIfNotNull(trackParams, "s", deviceObject.s);
+    addParamsIfNotNull(trackParams, "v", deviceObject.v);
+
+    return trackParams;
+}
+//{userdata, rule, task}
+function trackThirdSimple(params) {
+
+    var trackParams = trackThirdBaseParams(params);
+    sendTrackRequest(thirdSimpleUrl, trackParams);
+}
+
+function getFirstInfoByData(data) {
+    if(data && data.adEntityArray && data.adEntityArray.length > 0) {
+        return data.adEntityArray[0].info;
+    }
+}
+//{data, userdata, rule, task}
+function trackThirdPartyResponse(params) {
+
+    var trackParams = trackThirdBaseParams(params);
+
+    params = params || {};
+    var task = params.task || {};
+    var rule = params.rule || {};
+    var data = params.data || {};
+    var realInfo = getFirstInfoByData(data);
+    var info = realInfo || {};
+
+    addParamsIfNotNull(trackParams, "ad_order",  info.ad_order);
+    addParamsIfNotNull(trackParams, "adid",      info.adid);
+    addParamsIfNotNull(trackParams, "req_time",  (data.sdk && data.sdk.didReqTime||0) - (data.sdk && data.sdk.willReqTime||0));
+    addParamsIfNotNull(trackParams, "ad_status", realInfo?1:0);
+    addParamsIfNotNull(trackParams, "resp_size", data.contentLength);
+    if(params.error){
+        addParamsIfNotNull(trackParams, "code",  params.error);
+    } else {
+        addParamsIfNotNull(trackParams, "code",  OCValueForKey(data.extensionData, "statusCode"));
+    }
+
+    var body = {};
+
+    addParamsIfNotNull(body, "adv_title",   info.head);
+    addParamsIfNotNull(body, "adv_desc",    info.subhead);
+    addParamsIfNotNull(body, "icon_image",  info.pic);
+    addParamsIfNotNull(body, "main_image",  info.picsList);
+    addParamsIfNotNull(body, "link",        info.link);
+    addParamsIfNotNull(body, "url_type",    info.adType);
+
+    sendTrackRequest(thirdPartyResponseUrl, trackParams, body);
+}
+
+function trackEvent(eventId /*String*/, eventType /*String*/, params /*object*/) {
+    console.log("trackEvent eventId=" + eventId + " eventType=" + eventType + " params=" + JSON.stringify(params||{}));
+
+    if(eventType == TrackClass.Type.LoadSplash ||
+        eventType == TrackClass.Type.LoadBanner
+    ) {
+        //{userdata, rule, task}
+        trackThirdSimple(params);
+    }
+    else if(eventType == TrackClass.Type.LoadedSplash ||
+        eventType == TrackClass.Type.LoadedBanner
+    ) {
+        //{userdata, data, rule, task}
+        trackThirdPartyResponse(params);
+    }
+    else if(eventType == TrackClass.Type.FailedSplash ||
+        eventType == TrackClass.Type.FailedBanner
+    ) {
+        //params = {error:"code", des:"", requestInfo:requestInfo, userdata,rule}
+        trackThirdPartyResponse(params);
+    }
+}
+
+global.trackEvent = trackEvent;
+
+module.exports = {
+    trackExhibit: trackExhibit,
+    trackClick: trackClick,
+    trackClose: trackClose,
+    trackEvent: trackEvent
+}
+
+global.TrackClass = {
+    trackExhibit: trackExhibit,
+    trackClick: trackClick,
+    trackClose: trackClose,
+    trackEvent: trackEvent,
+    Type: {
+        //params = {userdata, rule, task}
+        LoadSplash: "LoadSplash", //开始调用 sdk/api loadSplash方法
+        LoadBanner: "LoadBanner", //开始调用 sdk/api loadBanner方法
+
+        //params = {userdata, data, rule, task}
+        LoadedSplash: "LoadedSplash", //开屏加载完成
+        LoadedBanner: "LoadedBanner", //Banner加载完成
+
+        //params = {error:"code", des:"", requestInfo:requestInfo, userdata,rule}
+        FailedSplash: "FailedSplash", //开屏加载失败
+        FailedBanner: "FailedBanner", //Banner加载失败
+
+        //params = {used,rule,userdata}
+        AllAdTimeout: "AllAdTimeout", //循环检查js超时
+
+        //params = {data,rule,userdata}
+        FetchedAd: "FetchedAd", //最终获取到的广告
+
+        //params = {rule,userdata}
+        NoDataLastGroup: "NoDataLastGroup" //到达最后一组配置，仍没有获取到广告
+
+    }
+}
+
+   })(module, exports, global);
+   return module.exports;
+})
+
+);
+global.AddModule('fetch.do', (function(global) {
+   var module = {};
+   global = global || this;
+   exports = {};
+   module.exports = exports;
+   (function(moudle, exports, global) {
+       "use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function sdkfile(sdkname) {
+    return "sdks/" + sdkname;
+}
+
+var mapSdks = {};
+
+function getExistSdks(taskGroup) {
+    var existSdks = [];
+    taskGroup = taskGroup || [];
+    taskGroup.forEach(function (task) {
+        var sdk = getSdk(task.sdkname());
+        if (sdk) existSdks.push({
+            task: task,
+            sdk: sdk
+        });
+    });
+    return existSdks;
+}
+
+/**
+ * @param {string!} sdkname
+ * @brief 通过rule文件配置的名称，查找sdk接口
+ */
+function getSdk(sdkname) {
+
+    sdkname = "sdk";
+    var sdk = mapSdks[sdkname];
+    if (!sdk) {
+        try {
+            sdk = require(sdkfile(sdkname));
+        } catch (e) {
+            console.log(e);
+        }
+        if (sdk) {
+            mapSdks[sdkname] = sdk;
+        }
+    }
+    return sdk;
+}
+
+// config.
+var firstTime = 1000;
+var secondTime = 2000;
+
+function getAds(rule, userdata, callback) {
+
+    if (!rule) return callback(null);
+
+    if (Array.isArray(rule.timeouts)) {
+        firstTime = rule.timeouts[0] || firstTime;
+        secondTime = rule.timeouts[1] || secondTime;
+    }
+
+    var hookCallback = function hookCallback(data) {
+        if (data && (typeof data === "undefined" ? "undefined" : _typeof(data)) == 'object' && data.sdk) {
+
+            data.sdk.refreshTime = 15000;
+            data.sdk.traceInfo = rule.traceInfo;
+            data.sdk.mixRefreshAdInterval = 5000;
+            data.sdk.maxSplashTimeout = 8000;
+            data.sdk.warmSplashIntervalTime = 30 * 60 * 1000;
+        }
+        callback(data);
+    };
+    hookCallback.userdata = userdata;
+    if (!rule.tasks || rule.tasks.length <= 0) {
+        callback(null);
+    } else {
+        tryNthTaskGroup(rule, 0, hookCallback);
+    }
+}
+
+/**
+ * 尝试第n个taskGroup
+ */
+function tryNthTaskGroup(rule, nth, callback) {
+    var taskGroups = rule.tasks;
+
+    function wrappedFn(data) {
+        if (data) {
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.FetchedAd, { data: data, rule: rule, userdata: callback.userdata });
+            return callback(data);
+        }
+
+        if (nth == taskGroups.length - 1) {
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.NoDataLastGroup, { rule: rule, userdata: callback.userdata });
+            return callback(null);
+        }
+
+        tryNthTaskGroup(rule, nth + 1, callback);
+    }
+
+    /**
+     * 停止除noStopTaskNth之外的task
+     * @param noStopTaskNth Int 继续执行的task，可以为null，停止全部的task
+     */
+    function stopCheckerAndTasks(noStopTaskNth) {
+        if (checker) {
+            clearInterval(checker);
+        }
+        // TODO
+        sdkInfos.forEach(function (sdkInfo, idx) {
+            if (idx === noStopTaskNth) return;
+            if (sdkInfo.sdk.stop2) sdkInfo.sdk.stop2(sdkInfo.task);
+        });
+    }
+
+    function checkResults() {
+
+        var used = now() - stamp1;
+        if (used > firstTime + secondTime) {
+
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.AllAdTimeout, { used: used, rule: rule, userdata: callback.userdata });
+
+            stopCheckerAndTasks();
+            wrappedFn(null);
+            return;
+        }
+
+        var finishCount = 0,
+            succeedCount = 0;
+        var sdkInfo, result;
+        for (var i = 0; i < sdkInfos.length; i++) {
+            sdkInfo = sdkInfos[i], result = sdkInfo._result;
+
+            if (result == undefined) continue;
+
+            finishCount++; // increase finish counter
+
+            // skip if NO_RESULT
+            if (!result[0]) continue;
+
+            succeedCount++; // increase succeed counter
+
+            // success
+            if (used > firstTime || // for data on greedy mode.
+            i == 0 // if it is the first slot
+            ) {
+                    stopCheckerAndTasks(i);
+                    wrappedFn(result[0]);
+                    return;
+                }
+        }
+
+        if (finishCount >= sdkInfos.length) {
+            if (succeedCount == 0) {
+                console.log('All finish without any succeed.');
+                stopCheckerAndTasks();
+                wrappedFn(null);
+            } else {
+                stopCheckerAndTasks();
+                if (minIndex > 0 && minIndex < sdkInfos.length - 1) {
+                    sdkInfo = sdkInfos[minIndex];
+                    result = sdkInfo._result;
+                    wrappedFn(result[0]);
+                }
+            }
+        }
+    }
+    checkResults._count = 0;
+
+    var stamp1 = now(),
+        interval = 50;
+    var sdkInfos = getExistSdks(taskGroups[nth]);
+    sdkInfos.forEach(function (sdkInfo) {
+        var req = sdkInfo.task.adurl_ios();
+        console.log('try sdk: ' + req.url);
+        sdkInfo.sdk.load(sdkInfo.task, rule, callback.userdata, firstTime + secondTime, function (data) {
+            console.log('uniReqId=' + callback.userdata.uniReqId + ' data comes ' + data);
+            sdkInfo._result = [data];
+        });
+    });
+
+    var checker = setInterval(checkResults, interval);
+}
+
+function now() {
+    return new Date().getTime();
+}
+
+module.exports = getAds;
+
+   })(module, exports, global);
+   return module.exports;
+})
+
+);
+global.AddModule('sdks/sdk.do', (function(global) {
+   var module = {};
+   global = global || this;
+   exports = {};
+   module.exports = exports;
+   (function(moudle, exports, global) {
+       "use strict";
+
+var RENDER_MSG = 'render_ok';
+
+function loadHttpPost(reqUrl, header, postData, fetchTimeout, callback) {
+    Http.post(reqUrl, header, postData, fetchTimeout, function (string, response, error) {
+        callback(string, response, error);
+    });
+}
+
+function loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult) {
+    var hasCalled = false;
+    if(data && data.adEntityArray && data.adEntityArray.length)
+    {
+        if(requestInfo.data && requestInfo.data.ad_data){
+            if(requestInfo.data.ad_data == "AsyncPostData") {
+                var postString = "";
+                if(requestInfo.data.postData){
+                    postString = JSON.stringify(requestInfo.data.postData);
+                }
+                hasCalled = true;
+                data.adEntityArray[0].info = undefined;
+                loadHttpPost(requestInfo.data.placementId, null, postString, fetchTimeout, function(string, response, error){
+                    if(requestInfo.data.dataFormater && requestInfo.data.dataFormater.parse && string) {
+                        var arr = requestInfo.data.dataFormater.parse(string);
+                        if(arr && arr.length){
+                            if(data.sdk){
+                                data.sdk.finishedReqTime = +new Date;
+                                data.sdk.didReqTime = +new Date;
+                            }
+                            data.adEntityArray[0].info = arr[0];
+                            callResult();
+                        } else {
+                            callResult("-90003");
+                        }
+                    } else {
+                        callResult(OCValueForKey(error, "code"));
+                    }
+                });
+            }
+        }
+    }
+    if(!hasCalled) {
+        callResult();
+    }
+}
+
+function load(task, rule, userdata, fetchTimeout, callback) {
+
+    var sdknameMap = {
+        "GDTSDK": "CLLGdtSdk",
+        "BaiduSDK": "CLLBaiduSdk",
+        "TOUTIAOSDK": "CLLTTSdk",
+        "IFLYSDK": "CLLIflySdk",
+        "InMobiSdk": "CLLInMobiSdk",
+        "AdViewSDK": "CLLAdViewSdk"
+    };
+    var requestInfo = task.adurl_ios();
+    if (requestInfo.url && requestInfo.url.toLowerCase().indexOf("http") == 0) {
+        requestInfo.data = requestInfo.data || {};
+        requestInfo.data.placementId = requestInfo.url;
+        requestInfo.url = "CLLAdApi";
+    } else if (requestInfo.url && sdknameMap[requestInfo.url]) {
+        requestInfo.url = sdknameMap[requestInfo.url];
+    }
+
+    var vendor = requestInfo.url;
+    var sdkIns = newInstance(requestInfo.url);
+    if (!sdkIns) {
+        return callback(null);
+    }
+
+    requestInfo.type = requestInfo.type || requestInfo.pos;
+    if (requestInfo.type == "splash") {
+
+        TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadSplash, { userdata: userdata, rule: rule, task: task });
+
+        sdkIns.loadSplash(requestInfo.data, userdata, fetchTimeout, function (data) {
+
+            function callResult(errorCode) {
+                if(errorCode) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: errorCode, des: "" + errorCode, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                    return;
+                }
+                try {
+                    if (task.aid && data.sdk) {
+                        data.sdk.aid = task.aid();
+                    }
+
+                    var task_filter = task.filter_ios;
+                    if (task_filter && data) {
+                        data.adEntityArray = task_filter(data.adEntityArray);
+                    }
+                    console.log("1info info = "+info);
+                    if (userdata &&  data.adEntityArray && data.adEntityArray.length > 0) {
+                        var info = data.adEntityArray[0].info;
+                        if(userdata.startMode){
+                            info.startMode = userdata.startMode;
+                        }
+                        console.log("info info = "+info);
+                        info.isSplash = true;
+                        if(info.provider_id != 1 && !info.link) {
+                            info.targetType = 1;
+                        }
+                        data.adEntityArray[0].info = info;
+                    }
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, { data: data, userdata: userdata, rule: rule, task: task });
+                    callback(data);
+                } catch (e) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: "-91000", des: "" + e, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
+                    callback(null);
+                }
+            }
+            loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult);
+
+        }, function (error) {
+            error = error || "-90000";
+            TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: error, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
+            callback(null);
+        });
+    } else if (requestInfo.type == "banner") {
+
+        TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadBanner, { userdata: userdata, rule: rule, task: task });
+
+        if (task.adStyle) {
+            var style = task.adStyle();
+            var sizeObj = {
+                "1": { showWidth: 180, showHeight: 88 },
+                "2": { showWidth: 96, showHeight: 64 },
+                "5": { showWidth: 96, showHeight: 64 }
+            };
+            var showSize = sizeObj[style + ""];
+            if (showSize) {
+                userdata.showWidth = showSize.showWidth;
+                userdata.showHeight = showSize.showHeight;
+            }
+        }
+        sdkIns.loadBanner(requestInfo.data, userdata, fetchTimeout, function (data) {
+            function callResult(errorCode) {
+                if(errorCode) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: errorCode, des: "" + errorCode, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                    return;
+                }
+                try {
+                    if (task.aid && data.sdk) {
+                        data.sdk.aid = task.aid();
+                    }
+
+                    var task_filter = task.filter_ios;
+                    if (task_filter && data) {
+                        data.adEntityArray = task_filter(data.adEntityArray);
+                    }
+
+                    if (data && data.adEntityArray) {
+                        var closePic = rule && rule.closeInfo && rule.closeInfo.closePic;
+                        var hostSpotSize = rule && rule.closeInfo && rule.closeInfo.hostSpotSize;
+                        var fakeRate = rule && rule.closeInfo && rule.closeInfo.fakeRate;
+
+                        for (var i = 0; i < data.adEntityArray.length; i++) {
+                            var adentity = data.adEntityArray[i];
+                            var info = adentity.info;
+                            if (info) {
+                                if(closePic) {
+                                    info.closePic = closePic;
+                                    info.isDisplay = 1;
+                                    info.isSkip = 1;
+                                    info.hostSpotSize = hostSpotSize;
+                                    info.fakeRate = eval(fakeRate);
+                                }
+                                if (task.adStyle) {
+                                    info.displayType = task.adStyle() == '' ? 2 : parseInt(task.adStyle());
+                                }
+                                if(info.displayType) {
+                                    info.displayType = parseInt(info.displayType);
+                                }
+
+                                info.head = info.head || "";
+                                info.subhead = info.subhead || "";
+                                info.stats_act = userdata.stats_act;
+                                if (info.head.length > info.subhead.length) {
+                                    var tstr = info.subhead;
+                                    info.subhead = info.head;
+                                    info.head = tstr;
+                                }
+
+                                if(userdata.startMode){
+                                    info.startMode = userdata.startMode;
+                                    info.isSplash = true;
+                                    if(info.provider_id != 1 && !info.link) {
+                                        info.targetType = 1;
+                                    }
+                                }
+                                
+                                // add brandPic 
+                                if(task.sdkname() == 'sdk_gdt') {
+                                    var traceid = rule && rule.traceInfo && rule.traceInfo.traceid;
+                                    if ( 
+                                        /^e/.test(traceid) &&  
+                                        (   (info.head && info.head.contains("京东")) || (info.subhead && info.subhead.contains("京东")) || (info.head && info.head.contains("杜蕾斯")) || (info.subhead && info.subhead.contains("杜蕾斯")) )
+                                     )
+                                    {
+                                        info.brandPic = "https://image3.chelaile.net.cn/47db7ec76e75407cb57a890cead60c85";
+                                    }
+                                }
+
+                                adentity.info = info;
+                            }
+                        }
+                    }
+
+
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedBanner, { userdata: userdata, data: data, rule: rule, task: task });
+                    callback(data);
+
+                } catch (e) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: "-91001", des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                }
+            }
+            loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult);
+
+        }, function (error, data, extension) {
+            error = error || "-90001";
+            TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: error, requestInfo: requestInfo, userdata: userdata, data: data, rule: rule, task: task });
+            callback(null);
+        });
+    }
+}
+
+function stop2(task) {
+    var requestInfo = task.adurl_ios();
+    var vendor = requestInfo.url;
+}
+
+module.exports = {
+    load: load,
+    stop2: stop2
+};
+
+   })(module, exports, global);
+   return module.exports;
+})
+
+);
+require('./event');

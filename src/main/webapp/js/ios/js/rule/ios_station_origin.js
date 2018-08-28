@@ -291,8 +291,10 @@ function ads() {
             pid: '15'
         },
         closeInfo:{
-            closePic: '${closePic}'
-            },
+            closePic: '${closePic}',
+            hostSpotSize: '${hostSpotSize}',
+            fakeRate: '${fakeRate}'
+        },
         timeouts: ${TIMEOUTS},
         tasks: ${TASKS}
     }

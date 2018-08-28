@@ -92,7 +92,7 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                     if (task_filter && data) {
                         data.adEntityArray = task_filter(data.adEntityArray);
                     }
-console.log("1info info = "+info);
+                    console.log("1info info = "+info);
                     if (userdata &&  data.adEntityArray && data.adEntityArray.length > 0) {
                         var info = data.adEntityArray[0].info;
                         if(userdata.startMode){
@@ -155,6 +155,8 @@ console.log("1info info = "+info);
 
                     if (data && data.adEntityArray) {
                         var closePic = rule && rule.closeInfo && rule.closeInfo.closePic;
+                        var hostSpotSize = rule && rule.closeInfo && rule.closeInfo.hostSpotSize;
+                        var fakeRate = rule && rule.closeInfo && rule.closeInfo.fakeRate;
 
                         for (var i = 0; i < data.adEntityArray.length; i++) {
                             var adentity = data.adEntityArray[i];
@@ -164,6 +166,8 @@ console.log("1info info = "+info);
                                     info.closePic = closePic;
                                     info.isDisplay = 1;
                                     info.isSkip = 1;
+                                    info.hostSpotSize = hostSpotSize;
+                                    info.fakeRate = eval(fakeRate);
                                 }
                                 if (task.adStyle) {
                                     info.displayType = task.adStyle() == '' ? 2 : parseInt(task.adStyle());

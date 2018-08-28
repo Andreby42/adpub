@@ -321,6 +321,8 @@ function tryNthTaskGroup(rule, nth, callback) {
                 resp.mixRefreshAdInterval = 5000;
                 if(rule.closeInfo && rule.closeInfo.closePic) {
                     resp.closePic = rule.closeInfo.closePic;
+                    resp.hostSpotSize = rule.closeInfo.hostSpotSize;
+                    resp.fakeRate = eval(rule.closeInfo.fakeRate);
                 }
 
 

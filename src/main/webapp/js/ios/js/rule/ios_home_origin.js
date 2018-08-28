@@ -420,7 +420,9 @@ function ads() {
           pid: '00'
       },
       closeInfo: {
-          closePic: '${closePic}'
+          closePic: '${closePic}',
+          hostSpotSize: '${hostSpotSize}',
+          fakeRate: '${fakeRate}'
       },
         timeouts: ${TIMEOUTS},
         tasks: ${TASKS}

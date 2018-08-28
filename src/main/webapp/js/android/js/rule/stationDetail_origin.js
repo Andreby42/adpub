@@ -727,7 +727,9 @@ function ads() {
           s: 'android'
       },
       closeInfo: {
-          closePic: '${closePic}'
+          closePic: '${closePic}',
+            hostSpotSize: '${hostSpotSize}',
+            fakeRate: '${fakeRate}'
       },
       urls : {
         exposeUrl:'http://atrace.chelaile.net.cn/exhibit?',
