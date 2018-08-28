@@ -55,7 +55,7 @@ public class AdGuideInnerContent extends AdInnerContent {
 				}
 			}
 			
-			setCommentContext(ad, this.pic);
+			setCommentContext(ad, this.pic, null);
 		}
 	}
 	

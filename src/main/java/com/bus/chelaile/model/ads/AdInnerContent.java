@@ -23,6 +23,10 @@ public abstract class AdInnerContent {
     protected List<String> picsList;
     
     protected String closePic = "";
+    protected String hostSpotSize = "";
+    protected List<Integer> fakeRate = New.arrayList();
+    
+    
     protected String wx_miniPro_id;
     protected String wx_miniPro_path; // 跳转小程序， 2018-04-09出现； 2018-08-08提到通用
     
@@ -32,10 +36,13 @@ public abstract class AdInnerContent {
     }
     
     
-    protected void setCommentContext(AdInnerContent ad, String pic) {
+    protected void setCommentContext(AdInnerContent ad, String pic, TasksGroup tasksGroup) {
         this.displayType = ad.getDisplayType();
         this.picsList = ad.getPicsList();
         this.closePic = ad.getClosePic();
+        this.hostSpotSize = ad.getHostSpotSize();
+        this.fakeRate = ad.getFakeRate();
+        
         this.setWx_miniPro_id(ad.getWx_miniPro_id());
         this.setWx_miniPro_path(ad.getWx_miniPro_path());
         if (this.getWx_miniPro_id() != null)
@@ -47,9 +54,11 @@ public abstract class AdInnerContent {
                 picsList = New.arrayList();
                 picsList.add(pic);
             }
-
         }
-
+        if(tasksGroup != null) {
+            tasksGroup.setFakeRate(this.fakeRate);
+            tasksGroup.setHostSpotSize(this.hostSpotSize);
+        }
     }
     
     public void fillAdEntity(AdEntity adEntity, AdvParam param, int stindex) {
@@ -103,7 +112,7 @@ public abstract class AdInnerContent {
         List<List<String>> tasks = New.arrayList();
         tasks.add(ts);
         List<Long> times = New.arrayList();
-        times.add(4000L);times.add(4000L);
+        times.add(1500L);times.add(1500L);
         tasksGroups.setTasks(tasks);
         tasksGroups.setTimeouts(times);
         tasksGroups.setClosePic(ad.getClosePic());
@@ -154,6 +163,26 @@ public abstract class AdInnerContent {
 
     public void setWx_miniPro_path(String wx_miniPro_path) {
         this.wx_miniPro_path = wx_miniPro_path;
+    }
+
+
+    public String getHostSpotSize() {
+        return hostSpotSize;
+    }
+
+
+    public void setHostSpotSize(String hostSpotSize) {
+        this.hostSpotSize = hostSpotSize;
+    }
+
+
+    public List<Integer> getFakeRate() {
+        return fakeRate;
+    }
+
+
+    public void setFakeRate(List<Integer> fakeRate) {
+        this.fakeRate = fakeRate;
     }
     
 }

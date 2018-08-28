@@ -65,16 +65,17 @@ public abstract class AbstractManager {
 
         // 用户投放广告的记录
         AdPubCacheRecord cacheRecord = gainCacheRecord(advParam, showType);
-        Map<Integer, AdContentCacheEle> adMap = null;
         // 单双栏、浮层、乘车页、活动页、和旧版本的开屏接口不走策略
         // 站点广告不走策略
         // 小程序 banner广告不走策略
+//        Map<Integer, AdContentCacheEle> adMap = null;
+        LinkedHashMap<Integer, AdContentCacheEle> adMap = new LinkedHashMap<>();
         if (!isNeedApid) {
             // 按照优先级
             Collections.shuffle(adsList); // 打乱顺序，然后再进行优先级排序 2018-04-28
             Collections.sort(adsList, AD_CONTENT_COMPARATOR);
 
-            adMap = New.hashMap();
+//            adMap = New.hashMap();
             // 把所有符合规则的广告放到map中
             boolean isneedAllAds = isNeedApid;
             if (showType == ShowType.STATION_ADV) // 站点广告返回所有的
@@ -87,7 +88,6 @@ public abstract class AbstractManager {
             return getEntity(null, advParam, cacheRecord, adMap, showType, queryParam, isRecord);
         } else {
             if (adsList != null && adsList.size() > 0) {
-                adMap = New.hashMap();
                 // 把所有符合规则的广告放到map中
                 handleAds(adMap, adsList, showType, advParam, cacheRecord, isNeedApid, queryParam);
             }
@@ -1520,7 +1520,7 @@ public abstract class AbstractManager {
             }
         }
 
-        // 车辆所有线路
+        // 同站线路
         else if (showType.getValue() == ShowType.CAR_ALL_LINE_ADV.getValue()) {
             if (phoneType.equalsIgnoreCase("ios")) {
                 //	广点通

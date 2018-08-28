@@ -15,6 +15,8 @@ public class TasksGroup {
     private Map<String,String> map;
     
     private String closePic;
+    private String hostSpotSize = "";
+    private List<Integer> fakeRate = New.arrayList();
     
     public static void main(String[] args) {
         
@@ -48,12 +50,15 @@ public class TasksGroup {
     }
 
 
-    public TasksGroup(List<List<String>> tasks, List<Long> timeouts,Map<String,String> map, String closePic) {
+    public TasksGroup(List<List<String>> tasks, List<Long> timeouts,Map<String,String> map, String closePic,
+            String hostSpotSize, List<Integer> fakeRate) {
         super();
         this.tasks = tasks;
         this.timeouts = timeouts;
         this.map = map;
         this.closePic = closePic;
+        this.hostSpotSize = hostSpotSize;
+        this.fakeRate = fakeRate;
     }
 
     /**
@@ -105,6 +110,22 @@ public class TasksGroup {
 
     public void setClosePic(String closePic) {
         this.closePic = closePic;
+    }
+
+    public String getHostSpotSize() {
+        return hostSpotSize;
+    }
+
+    public void setHostSpotSize(String hostSpotSize) {
+        this.hostSpotSize = hostSpotSize;
+    }
+
+    public List<Integer> getFakeRate() {
+        return fakeRate;
+    }
+
+    public void setFakeRate(List<Integer> fakeRate) {
+        this.fakeRate = fakeRate;
     }
 
 

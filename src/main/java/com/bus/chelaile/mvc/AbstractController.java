@@ -45,6 +45,8 @@ public class AbstractController {
                 map.put("TRACEID", tgs.getTraceid());
             }
             map.put("closePic", tgs.getTaskGroups().getClosePic());
+            map.put("hostSpotSize", tgs.getTaskGroups().getHostSpotSize());
+            map.put("fakeRate", tgs.getTaskGroups().getFakeRate().toString());
 
             for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
                 for (String task : tasks) {

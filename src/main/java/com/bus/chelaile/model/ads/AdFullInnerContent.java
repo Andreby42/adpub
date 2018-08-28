@@ -107,7 +107,7 @@ public class AdFullInnerContent extends AdInnerContent {
                 this.tasksGroup = createOwnAdTask(ad);
             }
             
-            setCommentContext(ad, this.pic);
+            setCommentContext(ad, this.pic, this.tasksGroup);
         }
     }
 

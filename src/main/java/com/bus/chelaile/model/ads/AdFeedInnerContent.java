@@ -72,7 +72,7 @@ public class AdFeedInnerContent extends AdInnerContent {
                 this.provider_id = ad.provider_id;
                 this.api_type = ad.api_type;
                 
-                setCommentContext(ad, this.pic);
+                setCommentContext(ad, this.pic, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }

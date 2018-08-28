@@ -126,13 +126,16 @@ public class JSService {
         Map<String,String> map = New.hashMap();
         
 
-       List<List<String>> tasks = New.arrayList();
+        List<List<String>> tasks = New.arrayList();
         List<Long> times = New.arrayList();
         String closePic = "";
+        String hostSpotSize = "";
+        List<Integer> fakeRate = New.arrayList();
         if (entities != null && entities.size() > 0) {
             for (BaseAdEntity entity : entities) {
                 if (entity.getTasksGroup() != null) {
                     tasks.addAll(entity.getTasksGroup().getTasks());
+                    //提取第一个times出来
                     if(times.size() == 0)
                         times = entity.getTasksGroup().getTimeouts();
                     
@@ -141,9 +144,13 @@ public class JSService {
                         	map.put(entry.getKey(), entry.getValue());
                         }
                     }
-                    
+                    // 将非空的closePic提取出来
                     if(StringUtils.isNoneBlank(entity.getTasksGroup().getClosePic()))
                         closePic = entity.getTasksGroup().getClosePic();
+                    if(StringUtils.isNoneBlank(entity.getTasksGroup().getHostSpotSize()))
+                        hostSpotSize = entity.getTasksGroup().getHostSpotSize();
+                    if(entity.getTasksGroup().getHostSpotSize() != null)
+                        hostSpotSize = entity.getTasksGroup().getHostSpotSize();
                 }
             }
             // 存储atraceInfo到redis中
@@ -163,7 +170,7 @@ public class JSService {
             
             
         }
-        taskEntity.setTaskGroups(new TasksGroup(tasks, times,map, closePic));
+        taskEntity.setTaskGroups(new TasksGroup(tasks, times,map, closePic, hostSpotSize, fakeRate));
         taskEntity.setTraceid(param.getTraceid());
         JSONObject resultMap = new JSONObject();
         resultMap.put("ads", entities);

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.TasksGroup;
 import com.bus.chelaile.mvc.AdvParam;
@@ -109,7 +110,7 @@ public class AdCommonContent extends AdInnerContent {
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
-            setCommentContext(ad, this.pic);
+            setCommentContext(ad, this.pic, this.tasksGroup);
         }
     }
 
@@ -137,8 +138,15 @@ public class AdCommonContent extends AdInnerContent {
 
     public static void main(String[] args) {
         AdLineFeedInnerContent ad = new AdLineFeedInnerContent();
-        ad.setAndParseJson("{\"provider_id\":2,\"adWeight\":10,\"autoInterval\":15,\"mixInterval\":3}");
+        String strs = "{\"adWeight\":10,\"autoInterval\":15,\"mixInterval\":3"
+                + "\"fakeRate\":[90,20]}";
+        ad.setAndParseJson(strs);
+        
+        System.out.println(JSONObject.toJSONString(ad));
         System.out.println(ad.getProvider_id() + "," + ad.getAdWeight() + "," + ad.getAutoInterval() + "," + ad.getMixInterval());
+        System.out.println(ad.getFakeRate());
+        System.out.println(ad.getHostSpotSize());
+    
     }
 
     @Override
