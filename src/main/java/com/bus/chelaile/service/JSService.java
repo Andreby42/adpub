@@ -1,5 +1,6 @@
 package com.bus.chelaile.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -134,39 +135,37 @@ public class JSService {
         if (entities != null && entities.size() > 0) {
             for (BaseAdEntity entity : entities) {
                 if (entity.getTasksGroup() != null) {
+                    // 取任务出来,针对android，去掉imei号是unknown的头条任务
                     tasks.addAll(entity.getTasksGroup().getTasks());
+                    // TODO  fist to use stream ， very cool !! 
+                    if (StringUtils.isNotBlank(param.getS()) && param.getS().equals("android")) {
+                        if (StringUtils.isBlank(param.getImei()) || param.getImei().equals("unknown")) {
+                            tasks.removeIf(i -> {
+                                return i.contains("sdk_toutiao"); //No contais sdk_toutiao
+                            });
+                        }
+                    }
+
                     //提取第一个times出来
-                    if(times.size() == 0)
+                    if (times.size() == 0)
                         times = entity.getTasksGroup().getTimeouts();
-                    
-                    if( entity.getTasksGroup() != null && entity.getTasksGroup().getMap() != null ) {
-                    	for (Map.Entry<String, String> entry : entity.getTasksGroup().getMap().entrySet()) {
-                        	map.put(entry.getKey(), entry.getValue());
+
+                    if (entity.getTasksGroup() != null && entity.getTasksGroup().getMap() != null) {
+                        for (Map.Entry<String, String> entry : entity.getTasksGroup().getMap().entrySet()) {
+                            map.put(entry.getKey(), entry.getValue());
                         }
                     }
                     // 将非空的closePic提取出来
-                    if(StringUtils.isNoneBlank(entity.getTasksGroup().getClosePic()))
+                    if (StringUtils.isNoneBlank(entity.getTasksGroup().getClosePic()))
                         closePic = entity.getTasksGroup().getClosePic();
-                    if(StringUtils.isNoneBlank(entity.getTasksGroup().getHostSpotSize()))
+                    if (StringUtils.isNoneBlank(entity.getTasksGroup().getHostSpotSize()))
                         hostSpotSize = entity.getTasksGroup().getHostSpotSize();
-                    if(entity.getTasksGroup().getFakeRate() != null)
+                    if (entity.getTasksGroup().getFakeRate() != null)
                         fakeRate = entity.getTasksGroup().getFakeRate();
                 }
             }
-            // 存储atraceInfo到redis中
-            if(StringUtils.isBlank(param.getTraceid())) {
-//            logger.info("traceid为空 ┭┮﹏┭┮");
-                param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
-            }
-            final String traceInfo = JSONObject.toJSONString(param);
-            fixedThreadPool.execute(new Runnable() {
-                
-                @Override
-                public void run() {
-                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 8 );
-                    
-                }
-            });
+            // 执行setTraceInfo的操作
+            executeSetTraceInfo(param, entities);
             
             
         }
@@ -178,8 +177,42 @@ public class JSService {
         return taskEntity;
     }
 
+    private void executeSetTraceInfo(final AdvParam param, List<BaseAdEntity> entities) {
+        if (entities.size() == 1 && entities.get(0).getProvider_id().equals("1")) { // js广告，只返回一条。那么是‘自采买广告’
+            logger.info("setTraceInfo, pid={}, udid={}, adId={}", entities.get(0).getShowType(), param.getUdid(), entities.get(0).getId());
+            // 存储atraceInfo到redis中
+            if (StringUtils.isBlank(param.getTraceid())) {
+                //            logger.info("traceid为空 ┭┮﹏┭┮");
+                param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
+            }
+            final String traceInfo = JSONObject.toJSONString(param);
+            fixedThreadPool.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 8);
+
+                }
+            });
+        }
+    }
+
     public static void main(String[] args) {
-        String a = "ddfs" + "_" + System.currentTimeMillis();
-        System.out.println(a);
+        List<String> t1 = new ArrayList<String>();
+        t1.add("sdk_toutiao");
+
+        List<String> t2 = new ArrayList<String>();
+        t2.add("sdk_baidu");
+
+        List<List<String>> task = new ArrayList<>();
+        task.add(t1);
+        task.add(t2);
+
+        System.out.println(task);
+
+        task.removeIf(i -> {
+            return i.contains("sdk_toutiao"); //No contais sdk_toutiao
+        });
+        System.out.println(task);
     }
 }

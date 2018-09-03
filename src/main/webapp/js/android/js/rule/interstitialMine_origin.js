@@ -76,7 +76,7 @@ var sdk_gdt = {
             url: "GDTSDK",
             pos: "interstitial",
             data: {
-                appId: "1106616441",
+                appId: "1104972974",
                 placementId: "${sdk_gdt_placementId}"
             }}
     },

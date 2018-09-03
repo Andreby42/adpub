@@ -960,7 +960,7 @@ public abstract class AbstractManager {
         }
 
         // 是否展开底部广告
-        if (showType == ShowType.LINE_FEED_ADV && StaticAds.SETTINGSMAP.containsKey(Constants.SETTING_SCREENHEIGHT_KEY)) {
+        if (showType != ShowType.LINE_FEED_ADV && StaticAds.SETTINGSMAP.containsKey(Constants.SETTING_SCREENHEIGHT_KEY)) {
             String sL = (StaticAds.SETTINGSMAP.get(Constants.SETTING_SCREENHEIGHT_KEY));
             try {
                 if (sL != null && Integer.parseInt(sL) >= p.getScreenHeight()) {

@@ -1,7 +1,39 @@
 "use strict";
 
 var RENDER_MSG = 'render_ok';
-
+function getCloseLayout(){
+  return  {
+"class": "RelativeLayout",
+"layout_width": "match_parent",
+"layout_height": "match_parent",
+"background": "@color/clear",
+"children": [
+  {
+    "class": "RelativeLayout",
+    "layout_width": "wrap_content",
+    "layout_height": "wrap_content",
+    "children": [
+      {
+        "class": "ImageView",
+        "id": "bannericon",
+        "layout_width": "24dp",
+        "layout_height": "24dp",
+        "action":"@selector/clickAdvertise:event:",
+        "clickable": "true",
+      },
+      {
+        "class": "RelativeLayout",
+        "layout_width": "24dp",
+        "layout_height": "24dp",
+        "layout_centerInParent": "true",
+        "action":"@selector/closeAdvertise:",
+        "clickable": "true",
+      }
+    ]
+  }
+]
+}
+}
 function loadHttpPost(reqUrl, header, postData, fetchTimeout, callback) {
     Http.post(reqUrl, header, postData, fetchTimeout, function (string, response, error) {
         callback(string, response, error);
@@ -192,9 +224,11 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                                         info.targetType = 1;
                                     }
                                 }
-                                
-                                // add brandPic 
+
+                                // add brandPic
+                                /*
                                 if(task.sdkname() == 'sdk_gdt') {
+
                                     var traceid = rule && rule.traceInfo && rule.traceInfo.traceid;
                                     if ( 
                                         /^e/.test(traceid) &&  
@@ -204,7 +238,57 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                                         info.brandPic = "https://image3.chelaile.net.cn/47db7ec76e75407cb57a890cead60c85";
                                     }
                                 }
+                                */
+                                if (info.closePic) {
+                                  info.layout = getCloseLayout();
+                                  var imageView = info.layout.children[0].children[0];
+                                  imageView.url = info.closePic;
 
+                                  var imageViewParant = info.layout.children[0];
+
+                                  /*
+                                  "layout_marginBottom":"8dp",
+                                  "layout_alignParentRight": "true",
+                                  "layout_alignParentBottom": "true",
+                                  "layout_marginRight": "120dp",
+
+                                  "diplayType==1，
+                                  */
+                                  switch (info.displayType) {
+                                    case 1://"diplayType==1",
+                                      imageViewParant.layout_alignParentRight = 'true';
+                                      imageViewParant.layout_alignParentBottom = 'true';
+                                      imageViewParant.layout_marginBottom = '8dp';
+                                    var object = GetDeviceInfoObject();
+                                    if (object.screenWidth > 640) {
+                                      imageViewParant.layout_marginRight = '192dp';
+                                    }else {
+                                      imageViewParant.layout_marginRight = '165dp';
+                                    }
+                                    break;
+                                      case 2:
+                                      case 5:
+                                      imageViewParant.layout_alignParentRight = 'true';
+                                      imageViewParant.layout_alignParentBottom = 'true';
+                                      imageViewParant.layout_marginBottom = '8dp';
+                                      imageViewParant.layout_marginRight = '120dp';
+                                        break;
+                                        case 3:
+                                        case 4:
+                                        imageViewParant.layout_alignParentRight = 'true';
+                                        imageViewParant.layout_marginTop = '8dp';
+                                        imageViewParant.layout_marginRight = '8dp';
+                                          break;
+                                    default:
+
+                                  }
+
+                                  var btn = info.layout.children[0].children[1];
+                                  if (eval(info.hostSpotSize) >= 0 && eval(info.hostSpotSize) <= 24) {
+                                    btn.layout_width = info.hostSpotSize + 'dp';
+                                    btn.layout_height = info.hostSpotSize + 'dp';
+                                  }
+                                }
                                 adentity.info = info;
                             }
                         }

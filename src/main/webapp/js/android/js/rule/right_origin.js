@@ -389,7 +389,7 @@ var sdk_gdt = {
             url: "GDTSDK",
             pos: "banner",
             data: {
-                appId: "1106616441",
+                appId: "1104972974",
                 placementId: "4060239431859044"
             }
         }
@@ -424,7 +424,7 @@ var sdk_baidu = {
             url: "BaiduSDK",
             pos: "banner",
             data: {
-                appId: "",
+                appId: "ae469914",
                 placementId: "5826196"
             }
         }
@@ -468,7 +468,7 @@ var sdk_toutiao = {
             url: "TOUTIAOSDK",
             pos: "banner",
             data: {
-                appId: "",
+                appId: "5000673",
                 placementId: "900673291"
             }
         }

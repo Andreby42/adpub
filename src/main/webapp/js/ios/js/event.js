@@ -91,22 +91,6 @@ function addParamsIfNotNull(params, key, value) {
     }
 }
 
-function GetDeviceInfoObject() {
-    var string = GetDeviceInfo();
-    var deviceObj = {};
-    if(string) {
-        var array = string.split("&");
-        if(array && array.length) {
-            array.forEach(function(item) {
-                var itemArray = item.split("=");
-                if(itemArray[0] && itemArray[1]) {
-                    deviceObj[itemArray[0]] = itemArray[1]
-                }
-            })
-        }
-    }
-    return deviceObj;
-}
 function trackBaseParams(sdk, ad) {
     var params = {};
     var info = ad.info || {};
@@ -124,7 +108,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "req_timestamp", +new Date);
     addParamsIfNotNull(params, "s", deviceObject.s);
     addParamsIfNotNull(params, "v", deviceObject.v);
-    addParamsIfNotNull(params, "is_backup", info.is_backup);
+    addParamsIfNotNull(params, "is_backup", info.is_backup || 0);
     return params;
 }
 
@@ -162,6 +146,8 @@ function trackClick(sdk, ad) {
 
     addParamsIfNotNull(params, "adv_title", info.head);
     addParamsIfNotNull(params, "adv_desc", info.subhead);
+    addParamsIfNotNull(params, "isFakeClick", info.isFakeClick || 0);
+    addParamsIfNotNull(params, "isRateClick", info.isRateClick || 0);
 
     sendTrackRequest(clickTrackUrl, params);
     if(info.actionMonitorLink) {

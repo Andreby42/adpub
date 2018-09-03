@@ -54,8 +54,8 @@ public class WXBannerManager extends AbstractManager {
 			
 			// site不为空，并且参数site跟inner的site不同，那么略过
 			if(advParam.getSite() != -1 &&  advParam.getSite() != adWXBanner.getSite()) {
-			    logger.info("wxbanner site not match, param site={}, inner site={}, udid={}, adid={}", 
-			            advParam.getSite(), adWXBanner.getSite(), advParam.getUdid(), ad.getAds().getId());
+//			    logger.info("wxbanner site not match, param site={}, inner site={}, udid={}, adid={}", 
+//			            advParam.getSite(), adWXBanner.getSite(), advParam.getUdid(), ad.getAds().getId());
 			    continue;
 			}
 			// site为空，只有inner的site是0才能继续，否则略过

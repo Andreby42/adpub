@@ -54,6 +54,23 @@ String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
 	global.JsEncryptUtil = {};
 	global.JsEncryptUtil.md5 = global.md5;
 
+	global.GetDeviceInfoObject = function() {
+	    var string = GetDeviceInfo();
+	    var deviceObj = {};
+	    if(string) {
+	        var array = string.split("&");
+	        if(array && array.length) {
+	            array.forEach(function(item) {
+	                var itemArray = item.split("=");
+	                if(itemArray[0] && itemArray[1]) {
+	                    deviceObj[itemArray[0]] = itemArray[1]
+	                }
+	            })
+	        }
+	    }
+	    return deviceObj;
+	}
+
 	global.RuleMap = {
 			//理论上可以配置做任意界面浮层广告
 			"CLLHomeViewController":"interstitialHomeAd" //首页

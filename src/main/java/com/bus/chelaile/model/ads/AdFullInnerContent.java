@@ -342,7 +342,7 @@ public class AdFullInnerContent extends AdInnerContent {
 
         AdFullInnerContent adPush = new AdFullInnerContent();
         adPush.setAndParseJson(
-                "{\"tasksJ\":[{\"apiName\":\"sdk_toutiao\",\"priority\":\"1\"},{\"apiName\":\"sdk_baidu\",\"priority\":\"2\"},{\"apiName\":\"sdk_gdt\",\"priority\":\"2\"},{\"apiName\":\"api_voicead\",\"priority\":1}],\"timeouts\":[500,1500],\"provider_id\":100}");
+                "{\"tasksJ\":[{\"apiName\":\"sdk_inmobi\",\"priority\":\"1\",\"displayType\":\"2\"}],\"timeouts\":[1500,1500],\"provider_id\":100,\"closePic\":\"\",\"hostSpotSize\":-1,\"fakeRate\":[]}");
         System.out.println("pic: " + adPush.pic);
         System.out.println("JsonR: " + adPush.jsonContent);
         System.out.println(JSONObject.toJSONString(adPush));

@@ -325,7 +325,7 @@ function tryNthTaskGroup(rule, nth, callback) {
                     resp.fakeRate = eval(rule.closeInfo.fakeRate);
                 }
 
-
+                /**
                 try {
                     if(sdkInfo.task.sdkname() == "sdk_gdt") {
                         var traceid = rule && rule.traceInfo && rule.traceInfo.traceid;
@@ -341,6 +341,7 @@ function tryNthTaskGroup(rule, nth, callback) {
                 } catch(error) {
                     console.log(error);
                 }
+                */
 
 
                 if (sdkInfo.task.adStyle) {

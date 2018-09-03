@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.ShortUrlUtil;
@@ -440,5 +441,26 @@ public class BusAdvAction extends AbstractController {
         String dateOut = DateUtil.getFormatTime(new Date(timeStr), "yyyy-MM-dd HH:mm:SS");
 
         return "设置用户创建时间成功,udid=" + udid + ", time=" + dateOut;
+    }
+    
+    /*
+     * clear close log 测试用，清楚关闭记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "adv!clearCloseHistory.action", produces = "text/plain;charset=UTF-8")
+    public String clearCloseHistory(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws Exception {
+        String udid = request.getParameter("udid");
+
+        if (StringUtils.isNoneBlank(udid)) {
+            
+            String key = AdvCache.getCloseAdKey(udid);
+            CacheUtil.redisOftenDelete(key);
+            return "删除关闭记录成功,udid=" + udid;
+        } else {
+            return "请输入udid "; 
+        }
+        
+
     }
 }
