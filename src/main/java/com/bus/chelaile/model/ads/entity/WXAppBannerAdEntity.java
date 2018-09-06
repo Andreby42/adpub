@@ -7,6 +7,7 @@ public class WXAppBannerAdEntity extends BaseAdEntity {
 	private String pic = EMPTY_STR; // 图片URL
 	private String wxMiniProId; // 小程序appId
 	private String wxMiniProPath;
+	private String title; // 标题
 
 	public WXAppBannerAdEntity(ShowType showType) {
 		super(showType.getValue());
@@ -41,4 +42,12 @@ public class WXAppBannerAdEntity extends BaseAdEntity {
 	public void setWxMiniProPath(String wxMiniProPath) {
 		this.wxMiniProPath = wxMiniProPath;
 	}
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

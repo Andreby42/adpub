@@ -38,6 +38,7 @@ public class WXBannerManager extends AbstractManager {
 		res.setWxMiniProId(adWXBanner.getWx_miniPro_id());
 		res.setWxMiniProPath(adWXBanner.getWx_miniPro_path());
 		res.setPriority(ad.getAds().getPriority());
+		res.setTitle(ad.getAds().getTitle());
 
 		return res;
 	}

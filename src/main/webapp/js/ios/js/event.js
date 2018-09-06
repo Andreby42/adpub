@@ -34,8 +34,8 @@ function reportAdsClose(sdk, ad) {
     if(picsList && picsList.length) {
         adv_image = picsList.join(";")
     }
-    addParamsIfNotNull(params, "adv_title", info.head);
     addParamsIfNotNull(params, "adv_image", adv_image);
+    addParamsIfNotNull(params, "adv_title", info.head);
     sendTrackRequest(reportCloseAdUrl +'?'+ GetDeviceInfo(), params);
 }
 
@@ -96,6 +96,13 @@ function trackBaseParams(sdk, ad) {
     var info = ad.info || {};
     var traceInfo = sdk.traceInfo || {};
     var deviceObject = GetDeviceInfoObject() || {}
+    
+    var picsList = info.picsList;
+    var adv_image = "";
+    if(picsList && picsList.length) {
+        adv_image = picsList.join(";")
+    }
+    addParamsIfNotNull(params, "adv_image", adv_image);
 
     addParamsIfNotNull(params, "traceid", traceInfo.traceid);
     addParamsIfNotNull(params, "pid", traceInfo.pid);

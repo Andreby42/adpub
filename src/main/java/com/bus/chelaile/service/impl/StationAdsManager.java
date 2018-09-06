@@ -106,6 +106,9 @@ public class StationAdsManager extends AbstractManager {
                 if ((advParam.getS().equalsIgnoreCase("android") && advParam.getVc() >= Constants.PLATFORM_LOG_ANDROID_0528)
                         || (advParam.getS().equalsIgnoreCase("ios") && advParam.getVc() >= Constants.PLATFOMR_LOG_IOS_0528)) {
                     res = createFeedEntity(advParam, ad, stationInner);
+                    if(res == null) {
+                        
+                    }
                 } else {
                     logger.error("低版本投放了跳转信息流的广告， adId={}, s={}, v={}, vc={}", ad.getId(), advParam.getS(), advParam.getV(),
                             advParam.getVc());
@@ -356,7 +359,8 @@ public class StationAdsManager extends AbstractManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("获取跳转feed流广告内容失败， url={}, response={}", url, response);;
+            logger.error("获取跳转feed流广告内容失败， url={}, response={}", url, response);
+            return null;
         }
         return entity;
     }
