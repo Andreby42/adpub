@@ -65,7 +65,7 @@ public class ConsumerHandleAtrace implements Runnable {
                     try {
                         String str = new String(bt, "UTF-8");
 
-                        logger.info("get atrace.click  from kafka, str={}", str);
+                        logger.info("new click log,  get log from lua_ngx_kafka_click , str={}", str);
 
                         processLog(str);
                     } catch (Exception e) {

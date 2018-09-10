@@ -104,7 +104,7 @@ public class ConsumerHandle implements Runnable {
         if (! isApp)
             return;
         
-        logger.info("**** get log from adv_log , str={}", line);
+        logger.info("old click log,  get log from adv_log , str={}", line);
         InfoStreamHelp.analysisClick(line);
     }
 

@@ -21,6 +21,7 @@ import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
 import com.bus.chelaile.kafka.newPackage.InfoStreamForAdvClick;
+import com.bus.chelaile.kafka.newPackage.InfoStreamForAdvClickAtrace;
 import com.bus.chelaile.model.AdvProject;
 import com.bus.chelaile.model.PlacementInfo;
 import com.bus.chelaile.model.PropertiesName;
@@ -47,6 +48,8 @@ public class StartService {
 	private ActivityService activityService;
 	@Autowired
 	private InfoStreamForAdvClick infoStreamForAdvClick;
+	@Autowired
+	private InfoStreamForAdvClickAtrace infoStreamForAdvClickAtrace;
 //	@Autowired
 //	private LinkActiveHelp linkActiveHelp;
 	@Autowired
@@ -147,6 +150,7 @@ public class StartService {
                 //	          infoStreamDispatcher.readKafka();
         	    // 2018-08-20
                 infoStreamForAdvClick.readKafka(); // 广告点击日志
+                infoStreamForAdvClickAtrace.readKafka();
                 //	          infoSteamForMaidianLogs.readKafka();  // 埋点日志
 
         	}
