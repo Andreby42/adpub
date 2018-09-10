@@ -122,7 +122,7 @@ public class MaidianLogsHandle {
         Queue.set(queueobj);
 
         // 存储用户点击广告到ocs中
-        InfoStreamHelp.setClickToRecord(advId, udid);
+        InfoStreamHelp.setClickToRecord(advId, udid, false);
         
         // 存储项目点击
         String projectId = StaticAds.allAds.get(advId).getProjectId();

@@ -319,6 +319,7 @@ public class StationAdsManager extends AbstractManager {
     private StationAdEntity createFeedEntity(AdvParam p, AdContent ad, AdStationlInnerContent inner) {
         String response = null;
         String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(), ShowType.STATION_ADV.getType());
+        url += "&advId=" + ad.getId();
         logger.info("请求信息流**********： url={}", url);
         StationAdEntity entity = null;
         try {
@@ -355,6 +356,8 @@ public class StationAdsManager extends AbstractManager {
                     if(inner.getTasksGroup() != null) {
                         entity.setTasksGroup(inner.getTasksGroup());
                     }
+                } else {
+                    logger.error("信息流接口返回为空, url={}, response={} ", url, response);
                 }
             }
         } catch (Exception e) {

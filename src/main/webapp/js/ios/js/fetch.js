@@ -64,10 +64,10 @@ function getAds(rule, userdata, callback) {
             data.sdk.maxSplashTimeout = 8000;
             data.sdk.warmSplashIntervalTime = 30 * 60 * 1000;
             
-            if(rule && rule.traceInfo && rule.traceInfo.pid == '22') {
-                data.sdk.refreshTime = 20000;
-                data.sdk.mixRefreshAdInterval = 10000;
-            }
+            //if(rule && rule.traceInfo && rule.traceInfo.pid == '22') {
+            //    data.sdk.refreshTime = 20000;
+            //    data.sdk.mixRefreshAdInterval = 10000;
+            //}
         }
         callback(data);
     };

@@ -77,7 +77,7 @@ function ourUrls(traceInfo, entity, urls) {
     })
 
     var config = JsFixedConfig.getJsFixedConfig();
-    var svadded = '&v=' + config.get('v').split('_')[0] + '&s=' + config.get('s');
+    var svadded = '&v=' + config.get('v').split('_')[0] + '&s=' + config.get('s') + '&imei=' + config.get('imei');
     for (var k in urls) {
         ret[k] += svadded;
     }

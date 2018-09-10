@@ -174,6 +174,7 @@ public class LineFeedAdsManager extends AbstractManager {
         String response = null;
         String url = String.format(AD_GOTO_INFO_URL, p.getUdid(), p.getStatsAct(), p.getS(), p.getVc(),
                 ShowType.LINE_FEED_ADV.getType());
+        url += "&advId=" + ad.getId();
         logger.info("请求信息流**********： url={}", url);
         LineFeedAdEntity entity = null;
         try {
@@ -225,6 +226,8 @@ public class LineFeedAdsManager extends AbstractManager {
                         logger.error("详情页底部，不支持的图片类型 , url={}, response={}", url, response);
                         return null;
                     }
+                } else {
+                    logger.error("信息流接口返回为空, url={}, response={} ", url, response);
                 }
             }
         } catch (Exception e) {

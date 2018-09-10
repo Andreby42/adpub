@@ -68,12 +68,14 @@ public class AdPubCacheRecord {
 	
 	private Map<String, Map<String, Map<Integer, Integer>>> todayNoAdHistoryMap = New.hashMap();
 	
+    private Map<String, Integer> dayClickFake = New.hashMap();
+    
+	/***********分割线******
+    ***********以下部分应该是没有用了的***********/
 	// 取消广告
 	private invalidAdv invalidInfo;
 	// 存储uv的广告 key  广告id,value 日期
 	private Map<Integer,String> uvMap= New.hashMap();
-
-
 
 	// 第三方广告信息，该缓存只保留1个小时
 	private Map<String, ApiRecord> apiRecordMap;
@@ -292,6 +294,7 @@ public class AdPubCacheRecord {
 	public void buildAdPubCacheRecord(int adId) {
 		buildAdPubCacheRecord(adId, false);
 	}
+	
 
 	// 线路详情的特殊设置
 	public int getAdTimeCountsQueryCount(String ruleId) {
@@ -319,6 +322,18 @@ public class AdPubCacheRecord {
 			cacheRecord.putDayCountMap(todayStr, 1);
 		}
 	}
+	
+	// fake点击 和 rate点击，都要记录在案
+	// day 点击fake +1
+    public void buildAdPubCacheRecordFakeClick() {
+        String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+        int count = 1;
+        if (dayClickFake.containsKey(todayStr)) {
+            count += dayClickFake.get(todayStr);
+        }
+        dayClickFake.put(todayStr, count);
+    }
+	
 	
 	public boolean hasClicked(int adId) {
 		if (cacheRecordMap.containsKey(adId)) {

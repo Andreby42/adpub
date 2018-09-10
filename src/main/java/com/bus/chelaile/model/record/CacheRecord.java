@@ -14,6 +14,7 @@ public class CacheRecord {
     int clickCount;
     Map<String, Integer> dayCountMap = New.hashMap();
     Map<String, Integer> dayClickMap = New.hashMap();
+    
 
     public CacheRecord() {
     }
@@ -50,6 +51,7 @@ public class CacheRecord {
         dayCountMap.put(dayStr, zcount);
     }
     
+    // day 点击 +1
     public void putDayClickMap(String dayStr, int dayClick) {
         int zcount = dayClick;
         if (dayClickMap.containsKey(dayStr)) {
@@ -79,6 +81,7 @@ public class CacheRecord {
     public Map<String, Integer> getDayClickMap() {
         return dayClickMap;
     }
+
 
 //    public void setDayClickMap(Map<String, Integer> dayClickMap) {
 //        this.dayClickMap = dayClickMap;

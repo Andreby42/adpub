@@ -115,6 +115,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "req_timestamp", +new Date);
     addParamsIfNotNull(params, "s", deviceObject.s);
     addParamsIfNotNull(params, "v", deviceObject.v);
+    addParamsIfNotNull(params, "idfa", deviceObject.idfa || '');
     addParamsIfNotNull(params, "is_backup", info.is_backup || 0);
     return params;
 }
