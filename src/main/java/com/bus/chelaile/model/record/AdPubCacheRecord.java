@@ -68,7 +68,6 @@ public class AdPubCacheRecord {
 	
 	private Map<String, Map<String, Map<Integer, Integer>>> todayNoAdHistoryMap = New.hashMap();
 	
-    private Map<String, Integer> dayClickFake = New.hashMap();
     
 	/***********分割线******
     ***********以下部分应该是没有用了的***********/
@@ -322,17 +321,6 @@ public class AdPubCacheRecord {
 			cacheRecord.putDayCountMap(todayStr, 1);
 		}
 	}
-	
-	// fake点击 和 rate点击，都要记录在案
-	// day 点击fake +1
-    public void buildAdPubCacheRecordFakeClick() {
-        String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
-        int count = 1;
-        if (dayClickFake.containsKey(todayStr)) {
-            count += dayClickFake.get(todayStr);
-        }
-        dayClickFake.put(todayStr, count);
-    }
 	
 	
 	public boolean hasClicked(int adId) {

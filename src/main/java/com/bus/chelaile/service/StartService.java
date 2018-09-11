@@ -149,8 +149,9 @@ public class StartService {
         	if( !Constants.ISDEV ) {
                 //	          infoStreamDispatcher.readKafka();
         	    // 2018-08-20
-                infoStreamForAdvClick.readKafka(); // 广告点击日志
-                infoStreamForAdvClickAtrace.readKafka();
+//                infoStreamForAdvClick.readKafka(); // 广告点击日志
+        	    // 2018-09-11
+                infoStreamForAdvClickAtrace.readKafka();  // atrace 广告点击日志
                 //	          infoSteamForMaidianLogs.readKafka();  // 埋点日志
 
         	}

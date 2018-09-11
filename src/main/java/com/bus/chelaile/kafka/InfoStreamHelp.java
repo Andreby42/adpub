@@ -20,13 +20,11 @@ import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
-import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.service.RecordManager;
 import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.thread.Queue;
-import com.bus.chelaile.thread.TimeLog;
 import com.bus.chelaile.thread.model.QueueObject;
 import com.bus.chelaile.util.New;
 
@@ -137,6 +135,7 @@ public class InfoStreamHelp {
                 logger.error(e.getMessage(), e);
                 return;
             }
+            String s = parameterMap.get("s");
             String traceid = parameterMap.get("traceid");
             String aid = parameterMap.get("aid");
             String pid = parameterMap.get("pid");
@@ -149,18 +148,21 @@ public class InfoStreamHelp {
                 return;
             }
             String udid = traceid.split("_")[0];
-            //            if(! Constants.ISTEST)
-            TimeLong.info("atrace 点击日志解析结果：pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", pid,
+            TimeLong.info("ATRACE 点击日志解析结果：s={}, pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", s, pid,
                     jsid, aid, udid, adid, traceid, isFakeClick, isRateClick);
-            AnalysisLog.info("atrace 点击日志解析结果：pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", pid,
+            AnalysisLog.info("ATRACE 点击日志解析结果：s={}, pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", s, pid,
                     jsid, aid, udid, adid, traceid, isFakeClick, isRateClick);
-            logger.info("atrace 点击日志解析结果：pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", pid, jsid,
+            logger.info("ATRACE 点击日志解析结果：s={}, pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", s, pid, jsid,
                     aid, udid, adid, traceid, isFakeClick, isRateClick);
 
-            
+            if (!StaticAds.allAds.containsKey(jsid)) {
+                if (!Constants.ISTEST) { // 线上需要打印这种情况，测试无需
+                    logger.error("缓存中未发现广告,advId={}, line={}", jsid, line);
+                }
+                return;
+            }
             // 记录点击
-            // TODO 测试无误后放开
-            //recordClick(udid, jsid);
+            recordClick(udid, jsid);
             
             
         } catch (Exception e) {
