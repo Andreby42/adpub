@@ -66,7 +66,7 @@ function ourUrls(traceInfo, entity, urls) {
     for (var k in urls)
         ret[k] = urls[k];
 
-    ['adid', 'traceid', 'pid', 'ad_order', 'is_backup'].forEach(function(field) {
+    ['adid', 'traceid', 'pid', 'ad_order', 'is_backup', 'jsid'].forEach(function(field) {
         var v = selectValue(field, traceInfo, entity);
         if (!nullOrUndefined(v)) {
             var added = '&' + field + '=' + v;

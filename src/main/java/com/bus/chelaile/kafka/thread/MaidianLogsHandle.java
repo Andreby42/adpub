@@ -17,8 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bus.chelaile.common.AdvCache;
+import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.kafka.InfoStreamHelp;
 import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.thread.Queue;
@@ -93,10 +95,12 @@ public class MaidianLogsHandle {
             if (params.containsKey("udid")) {
                 udid = params.get("udid");
             }
-            String provider_id = params.get("provider_id");
-            // app的自采买广告，老版本，都有provider_id等于1这个特质
-            if (StringUtils.isNoneBlank(provider_id) && provider_id.equals("1")) {
-                // 自采买的广告，不从埋点处理
+            if(udid == null) {
+                udid = params.get("user_id");
+            }
+             String s = params.get("s");
+            // 只解析h5的广告，包括网页版和小程序
+            if(StringUtils.isEmpty(s) || ! s.equals("h5")) {
                 return;
             }
 
@@ -105,41 +109,18 @@ public class MaidianLogsHandle {
                 logger.error("点击埋点解析， 广告为空 line={}", line);
                 return;
             }
-            logger.info("点击埋点得到点击日志： udid={}, advId={}", udid, advId);
-            if (StaticAds.allAds.get(advId) == null) {
+            TimeLong.info("h5点击埋点得到点击日志： udid={}, advId={}", udid, advId);
+            logger.info("h5点击埋点得到点击日志： udid={}, advId={}", udid, advId);
+            AnalysisLog.info("h5点击埋点得到点击日志： udid={}, advId={}", udid, advId);
+            if (! StaticAds.allAds.containsKey(advId)) {
                 return;
             }
 
-            recordClick(udid, advId);
+            InfoStreamHelp.recordClick(udid, advId);
 
         }
     }
 
-    public static void recordClick(String udid, String advId) {
-        // 存储广告点击次数到redis
-        QueueObject queueobj = new QueueObject();
-        queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
-        Queue.set(queueobj);
-
-        // 存储用户点击广告到ocs中
-        InfoStreamHelp.setClickToRecord(advId, udid, false);
-        
-        // 存储项目点击
-        String projectId = StaticAds.allAds.get(advId).getProjectId();
-        if(StringUtils.isNotBlank(projectId)) {
-            String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
-            int expireTime = StaticAds.allAds.get(advId).getProjectIdClickExpireTime();
-            if( expireTime == 0 ) {
-            	expireTime = Constants.HALF_YEAR_CACHE_TIME;
-            }
-            logger.info("projectClickKey={},expireTime={}",projectClickKey, expireTime);
-//            CacheUtil.incrToCache(projectClickKey,expireTime);
-            CacheUtil.incrToOftenRedis(projectClickKey,expireTime);
-            // CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
-            
-            CacheUtil.incrProjectClick(projectId, 1);
-        }
-    }
 
     //    /**
     //     * 解析开屏广告展示埋点日志

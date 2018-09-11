@@ -17,12 +17,17 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.AnalysisLog;
+import com.bus.chelaile.common.CacheUtil;
 import com.bus.chelaile.common.Constants;
+import com.bus.chelaile.common.TimeLong;
 import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.service.RecordManager;
 import com.bus.chelaile.service.StaticAds;
+import com.bus.chelaile.thread.Queue;
+import com.bus.chelaile.thread.TimeLog;
+import com.bus.chelaile.thread.model.QueueObject;
 import com.bus.chelaile.util.New;
 
 public class InfoStreamHelp {
@@ -58,16 +63,14 @@ public class InfoStreamHelp {
             }
             if (!Constants.ISTEST)
                 logger.info("点击日志解析结果： advId={}, udid={}", advId, udid);
-            //			System.out.println(advId);
-            //			System.out.println(udid);
-            if (StaticAds.allAds.get(advId) == null) {
+            if (!StaticAds.allAds.containsKey(advId)) {
                 if (!Constants.ISTEST) { // 线上需要打印这种情况，测试无需
                     logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
                 }
                 return;
             }
 
-            MaidianLogsHandle.recordClick(udid, advId);
+            recordClick(udid, advId);
 
             //			// 广告总点击次数
             //			QueueObject queueobj = new QueueObject();
@@ -90,41 +93,6 @@ public class InfoStreamHelp {
 
     }
 
-    /*
-     * 将点击记录，存储到缓存中
-     * isRecordFakeOnly 是否只记录fake点击
-     */
-    public static void setClickToRecord(String advId, String udid, boolean isRecordFakeOnly) {
-        AdPubCacheRecord cacheRecord = null;
-        // 放缓存的时候除了线路详情就是双栏
-        //		if(! StaticAds.allAds.containsKey(advId)) {
-        //		    logger.error("出现缓存中不存在advId点击上报事件， udid={}, advId={}", udid, advId);
-        //		    return;
-        //		}
-        String showType = StaticAds.allAds.get(advId).getShowType();
-        if (showType.equals(ShowType.LINE_DETAIL.getType())) {
-            cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.LINE_DETAIL.getType());
-        } else {
-            cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.DOUBLE_COLUMN.getType());
-        }
-        if (cacheRecord == null) {
-            cacheRecord = new AdPubCacheRecord();
-        }
-        
-        if(isRecordFakeOnly) {
-            cacheRecord.buildAdPubCacheRecordFakeClick();
-            return;
-        }
-        
-
-        cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId), true);
-
-        if (showType.equals(ShowType.LINE_DETAIL.getType())) {
-            RecordManager.recordAdd(udid, showType, cacheRecord);
-        } else {
-            RecordManager.recordAdd(udid, ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
-        }
-    }
 
     /*
      * 将日志参数临时转为map
@@ -175,51 +143,85 @@ public class InfoStreamHelp {
             String adid = parameterMap.get("adid");
             String isFakeClick = parameterMap.get("isFakeClick");
             String isRateClick = parameterMap.get("isRateClick");
-            if (pid == null || traceid == null || aid == null) {
+            String jsid = parameterMap.get("jsid");
+            if (jsid == null || pid == null || traceid == null || aid == null) {
                 logger.error("atrace 广告为空 line={}", line);
                 return;
             }
             String udid = traceid.split("_")[0];
             //            if(! Constants.ISTEST)
-            logger.info("点击日志解析结果：pid={}, aid={}, udid={}, adid={}, traceid={}", pid, aid, udid, adid, traceid);
+            TimeLong.info("atrace 点击日志解析结果：pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", pid,
+                    jsid, aid, udid, adid, traceid, isFakeClick, isRateClick);
+            AnalysisLog.info("atrace 点击日志解析结果：pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", pid,
+                    jsid, aid, udid, adid, traceid, isFakeClick, isRateClick);
+            logger.info("atrace 点击日志解析结果：pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", pid, jsid,
+                    aid, udid, adid, traceid, isFakeClick, isRateClick);
+
             
-            // 记录fake点击
-            if( (StringUtils.isNoneBlank(isFakeClick) && isFakeClick.equals("1")) 
-                    || (StringUtils.isNoneBlank(isRateClick) && isRateClick.equals("1"))) {
-                logger.info("获取到fakeOrrate点击， pid={}, aid={}, udid={},", pid, aid, udid);
-                AnalysisLog.info("获取到fakeOrrate点击， pid={}, aid={}, udid={},", pid, aid, udid);
-                InfoStreamHelp.setClickToRecord(adid, udid, true);
-            }
-
-            // TODO 自采买广告的处理，暂时不做
-            //            if(StaticAds.allAds.get(adid) == null) {
-            //                if(! Constants.ISTEST) {    // 线上需要打印这种情况，测试无需
-            //                    logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
-            //                }
-            //                return;
-            //            }
-
-
-            //          // 广告总点击次数
-            //          QueueObject queueobj = new QueueObject();
-            //          queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
-            //          Queue.set(queueobj);
-            //          
-            //          // 存储用户点击广告到ocs中
-            //          setClickToRecord(advId, udid);
-            //          
-            //          // 存储项目点击
-            //            String projectId = StaticAds.allAds.get(advId).getProjectId();
-            //            if(StringUtils.isNotBlank(projectId)) {
-            //                String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
-            //                CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
-            //                CacheUtil.incrProjectClick(projectId, 1);
-            //            }
+            // 记录点击
+            // TODO 测试无误后放开
+            //recordClick(udid, jsid);
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+    
+    
+    public static void recordClick(String udid, String advId) {
+        // 存储广告点击次数到redis
+        QueueObject queueobj = new QueueObject();
+        queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
+        Queue.set(queueobj);
+
+        // 存储用户点击广告到ocs中
+        InfoStreamHelp.setClickToRecord(udid, advId);
+        
+        // 存储项目点击
+        String projectId = StaticAds.allAds.get(advId).getProjectId();
+        if(StringUtils.isNotBlank(projectId)) {
+            String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
+            int expireTime = StaticAds.allAds.get(advId).getProjectIdClickExpireTime();
+            if( expireTime == 0 ) {
+                expireTime = Constants.HALF_YEAR_CACHE_TIME;
+            }
+            logger.info("projectClickKey={},expireTime={}",projectClickKey, expireTime);
+//            CacheUtil.incrToCache(projectClickKey,expireTime);
+            CacheUtil.incrToOftenRedis(projectClickKey,expireTime);
+            // CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
+            
+            CacheUtil.incrProjectClick(projectId, 1);
+        }
+    }
+    
+    
+    /*
+     * 将点击记录，存储到缓存中
+     * isRecordFakeOnly 是否只记录fake点击
+     */
+    public static void setClickToRecord(String udid, String advId) {
+        AdPubCacheRecord cacheRecord = null;
+        String showType = StaticAds.allAds.get(advId).getShowType();
+        if (showType.equals(ShowType.LINE_DETAIL.getType())) {
+            cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.LINE_DETAIL.getType());
+        } else {
+            cacheRecord = AdvCache.getAdPubRecordFromCache(udid, ShowType.DOUBLE_COLUMN.getType());
+        }
+        if (cacheRecord == null) {
+            cacheRecord = new AdPubCacheRecord();
+        }
+
+        cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId), true);
+
+        if (showType.equals(ShowType.LINE_DETAIL.getType())) {
+            RecordManager.recordAdd(udid, showType, cacheRecord);
+        } else {
+            RecordManager.recordAdd(udid, ShowType.DOUBLE_COLUMN.getType(), cacheRecord);
+        }
+    }
+    
 
     public static void main(String[] args) {
         //		String line = "<134>Jul  5 19:22:51 web1 nginx: 106.91.185.21 |# - |# 2017-07-05 19:22:51 |# GET /bus/line!lineDetail.action?idfa=99501C17-3547-494E-BF7C-5E58E1DCB2E2&geo_type=wgs&language=1&geo_lat=29.633844&geo_lng=106.572242&sv=9.1&s=IOS&deviceType=iPhone6s&stats_referer=searchHistory&lchsrc=icon&lineName=153&screenHeight=1334&stats_order=1-9&lng=106.572242&pushkey=&v=5.32.1&udid=d41d8cd98f00b204e9800998ecf8427ec991ae25&stats_act=enter&sign=mXfNZaM0IoKXzJFiCK18tQ==&userAgent=Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%209_1%20like%20Mac%20OS%20X)%20AppleWebKit/601.1.46%20(KHTML,%20like%20Gecko)%20Mobile/13B143&cityState=0&nw=4G&mac=&lineNo=153&wifi_open=1&geo_lac=30.000000&lat=29.633844&gpstype=wgs&cityId=003&push_open=0&vc=10371&userId= HTTP/1.1 |# 200 |# 0.108 |# 1760 |# - |# lite/5.32.1 (iPhone; iOS 9.1; Scale/2.00) |# - |# api.chelaile.net.cn |# 10.168.197.211:6080 |# 200 |# 1499253771438f8f0082366e4ace5223 |# 0.108 |# https";
@@ -243,8 +245,9 @@ public class InfoStreamHelp {
 
         Map<String, String> parameterMap = arrayToMap(requestUrl.substring(index, requestUrl.length()).split("&"), "=");
         System.out.println(JSONObject.toJSONString(parameterMap));
-        
-        String lineAtraceClick = "120.193.158.112 |# - |# 2018-09-10 19:16:16 |# 200 |# 0 |# 91 |# - |# Dalvik/2.1.0 (Linux; U; Android 7.1.1; OPPO R11s Build/NMF26X) |# - |# atrace.chelaile.net.cn |# - |# - |# /click?&traceid=734df656-345c-4144-8a2b-0fe811d71e84_1536578171.116&pid=22&ad_order=0&is_backup=0&v=3.61.0&s=android&imei=867464034198135&adv_title=58%E5%90%8C%E5%9F%8E&isFakeClick=0&cost_time=39&adv_image=http%403a%2F%2Fpgdt.ugdtimg.com%2Fgdt%2F0%2FDAAE7lKAUAALQABTBbFQWwDAbBxDvh.jpg%2F0%3Fck%3D391cd145a07a8dc202a21b8375681d3a&isRateClick=0&adv_desc=%E6%80%A5%E6%8B%9B%E9%80%81%E9%A4%90%E5%91%98%EF%BC%8C%E5%8C%85%E5%90%83%E5%8C%85%E4%BD%8F%EF%BC%8C%E5%BA%95%E8%96%AA8000%E5%85%83%EF%BC%8C%E5%A4%9A%E5%8A%B3%E5%A4%9A%E5%BE%97%E8%BF%98%E7%BB%99%E6%8F%90%E4%BE%9B%E8%BD%A6%EF%BC%81&aid=sdk_gdt_2&show_status=0&sdk_result=false |# http |# - |#  ";
+
+        String lineAtraceClick =
+                "120.193.158.112 |# - |# 2018-09-10 19:16:16 |# 200 |# 0 |# 91 |# - |# Dalvik/2.1.0 (Linux; U; Android 7.1.1; OPPO R11s Build/NMF26X) |# - |# atrace.chelaile.net.cn |# - |# - |# /click?&traceid=734df656-345c-4144-8a2b-0fe811d71e84_1536578171.116&pid=22&ad_order=0&is_backup=0&v=3.61.0&s=android&imei=867464034198135&adv_title=58%E5%90%8C%E5%9F%8E&isFakeClick=0&cost_time=39&adv_image=http%403a%2F%2Fpgdt.ugdtimg.com%2Fgdt%2F0%2FDAAE7lKAUAALQABTBbFQWwDAbBxDvh.jpg%2F0%3Fck%3D391cd145a07a8dc202a21b8375681d3a&isRateClick=0&adv_desc=%E6%80%A5%E6%8B%9B%E9%80%81%E9%A4%90%E5%91%98%EF%BC%8C%E5%8C%85%E5%90%83%E5%8C%85%E4%BD%8F%EF%BC%8C%E5%BA%95%E8%96%AA8000%E5%85%83%EF%BC%8C%E5%A4%9A%E5%8A%B3%E5%A4%9A%E5%BE%97%E8%BF%98%E7%BB%99%E6%8F%90%E4%BE%9B%E8%BD%A6%EF%BC%81&aid=sdk_gdt_2&show_status=0&sdk_result=false |# http |# - |#  ";
         InfoStreamHelp.analysisAtraceClick(lineAtraceClick);
     }
 

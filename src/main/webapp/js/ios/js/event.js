@@ -106,6 +106,7 @@ function trackBaseParams(sdk, ad) {
 
     addParamsIfNotNull(params, "traceid", traceInfo.traceid);
     addParamsIfNotNull(params, "pid", traceInfo.pid);
+    addParamsIfNotNull(params, "jsid", traceInfo.jsid || 0);
     addParamsIfNotNull(params, "aid", sdk.aid);
     addParamsIfNotNull(params, "ad_order", info.ad_order);
     addParamsIfNotNull(params, "adid", info.adid);

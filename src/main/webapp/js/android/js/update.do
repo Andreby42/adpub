@@ -1,5 +1,5 @@
 
-var version = 84;
+var version = 86;
 
 var tag_version = 'js_engine_version';
 
