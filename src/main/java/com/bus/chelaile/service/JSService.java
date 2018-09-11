@@ -163,7 +163,7 @@ public class JSService {
                         closePic = entity.getTasksGroup().getClosePic();
                     if (StringUtils.isNoneBlank(entity.getTasksGroup().getHostSpotSize()))
                         hostSpotSize = entity.getTasksGroup().getHostSpotSize();
-                    if (entity.getTasksGroup().getFakeRate() != null)
+                    if (entity.getTasksGroup().getFakeRate() != null && ! entity.getTasksGroup().getFakeRate().isEmpty())
                         fakeRate = entity.getTasksGroup().getFakeRate();
                 }
             }
