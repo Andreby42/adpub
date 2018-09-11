@@ -17,7 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.TimeLong;
-import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
+import com.bus.chelaile.kafka.newPackage.MaidianLogsHandle;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.service.ServiceManager;
 import com.bus.chelaile.service.StaticAds;

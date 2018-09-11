@@ -6,7 +6,7 @@
 
  *
  */
-package com.bus.chelaile.kafka.thread;
+package com.bus.chelaile.kafka.newPackage;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
