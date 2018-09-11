@@ -47,7 +47,7 @@ public class AbstractController {
             map.put("closePic", tgs.getTaskGroups().getClosePic());
             map.put("hostSpotSize", tgs.getTaskGroups().getHostSpotSize());
             map.put("fakeRate", tgs.getTaskGroups().getFakeRate().toString());
-
+            map.put("JSID", String.valueOf(tgs.getJsid()));
             for (List<String> tasks : tgs.getTaskGroups().getTasks()) {
                 for (String task : tasks) {
                     if (task.contains("api_chelaile")) {

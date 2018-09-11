@@ -64,9 +64,6 @@ public class ConsumerHandleAtrace implements Runnable {
                 public void callback(byte[] bt) {
                     try {
                         String str = new String(bt, "UTF-8");
-
-                        logger.info("new click log,  get log from lua_ngx_kafka_click , str={}", str);
-
                         processLog(str);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -91,12 +88,8 @@ public class ConsumerHandleAtrace implements Runnable {
 
     
     private void processLog(String line) {
-        boolean isApp = line.contains("s=android") ||  line.contains("s=IOS") || line.contains("s=ios");
-        if (! isApp)
-            return;
-        
-        logger.info("old click log,  get log from adv_log , str={}", line);
-        InfoStreamHelp.analysisClick(line);
+        logger.info("new click log,  get log from lua_ngx_kafka_click , str={}", line);
+        InfoStreamHelp.analysisAtraceClick(line);
     }
 
 }

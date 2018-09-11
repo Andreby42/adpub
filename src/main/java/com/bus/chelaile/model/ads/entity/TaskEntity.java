@@ -5,6 +5,7 @@ public class TaskEntity {
     private TasksGroup taskGroups;
     private String traceid;
     private String adDataString;
+    private int jsid;
     
     
     /**
@@ -36,6 +37,12 @@ public class TaskEntity {
     }
     public void setAdDataString(String adDataString) {
         this.adDataString = adDataString;
+    }
+    public int getJsid() {
+        return jsid;
+    }
+    public void setJsid(int jsid) {
+        this.jsid = jsid;
     }
     
 }

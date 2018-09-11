@@ -10,11 +10,13 @@ package com.bus.chelaile.kafka;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
+import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.kafka.thread.MaidianLogsHandle;
 import com.bus.chelaile.model.ShowType;
@@ -157,7 +159,7 @@ public class InfoStreamHelp {
         try {
             Map<String, String> parameterMap = New.hashMap();
             try {
-                String requestUrl = line.split("\\|#")[13].trim().split(" ")[1];
+                String requestUrl = line.split("\\|#")[12].trim();
                 int index = requestUrl.indexOf("?");
                 parameterMap = arrayToMap(requestUrl.substring(index, requestUrl.length()).split("&"), "=");
 
@@ -167,17 +169,27 @@ public class InfoStreamHelp {
                 logger.error(e.getMessage(), e);
                 return;
             }
-            String udid = parameterMap.get("udid");
+            String traceid = parameterMap.get("traceid");
             String aid = parameterMap.get("aid");
             String pid = parameterMap.get("pid");
             String adid = parameterMap.get("adid");
-            if (pid == null || udid == null || aid == null) {
+            String isFakeClick = parameterMap.get("isFakeClick");
+            String isRateClick = parameterMap.get("isRateClick");
+            if (pid == null || traceid == null || aid == null) {
                 logger.error("atrace 广告为空 line={}", line);
                 return;
             }
+            String udid = traceid.split("_")[0];
             //            if(! Constants.ISTEST)
-            logger.info("点击日志解析结果：pid={}, aid={}, udid={}, udid={}", pid, aid, udid, adid);
-//            InfoStreamHelp.setClickToRecord(adid, udid, true);
+            logger.info("点击日志解析结果：pid={}, aid={}, udid={}, adid={}, traceid={}", pid, aid, udid, adid, traceid);
+            
+            // 记录fake点击
+            if( (StringUtils.isNoneBlank(isFakeClick) && isFakeClick.equals("1")) 
+                    || (StringUtils.isNoneBlank(isRateClick) && isRateClick.equals("1"))) {
+                logger.info("获取到fakeOrrate点击， pid={}, aid={}, udid={},", pid, aid, udid);
+                AnalysisLog.info("获取到fakeOrrate点击， pid={}, aid={}, udid={},", pid, aid, udid);
+                InfoStreamHelp.setClickToRecord(adid, udid, true);
+            }
 
             // TODO 自采买广告的处理，暂时不做
             //            if(StaticAds.allAds.get(adid) == null) {
@@ -231,6 +243,9 @@ public class InfoStreamHelp {
 
         Map<String, String> parameterMap = arrayToMap(requestUrl.substring(index, requestUrl.length()).split("&"), "=");
         System.out.println(JSONObject.toJSONString(parameterMap));
+        
+        String lineAtraceClick = "120.193.158.112 |# - |# 2018-09-10 19:16:16 |# 200 |# 0 |# 91 |# - |# Dalvik/2.1.0 (Linux; U; Android 7.1.1; OPPO R11s Build/NMF26X) |# - |# atrace.chelaile.net.cn |# - |# - |# /click?&traceid=734df656-345c-4144-8a2b-0fe811d71e84_1536578171.116&pid=22&ad_order=0&is_backup=0&v=3.61.0&s=android&imei=867464034198135&adv_title=58%E5%90%8C%E5%9F%8E&isFakeClick=0&cost_time=39&adv_image=http%403a%2F%2Fpgdt.ugdtimg.com%2Fgdt%2F0%2FDAAE7lKAUAALQABTBbFQWwDAbBxDvh.jpg%2F0%3Fck%3D391cd145a07a8dc202a21b8375681d3a&isRateClick=0&adv_desc=%E6%80%A5%E6%8B%9B%E9%80%81%E9%A4%90%E5%91%98%EF%BC%8C%E5%8C%85%E5%90%83%E5%8C%85%E4%BD%8F%EF%BC%8C%E5%BA%95%E8%96%AA8000%E5%85%83%EF%BC%8C%E5%A4%9A%E5%8A%B3%E5%A4%9A%E5%BE%97%E8%BF%98%E7%BB%99%E6%8F%90%E4%BE%9B%E8%BD%A6%EF%BC%81&aid=sdk_gdt_2&show_status=0&sdk_result=false |# http |# - |#  ";
+        InfoStreamHelp.analysisAtraceClick(lineAtraceClick);
     }
 
 }

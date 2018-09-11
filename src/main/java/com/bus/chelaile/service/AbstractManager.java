@@ -377,6 +377,9 @@ public abstract class AbstractManager {
             }
         }
         
+//        // 点击了fakeORrate的，不予再投放fake广告了
+//        if(ad.getAdInnerContent().getFakeRate())
+        
         // 线路详情
         if (ad.getShowType().equals(ShowType.LINE_DETAIL.getType())) {
             // 当点击了右下角不感兴趣

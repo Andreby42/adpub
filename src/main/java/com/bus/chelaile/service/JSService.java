@@ -126,12 +126,13 @@ public class JSService {
         //        List<BaseAdEntity> entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, new QueryParam());
         Map<String,String> map = New.hashMap();
         
-
+        
         List<List<String>> tasks = New.arrayList();
         List<Long> times = New.arrayList();
         String closePic = "";
         String hostSpotSize = "";
         List<Integer> fakeRate = New.arrayList();
+        int jsid = 0;
         if (entities != null && entities.size() > 0) {
             for (BaseAdEntity entity : entities) {
                 if (entity.getTasksGroup() != null) {
@@ -149,6 +150,8 @@ public class JSService {
                     //提取第一个times出来
                     if (times.size() == 0)
                         times = entity.getTasksGroup().getTimeouts();
+                    if (jsid == 0)
+                        jsid = entity.getId();
 
                     if (entity.getTasksGroup() != null && entity.getTasksGroup().getMap() != null) {
                         for (Map.Entry<String, String> entry : entity.getTasksGroup().getMap().entrySet()) {
@@ -171,6 +174,7 @@ public class JSService {
         }
         taskEntity.setTaskGroups(new TasksGroup(tasks, times,map, closePic, hostSpotSize, fakeRate));
         taskEntity.setTraceid(param.getTraceid());
+        taskEntity.setJsid(jsid);
         JSONObject resultMap = new JSONObject();
         resultMap.put("ads", entities);
         taskEntity.setAdDataString(JSONObject.toJSONString(serviceManager.getClienSucMap(resultMap, Constants.STATUS_REQUEST_SUCCESS)));
