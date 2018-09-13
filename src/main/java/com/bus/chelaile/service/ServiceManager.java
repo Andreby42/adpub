@@ -1059,7 +1059,8 @@ public class ServiceManager {
     public boolean closeAd(AdvParam param, String pid) {
         try {
             CacheUtil.setCloseTimeToRedis(param.getUdid(), pid);
-            AnalysisLog.info("CLOSE_AD, pid={}, udid={}, aid={}, adv_title={}, adv_image={}", pid, param.getUdid(),
+            AnalysisLog.info("CLOSE_AD, s={}, v={}, pid={}, udid={}, aid={}, adv_title={}, adv_image={}",
+                    param.getS(), param.getV(), pid, param.getUdid(),
                     param.getAid(), param.getAdv_title(), param.getAdv_image());
         } catch (Exception e) {
             e.printStackTrace();
