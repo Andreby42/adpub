@@ -223,8 +223,8 @@ public class RuleEngine {
             rule.setClickCount(getChildAsInt(rInfo, "clickCount"));
             rule.setTotalClickPV(getChildAsInt(rInfo, "totalClickPV"));
             rule.setPclickCount(getChildAsInt(rInfo, "pclickCount"));
-            rule.setTotalClickPV(getChildAsInt(rInfo, "fakeCount"));
-            rule.setPclickCount(getChildAsInt(rInfo, "pfakeCount"));
+            rule.setFakeCount(getChildAsInt(rInfo, "fakeCount"));
+            rule.setPfakeCount(getChildAsInt(rInfo, "pfakeCount"));
             rule.setDays(getChildAsInt(rInfo, "days"));
             rule.setPerDayCount(getChildAsInt(rInfo, "perDayCount"));
             rule.setTotalCount(getChildAsInt(rInfo, "totalCount"));

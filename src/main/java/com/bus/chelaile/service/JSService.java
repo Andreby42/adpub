@@ -181,7 +181,7 @@ public class JSService {
         return taskEntity;
     }
 
-    private void executeSetTraceInfo(final AdvParam param, List<BaseAdEntity> entities) {
+    private void executeSetTraceInfo(AdvParam param, List<BaseAdEntity> entities) {
         if (StringUtils.isBlank(param.getTraceid())) {
             //            logger.info("traceid为空 ┭┮﹏┭┮");
             param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
