@@ -58,6 +58,10 @@ public class Rule {
 	private int clickCount; // 每人点击次数
 	private int pclickCount; // 每人每天点击次数
 	private int totalClickPV; // 每天点击次数上限
+	
+	private int fakeCount; // 每人误点击次数
+    private int pfakeCount; // 每人每天误点击次数
+	
 	private int days; // 投放天数
 	private int perDayCount; // 每天投放次数
 	private int totalCount; // 投放总次数
@@ -1223,6 +1227,22 @@ public class Rule {
 
     public void setExcludeVersions(Map<VersionEntity, String> excludeVersions) {
         this.excludeVersions = excludeVersions;
+    }
+
+    public int getFakeCount() {
+        return fakeCount;
+    }
+
+    public void setFakeCount(int fakeCount) {
+        this.fakeCount = fakeCount;
+    }
+
+    public int getPfakeCount() {
+        return pfakeCount;
+    }
+
+    public void setPfakeCount(int pfakeCount) {
+        this.pfakeCount = pfakeCount;
     }
 
 }

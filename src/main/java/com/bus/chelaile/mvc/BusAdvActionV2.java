@@ -109,30 +109,6 @@ public class BusAdvActionV2 extends AbstractController {
         return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
     }
     
-    /*
-     * 点击上报街接口
-     */
-    @ResponseBody
-    @RequestMapping(value = "adv!ca.action", produces = "text/plain;charset=UTF-8")
-    public String ca(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-        AdvParam advParam = getActionParam(request);
-        
-        if(StringUtils.isEmpty(advParam.getUdid())) {
-            advParam.setUdid(request.getParameter("h5Id"));
-        }
-        
-        String advId = request.getParameter("advId");
-        
-        // 存储广告点击次数到redis
-        QueueObject queueobj = new QueueObject();
-        queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
-        Queue.set(queueobj);
-        // 存储用户点击广告到ocs中
-        StaticAds.setClickToRecord(advId, advParam.getUdid());
-
-        return serviceManager.getClienSucMap(new JSONObject(), Constants.STATUS_REQUEST_SUCCESS);
-    }
-    
     
     /*
      * 处理点击埋点

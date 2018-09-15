@@ -20,7 +20,6 @@ import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.dao.AppAdvContentMapper;
 import com.bus.chelaile.dao.AppAdvRuleMapper;
 import com.bus.chelaile.flow.ActivityService;
-import com.bus.chelaile.kafka.newPackage.InfoStreamForAdvClick;
 import com.bus.chelaile.kafka.newPackage.InfoStreamForAdvClickAtrace;
 import com.bus.chelaile.model.AdvProject;
 import com.bus.chelaile.model.PlacementInfo;
@@ -46,8 +45,6 @@ public class StartService {
 	private AppAdvContentMapper advContent;
 	@Autowired
 	private ActivityService activityService;
-	@Autowired
-	private InfoStreamForAdvClick infoStreamForAdvClick;
 	@Autowired
 	private InfoStreamForAdvClickAtrace infoStreamForAdvClickAtrace;
 //	@Autowired

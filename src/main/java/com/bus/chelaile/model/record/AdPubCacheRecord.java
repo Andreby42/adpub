@@ -290,11 +290,6 @@ public class AdPubCacheRecord {
 		return null;
 	}
 
-	public void buildAdPubCacheRecord(int adId) {
-		buildAdPubCacheRecord(adId, false);
-	}
-	
-
 	// 线路详情的特殊设置
 	public int getAdTimeCountsQueryCount(String ruleId) {
 		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
@@ -306,21 +301,34 @@ public class AdPubCacheRecord {
 		}
 	}
 
-	public void buildAdPubCacheRecord(int adId, boolean isClick) {
-		String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
-		CacheRecord cacheRecord = cacheRecordMap.get(adId);
-		if (cacheRecord == null) {
-			cacheRecord = new CacheRecord(0);
-			cacheRecordMap.put(adId, cacheRecord);
-		}
+	// 发送 +1
+    public void buildAdPubCacheRecord(int adId) {
+        String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+        CacheRecord cacheRecord = cacheRecordMap.get(adId);
+        if (cacheRecord == null) {
+            cacheRecord = new CacheRecord(0);
+            cacheRecordMap.put(adId, cacheRecord);
+        }
 
-		if (isClick) {
-			cacheRecord.incrClickCount();
-			cacheRecord.putDayClickMap(todayStr, 1);
-		} else {
-			cacheRecord.putDayCountMap(todayStr, 1);
-		}
-	}
+        cacheRecord.putDayCountMap(todayStr, 1);
+    }
+    
+    // 点击 +1
+    public void buildAdPubCacheRecord(int adId, String isFakeClick, String isRateClick) {
+        String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+        CacheRecord cacheRecord = cacheRecordMap.get(adId);
+        if (cacheRecord == null) {
+            cacheRecord = new CacheRecord(0);
+            cacheRecordMap.put(adId, cacheRecord);
+        }
+
+        cacheRecord.incrClickCount();
+        cacheRecord.putDayClickMap(todayStr, 1);
+        if ((isFakeClick != null && isFakeClick.equals("1")) || (isRateClick != null && isRateClick.equals("1"))) {
+            cacheRecord.incrFakeCount();
+            cacheRecord.putDayRateMap(todayStr, 1);
+        }
+    }
 	
 	
 	public boolean hasClicked(int adId) {
@@ -351,8 +359,13 @@ public class AdPubCacheRecord {
 			CacheRecord cacheRecord = cacheRecordMap.get(adId);
 			Map<String, Integer> dayCountMap = cacheRecord.getDayCountMap();
 			Map<String ,Integer> dayClickMap = cacheRecord.getDayClickMap();
+			Map<String, Integer> dayFakeMap = cacheRecord.getDayRateMap();
 			int clickCount = rule.getClickCount();
 			int pclickCount = rule.getPclickCount();
+			
+			int fakeCount = rule.getFakeCount();
+            int pfakeCount = rule.getPfakeCount();
+			
 			int days = rule.getDays();
 			int perDayCount = rule.getPerDayCount();
 //			int totalCount = rule.getTotalCount(); // 针对一个人的
@@ -367,6 +380,18 @@ public class AdPubCacheRecord {
 			        return false;
 			    }
 			}
+			
+			if (fakeCount > 0) { // 说明配置了 误点击 次数属性，只判断该属性即可，这个是单人点击次数限制
+                if (cacheRecord.getFakeCount() >= fakeCount) {
+                    return false;
+                }
+            }
+            if (pfakeCount > 0) { // 每人每天 误点击 次数上限
+                if(dayFakeMap.containsKey(todayStr) && dayFakeMap.get(todayStr) >= pfakeCount) {
+                    return false;
+                }
+            }
+			
 			
 			if (days > 0 && perDayCount > 0) { // 说明没有配置点击次数属性，配置了每天多少次规则
 				if (dayCountMap.size() > days) { // 大于是不可能的，正确的情况下。

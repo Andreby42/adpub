@@ -12,15 +12,17 @@ import com.bus.chelaile.util.New;
  */
 public class CacheRecord {
     int clickCount;
+    private int fakeCount;
     Map<String, Integer> dayCountMap = New.hashMap();
     Map<String, Integer> dayClickMap = New.hashMap();
-    
+    private Map<String, Integer> dayRateMap = New.hashMap();  // 记录误点击
 
     public CacheRecord() {
     }
 
-    public CacheRecord(int clickCount) {
-        this.clickCount = clickCount;
+    public CacheRecord(int count) {
+        this.clickCount = count;
+        this.fakeCount = count;
     }
 
     public int getClickCount() {
@@ -35,6 +37,10 @@ public class CacheRecord {
         this.clickCount ++;
     }
     
+    public void incrFakeCount() {
+        this.fakeCount ++;
+    }
+    
     public Map<String, Integer> getDayCountMap() {
         return dayCountMap;
     }
@@ -43,6 +49,7 @@ public class CacheRecord {
 //        this.dayCountMap = dayCountMap;
 //    }
 
+    // day 发送 +1
     public void putDayCountMap(String dayStr, int dayCount) {
         int zcount = dayCount;
         if (dayCountMap.containsKey(dayStr)) {
@@ -60,6 +67,14 @@ public class CacheRecord {
         dayClickMap.put(dayStr, zcount);
     }
     
+    // day 误点击 +1
+    public void putDayRateMap(String dayStr, int dayRate) {
+        int zcount = dayRate;
+        if (dayRateMap.containsKey(dayStr)) {
+            zcount += dayRateMap.get(dayStr);
+        }
+        dayRateMap.put(dayStr, zcount);
+    }
     
     @Override
     public String toString() {
@@ -82,6 +97,17 @@ public class CacheRecord {
         return dayClickMap;
     }
 
+    public Map<String, Integer> getDayRateMap() {
+        return dayRateMap;
+    }
+
+    public int getFakeCount() {
+        return fakeCount;
+    }
+
+    public void setFakeCount(int fakeCount) {
+        this.fakeCount = fakeCount;
+    }
 
 //    public void setDayClickMap(Map<String, Integer> dayClickMap) {
 //        this.dayClickMap = dayClickMap;

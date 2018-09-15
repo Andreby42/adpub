@@ -182,23 +182,23 @@ public class JSService {
     }
 
     private void executeSetTraceInfo(final AdvParam param, List<BaseAdEntity> entities) {
-        if (entities.size() == 1 && entities.get(0).getProvider_id().equals("1")) { // js广告，只返回一条。那么是‘自采买广告’
-            logger.info("setTraceInfo, pid={}, udid={}, adId={}", entities.get(0).getShowType(), param.getUdid(), entities.get(0).getId());
-            // 存储atraceInfo到redis中
-            if (StringUtils.isBlank(param.getTraceid())) {
-                //            logger.info("traceid为空 ┭┮﹏┭┮");
-                param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
-            }
-            final String traceInfo = JSONObject.toJSONString(param);
-            fixedThreadPool.execute(new Runnable() {
-
-                @Override
-                public void run() {
-                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 8);
-
-                }
-            });
+        if (StringUtils.isBlank(param.getTraceid())) {
+            //            logger.info("traceid为空 ┭┮﹏┭┮");
+            param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
         }
+//        if (entities.size() == 1 && entities.get(0).getProvider_id().equals("1")) { // js广告，只返回一条。那么是‘自采买广告’
+//            logger.info("setTraceInfo, pid={}, udid={}, adId={}", entities.get(0).getShowType(), param.getUdid(), entities.get(0).getId());
+//            // 存储atraceInfo到redis中
+//            final String traceInfo = JSONObject.toJSONString(param);
+//            fixedThreadPool.execute(new Runnable() {
+//
+//                @Override
+//                public void run() {
+//                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 8);
+//
+//                }
+//            });
+//        }
     }
 
     public static void main(String[] args) {

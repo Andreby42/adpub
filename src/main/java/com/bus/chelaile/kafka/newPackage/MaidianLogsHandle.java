@@ -116,7 +116,7 @@ public class MaidianLogsHandle {
                 return;
             }
 
-            InfoStreamHelp.recordClick(udid, advId);
+            InfoStreamHelp.recordClick(udid, advId, null, null);
 
         }
     }

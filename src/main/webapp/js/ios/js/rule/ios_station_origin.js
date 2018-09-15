@@ -156,7 +156,7 @@ var sdk_toutiao = {
             pos: "banner",
             data: {
                 "appId": "5001451",
-                "placementId": "901451521"
+                "placementId": "901451537"
             }
         }
     },

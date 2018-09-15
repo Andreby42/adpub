@@ -34,62 +34,62 @@ public class InfoStreamHelp {
     /*
      * 解析广告点击日志, 记录点击数目，控制点击量
      */
-    public static void analysisClick(String line) {
-
-        try {
-            //			String line = URLDecoder.decode(msg, "utf-8");
-            Map<String, String> parameterMap = New.hashMap();
-            //			System.out.println(line.split("\\|#")[12]);
-            try {
-                if (line.contains(Constants.REDIRECT_DOMAIN_NAME) || line.contains("dev.ad.chelaile.net.cn"))
-                    parameterMap = arrayToMap(line.split("\\|#")[3].trim().replace("?", "").replace("/", "").split("&"), "=");
-                //				else if(line.split("\\|#").length > 3 && line.split("\\|#")[12].trim().split(" ").length > 1)
-                //					parameterMap = arrayToMap(line.split("\\|#")[12].trim().split(" ")[1].replace("?", "").replace("/", "").split("&"), "=");
-                else
-                    parameterMap = arrayToMap(line.split("\\|#")[3].trim().replace("?", "").replace("/", "").split("&"), "=");
-            } catch (Exception e) {
-                logger.error("广告 解析点击日志出错,line={}", line);
-                e.printStackTrace();
-                logger.error(e.getMessage(), e);
-                return;
-            }
-            String advId = parameterMap.get("advId");
-            String udid = parameterMap.get("udid");
-            if (udid == null || advId == null) {
-                logger.error("广告为空 line={}", line);
-                return;
-            }
-            if (!Constants.ISTEST)
-                logger.info("点击日志解析结果： advId={}, udid={}", advId, udid);
-            if (!StaticAds.allAds.containsKey(advId)) {
-                if (!Constants.ISTEST) { // 线上需要打印这种情况，测试无需
-                    logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
-                }
-                return;
-            }
-
-            recordClick(udid, advId);
-
-            //			// 广告总点击次数
-            //			QueueObject queueobj = new QueueObject();
-            //			queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
-            //			Queue.set(queueobj);
-            //			
-            //			// 存储用户点击广告到ocs中
-            //			setClickToRecord(advId, udid);
-            //			
-            //			// 存储项目点击
-            //            String projectId = StaticAds.allAds.get(advId).getProjectId();
-            //            if(StringUtils.isNotBlank(projectId)) {
-            //                String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
-            //                CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
-            //                CacheUtil.incrProjectClick(projectId, 1);
-            //            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
+//    public static void analysisClick(String line) {
+//
+//        try {
+//            //			String line = URLDecoder.decode(msg, "utf-8");
+//            Map<String, String> parameterMap = New.hashMap();
+//            //			System.out.println(line.split("\\|#")[12]);
+//            try {
+//                if (line.contains(Constants.REDIRECT_DOMAIN_NAME) || line.contains("dev.ad.chelaile.net.cn"))
+//                    parameterMap = arrayToMap(line.split("\\|#")[3].trim().replace("?", "").replace("/", "").split("&"), "=");
+//                //				else if(line.split("\\|#").length > 3 && line.split("\\|#")[12].trim().split(" ").length > 1)
+//                //					parameterMap = arrayToMap(line.split("\\|#")[12].trim().split(" ")[1].replace("?", "").replace("/", "").split("&"), "=");
+//                else
+//                    parameterMap = arrayToMap(line.split("\\|#")[3].trim().replace("?", "").replace("/", "").split("&"), "=");
+//            } catch (Exception e) {
+//                logger.error("广告 解析点击日志出错,line={}", line);
+//                e.printStackTrace();
+//                logger.error(e.getMessage(), e);
+//                return;
+//            }
+//            String advId = parameterMap.get("advId");
+//            String udid = parameterMap.get("udid");
+//            if (udid == null || advId == null) {
+//                logger.error("广告为空 line={}", line);
+//                return;
+//            }
+//            if (!Constants.ISTEST)
+//                logger.info("点击日志解析结果： advId={}, udid={}", advId, udid);
+//            if (!StaticAds.allAds.containsKey(advId)) {
+//                if (!Constants.ISTEST) { // 线上需要打印这种情况，测试无需
+//                    logger.error("缓存中未发现广告,advId={}, line={}", advId, line);
+//                }
+//                return;
+//            }
+//
+//            recordClick(udid, advId);
+//
+//            //			// 广告总点击次数
+//            //			QueueObject queueobj = new QueueObject();
+//            //			queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
+//            //			Queue.set(queueobj);
+//            //			
+//            //			// 存储用户点击广告到ocs中
+//            //			setClickToRecord(advId, udid);
+//            //			
+//            //			// 存储项目点击
+//            //            String projectId = StaticAds.allAds.get(advId).getProjectId();
+//            //            if(StringUtils.isNotBlank(projectId)) {
+//            //                String projectClickKey = AdvCache.getProjectClickKey(udid, projectId);
+//            //                CacheUtil.incrToCache(projectClickKey, Constants.HALF_YEAR_CACHE_TIME);    // 存储半年
+//            //                CacheUtil.incrProjectClick(projectId, 1);
+//            //            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 
     /*
@@ -162,7 +162,7 @@ public class InfoStreamHelp {
                 return;
             }
             // 记录点击
-            recordClick(udid, jsid);
+            recordClick(udid, jsid, isFakeClick, isRateClick);
             
             
         } catch (Exception e) {
@@ -172,14 +172,14 @@ public class InfoStreamHelp {
     }
     
     
-    public static void recordClick(String udid, String advId) {
+    public static void recordClick(String udid, String advId, String isFakeClick, String isRateClick) {
         // 存储广告点击次数到redis
         QueueObject queueobj = new QueueObject();
         queueobj.setRedisIncrKey(AdvCache.getTotalClickPV(advId));
         Queue.set(queueobj);
 
         // 存储用户点击广告到ocs中
-        InfoStreamHelp.setClickToRecord(udid, advId);
+        InfoStreamHelp.setClickToRecord(udid, advId, isFakeClick, isRateClick);
         
         // 存储项目点击
         String projectId = StaticAds.allAds.get(advId).getProjectId();
@@ -203,7 +203,7 @@ public class InfoStreamHelp {
      * 将点击记录，存储到缓存中
      * isRecordFakeOnly 是否只记录fake点击
      */
-    public static void setClickToRecord(String udid, String advId) {
+    public static void setClickToRecord(String udid, String advId, String isFakeClick, String isRateClick) {
         AdPubCacheRecord cacheRecord = null;
         String showType = StaticAds.allAds.get(advId).getShowType();
         if (showType.equals(ShowType.LINE_DETAIL.getType())) {
@@ -215,7 +215,7 @@ public class InfoStreamHelp {
             cacheRecord = new AdPubCacheRecord();
         }
 
-        cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId), true);
+        cacheRecord.buildAdPubCacheRecord(Integer.parseInt(advId), isFakeClick, isRateClick);
 
         if (showType.equals(ShowType.LINE_DETAIL.getType())) {
             RecordManager.recordAdd(udid, showType, cacheRecord);

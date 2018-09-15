@@ -92,8 +92,6 @@
 	</bean>
 	
 	<!-- 读取kafka -->
-	<bean id="infoStreamForAdvClick" class="com.bus.chelaile.kafka.newPackage.InfoStreamForAdvClick" >
-	</bean>
     <bean id="infoStreamForAdvClickAtrace" class="com.bus.chelaile.kafka.newPackage.InfoStreamForAdvClickAtrace" >
     </bean>
 	
