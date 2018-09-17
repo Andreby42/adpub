@@ -525,7 +525,8 @@ public abstract class AbstractManager {
             if (StringUtils.isBlank(rule.getInterstitialType()) && advParam.getStatsAct().equals("enter")) {
                 return false;
             }
-            if (!rule.getInterstitialType().contains(advParam.getStatsAct())) {
+            if (StringUtils.isNoneBlank(rule.getInterstitialType())
+                    && !rule.getInterstitialType().contains(advParam.getStatsAct())) {
                 return false;
             }
         }
