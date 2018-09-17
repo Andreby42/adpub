@@ -522,9 +522,10 @@ public abstract class AbstractManager {
             if (StringUtils.isBlank(advParam.getStatsAct())) {
                 return false;
             }
-            if (StringUtils.isBlank(rule.getInterstitialType()) && !rule.getInterstitialType().equals("enter")) {
+            if (StringUtils.isBlank(rule.getInterstitialType()) && rule.getInterstitialType().equals("enter")) {
                 return false;
-            } else if (!rule.getInterstitialType().contains(advParam.getStatsAct())) {
+            }
+            if (!rule.getInterstitialType().contains(advParam.getStatsAct())) {
                 return false;
             }
         }
