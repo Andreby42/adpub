@@ -61,6 +61,8 @@ public class Rule {
 	
 	private int fakeCount; // 每人误点击次数
     private int pfakeCount; // 每人每天误点击次数
+    
+    private String interstitialType; //进入插屏的方式， 三种:enter, tab, resume
 	
 	private int days; // 投放天数
 	private int perDayCount; // 每天投放次数
@@ -1243,6 +1245,14 @@ public class Rule {
 
     public void setPfakeCount(int pfakeCount) {
         this.pfakeCount = pfakeCount;
+    }
+
+    public String getInterstitialType() {
+        return interstitialType;
+    }
+
+    public void setInterstitialType(String interstitialType) {
+        this.interstitialType = interstitialType;
     }
 
 }

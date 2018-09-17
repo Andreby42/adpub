@@ -225,6 +225,7 @@ public class RuleEngine {
             rule.setPclickCount(getChildAsInt(rInfo, "pclickCount"));
             rule.setFakeCount(getChildAsInt(rInfo, "fakeCount"));
             rule.setPfakeCount(getChildAsInt(rInfo, "pfakeCount"));
+            rule.setInterstitialType(getChildAsText(rInfo, "interstitialType"));
             rule.setDays(getChildAsInt(rInfo, "days"));
             rule.setPerDayCount(getChildAsInt(rInfo, "perDayCount"));
             rule.setTotalCount(getChildAsInt(rInfo, "totalCount"));

@@ -516,6 +516,18 @@ public abstract class AbstractManager {
                     advParam.getLineId(), advParam.getStnName(), advParam.getStnOrder(), advParam.getUdid());
             return false;
         }
+        
+        // 首页插屏广告
+        if (showType == ShowType.INTERSHOME_ADV) {
+            if (StringUtils.isBlank(advParam.getStatsAct())) {
+                return false;
+            }
+            if (StringUtils.isBlank(rule.getInterstitialType()) && !rule.getInterstitialType().equals("enter")) {
+                return false;
+            } else if (!rule.getInterstitialType().contains(advParam.getStatsAct())) {
+                return false;
+            }
+        }
 
         // 站点名匹配
         if (!rule.isStationMatch(advParam.getStnName())) {
@@ -1021,10 +1033,10 @@ public abstract class AbstractManager {
         if(StringUtils.isNoneBlank(forTestStr))
             isforTempTest = Boolean.parseBoolean(forTestStr);
         if (isforTempTest) {
-            boolean isNew = UserHelper.isNewUser(p.getS(), p.getH5Src(), p.getUdid());
-            if (isNew) {
-                if (p.getUdid().startsWith("0") || p.getUdid().startsWith("1") || p.getUdid().startsWith("okBHq0A")
-                        || p.getUdid().startsWith("okBHq0B")) {
+            if (p.getUdid().startsWith("0") || p.getUdid().startsWith("1") || p.getUdid().startsWith("okBHq0A")
+                    || p.getUdid().startsWith("okBHq0B")) {
+                boolean isNew = UserHelper.isNewUser(p.getS(), p.getH5Src(), p.getUdid());
+                if (isNew) {
                     AnalysisLog.info("FORTEST, NOADRETURN, s={}, udid={}", p.getS(), p.getUdid());
 
                     return false;
