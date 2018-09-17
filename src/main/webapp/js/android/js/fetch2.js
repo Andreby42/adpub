@@ -318,6 +318,7 @@ function tryNthTaskGroup(rule, nth, callback) {
                 console.log('**************** sdkInfo=' + sdkInfo.task.aid() + ',' + sdkInfo.task.sdkname())
                 resp.aid = sdkInfo.task.aid();
                 resp.refreshTime = 15000;
+                resp.mixRefreshFloatAdInterval = 5000;//弹出浮窗广告最小请求间隔,每种类型界面单独记时
                 resp.mixRefreshAdInterval = 5000;
                 if(rule.closeInfo && rule.closeInfo.closePic) {
                     resp.closePic = rule.closeInfo.closePic;

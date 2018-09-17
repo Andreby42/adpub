@@ -78,11 +78,5 @@ String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
 			,"CLLEnergyMainViewController":"interstitialEnergyAd"   // 福利社
 			,"CLLMoreMainViewController":"interstitialMineAd"    //我
 		};
-	global.RuleCountMap = {
-		"interstitialHomeAd":1,
-		"interstitialTransitAd":1,
-		"interstitialEnergyAd":1,
-		"interstitialMineAd":1
-	}
 
 })(global);
