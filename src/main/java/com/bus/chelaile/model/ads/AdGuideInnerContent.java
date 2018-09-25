@@ -29,6 +29,8 @@ public class AdGuideInnerContent extends AdInnerContent {
 	private int groupId;
 	private int sort; // 排序
 	
+    private String markPic; // 带角标的图片
+	
 	
 	@Override
 	protected void parseJson(String jsonr) {
@@ -48,6 +50,7 @@ public class AdGuideInnerContent extends AdInnerContent {
 			this.desc = ad.desc;
 			this.groupId = ad.groupId;
 			this.sort = ad.sort;
+			this.markPic = ad.markPic;
 			if(StringUtils.isNotEmpty(ad.getServingPlace())) {
 				this.servingPlaceList = New.arrayList();
 				for(String s : ad.getServingPlace().split(",")) {

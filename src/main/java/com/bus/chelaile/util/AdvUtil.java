@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.common.ShortUrlUtil;
 import com.bus.chelaile.model.PropertiesName;
+import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
 import org.apache.commons.lang3.StringUtils;
@@ -428,6 +429,26 @@ public class AdvUtil {
         }
         return redirectUrl;
     }
+    
+    
+    public static String buildNewRedirectLink(String orgLink, AdvParam advParam) {
+        if (StringUtils.isBlank(orgLink)) {
+            return "";
+        }
+        
+        if(StringUtils.isNoneBlank(advParam.getUdid())) {
+            orgLink = orgLink.replaceAll(waildUrl, advParam.getUdid());
+        }
+        
+        if (StringUtils.isNoneBlank(advParam.getAccountId())) {
+            orgLink = orgLink.replaceAll(waildAccountId, advParam.getAccountId());
+        } else if(orgLink.contains(waildAccountId)){
+            orgLink = orgLink.substring(0, orgLink.length() - 12); // 12 是accountId=%ACCOUNTID%的长度
+        }
+        
+        return orgLink;
+    }
+    
 
     /* 加参数代码
     public static String buildRedirectLink(String orgLink, Map<String, String> paramsMap, String udid, boolean isUseShortUrl, boolean isRepeatParam) {

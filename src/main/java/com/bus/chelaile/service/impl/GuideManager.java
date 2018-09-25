@@ -45,8 +45,10 @@ public class GuideManager extends AbstractManager {
 		res.setLeadContent(inner.getDesc());
 		res.setRedPointTime(inner.getRedPointTime());
 		res.setSort(inner.getSort());
+		res.setMarkPic(inner.getMarkPic());
 		if(inner.getRedPoint() == 0) {
 		    res.setRedPointTime(-1);  // 不展示红点，这个时间给-1
+		    res.setMarkPic("");  // 红点的逻辑，转移到‘角标图片’上面了
 		}
 		res.setIconUrl(inner.getPic());
 		res.setLinkUrl(res.getLink());

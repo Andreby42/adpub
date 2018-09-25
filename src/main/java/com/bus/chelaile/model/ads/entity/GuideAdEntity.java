@@ -27,6 +27,9 @@ public class GuideAdEntity extends BaseAdEntity {
 	private int site;           // 位置 0 首页； 2  我的页面
 	@JSONField(serialize=false)
 	private int sort;
+	
+	private String markPic; // 带角标的图片
+	
 
 	public GuideAdEntity() {
 		super(ShowType.GUIDE_ADV.getValue());

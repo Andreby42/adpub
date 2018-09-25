@@ -61,7 +61,7 @@ function getAds(rule, userdata, callback) {
             data.sdk.refreshTime = 15000;
             data.sdk.traceInfo = rule.traceInfo;
             data.sdk.mixRefreshAdInterval = 5000;
-            data.sdk.mixRefreshFloatAdInterval = 60000;//弹出浮窗广告最小请求间隔,每种类型界面单独记时
+            data.sdk.mixRefreshFloatAdInterval = 5000;//弹出浮窗广告最小请求间隔,每种类型界面单独记时
             data.sdk.maxSplashTimeout = 8000;
             data.sdk.warmSplashIntervalTime = 30 * 60 * 1000;
 

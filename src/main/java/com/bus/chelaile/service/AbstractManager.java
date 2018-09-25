@@ -518,10 +518,8 @@ public abstract class AbstractManager {
         }
         
         // 首页插屏广告
-        if (showType == ShowType.INTERSHOME_ADV) {
-            if (StringUtils.isBlank(advParam.getStatsAct())) {
-                return false;
-            }
+        // stats_act不为空的时候，可能会不予返回
+        if (showType == ShowType.INTERSHOME_ADV && StringUtils.isNoneBlank(advParam.getStatsAct())) {
             if (StringUtils.isBlank(rule.getInterstitialType()) && advParam.getStatsAct().equals("enter")) {
                 return false;
             }

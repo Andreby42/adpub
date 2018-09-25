@@ -203,10 +203,13 @@ public abstract class BaseAdEntity {
 	}
 
 	protected void fillLink(AdContent ad, AdvParam advParam, Map<String, String> param) {
+//	    /**
+//	     * 2018-09-20，修改。从此广告不再走中转链接了
+//	     */
+//	    link = AdvUtil.buildNewRedirectLink(ad.getLink(), advParam);
+	    
 		param.put("udid", advParam.getUdid());
-
 		if (advParam.getS().equalsIgnoreCase(Platform.IOS.getDisplay()) && ad.getOpenType() == 1) { // IOS
-																									// 外部打开的时候，需要加上通用参数
 			param.put(Constants.PARAM_DEVICE, advParam.getDeviceType());
 			param.put(Constants.PARAM_LNG, advParam.getLng() + "");
 			param.put(Constants.PARAM_LAT, advParam.getLat() + "");
@@ -219,7 +222,6 @@ public abstract class BaseAdEntity {
 			param.put(Constants.PARAM_S, advParam.getS());
 			param.put(Constants.PARAM_ANDROID, advParam.getAndroidID());
 			param.put(Constants.PARAM_MAC, advParam.getMac());
-
 		}
 		//站点广告，加上站点的经纬度
 		if(ShowType.STATION_ADV.getType().equals(ad.getShowType()) && StringUtils.isNoneBlank(advParam.getStnName())) {
@@ -227,8 +229,6 @@ public abstract class BaseAdEntity {
 			param.put(Constants.PARAM_STATION_LAT, advParam.getStnLat());
 			param.put(Constants.PARAM_STATION_NAME_H5, URLEncoder.encode(advParam.getStnName()));
 		}
-		// TODO 临时for测试！！！
-//		link = ad.getLink();
 		link = AdvUtil.buildRedirectLink(ad.getLink(), genLinkParamMap(ad, param), advParam.getUdid(), false, true,
 				ad.getLink_extra());
 	}

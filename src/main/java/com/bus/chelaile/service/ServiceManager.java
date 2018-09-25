@@ -844,13 +844,11 @@ public class ServiceManager {
      */
     public Object getGuideAds(AdvParam advParam) {
         List<BaseAdEntity> guideAds = guideManager.doServiceList(advParam, ShowType.GUIDE_ADV, new QueryParam());
-//        logger.info("** entityes={}", JSONObject.toJSONString(guideAds));
         if (guideAds == null)
             return null;
 
         Map<Integer, GuideResultAd> groupAds = New.hashMap();
         List<BaseAdEntity> advs = New.arrayList();
-//        List<GuideResultAd> myAdvs = New.arrayList();
         Collections.sort(guideAds, new Comparator<BaseAdEntity>() {
             @Override
             public int compare(BaseAdEntity o1, BaseAdEntity o2) {

@@ -155,6 +155,16 @@ public class InfoStreamHelp {
             logger.info("ATRACE 点击日志解析结果：s={}, pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", s, pid, jsid,
                     aid, udid, adid, traceid, isFakeClick, isRateClick);
 
+            
+            // jsid!=adid 这种情况，需要记录的点击广告id，不再是jsid，而是adid
+            if(StringUtils.isNoneBlank(jsid) && StringUtils.isNoneBlank(adid) && !jsid.equals(adid)) {
+                TimeLong.info("ATRACE 点击日志解析结果, jsid != adid,说明下发了第三方广告和兜底广告，最终兜底生效 ：s={}, pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", s, pid,
+                        jsid, aid, udid, adid, traceid, isFakeClick, isRateClick);
+                AnalysisLog.info("ATRACE 点击日志解析结果：jsid != adid,说明下发了第三方广告和兜底广告，最终兜底生效：s={}, pid={}, jsid={}, aid={}, udid={}, adid={}, traceid={}, isFake={}, isRate={}", s, pid,
+                        jsid, aid, udid, adid, traceid, isFakeClick, isRateClick);
+                jsid = adid;
+            }
+            
             if (!StaticAds.allAds.containsKey(jsid)) {
                 if (!Constants.ISTEST) { // 线上需要打印这种情况，测试无需
                     logger.error("缓存中未发现广告,advId={}, line={}", jsid, line);

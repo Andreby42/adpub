@@ -171,10 +171,6 @@ public class HttpUtils {
 			post.setHeader("Content-type", contentType);
 		CloseableHttpResponse response = null;
 		try {
-			Request r = Request.parseFrom(bytes);
-			if(r != null)
-			    System.out.println("反序列化输入的对象：" + r.toString());
-			
 			response = HTTP_CLIENT.execute(post);
 			in = response.getEntity().getContent();
 			
