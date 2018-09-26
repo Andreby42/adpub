@@ -228,16 +228,6 @@ public class OCSCommonUtil {
         return objs;
     }
 
-    /**
-     * 从缓存里获取一个字符串，
-     *
-     * @param key
-     * @return
-     * @throws ClassCastException 如果对象类型不是字符串
-     */
-    public static String getStringValue(String key) {
-        return (String) get(key);
-    }
 
     /**
      * 尝试（多次）将一个值写入到memcached中，并且等待操作完成
