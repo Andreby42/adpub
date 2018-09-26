@@ -8972,3 +8972,9 @@ java.lang.NullPointerException
 java.lang.ArrayIndexOutOfBoundsException: 1
 	at com.bus.chelaile.kafka.InfoStreamHelp.analysisAtraceClick(InfoStreamHelp.java:160)
 	at com.bus.chelaile.kafka.InfoStreamHelp.main(InfoStreamHelp.java:236)
+[2018-09-25 16:11:56] [ERROR] - parseVersionStr 
+[2018-09-25 16:11:56] [ERROR] - [ERROR_VERSION] 错误版本号: versionStr=6.3.4.2
+[2018-09-25 16:13:20] [ERROR] - parseVersionStr 
+[2018-09-25 16:13:20] [ERROR] - [ERROR_VERSION] 错误版本号: versionStr=6.3.4.2
+[2018-09-25 16:14:58] [ERROR] - parseVersionStr 
+[2018-09-25 16:14:59] [ERROR] - [ERROR_VERSION] 错误版本号: versionStr=6.3.4.2

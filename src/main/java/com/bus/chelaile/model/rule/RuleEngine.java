@@ -263,6 +263,9 @@ public class RuleEngine {
                 rule.setExcludeVersions(excludeVersionsCmps);
             }
             
+            // 比这个版本低的android系统
+            VersionEntity lessThanAndroidSV = parseNoLessVersion(rInfo, "lessThanAndroidSV");
+            rule.setLessThanAndroidSV(lessThanAndroidSV);
             
             rule.setChatOrRide(getChildAsInt(rInfo, "chatOrRide"));
             rule.setIsClickEndPush(getChildAsInt(rInfo, "isClickEndPush"));

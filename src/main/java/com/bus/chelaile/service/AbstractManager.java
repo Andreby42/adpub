@@ -498,6 +498,14 @@ public abstract class AbstractManager {
                     advParam.getStartMode(), advParam.getUdid());
             return false;
         }
+        
+        if(rule.getLessThanAndroidSV() != null && advParam.getS() != null 
+                && advParam.getS().equals("android") && !rule.isAndroidSVMatch(advParam.getSv())) {
+            logger.info("android sv return false，advId={}, ruleId={}, sv={}, udid={}", ad.getId(), rule.getRuleId(),
+                    advParam.getSv(), advParam.getUdid());
+            return false;
+        }
+        
         if (rule.hasNetStatus() && !rule.isNetStatusMatch(advParam.getNw())) {
             return false;
         }

@@ -168,4 +168,21 @@ public class VersionEntity {
 		return NULL_OBJECT;
 	}
     
+	
+	public static void main(String[] args) {
+	    String v = "7";
+	    String v1 = "7.0";
+	    String v2 = "6.3.4";
+	    String v3 = "10";
+	    
+	    long t1 = System.currentTimeMillis();
+	    for(int i = 0; i < 100000; i ++) {
+	    VersionEntity ve = parseVersionStr(v);
+	    VersionEntity ve1 = parseVersionStr(v1);
+	    VersionEntity ve2 = parseVersionStr(v2);
+	    VersionEntity ve3 = parseVersionStr(v3);
+	    }
+	    System.out.println(System.currentTimeMillis() - t1);
+	    
+	}
 }

@@ -45,6 +45,8 @@ public class Rule {
 	private Map<VersionEntity, String> versions;
 	private Map<VersionEntity, String> excludeVersions;  // 排除的版本
 	
+	private VersionEntity lessThanAndroidSV;  // 低于android xxx版本
+	
 	private List<String> lines; // 线路详情的投放规则
 	private LocationKDTree kdTree;
 
@@ -499,6 +501,16 @@ public class Rule {
             }
         }
         
+        return true;
+    }
+    
+    public boolean isAndroidSVMatch(String androidSv) {
+        if (lessThanAndroidSV != null ) {
+            VersionEntity queryVersion = VersionEntity.parseVersionStr(androidSv);
+            if (queryVersion != null && queryVersion.compareTo(lessThanAndroidSV) >= 0) {
+                return false;
+            }
+        }
         return true;
     }
     
@@ -1253,6 +1265,14 @@ public class Rule {
 
     public void setInterstitialType(String interstitialType) {
         this.interstitialType = interstitialType;
+    }
+
+    public VersionEntity getLessThanAndroidSV() {
+        return lessThanAndroidSV;
+    }
+
+    public void setLessThanAndroidSV(VersionEntity lessThanAndroidSV) {
+        this.lessThanAndroidSV = lessThanAndroidSV;
     }
 
 }
