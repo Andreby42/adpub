@@ -66,56 +66,48 @@ public class JSService {
         queryParam.setJS(true);
         switch (site) {
             case "splash":
-                //                showType = ShowType.OPEN_SCREEN;
                 entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, queryParam);
                 break;
             case "home":
-                //                showType = ShowType.DOUBLE_COLUMN;
                 entities = doubleAndSingleManager.doServiceList(param, ShowType.DOUBLE_COLUMN, queryParam);
                 break;
 
             case "rightTop":
-                //                showType = ShowType.LINE_RIGHT_ADV;
                 entities = lineRightManager.doServiceList(param, ShowType.LINE_RIGHT_ADV, queryParam);
                 break;
             case "station":
-                //                showType = ShowType.STATION_ADV;
                 entities = stationAdsManager.doServiceList(param, ShowType.STATION_ADV, queryParam);
                 break;
 
             case "bottom":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = lineFeedAdsManager.doServiceList(param, ShowType.LINE_FEED_ADV, queryParam);
                 break;
-                
+
+            case "seek":
+                entities = otherManager.doServiceList(param, ShowType.SEEK_ADV, queryParam);
+                break;
+
             case "transfer":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.TRANSFER_ADV, queryParam);
                 break;
-                
+
             case "stationDetail":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.CAR_ALL_LINE_ADV, queryParam);
                 break;
 
             case "allCars":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.ALL_CAR_ADV, queryParam);
-                break; 
+                break;
             case "interstitialHome":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.INTERSHOME_ADV, queryParam);
                 break;
             case "interstitialTransit":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.INTERSTRANSIT_ADV, queryParam);
                 break;
             case "interstitialEnergy":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.INTERSENERGY_ADV, queryParam);
                 break;
             case "interstitialMine":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.INTERSMINE_ADV, queryParam);
                 break;
 
