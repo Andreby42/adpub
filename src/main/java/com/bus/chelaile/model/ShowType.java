@@ -34,7 +34,8 @@ public enum ShowType {
 	INTERSHOME_ADV("28"),     //首页插屏
 	INTERSTRANSIT_ADV("29"),     //路线页插屏
 	INTERSENERGY_ADV("30"),     //福利社插屏
-	INTERSMINE_ADV("31");     //我的页插屏
+	INTERSMINE_ADV("31"),     //我的页插屏
+    SEEK_ADV("32");     //搜索页广告
     
     private String type;
     private int val;

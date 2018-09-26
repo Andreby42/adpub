@@ -204,6 +204,19 @@ public class BusAdvActionV2 extends AbstractController {
     }
     
     @ResponseBody
+    @RequestMapping(value = "adv!getSeekAds.action", produces = "text/plain;charset=UTF-8")
+    public String getSeekAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+   //   String str = "**YGKJ{\"jsonr\":{\"data\":{\"ads\":[{\"apiType\":1,\"clickMonitorLink\":\"\",\"id\":10013305,\"imgsType\":0,\"link\":\"\",\"monitorType\":0,\"openType\":0,\"provider_id\":\"10\",\"showType\":24,\"targetType\":0,\"type\":3,\"picsList\":[\"https://image3.chelaile.net.cn/a2f29092cfe34beda37c23592d9c44b2#600,33\",\"https://image3.chelaile.net.cn/a2f29092cfe34beda37c23592d9c44b2#400,33\",\"https://image3.chelaile.net.cn/a2f29092cfe34beda37c23592d9c44b2#200,33\"],\"displayType\":4,\"unfoldMonitorLink\":\"\"}],\"autoInterval\":15000,\"unfoldFeed\":1,\"mixInterval\":5000,\"placementId\":\"1A3AFF2C97A22A174C6C75978C55B67D\"},\"errmsg\":\"\",\"status\":\"00\",\"sversion\":\"\"}}YGKJ##";
+        
+      //  return str;
+          AdvParam advParam = getActionParam(request);
+          advParam.setStartMode(getInt(request, "startMode"));
+
+          Object result = serviceManager.getCommont(advParam,ShowType.SEEK_ADV);
+          return serviceManager.getClienSucMap(result, Constants.STATUS_REQUEST_SUCCESS);
+    }
+    
+    @ResponseBody
     @RequestMapping(value = "adv!getGuideAds.action", produces = "text/plain;charset=UTF-8")
     public String getGuideAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         AdvParam advParam = getActionParam(request);

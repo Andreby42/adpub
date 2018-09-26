@@ -392,8 +392,40 @@ public class AdPubCacheRecord {
                 }
             }
 			
+            if (days > 0) {
+                if (dayCountMap.size() > days) { // 大于是不可能的，正确的情况下。
+                    return false;
+                } else if (dayCountMap.size() == days) {
+                    // 没有的情况就说名已经到了次数
+                    if (!dayCountMap.containsKey(todayStr)) {
+                        return false;
+                    }
+                }
+            }
+           
+            if (perDayCount > 0) {
+                // 线路详情特殊处理
+                //  每天投放次数：针对某个用户，每天投放几次。如果前面设置了cacheTime，则这里设置的投放次数必须在cacheTime时间内达到，
+                //              否则超时以后对同一用户会重新计数。例如假设设置广告每天投放次数为5，cacheTime为600（10分钟），
+                //              如果用户在早高峰时10分钟内只看到了2次广告，那么晚高峰时仍然认为需要给该用户投递5次广告
+                if (rule.getCacheTime() > 0) {
+                    int adCount = getAdTimeCountsQueryCount(rule.getRuleId());
+                    logger.debug("getAdTimeCountsQueryCount:" + adCount + ",ruleId:" + rule.getRuleId());
+                    if (adCount >= perDayCount) {
+                        return false;
+                    }
+                    return true; // 设置了cacheTime,有可能直接返回ture，而不进行接下来的总次数判断
+                }
+
+                if (dayCountMap.containsKey(todayStr)) {
+                    if (dayCountMap.get(todayStr) >= perDayCount) {
+                        return false;
+                    }
+                }
+            }
+            
 			
-			if (days > 0 && perDayCount > 0) { // 说明没有配置点击次数属性，配置了每天多少次规则
+			/*if (days > 0 && perDayCount > 0) { // 说明配置了每天多少次规则
 				if (dayCountMap.size() > days) { // 大于是不可能的，正确的情况下。
 					return false;
 				} else {
@@ -425,26 +457,8 @@ public class AdPubCacheRecord {
 						}
 					}
 				}
-			} 
+			} */
 			
-//			else if (days > 0 && totalCount > 0) { // 说明没有配置点击次数属性，配置了总共多少次规则
-//				if (dayCountMap.size() > days) { // 大于是不可能的，正确的情况下。
-//					return false;
-//				} else {
-//					int pubCount = 0;
-//					for (String key : dayCountMap.keySet()) {
-//						pubCount += dayCountMap.get(key);
-//					}
-//					if (pubCount >= totalCount) {
-//						return false;
-//					}
-//				}
-//			}
-			/*
-			 * else { // 默认 3次 ， 每天 (有可能只是浮屏广告有这一需求) if
-			 * (dayCountMap.containsKey(todayStr)) { if
-			 * (dayCountMap.get(todayStr) >= 3) { return false; } } }
-			 */
 		}
 		return true;
 	}
