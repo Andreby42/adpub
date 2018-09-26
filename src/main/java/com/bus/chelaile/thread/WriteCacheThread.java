@@ -257,7 +257,9 @@ public class WriteCacheThread implements Runnable {
 			if (record == null) {
 				continue;
 			}
-			if (record.getDayCountMap().size() == 0 && record.getDayClickMap().size() == 0) {
+			if (record.getDayCountMap().size() == 0 
+//			        && record.getDayClickMap().size() == 0
+			        ) {
 			    it.remove();
 			    continue;
 			}

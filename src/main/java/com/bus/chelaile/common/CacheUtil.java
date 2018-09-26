@@ -363,6 +363,25 @@ public class CacheUtil {
     	OCSCommonUtil.set(key, exp, obj);
     }
     
+    // wechatocs查询
+    public static String getFromWechatOcs(String key) {
+        
+        if( Constants.ISDEV ) {
+            Object j = redisClient.get(key);
+            if(j == null)
+                return null;
+            else
+                return String.valueOf(j);
+        }
+        
+//      Object j = cacheCommonClient.get(key);
+        Object j = OCSWechatUtil.get(key);
+        if(j == null)
+            return null;
+        else
+            return String.valueOf(j);
+    }
+    
     
 //    // 从BUS redis中获取数据
 //    public static Object getFromBUSRedis(String key){

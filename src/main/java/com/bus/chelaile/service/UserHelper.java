@@ -54,7 +54,8 @@ public class UserHelper {
                 //            wechat#unionId#2#openid
                 //            value
                 //            unionId#createTime
-                String createTimeStr = CacheUtil.getFromCommonOcs(key);
+//                String createTimeStr = CacheUtil.getFromCommonOcs(key);
+                String createTimeStr = CacheUtil.getFromWechatOcs(key);
                 if (StringUtils.isNotEmpty(createTimeStr)) {
                     String buf[] = createTimeStr.split("#");
                     if (buf.length >= 2) {
