@@ -85,7 +85,8 @@ function load(task, rule, userdata, fetchTimeout, callback) {
         "TOUTIAOSDK": "CLLTTSdk",
         "IFLYSDK": "CLLIflySdk",
         "InMobiSdk": "CLLInMobiSdk",
-        "AdViewSDK": "CLLAdViewSdk"
+        "AdViewSDK": "CLLAdViewSdk",
+        "ADMobSDK":"CLLAdMobileSdk"
     };
     var requestInfo = task.adurl_ios();
     if (requestInfo.url && requestInfo.url.toLowerCase().indexOf("http") == 0) {
@@ -124,13 +125,13 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                     if (task_filter && data) {
                         data.adEntityArray = task_filter(data.adEntityArray);
                     }
-                    console.log("1info info = "+info);
+
                     if (userdata &&  data.adEntityArray && data.adEntityArray.length > 0) {
                         var info = data.adEntityArray[0].info;
                         if(userdata.startMode){
                             info.startMode = userdata.startMode;
                         }
-                        console.log("info info = "+info);
+
                         info.isSplash = true;
                         if(info.provider_id != 1 && !info.link) {
                             info.targetType = 1;
@@ -156,12 +157,25 @@ function load(task, rule, userdata, fetchTimeout, callback) {
         TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadBanner, { userdata: userdata, rule: rule, task: task });
 
         if (task.adStyle) {
+
+            var deviceObject = GetDeviceInfoObject() || {};
+            var screenWidth = ((deviceObject.screenWidth || 750) / (deviceObject.dpi || 2));
+            var rule_pid = rule.traceInfo.pid;
+
+            if(rule_pid != '25' && rule_pid != '26' && rule_pid != '32')
+            {
+                screenWidth -= 16;
+            }
+            var screenHeight = screenWidth / 4;
+
             var style = task.adStyle();
             var sizeObj = {
                 "1": { showWidth: 180, showHeight: 88 },
                 "2": { showWidth: 96, showHeight: 64 },
-                "5": { showWidth: 96, showHeight: 64 }
+                "5": { showWidth: 96, showHeight: 64 },
+                "8": { showWidth: screenWidth, showHeight: screenHeight }
             };
+
             var showSize = sizeObj[style + ""];
             if (showSize) {
                 userdata.showWidth = showSize.showWidth;
@@ -230,8 +244,8 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                                 if(task.sdkname() == 'sdk_gdt') {
 
                                     var traceid = rule && rule.traceInfo && rule.traceInfo.traceid;
-                                    if ( 
-                                        /^e/.test(traceid) &&  
+                                    if (
+                                        /^e/.test(traceid) &&
                                         (   (info.head && info.head.contains("京东")) || (info.subhead && info.subhead.contains("京东")) || (info.head && info.head.contains("杜蕾斯")) || (info.subhead && info.subhead.contains("杜蕾斯")) )
                                      )
                                     {

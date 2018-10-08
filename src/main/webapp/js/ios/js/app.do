@@ -1,1 +1,980 @@
-"use strict";var _typeof2="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};String.prototype.contains=String.prototype.contains||function(e){return 0<=this.indexOf(e)},String.prototype.startsWith=String.prototype.startsWith||function(e){return 0===this.indexOf(e)},String.prototype.endsWith=String.prototype.endsWith||function(e){return 0<=this.indexOf(e,this.length-e.length)},function(i){var o={},s=i.require;i.require=function(e,t,a){try{var r,n=e;return n.startsWith("./")&&(n=n.slice(2)),n.endsWith(".do")||(n+=".do"),t||a?r=s.apply(this,arguments):"function"!=typeof(r=o[n])&&(r=s.apply(this,arguments),o[n]=r),r?r(i):function(){}}catch(e){throw console.log("e="+e),delete o[n],e}},i.AddModule=function(e,t){o[e]=t},function(e){function c(e,t){var a=(65535&e)+(65535&t);return(e>>16)+(t>>16)+(a>>16)<<16|65535&a}function s(e,t,a,r,n,i){return c((o=c(c(t,e),c(r,i)))<<(s=n)|o>>>32-s,a);var o,s}function f(e,t,a,r,n,i,o){return s(t&a|~t&r,e,t,n,i,o)}function p(e,t,a,r,n,i,o){return s(t&r|a&~r,e,t,n,i,o)}function h(e,t,a,r,n,i,o){return s(t^a^r,e,t,n,i,o)}function k(e,t,a,r,n,i,o){return s(a^(t|~r),e,t,n,i,o)}function d(e,t){e[t>>5]|=128<<t%32,e[14+(t+64>>>9<<4)]=t;var a,r,n,i,o,s=1732584193,d=-271733879,l=-1732584194,u=271733878;for(a=0;a<e.length;a+=16)d=k(d=k(d=k(d=k(d=h(d=h(d=h(d=h(d=p(d=p(d=p(d=p(d=f(d=f(d=f(d=f(n=d,l=f(i=l,u=f(o=u,s=f(r=s,d,l,u,e[a],7,-680876936),d,l,e[a+1],12,-389564586),s,d,e[a+2],17,606105819),u,s,e[a+3],22,-1044525330),l=f(l,u=f(u,s=f(s,d,l,u,e[a+4],7,-176418897),d,l,e[a+5],12,1200080426),s,d,e[a+6],17,-1473231341),u,s,e[a+7],22,-45705983),l=f(l,u=f(u,s=f(s,d,l,u,e[a+8],7,1770035416),d,l,e[a+9],12,-1958414417),s,d,e[a+10],17,-42063),u,s,e[a+11],22,-1990404162),l=f(l,u=f(u,s=f(s,d,l,u,e[a+12],7,1804603682),d,l,e[a+13],12,-40341101),s,d,e[a+14],17,-1502002290),u,s,e[a+15],22,1236535329),l=p(l,u=p(u,s=p(s,d,l,u,e[a+1],5,-165796510),d,l,e[a+6],9,-1069501632),s,d,e[a+11],14,643717713),u,s,e[a],20,-373897302),l=p(l,u=p(u,s=p(s,d,l,u,e[a+5],5,-701558691),d,l,e[a+10],9,38016083),s,d,e[a+15],14,-660478335),u,s,e[a+4],20,-405537848),l=p(l,u=p(u,s=p(s,d,l,u,e[a+9],5,568446438),d,l,e[a+14],9,-1019803690),s,d,e[a+3],14,-187363961),u,s,e[a+8],20,1163531501),l=p(l,u=p(u,s=p(s,d,l,u,e[a+13],5,-1444681467),d,l,e[a+2],9,-51403784),s,d,e[a+7],14,1735328473),u,s,e[a+12],20,-1926607734),l=h(l,u=h(u,s=h(s,d,l,u,e[a+5],4,-378558),d,l,e[a+8],11,-2022574463),s,d,e[a+11],16,1839030562),u,s,e[a+14],23,-35309556),l=h(l,u=h(u,s=h(s,d,l,u,e[a+1],4,-1530992060),d,l,e[a+4],11,1272893353),s,d,e[a+7],16,-155497632),u,s,e[a+10],23,-1094730640),l=h(l,u=h(u,s=h(s,d,l,u,e[a+13],4,681279174),d,l,e[a],11,-358537222),s,d,e[a+3],16,-722521979),u,s,e[a+6],23,76029189),l=h(l,u=h(u,s=h(s,d,l,u,e[a+9],4,-640364487),d,l,e[a+12],11,-421815835),s,d,e[a+15],16,530742520),u,s,e[a+2],23,-995338651),l=k(l,u=k(u,s=k(s,d,l,u,e[a],6,-198630844),d,l,e[a+7],10,1126891415),s,d,e[a+14],15,-1416354905),u,s,e[a+5],21,-57434055),l=k(l,u=k(u,s=k(s,d,l,u,e[a+12],6,1700485571),d,l,e[a+3],10,-1894986606),s,d,e[a+10],15,-1051523),u,s,e[a+1],21,-2054922799),l=k(l,u=k(u,s=k(s,d,l,u,e[a+8],6,1873313359),d,l,e[a+15],10,-30611744),s,d,e[a+6],15,-1560198380),u,s,e[a+13],21,1309151649),l=k(l,u=k(u,s=k(s,d,l,u,e[a+4],6,-145523070),d,l,e[a+11],10,-1120210379),s,d,e[a+2],15,718787259),u,s,e[a+9],21,-343485551),s=c(s,r),d=c(d,n),l=c(l,i),u=c(u,o);return[s,d,l,u]}function l(e){var t,a="",r=32*e.length;for(t=0;t<r;t+=8)a+=String.fromCharCode(e[t>>5]>>>t%32&255);return a}function u(e){var t,a=[];for(a[(e.length>>2)-1]=void 0,t=0;t<a.length;t+=1)a[t]=0;var r=8*e.length;for(t=0;t<r;t+=8)a[t>>5]|=(255&e.charCodeAt(t/8))<<t%32;return a}function r(e){var t,a,r="";for(a=0;a<e.length;a+=1)t=e.charCodeAt(a),r+="0123456789abcdef".charAt(t>>>4&15)+"0123456789abcdef".charAt(15&t);return r}function a(e){return unescape(encodeURIComponent(e))}function n(e){return l(d(u(t=a(e)),8*t.length));var t}function i(e,t){return function(e,t){var a,r,n=u(e),i=[],o=[];for(i[15]=o[15]=void 0,16<n.length&&(n=d(n,8*e.length)),a=0;a<16;a+=1)i[a]=909522486^n[a],o[a]=1549556828^n[a];return r=d(i.concat(u(t)),512+8*t.length),l(d(o.concat(r),640))}(a(e),a(t))}function t(e,t,a){return t?a?i(t,e):r(i(t,e)):a?n(e):r(n(e))}"function"==typeof define&&define.amd?define(function(){return t}):e.md5=t}(i),i.JsEncryptUtil={},i.JsEncryptUtil.md5=i.md5,i.GetDeviceInfoObject=function(){var e=GetDeviceInfo(),a={};if(e){var t=e.split("&");t&&t.length&&t.forEach(function(e){var t=e.split("=");t[0]&&t[1]&&(a[t[0]]=t[1])})}return a},i.RuleMap={CLLHomeViewController:"interstitialHomeAd",CLLTransferMainViewController:"interstitialTransitAd",CLLEnergyMainViewController:"interstitialEnergyAd",CLLMoreMainViewController:"interstitialMineAd"}}(global),global.AddModule("event.do",function(e){var y={};return e=e||this,exports={},y.exports=exports,function(e,t,a){var o,n="https://atrace.chelaile.net.cn/thirdSimple",s="https://atrace.chelaile.net.cn/thirdPartyResponse";if("function"==typeof GetConfig){var r=GetConfig();o="dev"==r.server?"https://dev.chelaile.net.cn/adpub/adv!closeAd.action":"stage"==r.server?"https://stage.chelaile.net.cn/adpub/adv!closeAd.action":"https://api.chelaile.net.cn/adpub/adv!closeAd.action"}function d(e,t,a){var r=function(e,t){var a="",r="",n="";if(0<=e.indexOf("#")){var i=e.split("#");a=0<=i[0].indexOf("?")?i[0]+"&":i[0]+"?",r="#"+i.slice(1).join("#")}else a=0<=e.indexOf("?")?e+"&":e+"?";for(var o in t)n+="&"+o+"="+encodeURIComponent(t[o]);return a+n+r}(e,t);null!=a&&null!=a&&"string"!=typeof a&&(a=JSON.stringify(a)),a?Http.post(r,null,a,5e3,function(e,t,a){console.log("sendTrackRequest ret="+e+" response.header="+JSON.stringify(OCValueForKey(t,"allHeaderFields"))+" error="+a)}):Http.get(r,null,5e3,function(e,t,a){console.log("sendTrackRequest ret="+e+" response.header="+JSON.stringify(OCValueForKey(t,"allHeaderFields"))+" error="+a)})}function l(e,t,a){null!=a&&null!=a&&(e[t]=a)}function u(e,t){var a={},r=t.info||{},n=e.traceInfo||{},i=GetDeviceInfoObject()||{},o=r.picsList,s="";return o&&o.length&&(s=o.join(";")),l(a,"adv_image",s),l(a,"traceid",n.traceid),l(a,"pid",n.pid),l(a,"jsid",n.jsid||0),l(a,"aid",e.aid),l(a,"ad_order",r.ad_order),l(a,"adid",r.adid),l(a,"startMode",r.startMode),l(a,"stats_act",r.stats_act),l(a,"viewstatus",t.viewstatus),l(a,"req_timestamp",+new Date),l(a,"s",i.s),l(a,"v",i.v),l(a,"idfa",i.idfa||""),l(a,"is_backup",r.is_backup||0),a}function i(e,t){var a=u(e,t),r=t.info||{};e.traceInfo;if(l(a,"show_status",r.show_status||0),l(a,"cost_time",r.cost_time),l(a,"adv_title",r.head),l(a,"adv_desc",r.subhead),d("https://atrace.chelaile.net.cn/exhibit",a),r.unfoldMonitorLink&&r.actionMonitorLink){var n=r.actionMonitorLink.replace("{action}","5"),i=+new Date+"";i=String(i).slice(0,-3),n=(n=n.replace("{time}",i)).replace("{play_time}","0"),d(r.unfoldMonitorLink,{}),d(n,{})}}function c(e,t){var a=u(e,t),r=t.info||{};e.traceInfo;if(l(a,"adv_title",r.head),l(a,"adv_desc",r.subhead),l(a,"isFakeClick",r.isFakeClick||0),l(a,"isRateClick",r.isRateClick||0),d("https://atrace.chelaile.net.cn/click",a),r.actionMonitorLink){var n=r.actionMonitorLink.replace("{action}","6"),i=+new Date+"";i=String(i).slice(0,-3),d(n=(n=n.replace("{time}",i)).replace("{play_time}","0"),{})}r.clickMonitorLink&&d(r.clickMonitorLink,{})}function f(e,t){d("https://atrace.chelaile.net.cn/close",u(e,t));var a=t.info||{};if(a.isSplash||a.isFloat){if(a.actionMonitorLink){var r=a.actionMonitorLink.replace("{action}","7"),n=+new Date+"";n=String(n).slice(0,-3),d(r=(r=r.replace("{time}",n)).replace("{play_time}","0"),{})}}else!function(e,t){if(o){var a=u(e,t),r=t.info||{},n=(e.traceInfo,r.picsList),i="";n&&n.length&&(i=n.join(";")),l(a,"adv_image",i),l(a,"adv_title",r.head),d(o+"?"+GetDeviceInfo(),a)}}(e,t)}function p(e){var t={},a=(e=e||{}).task||{},r=e.rule||{},n=e.userdata||{},i=GetDeviceInfoObject()||{};return r.traceInfo&&(l(t,"traceid",r.traceInfo.traceid),l(t,"pid",r.traceInfo.pid)),a.aid&&l(t,"aid",a.aid()),l(t,"req_timestamp",+new Date),l(t,"eventId",n.uniReqId),l(t,"s",i.s),l(t,"v",i.v),t}function h(e){var t=p(e),a=((e=e||{}).task,e.rule,e.data||{}),r=function(e){if(e&&e.adEntityArray&&0<e.adEntityArray.length)return e.adEntityArray[0].info}(a),n=r||{};l(t,"ad_order",n.ad_order),l(t,"adid",n.adid),l(t,"req_time",(a.sdk&&a.sdk.didReqTime||0)-(a.sdk&&a.sdk.willReqTime||0)),l(t,"ad_status",r?1:0),l(t,"resp_size",a.contentLength),e.error?l(t,"code",e.error):l(t,"code",OCValueForKey(a.extensionData,"statusCode"));var i={};l(i,"adv_title",n.head),l(i,"adv_desc",n.subhead),l(i,"icon_image",n.pic),l(i,"main_image",n.picsList),l(i,"link",n.link),l(i,"url_type",n.adType),d(s,t,i)}function k(e,t,a){var r;console.log("trackEvent eventId="+e+" eventType="+t+" params="+JSON.stringify(a||{})),t==TrackClass.Type.LoadSplash||t==TrackClass.Type.LoadBanner?(r=p(a),d(n,r)):t==TrackClass.Type.LoadedSplash||t==TrackClass.Type.LoadedBanner?h(a):t!=TrackClass.Type.FailedSplash&&t!=TrackClass.Type.FailedBanner||h(a)}a.trackEvent=k,y.exports={trackExhibit:i,trackClick:c,trackClose:f,trackEvent:k},a.TrackClass={trackExhibit:i,trackClick:c,trackClose:f,trackEvent:k,Type:{LoadSplash:"LoadSplash",LoadBanner:"LoadBanner",LoadedSplash:"LoadedSplash",LoadedBanner:"LoadedBanner",FailedSplash:"FailedSplash",FailedBanner:"FailedBanner",AllAdTimeout:"AllAdTimeout",FetchedAd:"FetchedAd",NoDataLastGroup:"NoDataLastGroup"}}}(0,exports,e),y.exports}),global.AddModule("fetch.do",function(e){var o={};return e=e||this,exports={},o.exports=exports,function(e,t,a){var n="function"==typeof Symbol&&"symbol"===_typeof2(Symbol.iterator)?function(e){return void 0===e?"undefined":_typeof2(e)}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":void 0===e?"undefined":_typeof2(e)};var r={};function i(e){var a=[];return(e=e||[]).forEach(function(e){var t=function(e){var t=r["sdk"];if(!t){try{t=require("sdks/"+"sdk")}catch(e){console.log(e)}t&&(r.sdk=t)}return t}(e.sdkname());t&&a.push({task:e,sdk:t})}),a}var f=1e3,p=2e3;function h(){return(new Date).getTime()}o.exports=function(t,e,a){if(!t)return a(null);Array.isArray(t.timeouts)&&(f=t.timeouts[0]||f,p=t.timeouts[1]||p);var r=function(e){e&&"object"==(void 0===e?"undefined":n(e))&&e.sdk&&(e.sdk.refreshTime=15e3,e.sdk.traceInfo=t.traceInfo,e.sdk.mixRefreshAdInterval=5e3,e.sdk.mixRefreshFloatAdInterval=5e3,e.sdk.maxSplashTimeout=8e3,e.sdk.warmSplashIntervalTime=18e5),a(e)};r.userdata=e,!t.tasks||t.tasks.length<=0?a(null):function t(o,a,s){var r=o.tasks;function d(e){return e?(TrackClass.trackEvent(s.userdata.uniReqId,TrackClass.Type.FetchedAd,{data:e,rule:o,userdata:s.userdata}),s(e)):a==r.length-1?(TrackClass.trackEvent(s.userdata.uniReqId,TrackClass.Type.NoDataLastGroup,{rule:o,userdata:s.userdata}),s(null)):void t(o,a+1,s)}function l(a){n&&clearInterval(n),c.forEach(function(e,t){t!==a&&e.sdk.stop2&&e.sdk.stop2(e.task)})}function e(){var e=h()-u;if(f+p<e)return TrackClass.trackEvent(s.userdata.uniReqId,TrackClass.Type.AllAdTimeout,{used:e,rule:o,userdata:s.userdata}),l(),void d(null);for(var t,a,r=0,n=0,i=0;i<c.length;i++)if(t=c[i],null!=(a=t._result)&&(r++,a[0]&&(n++,f<e||0==i)))return l(i),void d(a[0]);r>=c.length&&(0==n?(console.log("All finish without any succeed."),l(),d(null)):(l(),0<minIndex&&minIndex<c.length-1&&(t=c[minIndex],d((a=t._result)[0]))))}e._count=0;var u=h(),c=i(r[a]);c.forEach(function(t){var e=t.task.adurl_ios();console.log("try sdk: "+e.url),t.sdk.load(t.task,o,s.userdata,f+p,function(e){console.log("uniReqId="+s.userdata.uniReqId+" data comes "+e),t._result=[e]})});var n=setInterval(e,50)}(t,0,r)}}(0,exports),o.exports}),global.AddModule("sdks/sdk.do",function(global){var module={};return global=global||this,exports={},module.exports=exports,function(moudle,exports,global){var RENDER_MSG="render_ok";function getCloseLayout(){return{class:"RelativeLayout",layout_width:"match_parent",layout_height:"match_parent",background:"@color/clear",children:[{class:"RelativeLayout",layout_width:"wrap_content",layout_height:"wrap_content",children:[{class:"ImageView",id:"bannericon",layout_width:"24dp",layout_height:"24dp",action:"@selector/clickAdvertise:event:",clickable:"true"},{class:"RelativeLayout",layout_width:"24dp",layout_height:"24dp",layout_centerInParent:"true",action:"@selector/closeAdvertise:",clickable:"true"}]}]}}function loadHttpPost(e,t,a,r,n){Http.post(e,t,a,r,function(e,t,a){n(e,t,a)})}function loadThirdPostApiIfNeed(n,e,i,o){var t=!1;if(i&&i.adEntityArray&&i.adEntityArray.length&&n.data&&n.data.ad_data&&"AsyncPostData"==n.data.ad_data){var a="";n.data.postData&&(a=JSON.stringify(n.data.postData)),t=!0,i.adEntityArray[0].info=void 0,loadHttpPost(n.data.placementId,null,a,e,function(e,t,a){if(n.data.dataFormater&&n.data.dataFormater.parse&&e){var r=n.data.dataFormater.parse(e);r&&r.length?(i.sdk&&(i.sdk.finishedReqTime=+new Date,i.sdk.didReqTime=+new Date),i.adEntityArray[0].info=r[0],o()):o("-90003")}else o(OCValueForKey(a,"code"))})}t||o()}function load(task,rule,userdata,fetchTimeout,callback){var sdknameMap={GDTSDK:"CLLGdtSdk",BaiduSDK:"CLLBaiduSdk",TOUTIAOSDK:"CLLTTSdk",IFLYSDK:"CLLIflySdk",InMobiSdk:"CLLInMobiSdk",AdViewSDK:"CLLAdViewSdk"},requestInfo=task.adurl_ios();requestInfo.url&&0==requestInfo.url.toLowerCase().indexOf("http")?(requestInfo.data=requestInfo.data||{},requestInfo.data.placementId=requestInfo.url,requestInfo.url="CLLAdApi"):requestInfo.url&&sdknameMap[requestInfo.url]&&(requestInfo.url=sdknameMap[requestInfo.url]);var vendor=requestInfo.url,sdkIns=newInstance(requestInfo.url);if(!sdkIns)return callback(null);if(requestInfo.type=requestInfo.type||requestInfo.pos,"splash"==requestInfo.type)TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.LoadSplash,{userdata:userdata,rule:rule,task:task}),sdkIns.loadSplash(requestInfo.data,userdata,fetchTimeout,function(r){loadThirdPostApiIfNeed(requestInfo,fetchTimeout,r,function(e){if(e)return TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.FailedSplash,{error:e,des:""+e,userdata:userdata,data:r,rule:rule,task:task}),void callback(null);try{task.aid&&r.sdk&&(r.sdk.aid=task.aid());var t=task.filter_ios;if(t&&r&&(r.adEntityArray=t(r.adEntityArray)),console.log("1info info = "+a),userdata&&r.adEntityArray&&0<r.adEntityArray.length){var a=r.adEntityArray[0].info;userdata.startMode&&(a.startMode=userdata.startMode),console.log("info info = "+a),a.isSplash=!0,1==a.provider_id||a.link||(a.targetType=1),r.adEntityArray[0].info=a}TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.LoadedSplash,{data:r,userdata:userdata,rule:rule,task:task}),callback(r)}catch(e){TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.FailedSplash,{error:"-91000",des:""+e,requestInfo:requestInfo,userdata:userdata,rule:rule,task:task}),callback(null)}})},function(e){e=e||"-90000",TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.FailedSplash,{error:e,requestInfo:requestInfo,userdata:userdata,rule:rule,task:task}),callback(null)});else if("banner"==requestInfo.type){if(TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.LoadBanner,{userdata:userdata,rule:rule,task:task}),task.adStyle){var style=task.adStyle(),sizeObj={1:{showWidth:180,showHeight:88},2:{showWidth:96,showHeight:64},5:{showWidth:96,showHeight:64}},showSize=sizeObj[style+""];showSize&&(userdata.showWidth=showSize.showWidth,userdata.showHeight=showSize.showHeight)}sdkIns.loadBanner(requestInfo.data,userdata,fetchTimeout,function(data){function callResult(errorCode){if(errorCode)return TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.FailedBanner,{error:errorCode,des:""+errorCode,userdata:userdata,data:data,rule:rule,task:task}),void callback(null);try{task.aid&&data.sdk&&(data.sdk.aid=task.aid());var task_filter=task.filter_ios;if(task_filter&&data&&(data.adEntityArray=task_filter(data.adEntityArray)),data&&data.adEntityArray)for(var closePic=rule&&rule.closeInfo&&rule.closeInfo.closePic,hostSpotSize=rule&&rule.closeInfo&&rule.closeInfo.hostSpotSize,fakeRate=rule&&rule.closeInfo&&rule.closeInfo.fakeRate,i=0;i<data.adEntityArray.length;i++){var adentity=data.adEntityArray[i],info=adentity.info;if(info){if(closePic&&(info.closePic=closePic,info.isDisplay=1,info.isSkip=1,info.hostSpotSize=hostSpotSize,info.fakeRate=eval(fakeRate)),task.adStyle&&(info.displayType=""==task.adStyle()?2:parseInt(task.adStyle())),info.displayType&&(info.displayType=parseInt(info.displayType)),info.head=info.head||"",info.subhead=info.subhead||"",info.stats_act=userdata.stats_act,info.head.length>info.subhead.length){var tstr=info.subhead;info.subhead=info.head,info.head=tstr}if(userdata.startMode&&(info.startMode=userdata.startMode,info.isSplash=!0,1==info.provider_id||info.link||(info.targetType=1)),info.closePic){info.layout=getCloseLayout();var imageView=info.layout.children[0].children[0];imageView.url=info.closePic;var imageViewParant=info.layout.children[0];switch(info.displayType){case 1:imageViewParant.layout_alignParentRight="true",imageViewParant.layout_alignParentBottom="true",imageViewParant.layout_marginBottom="8dp";var object=GetDeviceInfoObject();640<object.screenWidth?imageViewParant.layout_marginRight="192dp":imageViewParant.layout_marginRight="165dp";break;case 2:case 5:imageViewParant.layout_alignParentRight="true",imageViewParant.layout_alignParentBottom="true",imageViewParant.layout_marginBottom="8dp",imageViewParant.layout_marginRight="120dp";break;case 3:case 4:imageViewParant.layout_alignParentRight="true",imageViewParant.layout_marginTop="8dp",imageViewParant.layout_marginRight="8dp"}var btn=info.layout.children[0].children[1];0<=eval(info.hostSpotSize)&&eval(info.hostSpotSize)<=24&&(btn.layout_width=info.hostSpotSize+"dp",btn.layout_height=info.hostSpotSize+"dp")}adentity.info=info}}TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.LoadedBanner,{userdata:userdata,data:data,rule:rule,task:task}),callback(data)}catch(e){TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.FailedBanner,{error:"-91001",des:""+e,userdata:userdata,data:data,rule:rule,task:task}),callback(null)}}loadThirdPostApiIfNeed(requestInfo,fetchTimeout,data,callResult)},function(e,t,a){e=e||"-90001",TrackClass.trackEvent(userdata.uniReqId,TrackClass.Type.FailedBanner,{error:e,requestInfo:requestInfo,userdata:userdata,data:t,rule:rule,task:task}),callback(null)})}}function stop2(e){e.adurl_ios().url}module.exports={load:load,stop2:stop2}}(module,exports,global),module.exports}),require("./event");
+'use strict';
+
+String.prototype.contains = String.prototype.contains || function(str) {
+	return this.indexOf(str) >= 0;
+};
+
+String.prototype.startsWith = String.prototype.startsWith || function(prefix) {
+	return this.indexOf(prefix) === 0;
+};
+
+String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
+	return this.indexOf(suffix, this.length - suffix.length) >= 0;
+};
+
+(function (global) {
+    var moduleCaches = {};
+    var systemRequire = global.require;
+    global.require = function (filename, noCache, forceUpdate) {
+        try {
+            var name = filename;
+            if (name.startsWith('./')) {
+                name = name.slice(2);
+            }
+            if (!name.endsWith('.do')) {
+                name += '.do';
+            }
+
+            var ret;
+            if (noCache || forceUpdate) {
+                ret = systemRequire.apply(this, arguments);
+            } else {
+                ret = moduleCaches[name];
+                if (!(typeof ret === 'function')) {
+                    ret = systemRequire.apply(this, arguments);
+                    moduleCaches[name] = ret;
+                }
+            }
+
+            return ret ? ret(global) : function () {};
+        } catch (e) {
+            console.log('e=' + e);
+            delete moduleCaches[name];
+            throw e;
+        }
+    };
+
+    global.AddModule = function (name, code) {
+        moduleCaches[name] = code;
+    };
+
+
+	!function(n){"use strict";function t(n,t){var r=(65535&n)+(65535&t);return(n>>16)+(t>>16)+(r>>16)<<16|65535&r}function r(n,t){return n<<t|n>>>32-t}function e(n,e,o,u,c,f){return t(r(t(t(e,n),t(u,f)),c),o)}function o(n,t,r,o,u,c,f){return e(t&r|~t&o,n,t,u,c,f)}function u(n,t,r,o,u,c,f){return e(t&o|r&~o,n,t,u,c,f)}function c(n,t,r,o,u,c,f){return e(t^r^o,n,t,u,c,f)}function f(n,t,r,o,u,c,f){return e(r^(t|~o),n,t,u,c,f)}function i(n,r){n[r>>5]|=128<<r%32,n[14+(r+64>>>9<<4)]=r;var e,i,a,d,h,l=1732584193,g=-271733879,v=-1732584194,m=271733878;for(e=0;e<n.length;e+=16)i=l,a=g,d=v,h=m,g=f(g=f(g=f(g=f(g=c(g=c(g=c(g=c(g=u(g=u(g=u(g=u(g=o(g=o(g=o(g=o(g,v=o(v,m=o(m,l=o(l,g,v,m,n[e],7,-680876936),g,v,n[e+1],12,-389564586),l,g,n[e+2],17,606105819),m,l,n[e+3],22,-1044525330),v=o(v,m=o(m,l=o(l,g,v,m,n[e+4],7,-176418897),g,v,n[e+5],12,1200080426),l,g,n[e+6],17,-1473231341),m,l,n[e+7],22,-45705983),v=o(v,m=o(m,l=o(l,g,v,m,n[e+8],7,1770035416),g,v,n[e+9],12,-1958414417),l,g,n[e+10],17,-42063),m,l,n[e+11],22,-1990404162),v=o(v,m=o(m,l=o(l,g,v,m,n[e+12],7,1804603682),g,v,n[e+13],12,-40341101),l,g,n[e+14],17,-1502002290),m,l,n[e+15],22,1236535329),v=u(v,m=u(m,l=u(l,g,v,m,n[e+1],5,-165796510),g,v,n[e+6],9,-1069501632),l,g,n[e+11],14,643717713),m,l,n[e],20,-373897302),v=u(v,m=u(m,l=u(l,g,v,m,n[e+5],5,-701558691),g,v,n[e+10],9,38016083),l,g,n[e+15],14,-660478335),m,l,n[e+4],20,-405537848),v=u(v,m=u(m,l=u(l,g,v,m,n[e+9],5,568446438),g,v,n[e+14],9,-1019803690),l,g,n[e+3],14,-187363961),m,l,n[e+8],20,1163531501),v=u(v,m=u(m,l=u(l,g,v,m,n[e+13],5,-1444681467),g,v,n[e+2],9,-51403784),l,g,n[e+7],14,1735328473),m,l,n[e+12],20,-1926607734),v=c(v,m=c(m,l=c(l,g,v,m,n[e+5],4,-378558),g,v,n[e+8],11,-2022574463),l,g,n[e+11],16,1839030562),m,l,n[e+14],23,-35309556),v=c(v,m=c(m,l=c(l,g,v,m,n[e+1],4,-1530992060),g,v,n[e+4],11,1272893353),l,g,n[e+7],16,-155497632),m,l,n[e+10],23,-1094730640),v=c(v,m=c(m,l=c(l,g,v,m,n[e+13],4,681279174),g,v,n[e],11,-358537222),l,g,n[e+3],16,-722521979),m,l,n[e+6],23,76029189),v=c(v,m=c(m,l=c(l,g,v,m,n[e+9],4,-640364487),g,v,n[e+12],11,-421815835),l,g,n[e+15],16,530742520),m,l,n[e+2],23,-995338651),v=f(v,m=f(m,l=f(l,g,v,m,n[e],6,-198630844),g,v,n[e+7],10,1126891415),l,g,n[e+14],15,-1416354905),m,l,n[e+5],21,-57434055),v=f(v,m=f(m,l=f(l,g,v,m,n[e+12],6,1700485571),g,v,n[e+3],10,-1894986606),l,g,n[e+10],15,-1051523),m,l,n[e+1],21,-2054922799),v=f(v,m=f(m,l=f(l,g,v,m,n[e+8],6,1873313359),g,v,n[e+15],10,-30611744),l,g,n[e+6],15,-1560198380),m,l,n[e+13],21,1309151649),v=f(v,m=f(m,l=f(l,g,v,m,n[e+4],6,-145523070),g,v,n[e+11],10,-1120210379),l,g,n[e+2],15,718787259),m,l,n[e+9],21,-343485551),l=t(l,i),g=t(g,a),v=t(v,d),m=t(m,h);return[l,g,v,m]}function a(n){var t,r="",e=32*n.length;for(t=0;t<e;t+=8)r+=String.fromCharCode(n[t>>5]>>>t%32&255);return r}function d(n){var t,r=[];for(r[(n.length>>2)-1]=void 0,t=0;t<r.length;t+=1)r[t]=0;var e=8*n.length;for(t=0;t<e;t+=8)r[t>>5]|=(255&n.charCodeAt(t/8))<<t%32;return r}function h(n){return a(i(d(n),8*n.length))}function l(n,t){var r,e,o=d(n),u=[],c=[];for(u[15]=c[15]=void 0,o.length>16&&(o=i(o,8*n.length)),r=0;r<16;r+=1)u[r]=909522486^o[r],c[r]=1549556828^o[r];return e=i(u.concat(d(t)),512+8*t.length),a(i(c.concat(e),640))}function g(n){var t,r,e="";for(r=0;r<n.length;r+=1)t=n.charCodeAt(r),e+="0123456789abcdef".charAt(t>>>4&15)+"0123456789abcdef".charAt(15&t);return e}function v(n){return unescape(encodeURIComponent(n))}function m(n){return h(v(n))}function p(n){return g(m(n))}function s(n,t){return l(v(n),v(t))}function C(n,t){return g(s(n,t))}function A(n,t,r){return t?r?s(t,n):C(t,n):r?m(n):p(n)}"function"==typeof define&&define.amd?define(function(){return A}):n.md5=A}(global);
+
+	global.JsEncryptUtil = {};
+	global.JsEncryptUtil.md5 = global.md5;
+
+	global.GetDeviceInfoObject = function() {
+	    var string = GetDeviceInfo();
+	    var deviceObj = {};
+	    if(string) {
+	        var array = string.split("&");
+	        if(array && array.length) {
+	            array.forEach(function(item) {
+	                var itemArray = item.split("=");
+	                if(itemArray[0] && itemArray[1]) {
+	                    deviceObj[itemArray[0]] = itemArray[1]
+	                }
+	            })
+	        }
+	    }
+	    return deviceObj;
+	}
+
+	global.RuleMap = {
+			//理论上可以配置做任意界面浮层广告
+			"CLLHomeViewController":"interstitialHomeAd" //首页
+			,"CLLTransferMainViewController":"interstitialTransitAd"   //路线
+			,"CLLEnergyMainViewController":"interstitialEnergyAd"   // 福利社
+			,"CLLMoreMainViewController":"interstitialMineAd"    //我
+		};
+
+})(global);
+
+global.AddModule('event.do', (function(global) {
+   var module = {};
+   global = global || this;
+   exports = {};
+   module.exports = exports;
+   (function(moudle, exports, global) {
+       "use strict";
+
+var exhibitTrackUrl = "https://atrace.chelaile.net.cn/exhibit";
+var clickTrackUrl = "https://atrace.chelaile.net.cn/click";
+var closeTrackUrl = "https://atrace.chelaile.net.cn/close";
+
+var thirdSimpleUrl = "https://atrace.chelaile.net.cn/thirdSimple";
+var thirdPartyResponseUrl = "https://atrace.chelaile.net.cn/thirdPartyResponse";
+
+var reportCloseAdUrl;
+if(typeof GetConfig == 'function') {
+    var Config = GetConfig();
+    if('dev' == Config.server) {
+        reportCloseAdUrl = "https://dev.chelaile.net.cn/adpub/adv!closeAd.action";
+    } else if('stage' == Config.server) {
+        reportCloseAdUrl = "https://stage.chelaile.net.cn/adpub/adv!closeAd.action";
+    } else {
+        reportCloseAdUrl = "https://api.chelaile.net.cn/adpub/adv!closeAd.action";
+    }
+}
+
+//==================================//
+
+function reportAdsClose(sdk, ad) {
+    if(!reportCloseAdUrl) {
+        return;
+    }
+    var params = trackBaseParams(sdk, ad);
+
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+    var picsList = info.picsList;
+    var adv_image = "";
+    if(picsList && picsList.length) {
+        adv_image = picsList.join(";")
+    }
+    addParamsIfNotNull(params, "adv_image", adv_image);
+    addParamsIfNotNull(params, "adv_title", info.head);
+    sendTrackRequest(reportCloseAdUrl +'?'+ GetDeviceInfo(), params);
+}
+
+//==================================//
+
+function flatUrlParams(url, params) {
+
+    var baseUrl = "";
+    var indexUrl = "";
+    var query = "";
+
+    var hasIndex = url.indexOf("#") >= 0;
+    if (hasIndex) {
+        var urlArray = url.split("#");
+        baseUrl = urlArray[0].indexOf("?") >= 0 ? urlArray[0] + "&" : urlArray[0] + "?";
+        indexUrl = "#" + urlArray.slice(1).join("#");
+    } else {
+        baseUrl = url.indexOf("?") >= 0 ? url + "&" : url + "?";
+    }
+
+    for (var key in params) {
+        query += "&" + key + "=" + encodeURIComponent(params[key]);
+    }
+
+    var reqUrl = baseUrl + query + indexUrl;
+    return reqUrl;
+}
+
+function sendTrackRequest(url, params, body) {
+
+    var reqUrl = flatUrlParams(url, params);
+    if(body != null && body != undefined) {
+        if(typeof body != 'string') {
+            body = JSON.stringify(body);
+        }
+    }
+
+    if(body) {
+        Http.post(reqUrl, null, body, 5000, function (string, response, error) {
+            console.log("sendTrackRequest ret="+string + " response.header="+JSON.stringify(OCValueForKey(response, "allHeaderFields"))+ " error="+error);
+        });
+    }
+    else {
+        Http.get(reqUrl, null, 5000, function (string, response, error) {
+            console.log("sendTrackRequest ret="+string + " response.header="+JSON.stringify(OCValueForKey(response, "allHeaderFields"))+ " error="+error);
+        });
+    }
+}
+
+function addParamsIfNotNull(params, key, value) {
+    if (value != undefined && value != null) {
+        params[key] = value;
+    }
+}
+
+function trackBaseParams(sdk, ad) {
+    var params = {};
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+    var deviceObject = GetDeviceInfoObject() || {}
+    
+    var picsList = info.picsList;
+    var adv_image = "";
+    if(picsList && picsList.length) {
+        adv_image = picsList.join(";")
+    }
+    addParamsIfNotNull(params, "adv_image", adv_image);
+
+    addParamsIfNotNull(params, "traceid", traceInfo.traceid);
+    addParamsIfNotNull(params, "pid", traceInfo.pid);
+    addParamsIfNotNull(params, "jsid", traceInfo.jsid || 0);
+    addParamsIfNotNull(params, "aid", sdk.aid);
+    addParamsIfNotNull(params, "ad_order", info.ad_order);
+    addParamsIfNotNull(params, "adid", info.adid);
+    addParamsIfNotNull(params, "startMode", info.startMode);
+    addParamsIfNotNull(params, "stats_act", info.stats_act);
+    addParamsIfNotNull(params, "viewstatus", ad.viewstatus);
+    addParamsIfNotNull(params, "req_timestamp", +new Date);
+    addParamsIfNotNull(params, "s", deviceObject.s);
+    addParamsIfNotNull(params, "v", deviceObject.v);
+    addParamsIfNotNull(params, "idfa", deviceObject.idfa || '');
+    addParamsIfNotNull(params, "is_backup", info.is_backup || 0);
+    addParamsIfNotNull(params, "adStyle", info.adStyle || '');
+    return params;
+}
+
+function trackExhibit(sdk, ad) {
+
+    var params = trackBaseParams(sdk, ad);
+
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+
+    addParamsIfNotNull(params, "show_status", info.show_status || 0);
+    addParamsIfNotNull(params, "cost_time", info.cost_time);
+    addParamsIfNotNull(params, "adv_title", info.head);
+    addParamsIfNotNull(params, "adv_desc", info.subhead);
+
+    sendTrackRequest(exhibitTrackUrl, params);
+
+    if(info.unfoldMonitorLink && info.actionMonitorLink) {
+        var actionLink = info.actionMonitorLink.replace('{action}','5');
+        var ts = (+new Date) + '';
+        ts = String(ts).slice(0,-3);
+        actionLink = actionLink.replace('{time}', ts);
+        actionLink = actionLink.replace('{play_time}', '0')
+
+        sendTrackRequest(info.unfoldMonitorLink, {});
+        sendTrackRequest(actionLink, {});
+    }
+}
+
+function trackClick(sdk, ad) {
+    var params = trackBaseParams(sdk, ad);
+
+    var info = ad.info || {};
+    var traceInfo = sdk.traceInfo || {};
+
+    addParamsIfNotNull(params, "adv_title", info.head);
+    addParamsIfNotNull(params, "adv_desc", info.subhead);
+    addParamsIfNotNull(params, "isFakeClick", info.isFakeClick || 0);
+    addParamsIfNotNull(params, "isRateClick", info.isRateClick || 0);
+
+    sendTrackRequest(clickTrackUrl, params);
+    if(info.actionMonitorLink) {
+        var actionLink = info.actionMonitorLink.replace('{action}','6');
+        var ts = (+new Date) + '';
+        ts = String(ts).slice(0,-3);
+        actionLink = actionLink.replace('{time}', ts);
+        actionLink = actionLink.replace('{play_time}', '0');
+
+        sendTrackRequest(actionLink, {});
+    }
+    // some own ads ,has clickLink ,have no actionLink
+    if(info.clickMonitorLink) {
+        sendTrackRequest(info.clickMonitorLink, {});
+    }
+}
+
+function trackClose(sdk, ad) {
+    var params = trackBaseParams(sdk, ad);
+    sendTrackRequest(closeTrackUrl, params);
+
+    var info = ad.info || {};
+    if(!info.isSplash && !info.isFloat) {
+        reportAdsClose(sdk, ad);
+    } else {
+        if(info.actionMonitorLink) {
+            var actionLink = info.actionMonitorLink.replace('{action}','7');
+            var ts = (+new Date) + '';
+            ts = String(ts).slice(0,-3);
+            actionLink = actionLink.replace('{time}', ts);
+            actionLink = actionLink.replace('{play_time}', '0')
+
+            sendTrackRequest(actionLink, {});
+        }
+    }
+}
+
+function trackThirdBaseParams(params) {
+
+    var trackParams = {};
+    params = params || {};
+    var task = params.task || {};
+    var rule = params.rule || {};
+    var userdata = params.userdata || {}
+    var deviceObject = GetDeviceInfoObject() || {}
+
+    if(rule.traceInfo){
+        addParamsIfNotNull(trackParams, "traceid", rule.traceInfo.traceid);
+        addParamsIfNotNull(trackParams, "pid", rule.traceInfo.pid);
+    }
+    if(task.aid) {
+        addParamsIfNotNull(trackParams, "aid", task.aid());
+    }
+    if (task.adStyle) {
+        addParamsIfNotNull(trackParams, "adStyle", task.adStyle());
+    }
+
+    addParamsIfNotNull(trackParams, "req_timestamp", +new Date);
+    addParamsIfNotNull(trackParams, "eventId", userdata.uniReqId);
+    addParamsIfNotNull(trackParams, "s", deviceObject.s);
+    addParamsIfNotNull(trackParams, "v", deviceObject.v);
+
+    return trackParams;
+}
+//{userdata, rule, task}
+function trackThirdSimple(params) {
+
+    var trackParams = trackThirdBaseParams(params);
+    sendTrackRequest(thirdSimpleUrl, trackParams);
+}
+
+function getFirstInfoByData(data) {
+    if(data && data.adEntityArray && data.adEntityArray.length > 0) {
+        return data.adEntityArray[0].info;
+    }
+}
+//{data, userdata, rule, task}
+function trackThirdPartyResponse(params) {
+
+    var trackParams = trackThirdBaseParams(params);
+
+    params = params || {};
+    var task = params.task || {};
+    var rule = params.rule || {};
+    var data = params.data || {};
+    var realInfo = getFirstInfoByData(data);
+    var info = realInfo || {};
+
+    addParamsIfNotNull(trackParams, "ad_order",  info.ad_order);
+    addParamsIfNotNull(trackParams, "adid",      info.adid);
+    addParamsIfNotNull(trackParams, "req_time",  (data.sdk && data.sdk.didReqTime||0) - (data.sdk && data.sdk.willReqTime||0));
+    addParamsIfNotNull(trackParams, "ad_status", realInfo?1:0);
+    addParamsIfNotNull(trackParams, "resp_size", data.contentLength);
+    if(params.error){
+        addParamsIfNotNull(trackParams, "code",  params.error);
+    } else {
+        addParamsIfNotNull(trackParams, "code",  OCValueForKey(data.extensionData, "statusCode"));
+    }
+
+    var body = {};
+
+    addParamsIfNotNull(body, "adv_title",   info.head);
+    addParamsIfNotNull(body, "adv_desc",    info.subhead);
+    addParamsIfNotNull(body, "icon_image",  info.pic);
+    addParamsIfNotNull(body, "main_image",  info.picsList);
+    addParamsIfNotNull(body, "link",        info.link);
+    addParamsIfNotNull(body, "url_type",    info.adType);
+
+    sendTrackRequest(thirdPartyResponseUrl, trackParams, body);
+}
+
+function trackEvent(eventId /*String*/, eventType /*String*/, params /*object*/) {
+    console.log("trackEvent eventId=" + eventId + " eventType=" + eventType + " params=" + JSON.stringify(params||{}));
+
+    if(eventType == TrackClass.Type.LoadSplash ||
+        eventType == TrackClass.Type.LoadBanner
+    ) {
+        //{userdata, rule, task}
+        trackThirdSimple(params);
+    }
+    else if(eventType == TrackClass.Type.LoadedSplash ||
+        eventType == TrackClass.Type.LoadedBanner
+    ) {
+        //{userdata, data, rule, task}
+        trackThirdPartyResponse(params);
+    }
+    else if(eventType == TrackClass.Type.FailedSplash ||
+        eventType == TrackClass.Type.FailedBanner
+    ) {
+        //params = {error:"code", des:"", requestInfo:requestInfo, userdata,rule}
+        trackThirdPartyResponse(params);
+    }
+}
+
+global.trackEvent = trackEvent;
+
+module.exports = {
+    trackExhibit: trackExhibit,
+    trackClick: trackClick,
+    trackClose: trackClose,
+    trackEvent: trackEvent
+}
+
+global.TrackClass = {
+    trackExhibit: trackExhibit,
+    trackClick: trackClick,
+    trackClose: trackClose,
+    trackEvent: trackEvent,
+    Type: {
+        //params = {userdata, rule, task}
+        LoadSplash: "LoadSplash", //开始调用 sdk/api loadSplash方法
+        LoadBanner: "LoadBanner", //开始调用 sdk/api loadBanner方法
+
+        //params = {userdata, data, rule, task}
+        LoadedSplash: "LoadedSplash", //开屏加载完成
+        LoadedBanner: "LoadedBanner", //Banner加载完成
+
+        //params = {error:"code", des:"", requestInfo:requestInfo, userdata,rule}
+        FailedSplash: "FailedSplash", //开屏加载失败
+        FailedBanner: "FailedBanner", //Banner加载失败
+
+        //params = {used,rule,userdata}
+        AllAdTimeout: "AllAdTimeout", //循环检查js超时
+
+        //params = {data,rule,userdata}
+        FetchedAd: "FetchedAd", //最终获取到的广告
+
+        //params = {rule,userdata}
+        NoDataLastGroup: "NoDataLastGroup" //到达最后一组配置，仍没有获取到广告
+
+    }
+}
+
+   })(module, exports, global);
+   return module.exports;
+})
+
+);
+global.AddModule('fetch.do', (function(global) {
+   var module = {};
+   global = global || this;
+   exports = {};
+   module.exports = exports;
+   (function(moudle, exports, global) {
+       "use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function sdkfile(sdkname) {
+    return "sdks/" + sdkname;
+}
+
+var mapSdks = {};
+
+function getExistSdks(taskGroup) {
+    var existSdks = [];
+    taskGroup = taskGroup || [];
+    taskGroup.forEach(function (task) {
+        var sdk = getSdk(task.sdkname());
+        if (sdk) existSdks.push({
+            task: task,
+            sdk: sdk
+        });
+    });
+    return existSdks;
+}
+
+/**
+ * @param {string!} sdkname
+ * @brief 通过rule文件配置的名称，查找sdk接口
+ */
+function getSdk(sdkname) {
+
+    sdkname = "sdk";
+    var sdk = mapSdks[sdkname];
+    if (!sdk) {
+        try {
+            sdk = require(sdkfile(sdkname));
+        } catch (e) {
+            console.log(e);
+        }
+        if (sdk) {
+            mapSdks[sdkname] = sdk;
+        }
+    }
+    return sdk;
+}
+
+// config.
+var firstTime = 1000;
+var secondTime = 2000;
+
+function getAds(rule, userdata, callback) {
+
+    if (!rule) return callback(null);
+
+    if (Array.isArray(rule.timeouts)) {
+        firstTime = rule.timeouts[0] || firstTime;
+        secondTime = rule.timeouts[1] || secondTime;
+    }
+
+    var hookCallback = function hookCallback(data) {
+        if (data && (typeof data === "undefined" ? "undefined" : _typeof(data)) == 'object' && data.sdk) {
+
+            data.sdk.refreshTime = 15000;
+            data.sdk.traceInfo = rule.traceInfo;
+            data.sdk.mixRefreshAdInterval = 5000;
+            data.sdk.mixRefreshFloatAdInterval = 5000;//弹出浮窗广告最小请求间隔,每种类型界面单独记时
+            data.sdk.maxSplashTimeout = 8000;
+            data.sdk.warmSplashIntervalTime = 30 * 60 * 1000;
+
+            //if(rule && rule.traceInfo && rule.traceInfo.traceid && rule.traceInfo.traceid.indexOf('a') == 0 ) {
+            //    data.sdk.maxSplashTimeout = 5000;
+            //}
+        }
+        callback(data);
+    };
+    hookCallback.userdata = userdata;
+    if (!rule.tasks || rule.tasks.length <= 0) {
+        callback(null);
+    } else {
+        tryNthTaskGroup(rule, 0, hookCallback);
+    }
+}
+
+/**
+ * 尝试第n个taskGroup
+ */
+function tryNthTaskGroup(rule, nth, callback) {
+    var taskGroups = rule.tasks;
+
+    function wrappedFn(data) {
+        if (data) {
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.FetchedAd, { data: data, rule: rule, userdata: callback.userdata });
+            return callback(data);
+        }
+
+        if (nth == taskGroups.length - 1) {
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.NoDataLastGroup, { rule: rule, userdata: callback.userdata });
+            return callback(null);
+        }
+
+        tryNthTaskGroup(rule, nth + 1, callback);
+    }
+
+    /**
+     * 停止除noStopTaskNth之外的task
+     * @param noStopTaskNth Int 继续执行的task，可以为null，停止全部的task
+     */
+    function stopCheckerAndTasks(noStopTaskNth) {
+        if (checker) {
+            clearInterval(checker);
+        }
+        // TODO
+        sdkInfos.forEach(function (sdkInfo, idx) {
+            if (idx === noStopTaskNth) return;
+            if (sdkInfo.sdk.stop2) sdkInfo.sdk.stop2(sdkInfo.task);
+        });
+    }
+
+    function checkResults() {
+
+        var used = now() - stamp1;
+        if (used > firstTime + secondTime) {
+
+            TrackClass.trackEvent(callback.userdata.uniReqId, TrackClass.Type.AllAdTimeout, { used: used, rule: rule, userdata: callback.userdata });
+
+            stopCheckerAndTasks();
+            wrappedFn(null);
+            return;
+        }
+
+        var finishCount = 0,
+            succeedCount = 0;
+        var sdkInfo, result;
+        for (var i = 0; i < sdkInfos.length; i++) {
+            sdkInfo = sdkInfos[i], result = sdkInfo._result;
+
+            if (result == undefined) continue;
+
+            finishCount++; // increase finish counter
+
+            // skip if NO_RESULT
+            if (!result[0]) continue;
+
+            succeedCount++; // increase succeed counter
+
+            // success
+            if (used > firstTime || // for data on greedy mode.
+            i == 0 // if it is the first slot
+            ) {
+                    stopCheckerAndTasks(i);
+                    wrappedFn(result[0]);
+                    return;
+                }
+        }
+
+        if (finishCount >= sdkInfos.length) {
+            if (succeedCount == 0) {
+                console.log('All finish without any succeed.');
+                stopCheckerAndTasks();
+                wrappedFn(null);
+            } else {
+                stopCheckerAndTasks();
+                if (minIndex > 0 && minIndex < sdkInfos.length - 1) {
+                    sdkInfo = sdkInfos[minIndex];
+                    result = sdkInfo._result;
+                    wrappedFn(result[0]);
+                }
+            }
+        }
+    }
+    checkResults._count = 0;
+
+    var stamp1 = now(),
+        interval = 50;
+    var sdkInfos = getExistSdks(taskGroups[nth]);
+    sdkInfos.forEach(function (sdkInfo) {
+        var req = sdkInfo.task.adurl_ios();
+        console.log('try sdk: ' + req.url);
+        sdkInfo.sdk.load(sdkInfo.task, rule, callback.userdata, firstTime + secondTime, function (data) {
+            console.log('uniReqId=' + callback.userdata.uniReqId + ' data comes ' + data);
+            sdkInfo._result = [data];
+        });
+    });
+
+    var checker = setInterval(checkResults, interval);
+}
+
+function now() {
+    return new Date().getTime();
+}
+
+module.exports = getAds;
+
+   })(module, exports, global);
+   return module.exports;
+})
+
+);
+global.AddModule('sdks/sdk.do', (function(global) {
+   var module = {};
+   global = global || this;
+   exports = {};
+   module.exports = exports;
+   (function(moudle, exports, global) {
+       "use strict";
+
+var RENDER_MSG = 'render_ok';
+function getCloseLayout(){
+  return  {
+"class": "RelativeLayout",
+"layout_width": "match_parent",
+"layout_height": "match_parent",
+"background": "@color/clear",
+"children": [
+  {
+    "class": "RelativeLayout",
+    "layout_width": "wrap_content",
+    "layout_height": "wrap_content",
+    "children": [
+      {
+        "class": "ImageView",
+        "id": "bannericon",
+        "layout_width": "24dp",
+        "layout_height": "24dp",
+        "action":"@selector/clickAdvertise:event:",
+        "clickable": "true",
+      },
+      {
+        "class": "RelativeLayout",
+        "layout_width": "24dp",
+        "layout_height": "24dp",
+        "layout_centerInParent": "true",
+        "action":"@selector/closeAdvertise:",
+        "clickable": "true",
+      }
+    ]
+  }
+]
+}
+}
+function loadHttpPost(reqUrl, header, postData, fetchTimeout, callback) {
+    Http.post(reqUrl, header, postData, fetchTimeout, function (string, response, error) {
+        callback(string, response, error);
+    });
+}
+
+function loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult) {
+    var hasCalled = false;
+    if(data && data.adEntityArray && data.adEntityArray.length)
+    {
+        if(requestInfo.data && requestInfo.data.ad_data){
+            if(requestInfo.data.ad_data == "AsyncPostData") {
+                var postString = "";
+                if(requestInfo.data.postData){
+                    postString = JSON.stringify(requestInfo.data.postData);
+                }
+                hasCalled = true;
+                data.adEntityArray[0].info = undefined;
+                loadHttpPost(requestInfo.data.placementId, null, postString, fetchTimeout, function(string, response, error){
+                    if(requestInfo.data.dataFormater && requestInfo.data.dataFormater.parse && string) {
+                        var arr = requestInfo.data.dataFormater.parse(string);
+                        if(arr && arr.length){
+                            if(data.sdk){
+                                data.sdk.finishedReqTime = +new Date;
+                                data.sdk.didReqTime = +new Date;
+                            }
+                            data.adEntityArray[0].info = arr[0];
+                            callResult();
+                        } else {
+                            callResult("-90003");
+                        }
+                    } else {
+                        callResult(OCValueForKey(error, "code"));
+                    }
+                });
+            }
+        }
+    }
+    if(!hasCalled) {
+        callResult();
+    }
+}
+
+function load(task, rule, userdata, fetchTimeout, callback) {
+
+    var sdknameMap = {
+        "GDTSDK": "CLLGdtSdk",
+        "BaiduSDK": "CLLBaiduSdk",
+        "TOUTIAOSDK": "CLLTTSdk",
+        "IFLYSDK": "CLLIflySdk",
+        "InMobiSdk": "CLLInMobiSdk",
+        "AdViewSDK": "CLLAdViewSdk",
+        "ADMobSDK":"CLLAdMobileSdk"
+    };
+    var requestInfo = task.adurl_ios();
+    if (requestInfo.url && requestInfo.url.toLowerCase().indexOf("http") == 0) {
+        requestInfo.data = requestInfo.data || {};
+        requestInfo.data.placementId = requestInfo.url;
+        requestInfo.url = "CLLAdApi";
+    } else if (requestInfo.url && sdknameMap[requestInfo.url]) {
+        requestInfo.url = sdknameMap[requestInfo.url];
+    }
+
+    var vendor = requestInfo.url;
+    var sdkIns = newInstance(requestInfo.url);
+    if (!sdkIns) {
+        return callback(null);
+    }
+
+    requestInfo.type = requestInfo.type || requestInfo.pos;
+    if (requestInfo.type == "splash") {
+
+        TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadSplash, { userdata: userdata, rule: rule, task: task });
+
+        sdkIns.loadSplash(requestInfo.data, userdata, fetchTimeout, function (data) {
+
+            function callResult(errorCode) {
+                if(errorCode) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: errorCode, des: "" + errorCode, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                    return;
+                }
+                try {
+                    if (task.aid && data.sdk) {
+                        data.sdk.aid = task.aid();
+                    }
+
+                    var task_filter = task.filter_ios;
+                    if (task_filter && data) {
+                        data.adEntityArray = task_filter(data.adEntityArray);
+                    }
+
+                    if (userdata &&  data.adEntityArray && data.adEntityArray.length > 0) {
+                        var info = data.adEntityArray[0].info;
+                        if(userdata.startMode){
+                            info.startMode = userdata.startMode;
+                        }
+
+                        info.isSplash = true;
+                        if(info.provider_id != 1 && !info.link) {
+                            info.targetType = 1;
+                        }
+                        data.adEntityArray[0].info = info;
+                    }
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedSplash, { data: data, userdata: userdata, rule: rule, task: task });
+                    callback(data);
+                } catch (e) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: "-91000", des: "" + e, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
+                    callback(null);
+                }
+            }
+            loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult);
+
+        }, function (error) {
+            error = error || "-90000";
+            TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedSplash, { error: error, requestInfo: requestInfo, userdata: userdata, rule: rule, task: task });
+            callback(null);
+        });
+    } else if (requestInfo.type == "banner") {
+
+        TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadBanner, { userdata: userdata, rule: rule, task: task });
+
+        if (task.adStyle) {
+
+            var deviceObject = GetDeviceInfoObject() || {};
+            var screenWidth = ((deviceObject.screenWidth || 750) / (deviceObject.dpi || 2));
+            var rule_pid = rule.traceInfo.pid;
+
+            if(rule_pid != '25' && rule_pid != '26' && rule_pid != '32')
+            {
+                screenWidth -= 16;
+            }
+            var screenHeight = screenWidth / 4;
+
+            var style = task.adStyle();
+            var sizeObj = {
+                "1": { showWidth: 180, showHeight: 88 },
+                "2": { showWidth: 96, showHeight: 64 },
+                "5": { showWidth: 96, showHeight: 64 },
+                "8": { showWidth: screenWidth, showHeight: screenHeight }
+            };
+
+            var showSize = sizeObj[style + ""];
+            if (showSize) {
+                userdata.showWidth = showSize.showWidth;
+                userdata.showHeight = showSize.showHeight;
+            }
+        }
+        sdkIns.loadBanner(requestInfo.data, userdata, fetchTimeout, function (data) {
+            function callResult(errorCode) {
+                if(errorCode) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: errorCode, des: "" + errorCode, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                    return;
+                }
+                try {
+                    if (task.aid && data.sdk) {
+                        data.sdk.aid = task.aid();
+                    }
+
+                    var task_filter = task.filter_ios;
+                    if (task_filter && data) {
+                        data.adEntityArray = task_filter(data.adEntityArray);
+                    }
+
+                    if (data && data.adEntityArray) {
+                        var closePic = rule && rule.closeInfo && rule.closeInfo.closePic;
+                        var hostSpotSize = rule && rule.closeInfo && rule.closeInfo.hostSpotSize;
+                        var fakeRate = rule && rule.closeInfo && rule.closeInfo.fakeRate;
+
+                        for (var i = 0; i < data.adEntityArray.length; i++) {
+                            var adentity = data.adEntityArray[i];
+                            var info = adentity.info;
+                            if (info) {
+                                if(closePic) {
+                                    info.closePic = closePic;
+                                    info.isDisplay = 1;
+                                    info.isSkip = 1;
+                                    info.hostSpotSize = hostSpotSize;
+                                    info.fakeRate = eval(fakeRate);
+                                }
+                                if (task.adStyle) {
+                                    info.displayType = task.adStyle() == '' ? 2 : parseInt(task.adStyle());
+                                }
+                                if(info.displayType) {
+                                    info.displayType = parseInt(info.displayType);
+                                }
+
+                                info.head = info.head || "";
+                                info.subhead = info.subhead || "";
+                                info.stats_act = userdata.stats_act;
+                                if (info.head.length > info.subhead.length) {
+                                    var tstr = info.subhead;
+                                    info.subhead = info.head;
+                                    info.head = tstr;
+                                }
+
+                                if(userdata.startMode){
+                                    info.startMode = userdata.startMode;
+                                    info.isSplash = true;
+                                    if(info.provider_id != 1 && !info.link) {
+                                        info.targetType = 1;
+                                    }
+                                }
+
+                                // add brandPic
+                                /*
+                                if(task.sdkname() == 'sdk_gdt') {
+
+                                    var traceid = rule && rule.traceInfo && rule.traceInfo.traceid;
+                                    if (
+                                        /^e/.test(traceid) &&
+                                        (   (info.head && info.head.contains("京东")) || (info.subhead && info.subhead.contains("京东")) || (info.head && info.head.contains("杜蕾斯")) || (info.subhead && info.subhead.contains("杜蕾斯")) )
+                                     )
+                                    {
+                                        info.brandPic = "https://image3.chelaile.net.cn/47db7ec76e75407cb57a890cead60c85";
+                                    }
+                                }
+                                */
+                                if (info.closePic) {
+                                  info.layout = getCloseLayout();
+                                  var imageView = info.layout.children[0].children[0];
+                                  imageView.url = info.closePic;
+
+                                  var imageViewParant = info.layout.children[0];
+
+                                  /*
+                                  "layout_marginBottom":"8dp",
+                                  "layout_alignParentRight": "true",
+                                  "layout_alignParentBottom": "true",
+                                  "layout_marginRight": "120dp",
+
+                                  "diplayType==1，
+                                  */
+                                  switch (info.displayType) {
+                                    case 1://"diplayType==1",
+                                      imageViewParant.layout_alignParentRight = 'true';
+                                      imageViewParant.layout_alignParentBottom = 'true';
+                                      imageViewParant.layout_marginBottom = '8dp';
+                                    var object = GetDeviceInfoObject();
+                                    if (object.screenWidth > 640) {
+                                      imageViewParant.layout_marginRight = '192dp';
+                                    }else {
+                                      imageViewParant.layout_marginRight = '165dp';
+                                    }
+                                    break;
+                                      case 2:
+                                      case 5:
+                                      imageViewParant.layout_alignParentRight = 'true';
+                                      imageViewParant.layout_alignParentBottom = 'true';
+                                      imageViewParant.layout_marginBottom = '8dp';
+                                      imageViewParant.layout_marginRight = '120dp';
+                                        break;
+                                        case 3:
+                                        case 4:
+                                        imageViewParant.layout_alignParentRight = 'true';
+                                        imageViewParant.layout_marginTop = '8dp';
+                                        imageViewParant.layout_marginRight = '8dp';
+                                          break;
+                                    default:
+
+                                  }
+
+                                  var btn = info.layout.children[0].children[1];
+                                  if (eval(info.hostSpotSize) >= 0 && eval(info.hostSpotSize) <= 24) {
+                                    btn.layout_width = info.hostSpotSize + 'dp';
+                                    btn.layout_height = info.hostSpotSize + 'dp';
+                                  }
+                                }
+                                adentity.info = info;
+                            }
+                        }
+                    }
+
+
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.LoadedBanner, { userdata: userdata, data: data, rule: rule, task: task });
+                    callback(data);
+
+                } catch (e) {
+                    TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: "-91001", des: "" + e, userdata: userdata, data: data, rule: rule, task: task });
+                    callback(null);
+                }
+            }
+            loadThirdPostApiIfNeed(requestInfo, fetchTimeout, data, callResult);
+
+        }, function (error, data, extension) {
+            error = error || "-90001";
+            TrackClass.trackEvent(userdata.uniReqId, TrackClass.Type.FailedBanner, { error: error, requestInfo: requestInfo, userdata: userdata, data: data, rule: rule, task: task });
+            callback(null);
+        });
+    }
+}
+
+function stop2(task) {
+    var requestInfo = task.adurl_ios();
+    var vendor = requestInfo.url;
+}
+
+module.exports = {
+    load: load,
+    stop2: stop2
+};
+
+   })(module, exports, global);
+   return module.exports;
+})
+
+);
+require('./event');

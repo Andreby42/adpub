@@ -18,6 +18,7 @@ public class Statics {
     private String curl;
     private List<String> acurl;
     private List<String> murl;
+    private String desc;
     private int w;
     private int h;
     public void setStype(int stype) {
@@ -75,5 +76,11 @@ public class Statics {
      public int getH() {
          return h;
      }
+    public String getDesc() {
+        return desc;
+    }
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
 }

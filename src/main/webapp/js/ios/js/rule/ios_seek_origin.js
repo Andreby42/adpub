@@ -253,7 +253,7 @@ var sdk_gdt = {
     },
 
     aid : function () {
-        return 'sdk_gdt_${sdk_gdt_aid}';
+        return 'sdk_gdt';
     },
 	
 	adStyle : function() {
@@ -283,7 +283,7 @@ var sdk_baidu = {
     },
 
     aid : function () {
-        return 'sdk_baidu_${sdk_baidu_aid}';
+        return 'sdk_baidu';
     },
 	
 	adStyle : function() {
@@ -313,7 +313,7 @@ var sdk_toutiao = {
     },
 
     aid : function () {
-        return 'sdk_toutiao_${sdk_toutiao_aid}';
+        return 'sdk_toutiao';
     },
 	
 	adStyle : function() {
@@ -343,7 +343,7 @@ var sdk_ifly = {
     },
 
     aid : function () {
-        return 'sdk_ifly_${sdk_ifly_aid}';
+        return 'sdk_ifly';
     },
 	
 	adStyle : function() {
@@ -371,7 +371,7 @@ var sdk_inmobi = {
     },
     
     aid : function () {
-        return 'sdk_inmobi_${sdk_inmobi_aid}';
+        return 'sdk_inmobi';
     },
 	
 	adStyle : function() {
@@ -403,7 +403,7 @@ var sdk_adview = {
     },
 
     aid : function () {
-        return 'sdk_adview_${sdk_adview_aid}';
+        return 'sdk_adview';
     },
 
 	adStyle : function() {

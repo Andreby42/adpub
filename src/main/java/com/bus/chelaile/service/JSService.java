@@ -137,6 +137,13 @@ public class JSService {
                                 return i.contains("sdk_toutiao"); //No contais sdk_toutiao
                             });
                         }
+
+                        // 涉及到非原生的banner的加载问题，跟客户端协议的一个参数
+                        if (param.getAdContainerShown() == 0) {
+                            tasks.removeIf(i -> {
+                                return i.contains("sdk_admobile");
+                            });
+                        }
                     }
 
                     //提取第一个times出来

@@ -154,6 +154,7 @@ public class AbstractController {
         	
         }
         
+        param.setAdContainerShown(getInt(request, "adContainerShown"));
 
         return param;
     }

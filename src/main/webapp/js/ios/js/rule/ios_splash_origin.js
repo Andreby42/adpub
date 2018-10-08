@@ -309,6 +309,37 @@ var sdk_adview = {
     }
 }
 
+var sdk_admobile = {
+
+    sdkname: function() {
+        return "sdk_admobile";
+    },
+    
+    adurl_ios: function() {
+        return {
+            url: "ADMobSDK",
+            pos: "splash",//banner
+            data: {
+                "appId":"2252620",
+                "placementId":"0"
+            }
+        }
+    },
+
+    filter_ios : function(list) {
+        return list;
+    },
+
+    aid : function () {
+        return 'sdk_admobile';
+    },
+
+	adStyle : function() {
+      return "8";
+    }
+}
+
+
 function ads() {
 
 //var ads = [api_chelaile, sdk_inmobi, sdk_toutiao, sdk_gdt, sdk_voicead, sdk_baidu];
