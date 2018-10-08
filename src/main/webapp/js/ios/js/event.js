@@ -118,6 +118,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "v", deviceObject.v);
     addParamsIfNotNull(params, "idfa", deviceObject.idfa || '');
     addParamsIfNotNull(params, "is_backup", info.is_backup || 0);
+    addParamsIfNotNull(params, "adStyle", info.adStyle || '');
     return params;
 }
 
@@ -209,6 +210,9 @@ function trackThirdBaseParams(params) {
     }
     if(task.aid) {
         addParamsIfNotNull(trackParams, "aid", task.aid());
+    }
+    if (task.adStyle) {
+        addParamsIfNotNull(trackParams, "adStyle", task.adStyle());
     }
 
     addParamsIfNotNull(trackParams, "req_timestamp", +new Date);

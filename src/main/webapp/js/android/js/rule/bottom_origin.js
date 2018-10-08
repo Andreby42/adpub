@@ -245,7 +245,7 @@ var api_voicead = {
     },
 	
 	adStyle : function() {
-      return ${api_voicead_aid};
+      return ${api_voicead_displayType};
     }
 }
 
@@ -403,7 +403,7 @@ var api_shunfei = {
 	    },
 		
 		adStyle : function() {
-	      return ${api_shunfei_aid};
+	      return ${api_shunfei_displayType};
 	    }
 	}
 
@@ -580,7 +580,7 @@ var api_shunfei = {
 	    },
 		
 		adStyle : function() {
-	      return ${api_zm_aid};
+	      return ${api_zm_displayType};
 	    }
 	}
 

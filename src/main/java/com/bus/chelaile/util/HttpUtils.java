@@ -19,6 +19,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -174,14 +175,6 @@ public class HttpUtils {
 			response = HTTP_CLIENT.execute(post);
 			in = response.getEntity().getContent();
 			
-//			HttpEntity entityResponse = response.getEntity();
-//			int contentLength = (int) entityResponse.getContentLength();  
-//			System.out.println("response内容大小： " + contentLength);
-//            if (contentLength <= 0)  
-//                throw new IOException("No response");  
-//            byte[] respBuffer = new byte[contentLength];  
-//            if (entityResponse.getContent().read(respBuffer) != respBuffer.length)  
-//                throw new IOException("Read response buffer error");  
 		} finally {
 			if (response != null) {
 				response.close();
@@ -189,6 +182,45 @@ public class HttpUtils {
 		}
 		return in;
 	}
+	
+    public static String post(String url, String bodyString) {
+        HttpPost post = new HttpPost(url);
+        try {
+            StringEntity s = new StringEntity(bodyString);
+            s.setContentEncoding("UTF-8");
+//            s.setContentType("application/json");
+            
+            post.setEntity(s);
+            post.addHeader("Content-Type", "application/json");
+            HttpResponse res = HTTP_CLIENT.execute(post);
+            if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                HttpEntity entity = res.getEntity();
+                InputStreamReader reader = new InputStreamReader(entity.getContent(), "UTF-8");
+
+                int tempchar;
+                StringBuilder jsStr = new StringBuilder();
+                while ((tempchar = reader.read()) != -1) {
+                    if (((char) tempchar) != '\r') {
+                        jsStr.append((char) tempchar);
+                    }
+                }
+                
+//                BufferedReader br = new BufferedReader(reader);
+//                String line = null;
+//                StringBuilder jsStr = new StringBuilder();
+//                while((line = br.readLine()) != null) {
+//                    jsStr.append(line);
+//                }
+                
+                
+                return jsStr.toString();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+
+    }
 	
 	
 	 public static String sendPost(String uri, byte[] bytes, String charset) {

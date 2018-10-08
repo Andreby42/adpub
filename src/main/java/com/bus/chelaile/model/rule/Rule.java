@@ -33,6 +33,10 @@ public class Rule {
 	private Date startDate;
 	private String ruleId;
 	private Date endDate;
+	
+	private String beginTime;
+	private String endTime;
+	
 	// private List<String> cities;
 	private Map<String, String> cities;
 	private List<String> stations;
@@ -728,6 +732,12 @@ public class Rule {
 		if (nowDate.compareTo(endDate) > 0 || nowDate.compareTo(startDate) < 0) {
 			return true;
 		}
+		// 判断是否在指定时间段内
+        String nowTime = DateUtil.getMinuteStr();
+        if(StringUtils.isNoneBlank(endTime) && nowTime.compareTo(endTime) > 0 )
+            return true;
+        if(StringUtils.isNoneBlank(beginTime) && nowTime.compareTo(beginTime) < 0 )
+            return true;
 		return false;
 	}
 
@@ -737,10 +747,17 @@ public class Rule {
 	 * @return
 	 */
 	public boolean isEndDateOverdue() {
+	    // 判断是否结束
 		Date nowDate = new Date();
 		if (nowDate.compareTo(endDate) > 0) {
 			return true;
 		}
+		// 判断是否在指定时间段内
+		String nowTime = DateUtil.getMinuteStr();
+		if(StringUtils.isNoneBlank(endTime) && nowTime.compareTo(endTime) > 0 )
+		    return true;
+		if( StringUtils.isNoneBlank(beginTime)  && nowTime.compareTo(beginTime) < 0 )
+		    return true;
 		return false;
 	}
 
@@ -1053,6 +1070,9 @@ public class Rule {
 //		int a = 1;
 //		System.out.println(test.containsKey(a));
 		
+		String endTie = "19:30";
+		String nowTime = DateUtil.getMinuteStr();
+		System.out.println(nowTime.compareTo(endTie));
 		
 	}
 
@@ -1273,6 +1293,22 @@ public class Rule {
 
     public void setLessThanAndroidSV(VersionEntity lessThanAndroidSV) {
         this.lessThanAndroidSV = lessThanAndroidSV;
+    }
+
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
 }

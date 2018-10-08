@@ -3,10 +3,6 @@ package com.bus.chelaile.mvc.utils;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.entity.TaskEntity;
 import com.bus.chelaile.service.StaticAds;
@@ -19,39 +15,39 @@ import com.bus.chelaile.util.New;
  */
 public class JSFileHandle {
 
-    private static final Logger logger = LoggerFactory.getLogger(JSFileHandle.class);
+//    private static final Logger logger = LoggerFactory.getLogger(JSFileHandle.class);
     
     
-    public static String replaceJs(String platform, String splashJS, ShowType showType, TaskEntity tgs, String tag) {
-
-        Map<String, String> map = null;
-        if (tgs != null && tgs.getTaskGroups() != null && tgs.getTaskGroups().getMap() != null) {
-            map = tgs.getTaskGroups().getMap();
-        } else {
-            map = New.hashMap();
-        }
-        for (Entry<String, String> entry : map.entrySet()) {
-            String displayType = entry.getValue();
-            String aid = entry.getKey();
-
-            String placementId = getPlaceMentId(platform, showType, aid, displayType);
-            String placementReplaceKey = "${" + aid + "_placementId}";
-            String displayTypeReplaceKey = "\"${" + aid + "_displayType}\"";
-            String aidReplaceKey = "${" + aid + "_aid}";
-
-            logger.info("**placementId={}, placementReplaceKey={}", placementId, placementReplaceKey);
-            if(StringUtils.isNoneBlank(placementId)) {
-                splashJS = splashJS.replace(placementReplaceKey, placementId);
-            } else {
-                logger.info("error occured when replace placementId, placementid is null , platform={}, showType={}, aid={}, displayType={}", 
-                        platform, showType, aid, displayType);
-            }
-            splashJS = splashJS.replace(displayTypeReplaceKey, displayType);
-            splashJS = splashJS.replace(aidReplaceKey, displayType);
-        }
-
-        return splashJS;
-    }
+//    public static String replaceJs(String platform, String splashJS, ShowType showType, TaskEntity tgs, String tag) {
+//
+//        Map<String, String> map = null;
+//        if (tgs != null && tgs.getTaskGroups() != null && tgs.getTaskGroups().getMap() != null) {
+//            map = tgs.getTaskGroups().getMap();
+//        } else {
+//            map = New.hashMap();
+//        }
+//        for (Entry<String, String> entry : map.entrySet()) {
+//            String displayType = entry.getValue();
+//            String aid = entry.getKey();
+//
+//            String placementId = getPlaceMentId(platform, showType, aid, displayType);
+//            String placementReplaceKey = "${" + aid + "_placementId}";
+//            String displayTypeReplaceKey = "\"${" + aid + "_displayType}\"";
+//            String aidReplaceKey = "${" + aid + "_aid}";
+//
+//            logger.info("**placementId={}, placementReplaceKey={}", placementId, placementReplaceKey);
+//            if(StringUtils.isNoneBlank(placementId)) {
+//                splashJS = splashJS.replace(placementReplaceKey, placementId);
+//            } else {
+//                logger.info("error occured when replace placementId, placementid is null , platform={}, showType={}, aid={}, displayType={}", 
+//                        platform, showType, aid, displayType);
+//            }
+//            splashJS = splashJS.replace(displayTypeReplaceKey, displayType);
+//            splashJS = splashJS.replace(aidReplaceKey, displayType);
+//        }
+//
+//        return splashJS;
+//    }
     
     public static void replaceNewJs(String platform, ShowType showType, TaskEntity tgs, String tag,Map<String, String> map) {
 
@@ -596,7 +592,8 @@ public class JSFileHandle {
     // 新的获取placementId的方式
     private static String getPlaceMentId(String platform, ShowType showType, String aid, String displayType) {
         // 目前 除了3以外，其他的都一样
-        if (!displayType.equals("3"))
+        // 2018-09-29 ，增加5和6。所以这里仅仅将 1(右图大图)处理成2(右图小图)即可      
+        if (displayType.equals("1"))
             displayType = "2";
         StringBuilder key = new StringBuilder(showType.getType()).append("_").append(aid).append("_").append(displayType);
         if (platform.equals("android")) {

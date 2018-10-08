@@ -240,6 +240,8 @@ public class RuleEngine {
             rule.setProjectTotalSend(getChildAsInt(rInfo, "projectTotalSend")); // 
             rule.setProjectDaySend(getChildAsInt(rInfo, "projectDaySend")); //
             rule.setProjectDayClick(getChildAsInt(rInfo, "projectDayClick")); //
+            rule.setBeginTime(getChildAsText(rInfo, "beginTime"));  // 每天的时间段开始时间
+            rule.setEndTime(getChildAsText(rInfo, "endTime"));       // 每天的时间段结束时间
             List<Position> positions = parseGpsList(rInfo);
             if (positions != null && positions.size() > 0) {
             	rule.setGpsList(positions);

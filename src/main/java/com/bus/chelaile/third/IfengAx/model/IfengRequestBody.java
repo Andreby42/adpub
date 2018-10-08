@@ -37,22 +37,22 @@ public class IfengRequestBody {
      */
     public IfengRequestBody(AdvParam p, int isTest, int bannerType) {
         super();
-        this.id = "";
+        this.id = p.getUdid();
         // imp
         List<Imp> imps = New.arrayList();
         List<Banner> banners = New.arrayList();
-        Banner banner = new Banner(200, 20, bannerType, 600);
+        Banner banner = new Banner(320, 21, bannerType, 480);
         banners.add(banner);
-        Imp imp = new Imp("广告位曝光请求的唯一识别符", banners, "广告位识别符");
+        Imp imp = new Imp(p.getUdid(), banners, "1-1-1");
         imps.add(imp);
         this.imp = imps;
 
         // app
-        this.app = new App("app包名", "app 唯一标识符", "chelaile", p.getV());
+        this.app = new App("com.ygkj.chelaile.standard", "bus01", "车来了", "3.61.0");
 
         // device
-        Geo geo = new Geo(119.0, 39.0);
-        int ppi = Integer.parseInt(p.getDpi());
+        Geo geo = new Geo(116.49721, 40.0114);
+        int ppi = 3;
 
         this.device = new Device(2, geo, p.getIp(), p.getS(), p.getImei(), p.getAndroidID(), p.getIdfa(), p.getScreenHeight(),
                 p.getScreenWidth(), ppi, p.getDeviceType(), p.getUa());
@@ -60,7 +60,7 @@ public class IfengRequestBody {
         // int screenHeight, int screenWeight, int ppi, String phoneModel, String ua)
 
         // user
-        this.user = new User(p.getUdid());
+        this.user = new User(p.getImei());
 
         // test
         this.test = isTest;
