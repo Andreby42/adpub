@@ -155,7 +155,9 @@ public class LineFeedAdsManager extends AbstractManager {
                 
                 // 凤凰网走服务端api
                 if (inner.getAdProducer() != null && inner.getAdProducer().equals("IfengAx")) {
-                    createIfengAxEntity(res, advParam);
+                    if(!canCreateIfengAxEntity(res, advParam)) {
+                        return null;
+                    }
                 }
             }
         }
@@ -255,11 +257,10 @@ public class LineFeedAdsManager extends AbstractManager {
         return entity;
     }
     
-    private void createIfengAxEntity(LineFeedAdEntity lineFeedEntity, AdvParam p) {
+    private boolean canCreateIfengAxEntity(LineFeedAdEntity lineFeedEntity, AdvParam p) {
         Ad ad = ifenAxService.getContext(p);
         if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
-            lineFeedEntity = null;
-            return;
+            return false;
         }
 
         lineFeedEntity.buildIfendAxEntity(ad);
@@ -267,7 +268,7 @@ public class LineFeedAdsManager extends AbstractManager {
         lineFeedEntity.setHead(ad.getCreative().getStatics().getText());
         lineFeedEntity.setSubhead(ad.getCreative().getStatics().getDesc());
         lineFeedEntity.setPic(lineFeedEntity.getPicsList().get(0));
-
+        return true;
     }
 
     public static void main(String[] args) {
@@ -280,7 +281,17 @@ public class LineFeedAdsManager extends AbstractManager {
         AdStationlInnerContent a = new AdStationlInnerContent();
         a.setApiType(1);
         System.out.println(a == null);
+        
+        test(a);
+        System.out.println(a == null);
+        
         a = null;
         System.out.println(a == null);
     }
+    
+    private static void test(AdStationlInnerContent ad) {
+        ad=null;
+        return;
+    }
+    
 }

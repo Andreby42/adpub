@@ -223,7 +223,9 @@ public class StationAdsManager extends AbstractManager {
         
         // 凤凰网走服务端api
         if (stationInner.getAdProducer() != null && stationInner.getAdProducer().equals("IfengAx")) {
-            createIfengAxEntity(res, advParam);
+            if(!canCreateIfengAxEntity(res, advParam)) {
+                return null;
+            }
         }
         
         return res;
@@ -396,6 +398,7 @@ public class StationAdsManager extends AbstractManager {
         }
     }
 
+
     @Override
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam) throws Exception {
@@ -475,13 +478,12 @@ public class StationAdsManager extends AbstractManager {
 
     }
     
-    private void createIfengAxEntity(StationAdEntity res, AdvParam p) {
+    private boolean canCreateIfengAxEntity(StationAdEntity res, AdvParam p) {
         Ad ad = ifenAxService.getContext(p);
         if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
             // 返回为空
-            res = null;
             logger.info("凤凰网返回res： res!=null  -->  {}", res != null);
-            return;
+            return false;
         }
         res.buildIfendAxEntity(ad);
 
@@ -491,6 +493,6 @@ public class StationAdsManager extends AbstractManager {
         res.getBannerInfo().setName("");
         res.getBannerInfo().setSlogan(ad.getCreative().getStatics().getDesc());
         res.setH5Url(res.getLink());
-
+        return true;
     }
 }
