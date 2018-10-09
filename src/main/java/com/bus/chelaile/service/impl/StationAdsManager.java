@@ -480,6 +480,7 @@ public class StationAdsManager extends AbstractManager {
         if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
             // 返回为空
             res = null;
+            logger.info("凤凰网返回res： res!=null  -->  {}", res != null);
             return;
         }
         res.buildIfendAxEntity(ad);

@@ -276,5 +276,11 @@ public class LineFeedAdsManager extends AbstractManager {
         ints.add(2);
         Collections.swap(ints, 0, 1);
         System.out.println(ints);
+        
+        AdStationlInnerContent a = new AdStationlInnerContent();
+        a.setApiType(1);
+        System.out.println(a == null);
+        a = null;
+        System.out.println(a == null);
     }
 }
