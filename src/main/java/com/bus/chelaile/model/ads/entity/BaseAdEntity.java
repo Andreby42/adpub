@@ -16,7 +16,9 @@ import com.bus.chelaile.model.Platform;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.mvc.AdvParam;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 import com.bus.chelaile.util.AdvUtil;
+import com.bus.chelaile.util.New;
 
 /**
  * 包含每个广告的通用的最基本的属性;
@@ -299,6 +301,29 @@ public abstract class BaseAdEntity {
 		return url;
 	}
 
+	public void buildIfendAxEntity(Ad ad) {
+	    this.setLink(ad.getCreative().getStatics().getCurl());
+        List<String> picList = New.arrayList();
+        picList.add(ad.getCreative().getStatics().getAurl().get(0));
+        this.setPicsList(picList);
+
+        String clickMonitorLink = "";
+        String unfoldMonitorLink = "";
+
+        for (String s : ad.getCreative().getStatics().getAcurl()) {
+            clickMonitorLink += s + ";";
+        }
+        if (clickMonitorLink.length() > 0)
+            clickMonitorLink = clickMonitorLink.substring(0, clickMonitorLink.length() - 1);
+        for (String s : ad.getCreative().getStatics().getMurl()) {
+            unfoldMonitorLink += s + ";";
+        }
+        if (unfoldMonitorLink.length() > 0)
+            unfoldMonitorLink = unfoldMonitorLink.substring(0, unfoldMonitorLink.length() - 1);
+        this.setClickMonitorLink(clickMonitorLink);
+        this.setUnfoldMonitorLink(unfoldMonitorLink);
+    }
+    
 	protected abstract ShowType gainShowTypeEnum();
 
 	public int getId() {

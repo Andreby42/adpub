@@ -1,12 +1,6 @@
 package com.bus.chelaile.third.IfengAx;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,45 +19,46 @@ public class IfenAxService {
 
     private static final Logger logger = LoggerFactory.getLogger(IfenAxService.class);
 
-    public static Ad getContext(AdvParam p) {
+    public Ad getContext(AdvParam p) {
 
         IfengResponse responseEntity = null;
 
         IfengRequestBody requestBody = new IfengRequestBody(p, 1, 6, 300, 200, "1-1-1");
-        System.out.println(JSONObject.toJSONString(requestBody));
+        logger.info("请求凤凰网body={}", JSONObject.toJSONString(requestBody));
+//        System.out.println(JSONObject.toJSONString(requestBody));
 
         String result = HttpUtils.post(URL_TEST, JSONObject.toJSONString(requestBody));
-        
-        System.out.println(result);
-        if(StringUtils.isNoneBlank(result))
+
+        logger.info("凤凰网返回result={}", result);
+//        System.out.println(result);
+        if (StringUtils.isNoneBlank(result))
             responseEntity = JSON.parseObject(result, IfengResponse.class);
 
-        if(responseEntity != null && responseEntity.getAd() != null && responseEntity.getAd().size() > 0) {
+        if (responseEntity != null && responseEntity.getAd() != null && responseEntity.getAd().size() > 0) {
             return responseEntity.getAd().get(0);
         }
-        
+
+        logger.error("凤凰网返回为空 ");
         return null;
     }
 
-    void parseAdEntity() {
-
-    }
 
     public static void main(String[] args) {
         AdvParam p = new AdvParam();
-        p.setUdid("db9bef8b-93a1-4698-9c3b-d7ee59808f13");
+        p.setUdid("db9bef8b-93a1-4698-9c3b-d7ee59808f15");
         //        p.setDpi("3");
-        p.setIp("210.51.19.2");
+        p.setIp("210.51.19.3");
         p.setS("android");
         p.setV("3.62.0");
-        p.setImei("861063046917684");
+        p.setImei("86106304691768113");
         p.setScreenHeight(1920);
         p.setScreenWidth(680);
         p.setLng(119.123);
         p.setLat(39.0093);
 
-        Ad ad = getContext(p);
-        if(ad != null) {
+        IfenAxService i = new IfenAxService();
+        Ad ad = i.getContext(p);
+        if (ad != null) {
             System.out.println(JSONObject.toJSONString(ad));
             System.out.println("text=" + ad.getCreative().getStatics().getText());
             System.out.println("desc=" + ad.getCreative().getStatics().getDesc());

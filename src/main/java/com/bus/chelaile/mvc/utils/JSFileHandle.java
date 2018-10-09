@@ -592,7 +592,7 @@ public class JSFileHandle {
     // 新的获取placementId的方式
     private static String getPlaceMentId(String platform, ShowType showType, String aid, String displayType) {
         // 目前 除了3以外，其他的都一样
-        // 2018-09-29 ，增加5和6。所以这里仅仅将 1(右图大图)处理成2(右图小图)即可      
+        // 2018-09-29 ，增加6和7。所以这里仅仅将 1(右图大图)处理成2(右图小图)即可      
         if (displayType.equals("1"))
             displayType = "2";
         StringBuilder key = new StringBuilder(showType.getType()).append("_").append(aid).append("_").append(displayType);

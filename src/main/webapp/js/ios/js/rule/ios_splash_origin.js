@@ -83,7 +83,6 @@ var sdk_gdt = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_gdt_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -119,7 +118,6 @@ var sdk_baidu = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_baidu_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -154,7 +152,6 @@ var sdk_toutiao = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_toutiao_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -189,7 +186,6 @@ var sdk_inmobi = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_inmobi_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -228,7 +224,6 @@ var sdk_voicead = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_ifly_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -264,7 +259,6 @@ var sdk_voicead_no2 = {
     filter_ios: function(list) {
         if(Array.isArray(list) && list.length > 0) {
             var info = list[0].info;
-            info.adid = "sdk_voicead_test";
             info.isDisplay = 0;
             info.isSkip = 0;
             info.duration = 4;
@@ -297,7 +291,15 @@ var sdk_adview = {
     },
 
     filter_ios : function(list) {
-        return list;
+        if(Array.isArray(list) && list.length > 0) {
+            var info = list[0].info;
+            info.isDisplay = 0;
+            info.isSkip = 0;
+            info.duration = 4;
+            list[0].info = info;
+            return [list[0]];
+        }
+        return [];
     },
 
     aid : function () {

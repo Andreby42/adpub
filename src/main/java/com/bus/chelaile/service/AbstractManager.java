@@ -11,6 +11,7 @@ import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
@@ -32,6 +33,7 @@ import com.bus.chelaile.model.rule.UserClickRate;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
+import com.bus.chelaile.third.IfengAx.IfenAxService;
 import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;

@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -36,6 +37,8 @@ import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.service.model.Ads;
 import com.bus.chelaile.service.model.FeedAdGoto;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.third.IfengAx.IfenAxService;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 import com.bus.chelaile.third.meituan.MeiTuanService;
 import com.bus.chelaile.third.meituan.MeituanData;
 import com.bus.chelaile.thread.StaticTimeLog;
@@ -44,6 +47,9 @@ import com.bus.chelaile.util.New;
 
 public class StationAdsManager extends AbstractManager {
 
+    @Autowired
+    IfenAxService ifenAxService;
+    
     static Set<String> TBK_TITLE_KEY = New.hashSet();
 
     @Override
@@ -214,8 +220,15 @@ public class StationAdsManager extends AbstractManager {
         		return null;
         	}
         }
-      
-
+        
+        // 凤凰网走服务端api
+        if (stationInner.getAdProducer() != null && stationInner.getAdProducer().equals("IfengAx")) {
+            res = createIfengAxEntity(advParam);
+            if (res == null) {
+                logger.error("获取凤凰网数据为空");
+            }
+        }
+        
         return res;
     }
 
@@ -456,5 +469,21 @@ public class StationAdsManager extends AbstractManager {
 
         return entities;
 
+    }
+    
+    private StationAdEntity createIfengAxEntity(AdvParam p) {
+        StationAdEntity res = null;
+        Ad ad = ifenAxService.getContext(p);
+        res = new StationAdEntity();
+        res.buildIfendAxEntity(ad);
+
+        res.setPic(res.getPicsList().get(0));
+        res.setTitle(ad.getCreative().getStatics().getText());
+        res.getBannerInfo().setSlogan("");
+        res.getBannerInfo().setName("");
+        res.getBannerInfo().setSlogan(ad.getCreative().getStatics().getDesc());
+        res.setH5Url(res.getLink());
+
+        return res;
     }
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.QueryParam;
@@ -22,12 +24,17 @@ import com.bus.chelaile.service.model.Ads;
 import com.bus.chelaile.service.model.FeedAdGoto;
 import com.bus.chelaile.service.model.Thumbnails;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.third.IfengAx.IfenAxService;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
 public class LineFeedAdsManager extends AbstractManager {
-
+    
+    @Autowired
+    IfenAxService ifenAxService;
+    
     @Override
     protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord) throws Exception {
@@ -139,6 +146,14 @@ public class LineFeedAdsManager extends AbstractManager {
                 if(inner.getTasksGroup() != null) {
                     res.setTasksGroup(inner.getTasksGroup());
                 }
+                
+                // 凤凰网走服务端api
+                if (inner.getAdProducer() != null && inner.getAdProducer().equals("IfengAx")) {
+                    res = createIfengAxEntity(advParam);
+                    if (res == null) {
+                        logger.error("获取凤凰网数据为空");
+                    }
+                }
             }
         }
         return res;
@@ -235,6 +250,20 @@ public class LineFeedAdsManager extends AbstractManager {
             logger.error("获取跳转feed流广告内容失败， url={}, response={}", url, response);;
         }
         return entity;
+    }
+    
+    private LineFeedAdEntity createIfengAxEntity(AdvParam p) {
+        LineFeedAdEntity lineFeedEntity = null;
+        Ad ad = ifenAxService.getContext(p);
+        lineFeedEntity = new LineFeedAdEntity(ShowType.LINE_FEED_ADV.getValue());
+
+        lineFeedEntity.buildIfendAxEntity(ad);
+
+        lineFeedEntity.setHead(ad.getCreative().getStatics().getText());
+        lineFeedEntity.setSubhead(ad.getCreative().getStatics().getDesc());
+        lineFeedEntity.setPic(lineFeedEntity.getPicsList().get(0));
+
+        return lineFeedEntity;
     }
 
     public static void main(String[] args) {

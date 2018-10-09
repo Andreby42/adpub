@@ -71,9 +71,8 @@ public class IfengRequestBody {
         //            ppi = Math.round(Float.parseFloat(p.getDpi()));
 
         // 0 : Unknown， 1 : Ethernet，2 : WIFI ，3 : Cellular Network – Unknown Generation ，4 : Cellular Network – 2G ，5 : Cellular Network – 3G ，6 : Cellular Network – 4G
-        this.device = new Device(6, geo, p.getIp(), p.getS(), p.getImei(), p.getAndroidID(), p.getIdfa(), p.getScreenHeight(),
+        this.device = new Device(2, geo, p.getIp(), p.getS(), p.getImei(), p.getAndroidID(), p.getIdfa(), p.getScreenHeight(),
                 p.getScreenWidth(), ppi, p.getDeviceType(), p.getUa());
-
 
         // test
         this.test = isTest;
