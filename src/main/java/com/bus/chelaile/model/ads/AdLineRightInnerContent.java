@@ -35,6 +35,8 @@ public class AdLineRightInnerContent extends AdInnerContent {
     private TasksGroup tasksGroup;
     private String iosURL;
     private String androidURL;
+    
+    private String adProducer;  //广告主
 
     @Override
     protected void parseJson(String jsonr) {
@@ -49,6 +51,7 @@ public class AdLineRightInnerContent extends AdInnerContent {
             this.adMode = ad.adMode;
             this.iosURL = ad.iosURL;
             this.androidURL = ad.androidURL;
+            this.adProducer = ad.adProducer;
             if (ad.pic != null && ad.pic.contains("#") && ad.pic.contains(",")) {
                 this.pic = ad.pic.split("#")[0];
                 //				this.setWidth(Integer.parseInt(ad.pic.split("#")[1].split(",")[0]));
@@ -268,5 +271,13 @@ public class AdLineRightInnerContent extends AdInnerContent {
                 "{\"closePic\":\"https://image3.chelaile.net.cn/e97febd4501d488e85b096b04721745c\",\"androidURL\":\"https://image3.chelaile.net.cn/0f5007a0e8d34c2a8398d0a14d4a9e88#511,512\",\"iosURL\":\"https://image3.chelaile.net.cn/82d042f985ac4cfa8a9e2ae8b426057b#511,512\",\"adMode\":\"1\",\"linkH5\":\"\",\"backup\":0}");
    
        System.out.println(JSONObject.toJSONString(ad));
+    }
+
+    public String getAdProducer() {
+        return adProducer;
+    }
+
+    public void setAdProducer(String adProducer) {
+        this.adProducer = adProducer;
     }
 }

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.third.IfengAx.model.IfengRequestBody;
 import com.bus.chelaile.third.IfengAx.model.response.Ad;
@@ -19,17 +20,26 @@ public class IfenAxService {
 
     private static final Logger logger = LoggerFactory.getLogger(IfenAxService.class);
 
-    public Ad getContext(AdvParam p) {
+    public Ad getContext(AdvParam p, int isTest, int bannerType, int w, int h, String tagid) {
 
         IfengResponse responseEntity = null;
 
-        IfengRequestBody requestBody = new IfengRequestBody(p, 1, 6, 300, 200, "1-1-1");
+        String url = URL_ONLINE;
+        if (Constants.ISTEST) {
+            url = URL_TEST;
+            if (p.getImei() != null)
+                p.setImei(p.getImei() + System.currentTimeMillis());
+            if (p.getIdfa() != null)
+                p.setIdfa(p.getIdfa() + System.currentTimeMillis());
+        }
+
+        IfengRequestBody requestBody = new IfengRequestBody(p, isTest, bannerType, w, h, tagid);
         logger.info("请求凤凰网body={}", JSONObject.toJSONString(requestBody));
         System.out.println(JSONObject.toJSONString(requestBody));
 
-        String result = HttpUtils.post(URL_TEST, JSONObject.toJSONString(requestBody));
+        String result = HttpUtils.post(url, JSONObject.toJSONString(requestBody));
 
-//        logger.info("凤凰网返回result={}", result);
+        //        logger.info("凤凰网返回result={}", result);
         System.out.println(result);
         if (StringUtils.isNoneBlank(result))
             responseEntity = JSON.parseObject(result, IfengResponse.class);
@@ -42,7 +52,6 @@ public class IfenAxService {
         return null;
     }
 
-
     public static void main(String[] args) {
         AdvParam p = new AdvParam();
         p.setUdid("db9bef8b-93a1-4698-9c3b-d7ee59808f15");
@@ -50,14 +59,16 @@ public class IfenAxService {
         p.setIp("210.51.19.3");
         p.setS("android");
         p.setV("3.62.0");
-        p.setImei("861063046917681131");
+        p.setImei("861063046917681139");
         p.setScreenHeight(1920);
         p.setScreenWidth(680);
         p.setLng(119.123);
         p.setLat(39.0093);
 
         IfenAxService i = new IfenAxService();
-        Ad ad = i.getContext(p);
+        Ad ad = i.getContext(p, 1, 6, 300, 200, "1-1-1"); // banner位尺寸
+        //        Ad ad = i.getContext(p, 1, 2, 320, 180, "1-1-1"); // 右上角尺寸
+        //        Ad ad = i.getContext(p, 1, 2, 640, 960, "1-1-1");  // 开屏尺寸
         if (ad != null) {
             System.out.println(JSONObject.toJSONString(ad));
             System.out.println("text=" + ad.getCreative().getStatics().getText());

@@ -479,7 +479,7 @@ public class StationAdsManager extends AbstractManager {
     }
     
     private boolean canCreateIfengAxEntity(StationAdEntity res, AdvParam p) {
-        Ad ad = ifenAxService.getContext(p);
+        Ad ad = ifenAxService.getContext(p, 1, 6, 300, 200, "1-1-1");
         if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
             // 返回为空
             logger.info("凤凰网返回res： res!=null  -->  {}", res != null);

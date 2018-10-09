@@ -258,7 +258,7 @@ public class LineFeedAdsManager extends AbstractManager {
     }
     
     private boolean canCreateIfengAxEntity(LineFeedAdEntity lineFeedEntity, AdvParam p) {
-        Ad ad = ifenAxService.getContext(p);
+        Ad ad = ifenAxService.getContext(p, 1, 6, 300, 200, "1-1-1");
         if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
             return false;
         }
