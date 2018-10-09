@@ -422,6 +422,7 @@ public class StationAdsManager extends AbstractManager {
                 }
             }
         }
+        logger.info("hasOwnA={}", hasOwnAd);
         StaticTimeLog.record(Constants.RECORD_LOG,"for_two" );
         // 如果没有自采买，那么返回一个列表
         if (!hasOwnAd) {
