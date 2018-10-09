@@ -354,15 +354,7 @@ public class StationAdsManager extends AbstractManager {
                     entity.setAutoInterval(inner.getAutoInterval());
                     entity.setMixInterval(inner.getMixInterval());
 
-                    BannerInfo bannerInfo = new BannerInfo();
-                    bannerInfo.setSlogan(slogan);
-                    bannerInfo.setBannerType(4); // 专用样式，文字+标签（文案由客户端自定义）
-                    AdButtonInfo buttonInfo = new AdButtonInfo();
-                    buttonInfo.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
-                    bannerInfo.setButton(buttonInfo);
-
-                    entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
-                    entity.setBannerInfo(bannerInfo);
+                    setMaterials(entity, slogan);
                     entity.setTargetType(ad.getTargetType());
                     
                     if(inner.getTasksGroup() != null) {
@@ -378,6 +370,19 @@ public class StationAdsManager extends AbstractManager {
             return null;
         }
         return entity;
+    }
+
+    // 第三方站点广告常规原色设定
+    private void setMaterials(StationAdEntity entity, String slogan) {
+        BannerInfo bannerInfo = new BannerInfo();
+        bannerInfo.setSlogan(slogan);
+        bannerInfo.setBannerType(4); // 专用样式，文字+标签（文案由客户端自定义）
+        AdButtonInfo buttonInfo = new AdButtonInfo();
+        buttonInfo.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
+        bannerInfo.setButton(buttonInfo);
+
+        entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
+        entity.setBannerInfo(bannerInfo);
     }
     
     
@@ -486,13 +491,8 @@ public class StationAdsManager extends AbstractManager {
             return false;
         }
         res.buildIfendAxEntity(ad);
-
-        res.setPic(res.getPicsList().get(0));
-        res.setTitle(ad.getCreative().getStatics().getText());
-        res.getBannerInfo().setSlogan("");
-        res.getBannerInfo().setName("");
-        res.getBannerInfo().setSlogan(ad.getCreative().getStatics().getDesc());
-        res.setH5Url(res.getLink());
+        setMaterials(res, ad.getCreative().getStatics().getText());
+        
         return true;
     }
 }
