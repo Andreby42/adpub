@@ -15,6 +15,7 @@ import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
+import com.bus.chelaile.model.ads.AdStationlInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -75,6 +76,11 @@ public class LineFeedAdsManager extends AbstractManager {
                 AdContentCacheEle ad = entry.getValue();
                 if (((AdLineFeedInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
                     backupad = ad;
+                    continue;
+                }
+                // 自采买的去掉
+                if(((AdLineFeedInnerContent)ad.getAds().getInnerContent()).getProvider_id() <= 1 
+                        && ((AdLineFeedInnerContent)ad.getAds().getInnerContent()).getBackup() == 0) {
                     continue;
                 }
                 LineFeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);

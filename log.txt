@@ -8978,3 +8978,5 @@ java.lang.ArrayIndexOutOfBoundsException: 1
 [2018-09-25 16:13:20] [ERROR] - [ERROR_VERSION] 错误版本号: versionStr=6.3.4.2
 [2018-09-25 16:14:58] [ERROR] - parseVersionStr 
 [2018-09-25 16:14:59] [ERROR] - [ERROR_VERSION] 错误版本号: versionStr=6.3.4.2
+[2018-10-09 15:29:51] [ERROR] - 凤凰网返回为空 
+[2018-10-09 15:30:21] [ERROR] - 凤凰网返回为空 

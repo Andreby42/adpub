@@ -25,12 +25,12 @@ public class IfenAxService {
 
         IfengRequestBody requestBody = new IfengRequestBody(p, 1, 6, 300, 200, "1-1-1");
         logger.info("请求凤凰网body={}", JSONObject.toJSONString(requestBody));
-//        System.out.println(JSONObject.toJSONString(requestBody));
+        System.out.println(JSONObject.toJSONString(requestBody));
 
         String result = HttpUtils.post(URL_TEST, JSONObject.toJSONString(requestBody));
 
-        logger.info("凤凰网返回result={}", result);
-//        System.out.println(result);
+//        logger.info("凤凰网返回result={}", result);
+        System.out.println(result);
         if (StringUtils.isNoneBlank(result))
             responseEntity = JSON.parseObject(result, IfengResponse.class);
 
@@ -50,7 +50,7 @@ public class IfenAxService {
         p.setIp("210.51.19.3");
         p.setS("android");
         p.setV("3.62.0");
-        p.setImei("86106304691768113");
+        p.setImei("861063046917681131");
         p.setScreenHeight(1920);
         p.setScreenWidth(680);
         p.setLng(119.123);

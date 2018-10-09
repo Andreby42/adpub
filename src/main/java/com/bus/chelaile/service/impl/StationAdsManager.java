@@ -428,8 +428,14 @@ public class StationAdsManager extends AbstractManager {
             AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
+                // 兜底的拿出来
                 if(((AdStationlInnerContent)ad.getAds().getInnerContent()).getBackup() == 1) {
                     backupad = ad;
+                    continue;
+                }
+                // 自采买的去掉
+                if(((AdStationlInnerContent)ad.getAds().getInnerContent()).getProvider_id() <= 1 
+                        && ((AdStationlInnerContent)ad.getAds().getInnerContent()).getBackup() == 0) {
                     continue;
                 }
                 StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
