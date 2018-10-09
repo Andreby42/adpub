@@ -149,10 +149,7 @@ public class LineFeedAdsManager extends AbstractManager {
                 
                 // 凤凰网走服务端api
                 if (inner.getAdProducer() != null && inner.getAdProducer().equals("IfengAx")) {
-                    res = createIfengAxEntity(advParam);
-                    if (res == null) {
-                        logger.error("获取凤凰网数据为空");
-                    }
+                    createIfengAxEntity(res, advParam);
                 }
             }
         }
@@ -252,10 +249,12 @@ public class LineFeedAdsManager extends AbstractManager {
         return entity;
     }
     
-    private LineFeedAdEntity createIfengAxEntity(AdvParam p) {
-        LineFeedAdEntity lineFeedEntity = null;
+    private void createIfengAxEntity(LineFeedAdEntity lineFeedEntity, AdvParam p) {
         Ad ad = ifenAxService.getContext(p);
-        lineFeedEntity = new LineFeedAdEntity(ShowType.LINE_FEED_ADV.getValue());
+        if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
+            lineFeedEntity = null;
+            return;
+        }
 
         lineFeedEntity.buildIfendAxEntity(ad);
 
@@ -263,7 +262,6 @@ public class LineFeedAdsManager extends AbstractManager {
         lineFeedEntity.setSubhead(ad.getCreative().getStatics().getDesc());
         lineFeedEntity.setPic(lineFeedEntity.getPicsList().get(0));
 
-        return lineFeedEntity;
     }
 
     public static void main(String[] args) {

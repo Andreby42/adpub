@@ -185,7 +185,7 @@ function trackBaseParams(sdk, ad) {
     var info = ad.info || {};
     var traceInfo = sdk.traceInfo || {};
     var deviceObject = GetDeviceInfoObject() || {}
-    
+
     var picsList = info.picsList;
     var adv_image = "";
     if(picsList && picsList.length) {
@@ -207,7 +207,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "v", deviceObject.v);
     addParamsIfNotNull(params, "idfa", deviceObject.idfa || '');
     addParamsIfNotNull(params, "is_backup", info.is_backup || 0);
-    addParamsIfNotNull(params, "adStyle", info.adStyle || '');
+    addParamsIfNotNull(params, "adStyle", info.displayType || '');
     return params;
 }
 
@@ -793,15 +793,28 @@ function load(task, rule, userdata, fetchTimeout, callback) {
 
         if (task.adStyle) {
 
-            var deviceObject = GetDeviceInfoObject() || {};
-            var screenWidth = ((deviceObject.screenWidth || 750) / (deviceObject.dpi || 2));
-            var rule_pid = rule.traceInfo.pid;
-
-            if(rule_pid != '25' && rule_pid != '26' && rule_pid != '32')
+            if(requestInfo.url == 'CLLAdMobileSdk')
             {
-                screenWidth -= 16;
+                var deviceObject = GetDeviceInfoObject() || {};
+                var screenWidth = ((deviceObject.screenWidth || 750) / (deviceObject.dpi || 2));
+                var rule_pid = rule.traceInfo.pid;
+                if(rule_pid != '25' && rule_pid != '26' && rule_pid != '32')
+                {
+                    screenWidth -= 16;
+                }
+                var screenHeight;
+                if(rule_pid == '15')
+                {
+                    screenHeight = 48;
+                    screenWidth = 48 * 6.4;
+                    userdata["bannerSize"] = 0;
+                }
+                else
+                {
+                    screenHeight = screenWidth / 4;
+                    userdata["bannerSize"] = 1;
+                }
             }
-            var screenHeight = screenWidth / 4;
 
             var style = task.adStyle();
             var sizeObj = {

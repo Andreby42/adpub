@@ -96,7 +96,7 @@ function trackBaseParams(sdk, ad) {
     var info = ad.info || {};
     var traceInfo = sdk.traceInfo || {};
     var deviceObject = GetDeviceInfoObject() || {}
-    
+
     var picsList = info.picsList;
     var adv_image = "";
     if(picsList && picsList.length) {
@@ -118,7 +118,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "v", deviceObject.v);
     addParamsIfNotNull(params, "idfa", deviceObject.idfa || '');
     addParamsIfNotNull(params, "is_backup", info.is_backup || 0);
-    addParamsIfNotNull(params, "adStyle", info.adStyle || '');
+    addParamsIfNotNull(params, "adStyle", info.displayType || '');
     return params;
 }
 
