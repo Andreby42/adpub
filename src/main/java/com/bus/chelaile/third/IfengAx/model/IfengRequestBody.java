@@ -59,7 +59,7 @@ public class IfengRequestBody {
         this.user = new User(p.getImei());
         String domain = "com.ygkj.chelaile.standard";
         if (p.getS().equalsIgnoreCase("ios")) {
-            domain = "";
+            domain = "com.chelaile.lite";
             this.user = new User(p.getIdfa());
         }
         this.app = new App(domain, APPID, APPNAME, p.getV());

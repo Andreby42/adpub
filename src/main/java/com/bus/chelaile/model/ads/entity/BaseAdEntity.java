@@ -313,13 +313,17 @@ public abstract class BaseAdEntity {
         for (String s : ad.getCreative().getStatics().getAcurl()) {
             clickMonitorLink += s + ";";
         }
-        if (clickMonitorLink.length() > 0)
+        if (clickMonitorLink.length() > 0) {
+            this.monitorType = 3;
             clickMonitorLink = clickMonitorLink.substring(0, clickMonitorLink.length() - 1);
+        }
         for (String s : ad.getCreative().getStatics().getMurl()) {
             unfoldMonitorLink += s + ";";
         }
-        if (unfoldMonitorLink.length() > 0)
+        if (unfoldMonitorLink.length() > 0) {
+            this.monitorType = 3;
             unfoldMonitorLink = unfoldMonitorLink.substring(0, unfoldMonitorLink.length() - 1);
+        }
         this.setClickMonitorLink(clickMonitorLink);
         this.setUnfoldMonitorLink(unfoldMonitorLink);
     }
