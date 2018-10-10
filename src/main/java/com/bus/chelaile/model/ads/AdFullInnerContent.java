@@ -43,6 +43,8 @@ public class AdFullInnerContent extends AdInnerContent {
     private List<Long> timeouts; // 超时时间段设置
 
     private TasksGroup tasksGroup;
+    
+    private String adProducer;  //广告主
 
     @Autowired
     @Override
@@ -66,6 +68,7 @@ public class AdFullInnerContent extends AdInnerContent {
             this.timeout = ad.timeout;
             this.AdWeight = ad.AdWeight;
             this.clickDown = ad.clickDown;
+            this.adProducer = ad.adProducer;
             this.setTasksJ(ad.getTasksJ());
             Map<String,String> map = New.hashMap();
             List<List<String>> tasksG = New.arrayList();
@@ -364,6 +367,14 @@ public class AdFullInnerContent extends AdInnerContent {
      */
     public void setTasksJ(List<TaskModel> tasksJ) {
         this.tasksJ = tasksJ;
+    }
+
+    public String getAdProducer() {
+        return adProducer;
+    }
+
+    public void setAdProducer(String adProducer) {
+        this.adProducer = adProducer;
     }
 
 }

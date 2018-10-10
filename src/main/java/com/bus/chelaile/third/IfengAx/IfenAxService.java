@@ -68,8 +68,8 @@ public class IfenAxService {
 
         IfenAxService i = new IfenAxService();
 //        Ad ad = i.getContext(p, 1, 6, 300, 200, "1-1-1"); // banner位尺寸
-                Ad ad = i.getContext(p, 1, 2, 320, 180, "1-1-1"); // 右上角尺寸
-//                Ad ad = i.getContext(p, 1, 2, 640, 960, "1-1-1");  // 开屏尺寸
+//                Ad ad = i.getContext(p, 1, 2, 320, 180, "1-1-1"); // 右上角尺寸
+                Ad ad = i.getContext(p, 1, 6, 640, 960, "1-2-1");  // 开屏尺寸
         if (ad != null) {
             System.out.println(JSONObject.toJSONString(ad));
             System.out.println("text=" + ad.getCreative().getStatics().getText());

@@ -22,9 +22,11 @@ import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdFullInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
+import com.bus.chelaile.model.ads.AdLineRightInnerContent;
 import com.bus.chelaile.model.ads.AdSchedule;
 import com.bus.chelaile.model.ads.entity.ApiLineEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.LineRightAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenAdEntity;
 import com.bus.chelaile.model.ads.entity.OpenOldAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -33,6 +35,8 @@ import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.service.CommonService;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.third.IfengAx.IfenAxService;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 import com.bus.chelaile.util.New;
  
 /**
@@ -48,6 +52,9 @@ public class OpenManager extends AbstractManager {
 
     @Autowired
     private ApiDetailsManager apiDetailsManager;
+    
+    @Autowired
+    IfenAxService ifenAxService;
 
     @Override
     protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
@@ -236,6 +243,14 @@ public class OpenManager extends AbstractManager {
             oldEntity.setExpire(adc.getRule().getEndDate().getTime());
             entity = oldEntity;
         }
+        
+        // 凤凰网走服务端api
+        if (fullInner.getAdProducer() != null && fullInner.getAdProducer().equals("IfengAx")) {
+            if(!canCreateIfengAxEntity(entity, advParam)) {
+                return null;
+            }
+        }
+        
 
         // 每个时间段的发送次数
         adTimeCounts(cacheRecord, advParam.getUdid(), adc);
@@ -430,8 +445,12 @@ public class OpenManager extends AbstractManager {
                 if (inner.getProvider_id() > 1) {
                     entity = createSDKOpenAds(inner, ad.getAds().getId());
                 } else {
-                    if(inner.getBackup() == 1) {    // 兜底的广告单独摘出来
+                    if (inner.getBackup() == 1) { // 兜底的广告单独摘出来
                         backupad = ad;
+                        continue;
+                    }
+                    // 自采买的去掉, 因为自采买的之前已经给遍历过一遍了，此时不允许再次处理
+                    if (inner.getProvider_id() <= 1 && inner.getBackup() == 0) {
                         continue;
                     }
                     entity = getSelfAdEntity(advParam, cacheRecord, ad, showType, queryParam);
@@ -467,5 +486,17 @@ public class OpenManager extends AbstractManager {
         }
 
         return entities;
+    }
+    
+    // TODO  尺寸需要修改，临时用开屏的
+    private boolean canCreateIfengAxEntity(OpenAdEntity entity, AdvParam p) {
+        Ad ad = ifenAxService.getContext(p, 1, 2, 320, 180, "1-1-1"); // 2, 320, 180
+        if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
+            return false;
+        }
+
+        entity.buildIfendAxEntity(ad);
+        entity.setPic(entity.getPicsList().get(0));
+        return true;
     }
 }
