@@ -25,13 +25,14 @@ public class IfenAxService {
         IfengResponse responseEntity = null;
 
         String url = URL_ONLINE;
-        if (Constants.ISTEST) {
+        // TODO
+//        if (Constants.ISTEST) {
             url = URL_TEST;
             if (p.getImei() != null)
                 p.setImei(p.getImei() + System.currentTimeMillis());
             if (p.getIdfa() != null)
                 p.setIdfa(p.getIdfa() + System.currentTimeMillis());
-        }
+//        }
 
         IfengRequestBody requestBody = new IfengRequestBody(p, isTest, bannerType, w, h, tagid);
         logger.info("请求凤凰网body={}", JSONObject.toJSONString(requestBody));
@@ -66,9 +67,9 @@ public class IfenAxService {
         p.setLat(39.0093);
 
         IfenAxService i = new IfenAxService();
-        Ad ad = i.getContext(p, 1, 6, 300, 200, "1-1-1"); // banner位尺寸
-        //        Ad ad = i.getContext(p, 1, 2, 320, 180, "1-1-1"); // 右上角尺寸
-        //        Ad ad = i.getContext(p, 1, 2, 640, 960, "1-1-1");  // 开屏尺寸
+//        Ad ad = i.getContext(p, 1, 6, 300, 200, "1-1-1"); // banner位尺寸
+                Ad ad = i.getContext(p, 1, 2, 320, 180, "1-1-1"); // 右上角尺寸
+//                Ad ad = i.getContext(p, 1, 2, 640, 960, "1-1-1");  // 开屏尺寸
         if (ad != null) {
             System.out.println(JSONObject.toJSONString(ad));
             System.out.println("text=" + ad.getCreative().getStatics().getText());
