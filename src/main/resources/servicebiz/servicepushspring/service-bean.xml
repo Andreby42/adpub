@@ -50,7 +50,9 @@
     <!-- feed流广告 -->
     <bean id="guideManager" class="com.bus.chelaile.service.impl.GuideManager" parent="abstractService">
     </bean>
-	
+	<!-- 凤凰网api -->
+    <bean id="ifenAxService" class="com.bus.chelaile.third.IfengAx.IfenAxService">
+    </bean>
 	
 	
 	<!-- 通用广告 -->

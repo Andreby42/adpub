@@ -66,56 +66,48 @@ public class JSService {
         queryParam.setJS(true);
         switch (site) {
             case "splash":
-                //                showType = ShowType.OPEN_SCREEN;
                 entities = openManager.doServiceList(param, ShowType.OPEN_SCREEN, queryParam);
                 break;
             case "home":
-                //                showType = ShowType.DOUBLE_COLUMN;
                 entities = doubleAndSingleManager.doServiceList(param, ShowType.DOUBLE_COLUMN, queryParam);
                 break;
 
             case "rightTop":
-                //                showType = ShowType.LINE_RIGHT_ADV;
                 entities = lineRightManager.doServiceList(param, ShowType.LINE_RIGHT_ADV, queryParam);
                 break;
             case "station":
-                //                showType = ShowType.STATION_ADV;
                 entities = stationAdsManager.doServiceList(param, ShowType.STATION_ADV, queryParam);
                 break;
 
             case "bottom":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = lineFeedAdsManager.doServiceList(param, ShowType.LINE_FEED_ADV, queryParam);
                 break;
-                
+
+            case "seek":
+                entities = otherManager.doServiceList(param, ShowType.SEEK_ADV, queryParam);
+                break;
+
             case "transfer":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.TRANSFER_ADV, queryParam);
                 break;
-                
+
             case "stationDetail":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.CAR_ALL_LINE_ADV, queryParam);
                 break;
 
             case "allCars":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.ALL_CAR_ADV, queryParam);
-                break; 
+                break;
             case "interstitialHome":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.INTERSHOME_ADV, queryParam);
                 break;
             case "interstitialTransit":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.INTERSTRANSIT_ADV, queryParam);
                 break;
             case "interstitialEnergy":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.INTERSENERGY_ADV, queryParam);
                 break;
             case "interstitialMine":
-                //                showType = ShowType.LINE_FEED_ADV;
                 entities = otherManager.doServiceList(param, ShowType.INTERSMINE_ADV, queryParam);
                 break;
 
@@ -138,14 +130,7 @@ public class JSService {
                 if (entity.getTasksGroup() != null) {
                     // 取任务出来,针对android，去掉imei号是unknown的头条任务
                     tasks.addAll(entity.getTasksGroup().getTasks());
-                    // TODO  fist to use stream ， very cool !! 
-                    if (StringUtils.isNotBlank(param.getS()) && param.getS().equals("android")) {
-                        if (StringUtils.isBlank(param.getImei()) || param.getImei().equals("unknown")) {
-                            tasks.removeIf(i -> {
-                                return i.contains("sdk_toutiao"); //No contais sdk_toutiao
-                            });
-                        }
-                    }
+                    specialAids(param, tasks);
 
                     //提取第一个times出来
                     if (times.size() == 0)
@@ -168,10 +153,11 @@ public class JSService {
                 }
             }
             // 执行setTraceInfo的操作
-            executeSetTraceInfo(param, entities);
-            
-            
+            if (StringUtils.isBlank(param.getTraceid())) {
+                param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
+            }
         }
+        
         taskEntity.setTaskGroups(new TasksGroup(tasks, times,map, closePic, hostSpotSize, fakeRate));
         taskEntity.setTraceid(param.getTraceid());
         taskEntity.setJsid(jsid);
@@ -181,25 +167,26 @@ public class JSService {
         return taskEntity;
     }
 
-    private void executeSetTraceInfo(AdvParam param, List<BaseAdEntity> entities) {
-        if (StringUtils.isBlank(param.getTraceid())) {
-            //            logger.info("traceid为空 ┭┮﹏┭┮");
-            param.setTraceid(param.getUdid() + "_" + System.currentTimeMillis());
+
+    // 一些特殊aid的特殊要求
+    private void specialAids(final AdvParam param, List<List<String>> tasks) {
+        if (StringUtils.isNotBlank(param.getS()) && param.getS().equals("android")) {
+            if (StringUtils.isBlank(param.getImei()) || param.getImei().equals("unknown")) {
+                //  fist to use stream ， very cool !! 
+                tasks.removeIf(i -> {
+                    return i.contains("sdk_toutiao"); //No contais sdk_toutiao
+                });
+            }
+
+            // 涉及到非原生的banner的加载问题，跟客户端协议的一个参数
+            if (param.getAdContainerShown() == 0) {
+                tasks.removeIf(i -> {
+                    return i.contains("sdk_admobile");
+                });
+            }
         }
-//        if (entities.size() == 1 && entities.get(0).getProvider_id().equals("1")) { // js广告，只返回一条。那么是‘自采买广告’
-//            logger.info("setTraceInfo, pid={}, udid={}, adId={}", entities.get(0).getShowType(), param.getUdid(), entities.get(0).getId());
-//            // 存储atraceInfo到redis中
-//            final String traceInfo = JSONObject.toJSONString(param);
-//            fixedThreadPool.execute(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//                    CacheUtil.setToAtrace(param.getTraceid(), traceInfo, Constants.ONE_HOUR_TIME * 8);
-//
-//                }
-//            });
-//        }
     }
+
 
     public static void main(String[] args) {
         List<String> t1 = new ArrayList<String>();

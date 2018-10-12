@@ -220,7 +220,7 @@ var api_shunfei = {
     },
 
     aid : function () {
-        return 'api_shunfei_2';
+        return 'api_shunfei';
     },
 
     adStyle : function() {
@@ -254,7 +254,7 @@ var sdk_gdt = {
     },
 
     aid : function () {
-        return 'sdk_gdt_${sdk_gdt_aid}';
+        return 'sdk_gdt';
     },
 	
 	adStyle : function() {
@@ -284,7 +284,7 @@ var sdk_baidu = {
     },
 
     aid : function () {
-        return 'sdk_baidu_${sdk_baidu_aid}';
+        return 'sdk_baidu';
     },
 	
 	adStyle : function() {
@@ -314,7 +314,7 @@ var sdk_toutiao = {
     },
 
     aid : function () {
-        return 'sdk_toutiao_${sdk_toutiao_aid}';
+        return 'sdk_toutiao';
     },
 	
 	adStyle : function() {
@@ -344,7 +344,7 @@ var sdk_ifly = {
     },
 
     aid : function () {
-        return 'sdk_ifly_${sdk_ifly_aid}';
+        return 'sdk_ifly';
     },
 	
 	adStyle : function() {
@@ -375,7 +375,7 @@ var sdk_ifly_no2 = {
     },
 
     aid : function () {
-        return 'sdk_ifly_no2_${sdk_ifly_no2_aid}';
+        return 'sdk_ifly_no2';
     },
 	
 	adStyle : function() {
@@ -403,7 +403,7 @@ var sdk_inmobi = {
     },
     
     aid : function () {
-        return 'sdk_inmobi_${sdk_inmobi_aid}';
+        return 'sdk_inmobi';
     },
 	
 	adStyle : function() {
@@ -432,7 +432,7 @@ var sdk_inmobi_no2 = {
     },
     
     aid : function () {
-        return 'sdk_inmobi_no2_${sdk_inmobi_no2_aid}';
+        return 'sdk_inmobi_no2';
     },
 	
 	adStyle : function() {
@@ -463,11 +463,41 @@ var sdk_adview = {
     },
 
     aid : function () {
-        return 'sdk_adview_${sdk_adview_aid}';
+        return 'sdk_adview';
     },
 
 	adStyle : function() {
       return '${sdk_adview_displayType}';
+    }
+}
+
+var sdk_admobile = {
+
+    sdkname: function() {
+        return "sdk_admobile";
+    },
+    
+    adurl_ios: function() {
+        return {
+            url: "ADMobSDK",
+            pos: "banner",
+            data: {
+                "appId":"2252620",
+                "placementId":"0"
+            }
+        }
+    },
+
+    filter_ios : function(list) {
+        return list;
+    },
+
+    aid : function () {
+        return 'sdk_admobile';
+    },
+
+	adStyle : function() {
+      return "8";
     }
 }
 

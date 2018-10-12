@@ -691,6 +691,11 @@ public class ServiceManager {
             }
         }
         
+        // TODO temp
+        if (StringUtils.isNotBlank(p.getCityId()) && (p.getCityId().equals("053"))) {
+            return true;
+        }
+        
         //            key
         //            wechat#unionId#2#openid
         //            value

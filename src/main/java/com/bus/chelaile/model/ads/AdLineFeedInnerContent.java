@@ -39,6 +39,8 @@ public class AdLineFeedInnerContent extends AdInnerContent {
     private List<Long> timeouts; // 超时时间段设置
 
     private TasksGroup tasksGroup;
+    
+    private String adProducer;  //广告主
 
     @Override
     protected void parseJson(String jsonr) {
@@ -50,6 +52,7 @@ public class AdLineFeedInnerContent extends AdInnerContent {
             this.mixInterval = ad.mixInterval * 1000;
             this.backup = ad.backup;
             this.apiType = ad.apiType;
+            this.adProducer = ad.adProducer;
             this.setProvider_id(ad.getProvider_id());
             this.setSlogan(ad.getSlogan());
             this.setFeedAdTitle(ad.getFeedAdTitle());
@@ -307,5 +310,13 @@ public class AdLineFeedInnerContent extends AdInnerContent {
 
     public void setBrandPic(String brandPic) {
         this.brandPic = brandPic;
+    }
+
+    public String getAdProducer() {
+        return adProducer;
+    }
+
+    public void setAdProducer(String adProducer) {
+        this.adProducer = adProducer;
     }
 }

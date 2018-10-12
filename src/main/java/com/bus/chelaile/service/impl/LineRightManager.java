@@ -4,22 +4,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.bus.chelaile.model.QueryParam;
 import com.bus.chelaile.model.ShowType;
 import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
+import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
 import com.bus.chelaile.model.ads.AdLineRightInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.ads.entity.LineRightAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.third.IfengAx.IfenAxService;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 import com.bus.chelaile.util.New;
 
 public class LineRightManager extends AbstractManager {
 
+    @Autowired
+    IfenAxService ifenAxService;
+    
     @Override
     protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord) throws Exception {
@@ -46,6 +55,13 @@ public class LineRightManager extends AbstractManager {
             res.setMixInterval(inner.getMixInterval());
             if (inner.getTasksGroup() != null) {
                 res.setTasksGroup(inner.getTasksGroup());
+            }
+            
+            // 凤凰网走服务端api
+            if (inner.getAdProducer() != null && inner.getAdProducer().equals("IfengAx")) {
+                if(!canCreateIfengAxEntity(res, advParam)) {
+                    return null;
+                }
             }
         }
 
@@ -81,8 +97,14 @@ public class LineRightManager extends AbstractManager {
             AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
+                // 拿出来兜底的
                 if (((AdLineRightInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
                     backupad = ad;
+                    continue;
+                }
+                // 自采买的去掉
+                if(((AdLineRightInnerContent)ad.getAds().getInnerContent()).getProvider_id() <= 1 
+                        && ((AdLineRightInnerContent)ad.getAds().getInnerContent()).getBackup() == 0) {
                     continue;
                 }
                 LineRightAdEntity entity = from(ad.getAds(), advParam);
@@ -136,6 +158,18 @@ public class LineRightManager extends AbstractManager {
         }
 
         return entity;
+    }
+    
+    // TODO  尺寸需要修改，临时用开屏的
+    private boolean canCreateIfengAxEntity(LineRightAdEntity entity, AdvParam p) {
+        Ad ad = ifenAxService.getContext(p, 1, 2, 320, 180, "1-1-1"); // 2, 320, 180
+        if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
+            return false;
+        }
+
+        entity.buildIfendAxEntity(ad);
+        entity.setPic(entity.getPicsList().get(0));
+        return true;
     }
     
 }

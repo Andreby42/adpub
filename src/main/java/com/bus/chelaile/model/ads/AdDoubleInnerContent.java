@@ -50,6 +50,8 @@ public class AdDoubleInnerContent extends AdInnerContent {
     private String feedId; //话题详情页id
 
     private String desc; //
+    
+    private String adProducer;  //广告主
 
     /**
     * 站级别位置，双栏广告的显示位置：第n位， 0表示第一条线前面（首位），
@@ -89,6 +91,7 @@ public class AdDoubleInnerContent extends AdInnerContent {
             this.buttonIcon = ad.buttonIcon;
             this.buttonTitle = ad.buttonTitle;
             this.buttonColor = ad.buttonColor;
+            this.adProducer = ad.adProducer;
 
             this.lng = ad.lng;
             this.lat = ad.lat;
@@ -531,5 +534,13 @@ public class AdDoubleInnerContent extends AdInnerContent {
 
     public void setPic(String pic) {
         this.pic = pic;
+    }
+
+    public String getAdProducer() {
+        return adProducer;
+    }
+
+    public void setAdProducer(String adProducer) {
+        this.adProducer = adProducer;
     }
 }

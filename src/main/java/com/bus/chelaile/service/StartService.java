@@ -143,7 +143,7 @@ public class StartService {
         logger.info("js文件*********************：{}", StaticAds.JS_FILE_STR.keySet());
 
         try {
-        	if( !Constants.ISDEV ) {
+        	if( !Constants.ISDEV && !Constants.ISTEST) {
                 //	          infoStreamDispatcher.readKafka();
         	    // 2018-08-20
 //                infoStreamForAdvClick.readKafka(); // 广告点击日志
@@ -249,7 +249,7 @@ public class StartService {
 		// ac.setAds(adv);
 
 		for (Rule rule : tempList) {
-			logger.info("prepareAdvByType adId: {}, ruleId: {}", adv.getId(), rule.getRuleId());
+//			logger.info("prepareAdvByType adId: {}, ruleId: {}", adv.getId(), rule.getRuleId());
 			try {
 				if (rule.hasUserIds()) {
 					for (String userId : rule.getUserIds()) {

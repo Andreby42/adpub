@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.alibaba.fastjson.JSON;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.QueryParam;
@@ -13,6 +15,7 @@ import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdInnerContent;
 import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
+import com.bus.chelaile.model.ads.AdStationlInnerContent;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
 import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
@@ -22,12 +25,17 @@ import com.bus.chelaile.service.model.Ads;
 import com.bus.chelaile.service.model.FeedAdGoto;
 import com.bus.chelaile.service.model.Thumbnails;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.third.IfengAx.IfenAxService;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.HttpUtils;
 import com.bus.chelaile.util.New;
 
 public class LineFeedAdsManager extends AbstractManager {
-
+    
+    @Autowired
+    IfenAxService ifenAxService;
+    
     @Override
     protected BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord) throws Exception {
@@ -59,15 +67,21 @@ public class LineFeedAdsManager extends AbstractManager {
                 }
             }
         }
-        
+        logger.info("hasOwnA={}", hasOwnAd);
         StaticTimeLog.record(Constants.RECORD_LOG,"for_two" );
         // 如果没有自采买，那么返回一个列表
         if (!hasOwnAd) {
             AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
+                // 次数有问题，如果有多个兜底，最后取到的，反而是优先级最低的？？  TODO
                 if (((AdLineFeedInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
                     backupad = ad;
+                    continue;
+                }
+                // 自采买的去掉
+                if(((AdLineFeedInnerContent)ad.getAds().getInnerContent()).getProvider_id() <= 1 
+                        && ((AdLineFeedInnerContent)ad.getAds().getInnerContent()).getBackup() == 0) {
                     continue;
                 }
                 LineFeedAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
@@ -138,6 +152,13 @@ public class LineFeedAdsManager extends AbstractManager {
                 
                 if(inner.getTasksGroup() != null) {
                     res.setTasksGroup(inner.getTasksGroup());
+                }
+                
+                // 凤凰网走服务端api
+                if (inner.getAdProducer() != null && inner.getAdProducer().equals("IfengAx")) {
+                    if(!canCreateIfengAxEntity(res, advParam)) {
+                        return null;
+                    }
                 }
             }
         }
@@ -236,6 +257,20 @@ public class LineFeedAdsManager extends AbstractManager {
         }
         return entity;
     }
+    
+    private boolean canCreateIfengAxEntity(LineFeedAdEntity lineFeedEntity, AdvParam p) {
+        Ad ad = ifenAxService.getContext(p, 1, 6, 300, 200, "1-1-1");
+        if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
+            return false;
+        }
+
+        lineFeedEntity.buildIfendAxEntity(ad);
+
+        lineFeedEntity.setHead(ad.getCreative().getStatics().getText());
+        lineFeedEntity.setSubhead(ad.getCreative().getStatics().getDesc());
+        lineFeedEntity.setPic(lineFeedEntity.getPicsList().get(0));
+        return true;
+    }
 
     public static void main(String[] args) {
         List<Integer> ints = New.arrayList();
@@ -243,5 +278,21 @@ public class LineFeedAdsManager extends AbstractManager {
         ints.add(2);
         Collections.swap(ints, 0, 1);
         System.out.println(ints);
+        
+        AdStationlInnerContent a = new AdStationlInnerContent();
+        a.setApiType(1);
+        System.out.println(a == null);
+        
+        test(a);
+        System.out.println(a == null);
+        
+        a = null;
+        System.out.println(a == null);
     }
+    
+    private static void test(AdStationlInnerContent ad) {
+        ad=null;
+        return;
+    }
+    
 }

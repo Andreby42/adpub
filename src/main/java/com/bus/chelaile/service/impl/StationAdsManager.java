@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -36,6 +37,8 @@ import com.bus.chelaile.service.StaticAds;
 import com.bus.chelaile.service.model.Ads;
 import com.bus.chelaile.service.model.FeedAdGoto;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.third.IfengAx.IfenAxService;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 import com.bus.chelaile.third.meituan.MeiTuanService;
 import com.bus.chelaile.third.meituan.MeituanData;
 import com.bus.chelaile.thread.StaticTimeLog;
@@ -44,6 +47,9 @@ import com.bus.chelaile.util.New;
 
 public class StationAdsManager extends AbstractManager {
 
+    @Autowired
+    IfenAxService ifenAxService;
+    
     static Set<String> TBK_TITLE_KEY = New.hashSet();
 
     @Override
@@ -214,8 +220,14 @@ public class StationAdsManager extends AbstractManager {
         		return null;
         	}
         }
-      
-
+        
+        // 凤凰网走服务端api
+        if (stationInner.getAdProducer() != null && stationInner.getAdProducer().equals("IfengAx")) {
+            if(!canCreateIfengAxEntity(res, advParam)) {
+                return null;
+            }
+        }
+        
         return res;
     }
 
@@ -342,15 +354,7 @@ public class StationAdsManager extends AbstractManager {
                     entity.setAutoInterval(inner.getAutoInterval());
                     entity.setMixInterval(inner.getMixInterval());
 
-                    BannerInfo bannerInfo = new BannerInfo();
-                    bannerInfo.setSlogan(slogan);
-                    bannerInfo.setBannerType(4); // 专用样式，文字+标签（文案由客户端自定义）
-                    AdButtonInfo buttonInfo = new AdButtonInfo();
-                    buttonInfo.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
-                    bannerInfo.setButton(buttonInfo);
-
-                    entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
-                    entity.setBannerInfo(bannerInfo);
+                    setMaterials(entity, slogan);
                     entity.setTargetType(ad.getTargetType());
                     
                     if(inner.getTasksGroup() != null) {
@@ -366,6 +370,19 @@ public class StationAdsManager extends AbstractManager {
             return null;
         }
         return entity;
+    }
+
+    // 第三方站点广告常规原色设定
+    private void setMaterials(StationAdEntity entity, String slogan) {
+        BannerInfo bannerInfo = new BannerInfo();
+        bannerInfo.setSlogan(slogan);
+        bannerInfo.setBannerType(4); // 专用样式，文字+标签（文案由客户端自定义）
+        AdButtonInfo buttonInfo = new AdButtonInfo();
+        buttonInfo.setButtonPic("https://image3.chelaile.net.cn/babb63e1f76244749298ffe47d176b45");
+        bannerInfo.setButton(buttonInfo);
+
+        entity.setPic("https://image3.chelaile.net.cn/13c5f05173c7413ba73a492fcd6c3dcb");
+        entity.setBannerInfo(bannerInfo);
     }
     
     
@@ -385,6 +402,7 @@ public class StationAdsManager extends AbstractManager {
             System.out.println(stn.getPriority());
         }
     }
+
 
     @Override
     protected List<BaseAdEntity> dealEntities(AdvParam advParam, AdPubCacheRecord cacheRecord,
@@ -412,14 +430,21 @@ public class StationAdsManager extends AbstractManager {
                 }
             }
         }
+        logger.info("hasOwnA={}", hasOwnAd);
         StaticTimeLog.record(Constants.RECORD_LOG,"for_two" );
         // 如果没有自采买，那么返回一个列表
         if (!hasOwnAd) {
             AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
+                // 兜底的拿出来
                 if(((AdStationlInnerContent)ad.getAds().getInnerContent()).getBackup() == 1) {
                     backupad = ad;
+                    continue;
+                }
+                // 自采买的去掉
+                if(((AdStationlInnerContent)ad.getAds().getInnerContent()).getProvider_id() <= 1 
+                        && ((AdStationlInnerContent)ad.getAds().getInnerContent()).getBackup() == 0) {
                     continue;
                 }
                 StationAdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
@@ -456,5 +481,18 @@ public class StationAdsManager extends AbstractManager {
 
         return entities;
 
+    }
+    
+    private boolean canCreateIfengAxEntity(StationAdEntity res, AdvParam p) {
+        Ad ad = ifenAxService.getContext(p, 1, 6, 300, 200, "1-1-1");
+        if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
+            // 返回为空
+            logger.info("凤凰网返回res： res!=null  -->  {}", res != null);
+            return false;
+        }
+        res.buildIfendAxEntity(ad);
+        setMaterials(res, ad.getCreative().getStatics().getText());
+        
+        return true;
     }
 }

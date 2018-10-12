@@ -2,6 +2,7 @@ package com.bus.chelaile.model.ads.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.bus.chelaile.model.ShowType;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 
 /**
  * 详情页下方feed流广告，返回广告体【底部广告】
@@ -156,4 +157,5 @@ public class LineFeedAdEntity extends BaseAdEntity {
     public void setBrandPic(String brandPic) {
         this.brandPic = brandPic;
     }
+
 }

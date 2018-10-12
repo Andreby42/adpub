@@ -96,7 +96,7 @@ function trackBaseParams(sdk, ad) {
     var info = ad.info || {};
     var traceInfo = sdk.traceInfo || {};
     var deviceObject = GetDeviceInfoObject() || {}
-    
+
     var picsList = info.picsList;
     var adv_image = "";
     if(picsList && picsList.length) {
@@ -118,6 +118,7 @@ function trackBaseParams(sdk, ad) {
     addParamsIfNotNull(params, "v", deviceObject.v);
     addParamsIfNotNull(params, "idfa", deviceObject.idfa || '');
     addParamsIfNotNull(params, "is_backup", info.is_backup || 0);
+    addParamsIfNotNull(params, "adStyle", info.displayType || '');
     return params;
 }
 
@@ -135,15 +136,21 @@ function trackExhibit(sdk, ad) {
 
     sendTrackRequest(exhibitTrackUrl, params);
 
-    if(info.unfoldMonitorLink && info.actionMonitorLink) {
+    if(info.actionMonitorLink) {
         var actionLink = info.actionMonitorLink.replace('{action}','5');
         var ts = (+new Date) + '';
         ts = String(ts).slice(0,-3);
         actionLink = actionLink.replace('{time}', ts);
         actionLink = actionLink.replace('{play_time}', '0')
 
-        sendTrackRequest(info.unfoldMonitorLink, {});
         sendTrackRequest(actionLink, {});
+    }
+    // some own ads ,has clickLink ,have no actionLink
+    if (info.unfoldMonitorLink) {
+        var unfolds = info.unfoldMonitorLink.split(';');
+        for(var i = 0; i < unfolds.length; i ++) {
+            sendTrackRequest(unfolds[i], {});
+        }
     }
 }
 
@@ -169,8 +176,11 @@ function trackClick(sdk, ad) {
         sendTrackRequest(actionLink, {});
     }
     // some own ads ,has clickLink ,have no actionLink
-    if(info.clickMonitorLink) {
-        sendTrackRequest(info.clickMonitorLink, {});
+    if (info.clickMonitorLink) {
+        var unfolds = info.clickMonitorLink.split(';');
+        for(var i = 0; i < unfolds.length; i ++) {
+            sendTrackRequest(unfolds[i], {});
+        }
     }
 }
 
@@ -209,6 +219,9 @@ function trackThirdBaseParams(params) {
     }
     if(task.aid) {
         addParamsIfNotNull(trackParams, "aid", task.aid());
+    }
+    if (task.adStyle) {
+        addParamsIfNotNull(trackParams, "adStyle", task.adStyle());
     }
 
     addParamsIfNotNull(trackParams, "req_timestamp", +new Date);

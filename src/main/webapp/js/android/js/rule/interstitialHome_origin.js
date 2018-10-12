@@ -112,7 +112,7 @@ var sdk_gdt = {
     },
 
     adStyle: function() {
-        return 2;
+        return ${sdk_gdt_displayType};
     }
 }
 
@@ -136,10 +136,6 @@ var sdk_ifly = {
     },
 
     hide: function(row) {
-        if (row.title.indexOf('抖音') > -1) {
-            return true;}
-        if (row.title.indexOf('西瓜') > -1) {
-            return true;}
         return false;
     },
 
@@ -176,7 +172,7 @@ var sdk_ifly = {
     },
 
     adStyle: function() {
-        return 2;
+        return ${sdk_ifly_displayType};
     }
 }
 
@@ -231,7 +227,7 @@ var sdk_adview = {
     },
 
     adStyle: function() {
-        return 2;
+        return ${sdk_adview_displayType};
     }
 }
 

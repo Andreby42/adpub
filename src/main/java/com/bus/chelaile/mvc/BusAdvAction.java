@@ -71,6 +71,9 @@ public class BusAdvAction extends AbstractController {
         return serviceManager.getAdsResponseStr(param, "getNewOpen");
     }
 
+    /*
+     * type=1的时候，表示线路规划页的单栏广告
+     */
     @ResponseBody
     @RequestMapping(value = "adv!getAds.action", produces = "text/plain;charset=UTF-8")
     public String getAds(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {

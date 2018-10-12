@@ -314,7 +314,29 @@ public class IosJsRule extends AbstractController {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
-        //  return "";
+    }
+    
+    /*
+     * 搜索页
+     */
+    @RequestMapping(value = "/seekAd.do", produces = "application/javascript;charset=UTF-8")
+    public void seekAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        AdvParam p = getActionParam(request);
+        if (StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板
+        String splashOrigin = StaticAds.JS_FILE_STR.get("ios_seek_origin");
+        TaskEntity tgs = jSService.getTask(p, "seek");
+
+        response.setContentType("application/javascript;charset=UTF-8");
+        response.setHeader("traceId", p.getTraceid());
+        try {
+            produceJS(p, splashOrigin, tgs, "ios_seek_origin", request, ShowType.SEEK_ADV, response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
 //	private void produceJS(AdvParam p, String originJs, TaskEntity tgs, String tag, HttpServletRequest request,

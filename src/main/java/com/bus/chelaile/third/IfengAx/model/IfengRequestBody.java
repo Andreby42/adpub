@@ -5,6 +5,7 @@ package com.bus.chelaile.third.IfengAx.model;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.util.New;
@@ -16,6 +17,9 @@ import com.bus.chelaile.util.New;
  * @website http://www.bejson.com/java2pojo/
  */
 public class IfengRequestBody {
+
+    private static final String APPID = "bus01";
+    private static final String APPNAME = "车来了";
 
     private String id;
     private List<Imp> imp;
@@ -32,35 +36,43 @@ public class IfengRequestBody {
      * 
      * @param p
      * @param isTest， 是否是测试， 0 不是， 1 是
-     * @param bannerType， 1：Banner； 3：常规信息流；4：三小图；6：下载信息流；7：信息流大图；8:启动图；9:焦点图；0: 贴片 （需要线下约定，录入 IfengAX 管理系统中）
-     * 
+     * @param bannerType， 1: 贴片 ；2：Banner； 3:焦点图；4:启动图；6：常规信息流；7：三小图；9：下载信息流；10：信息流大图；
+     * @param w 图片宽
+     * @param h 图片高
+     * @param tagid 广告位识别符。网盟的广告位id，要求implist中的tagid不重复，demo给的是‘1-1-1’
      */
-    public IfengRequestBody(AdvParam p, int isTest, int bannerType) {
+    public IfengRequestBody(AdvParam p, int isTest, int bannerType, int w, int h, String tagid) {
         super();
-        this.id = "";
+        this.id = p.getUdid();
         // imp
         List<Imp> imps = New.arrayList();
         List<Banner> banners = New.arrayList();
-        Banner banner = new Banner(200, 20, bannerType, 600);
+
+        Banner banner = new Banner(h, 21, bannerType, w);
         banners.add(banner);
-        Imp imp = new Imp("广告位曝光请求的唯一识别符", banners, "广告位识别符");
+        Imp imp = new Imp(p.getUdid(), banners, tagid);
         imps.add(imp);
         this.imp = imps;
 
         // app
-        this.app = new App("app包名", "app 唯一标识符", "chelaile", p.getV());
+        // user
+        this.user = new User(p.getImei());
+        String domain = "com.ygkj.chelaile.standard";
+        if (p.getS().equalsIgnoreCase("ios")) {
+            domain = "com.chelaile.lite";
+            this.user = new User(p.getIdfa());
+        }
+        this.app = new App(domain, APPID, APPNAME, p.getV());
 
         // device
-        Geo geo = new Geo(119.0, 39.0);
-        int ppi = Integer.parseInt(p.getDpi());
+        Geo geo = new Geo(p.getLng(), p.getLat());
+        int ppi = 3; // 像素密度
+        //        if(StringUtils.isNoneBlank(p.getDpi()))
+        //            ppi = Math.round(Float.parseFloat(p.getDpi()));
 
+        // 0 : Unknown， 1 : Ethernet，2 : WIFI ，3 : Cellular Network – Unknown Generation ，4 : Cellular Network – 2G ，5 : Cellular Network – 3G ，6 : Cellular Network – 4G
         this.device = new Device(2, geo, p.getIp(), p.getS(), p.getImei(), p.getAndroidID(), p.getIdfa(), p.getScreenHeight(),
                 p.getScreenWidth(), ppi, p.getDeviceType(), p.getUa());
-        //(int connectiontype, Geo geo, String ip, String os, String did, String dpid, String ifa,
-        // int screenHeight, int screenWeight, int ppi, String phoneModel, String ua)
-
-        // user
-        this.user = new User(p.getUdid());
 
         // test
         this.test = isTest;

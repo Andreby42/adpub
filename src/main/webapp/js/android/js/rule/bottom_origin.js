@@ -136,7 +136,7 @@ var api_yd = {
     },
 
     aid : function () {
-        return 'api_yd_${api_yd_aid}';
+        return 'api_yd';
     },
 	
 	adStyle : function() {
@@ -241,11 +241,11 @@ var api_voicead = {
     },
 
     aid : function () {
-        return 'api_voicead_${api_voicead_displayType}';
+        return 'api_voicead';
     },
 	
 	adStyle : function() {
-      return ${api_voicead_aid};
+      return ${api_voicead_displayType};
     }
 }
 
@@ -399,11 +399,11 @@ var api_shunfei = {
 	    },
 
 	  aid : function () {
-	        return 'api_shunfei_${api_shunfei_displayType}';
+	        return 'api_shunfei';
 	    },
 		
 		adStyle : function() {
-	      return ${api_shunfei_aid};
+	      return ${api_shunfei_displayType};
 	    }
 	}
 
@@ -576,11 +576,11 @@ var api_shunfei = {
 	    },
 
 	  aid : function () {
-	        return 'api_zm_${api_zm_displayType}';
+	        return 'api_zm';
 	    },
 		
 		adStyle : function() {
-	      return ${api_zm_aid};
+	      return ${api_zm_displayType};
 	    }
 	}
 
@@ -631,7 +631,7 @@ var sdk_gdt = {
     },
 
     aid : function () {
-        return 'sdk_gdt_${sdk_gdt_aid}';
+        return 'sdk_gdt';
     },
 	
 	adStyle : function() {
@@ -692,7 +692,7 @@ var sdk_baidu = {
     },
 
     aid : function () {
-        return 'sdk_baidu_${sdk_baidu_displayType}';
+        return 'sdk_baidu';
     },
 	
 	adStyle : function() {
@@ -745,7 +745,7 @@ var sdk_toutiao = {
     },
 
     aid : function () {
-        return 'sdk_toutiao_${sdk_toutiao_aid}';
+        return 'sdk_toutiao';
     },
 	
 	adStyle : function() {
@@ -817,7 +817,7 @@ var sdk_ifly = {
     },
 
     aid : function () {
-        return 'sdk_ifly_${sdk_ifly_aid}';
+        return 'sdk_ifly';
     },
 	
 	adStyle : function() {
@@ -881,7 +881,7 @@ var sdk_ifly_no2 = {
     },
 
     aid : function () {
-        return 'sdk_ifly_no2_${sdk_ifly_no2_aid}';
+        return 'sdk_ifly_no2';
     },
 	
 	adStyle : function() {
@@ -936,12 +936,49 @@ var sdk_adview = {
 	},
 
 	aid: function() {
-		return 'sdk_adview_${sdk_adview_aid}';
+		return 'sdk_adview';
 	},
 
 	adStyle: function() {
 		return ${sdk_adview_displayType};
 	}
+}
+
+var sdk_admobile = {
+
+    adurl: function() {
+        return {
+            url: "ADMOBILESDK",
+            pos: "banner",
+            data: {
+                appId: "",
+                placementId: "" // 无广告位概念，呵呵
+            }
+        }
+    },
+
+    sdkname: function() {
+        return "sdk_admobile";
+    },
+
+    filter: function(msg) {
+        return msg;
+    },
+    
+    asEntity: function(ad) {
+        if (ad == null) return null;
+
+        var ret = {};
+        return ret;
+    },
+
+    aid : function () {
+        return 'sdk_admobile';
+    },
+	
+	adStyle : function() {
+     return "8";
+    }
 }
 
 function ads() {

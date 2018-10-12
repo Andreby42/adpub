@@ -32,6 +32,16 @@ import com.bus.chelaile.util.config.PropertiesUtils;
 
 
 /**
+ * 这个类是用户的投放记录，用于一些涉及到流量分配时的数据记录
+ * 目前包含：
+ * 用户每天投放的广告、每天点击的广告
+ * 
+ * 开屏广告最近一次投放时间
+ * 【老-线路详情页投放记录】
+ * 开屏广告投放记录--->用于之前历史上的一些‘策略’投放
+ * 记录广告‘没有投放’的次数，用于控制每条广告的投放间隔
+ * 其他……………… 
+ *
  * 放到ocs里面的key只有线路详情和双栏两个类型
  */
 public class AdPubCacheRecord {
@@ -42,6 +52,10 @@ public class AdPubCacheRecord {
 	//记录自采买广告的点击次数，和展示次数
 	//取advId=1，格式类似：\"cacheRecordMap\":{1:{\"clickCount\":0,\"dayCountMap\":{\"2016-11-22\":7}}}
 	Map<Integer, CacheRecord> cacheRecordMap = New.hashMap();
+	
+	// 日期， ClickCacheRecord 
+	private Map<String, ClickCacheRecord> aidTitlesMap = New.hashMap();
+	
 	// 一个时间段之内的广告发送次数，和用户第一次请求该广告时间，
 	//取ruleId=9，格式类似：{\"2016-11-22-9-10:00-17:00\":{\"count\":4,\"time\":1479802720999}}
 	Map<String, TimeAndCount> firstClickMap = New.hashMap();
@@ -300,6 +314,7 @@ public class AdPubCacheRecord {
 			return 0;
 		}
 	}
+	
 
 	// 发送 +1
     public void buildAdPubCacheRecord(int adId) {
@@ -329,6 +344,32 @@ public class AdPubCacheRecord {
             cacheRecord.putDayRateMap(todayStr, 1);
         }
     }
+    
+    // 点击 +1
+    // 与之前不同在于： 这条记录偏重于记录pid和aid，而不是adid
+    public void buildAdClickRecord(String pid, String aid, String title) {
+        String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+        if(! aidTitlesMap.containsKey(todayStr)) {
+            ClickCacheRecord record = new ClickCacheRecord(pid, aid, title);
+            aidTitlesMap.put(todayStr, record);
+        } else {
+            ClickCacheRecord record = aidTitlesMap.get(todayStr);
+            record.addClickRecord(pid, aid, title);
+        }
+    }
+    
+    // 获取今日的点击标题列表
+    public List<String> getTodayClickedTitles(String pid, String aid) {
+        String todayStr = DateUtil.getTodayStr("yyyy-MM-dd");
+        if(! aidTitlesMap.containsKey(todayStr)) {
+            return null;
+        } else {
+            ClickCacheRecord record = aidTitlesMap.get(todayStr);
+            return record.getListByPidAndAid(pid, aid);
+        }
+    }
+    
+    
 	
 	
 	public boolean hasClicked(int adId) {
@@ -392,8 +433,40 @@ public class AdPubCacheRecord {
                 }
             }
 			
+            if (days > 0) {
+                if (dayCountMap.size() > days) { // 大于是不可能的，正确的情况下。
+                    return false;
+                } else if (dayCountMap.size() == days) {
+                    // 没有的情况就说名已经到了次数
+                    if (!dayCountMap.containsKey(todayStr)) {
+                        return false;
+                    }
+                }
+            }
+           
+            if (perDayCount > 0) {
+                // 线路详情特殊处理
+                //  每天投放次数：针对某个用户，每天投放几次。如果前面设置了cacheTime，则这里设置的投放次数必须在cacheTime时间内达到，
+                //              否则超时以后对同一用户会重新计数。例如假设设置广告每天投放次数为5，cacheTime为600（10分钟），
+                //              如果用户在早高峰时10分钟内只看到了2次广告，那么晚高峰时仍然认为需要给该用户投递5次广告
+                if (rule.getCacheTime() > 0) {
+                    int adCount = getAdTimeCountsQueryCount(rule.getRuleId());
+                    logger.debug("getAdTimeCountsQueryCount:" + adCount + ",ruleId:" + rule.getRuleId());
+                    if (adCount >= perDayCount) {
+                        return false;
+                    }
+                    return true; // 设置了cacheTime,有可能直接返回ture，而不进行接下来的总次数判断
+                }
+
+                if (dayCountMap.containsKey(todayStr)) {
+                    if (dayCountMap.get(todayStr) >= perDayCount) {
+                        return false;
+                    }
+                }
+            }
+            
 			
-			if (days > 0 && perDayCount > 0) { // 说明没有配置点击次数属性，配置了每天多少次规则
+			/*if (days > 0 && perDayCount > 0) { // 说明配置了每天多少次规则
 				if (dayCountMap.size() > days) { // 大于是不可能的，正确的情况下。
 					return false;
 				} else {
@@ -425,26 +498,8 @@ public class AdPubCacheRecord {
 						}
 					}
 				}
-			} 
+			} */
 			
-//			else if (days > 0 && totalCount > 0) { // 说明没有配置点击次数属性，配置了总共多少次规则
-//				if (dayCountMap.size() > days) { // 大于是不可能的，正确的情况下。
-//					return false;
-//				} else {
-//					int pubCount = 0;
-//					for (String key : dayCountMap.keySet()) {
-//						pubCount += dayCountMap.get(key);
-//					}
-//					if (pubCount >= totalCount) {
-//						return false;
-//					}
-//				}
-//			}
-			/*
-			 * else { // 默认 3次 ， 每天 (有可能只是浮屏广告有这一需求) if
-			 * (dayCountMap.containsKey(todayStr)) { if
-			 * (dayCountMap.get(todayStr) >= 3) { return false; } } }
-			 */
 		}
 		return true;
 	}
@@ -866,6 +921,14 @@ public class AdPubCacheRecord {
 	public Map<String, Map<Integer, Long>> getTodayOpenAdPubTime() {
 		return todayOpenAdPubTime;
 	}
+
+    public Map<String, ClickCacheRecord> getAidTitlesMap() {
+        return aidTitlesMap;
+    }
+
+    public void setAidTitlesMap(Map<String, ClickCacheRecord> aidTitlesMap) {
+        this.aidTitlesMap = aidTitlesMap;
+    }
 }
 
 class TimeAndCount {

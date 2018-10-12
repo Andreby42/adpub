@@ -3,6 +3,8 @@ package com.bus.chelaile.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.bus.chelaile.common.AnalysisLog;
 import com.bus.chelaile.common.Constants;
 import com.bus.chelaile.model.QueryParam;
@@ -11,12 +13,16 @@ import com.bus.chelaile.model.ads.AdContent;
 import com.bus.chelaile.model.ads.AdContentCacheEle;
 import com.bus.chelaile.model.ads.AdDoubleInnerContent;
 import com.bus.chelaile.model.ads.AdInnerContent;
+import com.bus.chelaile.model.ads.AdLineFeedInnerContent;
 import com.bus.chelaile.model.ads.entity.AdEntity;
 import com.bus.chelaile.model.ads.entity.BaseAdEntity;
+import com.bus.chelaile.model.ads.entity.LineFeedAdEntity;
 import com.bus.chelaile.model.record.AdPubCacheRecord;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.service.AbstractManager;
 import com.bus.chelaile.strategy.AdCategory;
+import com.bus.chelaile.third.IfengAx.IfenAxService;
+import com.bus.chelaile.third.IfengAx.model.response.Ad;
 import com.bus.chelaile.util.AdvUtil;
 import com.bus.chelaile.util.New;
 
@@ -28,6 +34,9 @@ import com.bus.chelaile.util.New;
  */
 public class DoubleAndSingleManager extends AbstractManager {
 
+    @Autowired
+    IfenAxService ifenAxService;
+    
     @Override
     public BaseAdEntity dealEntity(AdCategory cateGory, AdvParam advParam, AdPubCacheRecord cacheRecord,
             Map<Integer, AdContentCacheEle> adMap, ShowType showType, QueryParam queryParam, boolean isRecord) throws Exception {
@@ -157,6 +166,10 @@ public class DoubleAndSingleManager extends AbstractManager {
                         backupad = ad;
                         continue;
                     }
+                    // 自采买的去掉
+                    if (inner.getProvider_id() <= 1 && inner.getBackup() == 0) {
+                        continue;
+                    }
                     AdEntity entity = from(advParam, cacheRecord, ad.getAds(), showType);
                     if (entity != null) {
                         entities.add(entity);
@@ -230,6 +243,13 @@ public class DoubleAndSingleManager extends AbstractManager {
         if(doubleInner.getTasksGroup() != null) {
             entity.setTasksGroup(doubleInner.getTasksGroup());
         }
+        
+        // 凤凰网走服务端api
+        if (doubleInner.getAdProducer() != null && doubleInner.getAdProducer().equals("IfengAx")) {
+            if(!canCreateIfengAxEntity(entity, advParam)) {
+                return null;
+            }
+        }
 
         return entity;
     }
@@ -258,5 +278,19 @@ public class DoubleAndSingleManager extends AbstractManager {
         entity.setDisplayType(inner.getDisplayType());
         
         return entity;
+    }
+    
+    private boolean canCreateIfengAxEntity(AdEntity entity, AdvParam p) {
+        Ad ad = ifenAxService.getContext(p, 1, 6, 300, 200, "1-1-1");
+        if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
+            return false;
+        }
+
+        entity.buildIfendAxEntity(ad);
+
+        entity.setHead(ad.getCreative().getStatics().getText());
+        entity.setSubhead(ad.getCreative().getStatics().getDesc());
+        entity.setButtonIcon(entity.getPicsList().get(0));  // 图片
+        return true;
     }
 }

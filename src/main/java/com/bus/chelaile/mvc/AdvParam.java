@@ -105,6 +105,9 @@ public class AdvParam {
      private String adv_image;
      
      private double screenDensity;   // 几倍屏
+     
+     private int adContainerShown;  // 0未显示，1已经显示。 未显示的时候不予返回admobile的task
+     
      /**
       * 存入的s都会被转换为小写。
       *
@@ -795,6 +798,16 @@ public class AdvParam {
 
     public void setScreenDensity(double screenDensity) {
         this.screenDensity = screenDensity;
+    }
+
+
+    public int getAdContainerShown() {
+        return adContainerShown;
+    }
+
+
+    public void setAdContainerShown(int adContainerShown) {
+        this.adContainerShown = adContainerShown;
     }
 
 

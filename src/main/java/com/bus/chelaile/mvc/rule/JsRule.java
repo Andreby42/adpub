@@ -335,6 +335,29 @@ public class JsRule extends AbstractController {
         }
         //  return "";
     }
+    
+    /*
+     * 搜索页
+     */
+    @RequestMapping(value = "/seekAd.do", produces = "application/javascript;charset=UTF-8")
+    public void seekAd(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        AdvParam p = getActionParam(request);
+        if (StringUtils.isBlank(p.getStnName()))
+            p.setStnName(request.getParameter("stationName"));
+
+        // 模板
+        String splashOrigin = StaticAds.JS_FILE_STR.get("seek_origin");
+        TaskEntity tgs = jSService.getTask(p, "seek");
+
+        response.setContentType("application/javascript;charset=UTF-8");
+        response.setHeader("traceId", p.getTraceid());
+        try {
+            produceJS(p, splashOrigin, tgs, "seek_origin", request, ShowType.SEEK_ADV, response.getWriter());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 
     // String splashJS = "";
     // if (tgs != null) {
