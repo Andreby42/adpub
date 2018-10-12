@@ -135,14 +135,12 @@ public class AdStationlInnerContent extends AdInnerContent {
         AdStationlInnerContent adPush = new AdStationlInnerContent();
 
         adPush.setAndParseJson(
-                "{\"pic\":\"https://image3.chelaile.net.cn/98949248b15141a9b5eb0759097b68eb\",\"bannerInfo\":{\"bannerType\":\"3\",\"name\":\"坚持打卡\",\"color\":\"174, 60, 60, 1\",\"slogan\":\"昨天喜欢你，今天喜欢你，明天看心情\",\"sloganColor\":\"29, 116, 113, 1\",\"tag\":{},\"button\":{\"buttonText\":\"测试\",\"buttonColor\":\"255, 255, 255, 1\",\"buttonBG\":\"84, 85, 25, 1\",\"buttonRim\":\"255, 0, 43, 1\",\"buttonPic\":\"\"}},\"adCard\":{\"open\":\"0\",\"cardType\":\"2\",\"logo\":\"\",\"topPic\":\"\",\"tagPic\":\"\",\"name\":\"\",\"address\":\"\",\"lng\":\"12.1\",\"lat\":\"\",\"phoneNum\":\"\",\"link\":\"\"}}");
+                "{\"adProducer\":\"0\",\"backup\":\"1\",\"wx_miniPro_id\":\"\",\"adCard\":{\"address\":\"\",\"lng\":\"\",\"topPic\":\"\",\"cardType\":\"2\",\"name\":\"\",\"link\":\"\",\"logo\":\"\",\"tagPic\":\"\",\"phoneNum\":\"\",\"open\":\"1\",\"lat\":\"\"},\"bannerInfo\":{\"button\":{\"buttonText\":\"\",\"buttonBG\":\"\",\"buttonRim\":\"255, 166, 0, 1\",\"buttonColor\":\"\",\"buttonPic\":\"https://image3.chelaile.net.cn/e65cc852815945249f63857427af67bf#150,88\"},\"bannerType\":\"6\",\"color\":\"51, 51, 51, 1\",\"sloganColor\":\"102, 102, 102, 1\",\"link\":\"http://75.vrm.cn/103?src=cll-cll-wzl-jhy-new-tz\",\"name\":\"\",\"pic\":\"https://image3.chelaile.net.cn/e97febd4501d488e85b096b04721745c#48,48\",\"tag\":{\"tagPic\":\"https://image3.chelaile.net.cn/fcd85275b08a4565af0c56a13a8c5c2c#136,88\",\"tagText\":\"\",\"tagBG\":\"\"},\"slogan\":\"银联云闪付APP，1分钱乘公交\"},\"pic\":\"https://image3.chelaile.net.cn/e97febd4501d488e85b096b04721745c#48,48\",\"buyOut\":\"0\",\"adWeight\":90,\"productType\":\"10\",\"wx_miniPro_path\":\"\"}");
         System.out.println("pic: " + adPush.pic);
         System.out.println("adCard: name " + adPush.getAdCard().getName());
         System.out.println("adCard: lng " + adPush.getAdCard().getLng());
-        if (adPush.getAdCard().getLng() > 1.0) {
-            System.out.println("lng 太大了");
-        }
         System.out.println("JsonR: " + adPush.jsonContent);
+        System.out.println("backup=" + adPush.backup);
     }
 
     @Override
