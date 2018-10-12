@@ -59,10 +59,10 @@ public class IfenAxService {
         AdvParam p = new AdvParam();
         p.setUdid("db9bef8b-93a1-4698-9c3b-d7ee59808f15");
         p.setIp("210.51.19.3");
-//        p.setS("android");
-//        p.setImei("861063046917681139");
-        p.setS("ios");
-        p.setIdfa("861063046917681139");
+        p.setS("android");
+        p.setImei("861063046917681139");
+//        p.setS("ios");
+//        p.setIdfa("861063046917681139");
         p.setV("3.62.0");
         p.setScreenHeight(1920);
         p.setScreenWidth(680);
@@ -70,9 +70,9 @@ public class IfenAxService {
         p.setLat(39.0093);
 
         IfenAxService i = new IfenAxService();
-        Ad ad = i.getContext(p, 1, 6, 300, 200, "1-1-1"); // banner位尺寸
+//        Ad ad = i.getContext(p, 1, 6, 300, 200, "1-1-1"); // banner位尺寸
 //                Ad ad = i.getContext(p, 1, 2, 320, 180, "1-1-1"); // 右上角尺寸
-//                Ad ad = i.getContext(p, 1, 6, 640, 960, "1-2-1");  // 开屏尺寸
+                Ad ad = i.getContext(p, 1, 6, 640, 960, "1-2-1");  // 开屏尺寸
         if (ad != null) {
             System.out.println(JSONObject.toJSONString(ad));
             System.out.println("text=" + ad.getCreative().getStatics().getText());

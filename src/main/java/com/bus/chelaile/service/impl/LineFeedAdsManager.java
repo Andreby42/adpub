@@ -74,6 +74,7 @@ public class LineFeedAdsManager extends AbstractManager {
             AdContentCacheEle backupad = null;
             for (Map.Entry<Integer, AdContentCacheEle> entry : adMap.entrySet()) {
                 AdContentCacheEle ad = entry.getValue();
+                // 次数有问题，如果有多个兜底，最后取到的，反而是优先级最低的？？  TODO
                 if (((AdLineFeedInnerContent) ad.getAds().getInnerContent()).getBackup() == 1) { // 兜底
                     backupad = ad;
                     continue;

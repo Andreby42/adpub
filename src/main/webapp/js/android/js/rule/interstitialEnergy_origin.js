@@ -111,7 +111,7 @@ var sdk_gdt = {
     },
 
     adStyle: function() {
-        return 2;
+        return ${sdk_gdt_displayType};
     }
 }
 
@@ -175,7 +175,7 @@ var sdk_ifly = {
     },
 
     adStyle: function() {
-        return 2;
+        return ${sdk_ifly_displayType};
     }
 }
 
@@ -230,7 +230,7 @@ var sdk_adview = {
     },
 
     adStyle: function() {
-        return 2;
+        return ${sdk_adview_displayType};
     }
 }
 

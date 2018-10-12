@@ -186,6 +186,7 @@ function load(task, rule, userdata, fetchTimeout, callback) {
                 "1": { showWidth: 180, showHeight: 88 },
                 "2": { showWidth: 96, showHeight: 64 },
                 "5": { showWidth: 96, showHeight: 64 },
+                "7": { showWidth: 270, showHeight: 406 },
                 "8": { showWidth: screenWidth, showHeight: screenHeight }
             };
 

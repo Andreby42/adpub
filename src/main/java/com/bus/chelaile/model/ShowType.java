@@ -66,4 +66,9 @@ public enum ShowType {
         }
         return null;
     }
+    
+    public static void main(String[] args) {
+        ShowType s = ShowType.LINE_DETAIL;
+        System.out.println(s.getType().equals(ShowType.DOUBLE_COLUMN.getType()));
+    }
 }

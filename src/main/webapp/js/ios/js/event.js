@@ -136,15 +136,21 @@ function trackExhibit(sdk, ad) {
 
     sendTrackRequest(exhibitTrackUrl, params);
 
-    if(info.unfoldMonitorLink && info.actionMonitorLink) {
+    if(info.actionMonitorLink) {
         var actionLink = info.actionMonitorLink.replace('{action}','5');
         var ts = (+new Date) + '';
         ts = String(ts).slice(0,-3);
         actionLink = actionLink.replace('{time}', ts);
         actionLink = actionLink.replace('{play_time}', '0')
 
-        sendTrackRequest(info.unfoldMonitorLink, {});
         sendTrackRequest(actionLink, {});
+    }
+    // some own ads ,has clickLink ,have no actionLink
+    if (info.unfoldMonitorLink) {
+        var unfolds = info.unfoldMonitorLink.split(';');
+        for(var i = 0; i < unfolds.length; i ++) {
+            sendTrackRequest(unfolds[i], {});
+        }
     }
 }
 
@@ -170,8 +176,11 @@ function trackClick(sdk, ad) {
         sendTrackRequest(actionLink, {});
     }
     // some own ads ,has clickLink ,have no actionLink
-    if(info.clickMonitorLink) {
-        sendTrackRequest(info.clickMonitorLink, {});
+    if (info.clickMonitorLink) {
+        var unfolds = info.clickMonitorLink.split(';');
+        for(var i = 0; i < unfolds.length; i ++) {
+            sendTrackRequest(unfolds[i], {});
+        }
     }
 }
 

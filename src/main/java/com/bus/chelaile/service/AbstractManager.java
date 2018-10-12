@@ -11,7 +11,6 @@ import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bus.chelaile.common.AdvCache;
@@ -33,14 +32,11 @@ import com.bus.chelaile.model.rule.UserClickRate;
 import com.bus.chelaile.mvc.AdvParam;
 import com.bus.chelaile.strategy.AdCategory;
 import com.bus.chelaile.strategy.AdDispatcher;
-import com.bus.chelaile.third.IfengAx.IfenAxService;
 import com.bus.chelaile.thread.StaticTimeLog;
 import com.bus.chelaile.util.New;
 import com.bus.chelaile.util.config.PropertiesUtils;
 
 public abstract class AbstractManager {
-//    @Autowired
-//    private AdvInvalidService invaildService;
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractManager.class);
     protected static String AD_GOTO_INFO_URL = PropertiesUtils.getValue(PropertiesName.PUBLIC.getValue(), "ad.gotoinfo.url",
@@ -1013,13 +1009,18 @@ public abstract class AbstractManager {
         if (StringUtils.isNotBlank(p.getCityId()) && (p.getCityId().equals("085"))) {
             return false;
         }
+        
+        // TODO temp 石家庄除双栏外，直接不返广告
+        if (StringUtils.isNotBlank(p.getCityId()) && (p.getCityId().equals("053")) && !showType.getType().equals(ShowType.DOUBLE_COLUMN.getType())) {
+            return false;
+        }
 
         // 详情页cshow非空，不等于linedetail的不返回
-        if (showType.getType().equals(ShowType.LINE_DETAIL)) {
-            if (StringUtils.isNoneBlank(p.getCshow()) && !p.getCshow().equals(Constants.CSHOW_LINEDETAIL)) {
-                return false;
-            }
-        }
+//        if (showType.getType().equals(ShowType.LINE_DETAIL.getType())) {
+//            if (StringUtils.isNoneBlank(p.getCshow()) && !p.getCshow().equals(Constants.CSHOW_LINEDETAIL)) {
+//                return false;
+//            }
+//        }
 
         // android 内核4.4一下的，不返回广告 20180118
         // 这个方法不够严谨，当android更新到版本10的时候，会出错
