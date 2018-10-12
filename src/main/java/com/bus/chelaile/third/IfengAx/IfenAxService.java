@@ -26,7 +26,7 @@ public class IfenAxService {
 
         String url = URL_ONLINE;
         // TODO
-//        if (Constants.ISTEST) {
+        if (Constants.ISTEST) {
             url = URL_TEST;
             if (p.getImei() != null)
                 p.setImei(p.getImei() + System.currentTimeMillis());
@@ -34,16 +34,16 @@ public class IfenAxService {
                 p.setImei(p.getIdfa() + System.currentTimeMillis());
                 p.setIdfa(p.getIdfa() + System.currentTimeMillis());
             }
-//        }
+        }
 
         IfengRequestBody requestBody = new IfengRequestBody(p, isTest, bannerType, w, h, tagid);
         logger.info("请求凤凰网body={}", JSONObject.toJSONString(requestBody));
-        System.out.println(JSONObject.toJSONString(requestBody));
+//        System.out.println(JSONObject.toJSONString(requestBody));
 
         String result = HttpUtils.post(url, JSONObject.toJSONString(requestBody));
 
-        //        logger.info("凤凰网返回result={}", result);
-        System.out.println(result);
+        logger.info("凤凰网返回result={}", result);
+//        System.out.println(result);
         if (StringUtils.isNoneBlank(result))
             responseEntity = JSON.parseObject(result, IfengResponse.class);
 

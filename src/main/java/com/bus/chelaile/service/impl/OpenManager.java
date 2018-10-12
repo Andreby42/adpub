@@ -488,9 +488,8 @@ public class OpenManager extends AbstractManager {
         return entities;
     }
     
-    // TODO  尺寸需要修改，临时用开屏的
     private boolean canCreateIfengAxEntity(OpenAdEntity entity, AdvParam p) {
-        Ad ad = ifenAxService.getContext(p, 1, 2, 320, 180, "1-1-1"); // 2, 320, 180
+        Ad ad = ifenAxService.getContext(p, 1, 2, 640, 960, "1-1-1"); 
         if(ad == null || ad.getCreative() == null || ad.getCreative().getStatics() == null) {
             return false;
         }
